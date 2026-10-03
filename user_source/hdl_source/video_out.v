@@ -161,9 +161,11 @@ module video_out (
            S_fifo_rd_cnt <= 'd0;
    end
 
-   assign S_fifo_rd_en = I_video_rd_en && (S_fifo_rd_cnt == 'd0)  ? 1'b1 :
-                         I_video_rd_en && (S_fifo_rd_cnt == 'd5)  ? 1'b1 :
-                         I_video_rd_en && (S_fifo_rd_cnt == 'd10) ? 1'b1 : 1'b0;
+   // 2026-10-04 fix: do not pop the FIFO when empty (underrun used to read stale data)
+   assign S_fifo_rd_en = I_video_rd_en && !S_fifo_emtpy &&
+                         ( (S_fifo_rd_cnt == 'd0)  ||
+                           (S_fifo_rd_cnt == 'd5)  ||
+                           (S_fifo_rd_cnt == 'd10) );
 
    always @(posedge I_dsi_clk) begin
        S_video_rd_en_1d  <= I_video_rd_en;
@@ -172,7 +174,7 @@ module video_out (
    end
 
    always @(posedge I_dsi_clk) begin
-       if(S_video_rd_en_1d)
+       if(S_video_rd_en_1d && !S_fifo_emtpy)
            begin
                case(S_fifo_rd_cnt_1d)
                    'd0: O_vdieo_data  <= S_fifo_rd_data[127:104];

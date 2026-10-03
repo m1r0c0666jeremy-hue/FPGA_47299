@@ -73,13 +73,13 @@ reg 	[3:0] 	r_button_0 = 0, r_button_1 = 0;
 // HD 60 fps mode uses VTS=1000.  Exposure 1990 is about 995 lines
 // (half-line units), already close to the legal maximum.  AG=48 maps through
 // SC500GainTbl to 0x0f20, approximately 4x analogue gain.
-reg 	[15:0] 	r_ae_set = 1990, r_ag_set = 80; 
+reg 	[15:0] 	r_ae_set = 1990, r_ag_set = 90;  // 2026-10-04: AG=90 -> table index 74 -> 0x1F20 = 8.000x 
 always @(posedge I_clk or posedge I_rst) begin
 	if(I_rst) begin
 		r_button_0 <= 0; 
 		r_button_1 <= 0; 
 		r_ae_set <= 1990; 
-		r_ag_set <= 80; 
+		r_ag_set <= 90; 
 	end else begin
 	//	When button pressed, r_button_1 bit is 1. 
 		r_button_0 <= ~I_btn; 
@@ -93,7 +93,7 @@ always @(posedge I_clk or posedge I_rst) begin
 		if(r_button_1[2]) begin
 				r_ag_set <= (r_ag_set > 16) ? r_ag_set - r_ag_tick : r_ag_set; 
 		end else if(r_button_1[3]) begin
-				r_ag_set <= (r_ag_set < 89) ? r_ag_set + r_ag_tick : r_ag_set; 
+				r_ag_set <= (r_ag_set < 105) ? r_ag_set + r_ag_tick : r_ag_set; 
 		end 
 		end
 	end

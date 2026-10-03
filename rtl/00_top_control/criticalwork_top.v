@@ -12,7 +12,7 @@ module criticalwork_top #(parameter integer DEBUG_MODE = 0) (
     output wire       O_cam_24m,
     output wire       O_cam_rst,
       
-    inout wire [1:0]  I_button,
+    input wire [1:0]  I_button,          // 2026-10-04: was inout (bidirectional pad); board keys are pure inputs
 
     output wire       O_screen_pwm,
     output wire       O_tmds_ch0_p,
@@ -66,8 +66,28 @@ PLL u_PLL(
 
     );
 
-assign O_screen_pwm = 1'b1; // Original reference output; pin compatibility pending.
+// ---------------------------------------------------------------------------
+// 2026-10-04 工程自有修改（见 docs/来源与修改记录.md、reports/验证报告.md 待办项）
+//   1) PLL 锁定后同步释放的复位，替代直接把 S_pll_lock 当全局复位；
+//   2) O_screen_pwm 改为心跳输出（引脚已从以太网 RGMII_TXD0 改到板载 LED1 = D10）。
+// 其余端口与实例连接仍与厂家基线逐字一致，audit_project.py 继续核对。
+// ---------------------------------------------------------------------------
+// 2026-10-04 decision: a single global "synchronised release" reset was tried here and
+// re-verified by a full re-build: Setup WNS went from +1.294ns to -1.418ns (TNS -7.029ns),
+// because the reset net then launches from one 100MHz flop into every clock domain and is
+// timed as ordinary logic.  Reverted to the vendor policy (asynchronous reset = PLL lock);
+// per-domain reset bridges are a separate, properly scoped follow-up.
 assign S_rst_n = S_pll_lock;
+
+reg [25:0] S_heart_cnt;
+always @(posedge S_100m_clk or negedge S_rst_n) begin
+    if(!S_rst_n)
+        S_heart_cnt <= 26'd0;
+    else
+        S_heart_cnt <= S_heart_cnt + 26'd1;
+end
+
+assign O_screen_pwm = S_heart_cnt[25];   // 100 MHz / 2^26 ~= 0.75 s toggle
 camera_capture u_camera (
     .I_control_clk(S_100m_clk), .I_camera_ref_clk(S_24m_clk),
     .I_rst_n(S_rst_n), .I_button(I_button),

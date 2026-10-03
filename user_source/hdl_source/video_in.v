@@ -36,6 +36,8 @@ module video_in (
     wire[127:0] S_fifo_rd_data; 
     reg         S_ddr_wr_valid;
     reg[9:0]    S_ddr_wr_cnt;
+    wire        S_fifo_full;          // 2026-10-04 new
+    reg         S_fifo_overflow;      // 2026-10-04 new: sticky write-dropped flag
 
     localparam IMAGE_BASE_ADDR_0 = 25'd0;
     localparam IMAGE_BASE_ADDR_1 = 25'd7000000;
@@ -56,10 +58,10 @@ module video_in (
         .rst        ( S_fifo_rst         ),   
 
         .clkw       ( I_camera_clk       ),     
-        .we         ( I_camera_valid     ),
+        .we         ( I_camera_valid & ~S_fifo_full ),   // 2026-10-04 fix: do not write when full
         .di         ( I_camera_data      ),
         .afull      (),
-        .full_flag  (),
+        .full_flag  ( S_fifo_full        ),              // 2026-10-04 fix: was dangling
         .wrusedw    (),
  
         .clkr       ( I_ddr_clk          ),
@@ -71,6 +73,17 @@ module video_in (
         .aempty     ()
     );
 
+
+    // 2026-10-04 new: sticky overflow flag.  The camera cannot be back-pressured, so
+// dropping one beat and raising a flag is much safer than letting the FIFO overflow.
+    always @(posedge I_camera_clk or negedge I_rst_n) begin
+        if(!I_rst_n)
+            S_fifo_overflow <= 1'b0;
+        else if(I_camera_valid && S_fifo_full)
+            S_fifo_overflow <= 1'b1;
+        else if(I_camera_frame_start)
+            S_fifo_overflow <= 1'b0;
+    end
 
     always @(posedge I_camera_clk or negedge I_rst_n) begin
         if(!I_rst_n)

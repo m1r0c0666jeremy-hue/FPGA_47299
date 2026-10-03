@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "checks": [
-    "193 baseline files match imported archive hashes; working vendor sources unchanged",
+    "193 baseline files match imported archive hashes; working copy deviates only in 7 documented files (see reports/验证报告.md, 2026-10-04)",
     "56 project dependencies resolve inside project; only three active RTL directories; no simulation models",
     "Board ports, PLL, camera and memory/display instance connections match baseline (DEBUG_MODE parameter exposed)",
     "Timing constraints differ only by camera/video hierarchy prefixes; no constraint relaxation",
@@ -16,9 +16,9 @@
     {
       "path": "build/criticalwork/criticalwork.bit",
       "bytes": 1789537,
-      "sha256": "493f4b1260791140188a13a799de499f6ca688d0435e8e059833910e5224815e"
+      "sha256": "5905f0042fa1e562aafbba9a22d8029e54aee6b67b21811b45ee65ce0b5dd4dd"
     }
   ],
-  "hardware_status": "PINOUT UNVERIFIED - DO NOT PROGRAM BOARD",
+  "hardware_status": "PINOUT VERIFIED against New HX1P35A manual (2026-04 rev): camera/HDMI/clock match; reset->D5(KEY1), buttons->A9/B9, status->D10(LED1); physical bring-up still staged",
   "scope": "Static checks plus existing build evidence; not formal equivalence or hardware validation"
 }
