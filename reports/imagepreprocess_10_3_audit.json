@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "checks": [
+    "193 baseline files match imported archive hashes; working copy deviates only in 7 documented files (see reports/验证报告.md, 2026-10-04)",
+    "58 project dependencies resolve inside project; four active RTL directories; no simulation models",
+    "Camera/DDR/PLL connections retained; RGB processing inserted before HDMI, top switches connected, SW1=A4 SW2=B4",
+    "Timing constraints differ only by camera/video hierarchy prefixes; no constraint relaxation",
+    "Baseline/teammate artifacts retained; ImagePreprocess new build marker and bitstream present"
+  ],
+  "artifacts": [
+    {
+      "path": "build/baseline/baseline.bit",
+      "bytes": 1789539,
+      "sha256": "07181fbd16a6c510c7ccbb33383fd139d96f48afc7ea9c51af948bbd3034eaf2"
+    },
+    {
+      "path": "build/criticalwork/criticalwork.bit",
+      "bytes": 1789537,
+      "sha256": "5905f0042fa1e562aafbba9a22d8029e54aee6b67b21811b45ee65ce0b5dd4dd"
+    },
+    {
+      "path": "build/imagepreprocess_10_3/imagepreprocess_10_3.bit",
+      "bytes": 1789537,
+      "sha256": "eddd9d7d28eb431de92d1d0f061962645b7734b027469290ae06166c9183ddf9"
+    }
+  ],
+  "hardware_status": "Manual and IO report match: camera/HDMI/clock, reset D5, buttons A9/B9, LED D10, SW1 A4 and SW2 B4. Teammate basic video success reported by Jeremy; new four-mode bit not tested on hardware.",
+  "scope": "Static checks plus existing build evidence; not formal equivalence or hardware validation"
+}

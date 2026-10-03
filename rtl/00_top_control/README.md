@@ -1,7 +1,3 @@
 # 00_top_control
 
-职责：板级顶层、PLL连接、复位分发、模块连接与诊断状态同步。
-
-状态：已接入综合：criticalwork_top.v、status_sync.v。沿用基线复位策略，完整跨时钟复位安全仍待验证。
-
-本次范围及接口限制见[工程README](../../README.md)和[架构与接口](../../docs/架构与接口.md)。目录存在不代表板上实现；未实现目录仅作功能组织，不放空壳硬件模块。
+已接入综合：criticalwork_top.v、status_sync.v、switch_mode_control.v。负责PLL、连接、诊断同步、SW1/SW2同步消抖。新增模块使用像素域局部复位释放桥，原厂家链路复位策略保留。见[开关说明](../../docs/图像处理与拨动开关_10_3.md)。

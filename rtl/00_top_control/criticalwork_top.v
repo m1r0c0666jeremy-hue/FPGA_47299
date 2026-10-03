@@ -13,6 +13,7 @@ module criticalwork_top #(parameter integer DEBUG_MODE = 0) (
     output wire       O_cam_rst,
       
     input wire [1:0]  I_button,          // 2026-10-04: was inout (bidirectional pad); board keys are pure inputs
+    input wire [1:0]  I_switch,          // [1]=SW1(A4), [0]=SW2(B4); up=1
 
     output wire       O_screen_pwm,
     output wire       O_tmds_ch0_p,
@@ -52,6 +53,18 @@ wire        S_hdmi_serial_clk;
 wire        	S_pll_lock;
 wire        	S_rst_n;
 wire [3:0] camera_status_async;
+wire [1:0] image_mode_pending;
+reg [1:0] process_reset_bridge;
+wire process_rst_n = process_reset_bridge[1];
+// Only the new pixel-domain modules use this local reset release bridge.
+always @(posedge S_hdmi_pixel_clk or negedge S_rst_n) begin
+    if (!S_rst_n) process_reset_bridge <= 2'b00;
+    else process_reset_bridge <= {process_reset_bridge[0],1'b1};
+end
+switch_mode_control u_switch_mode (
+    .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
+    .I_switch(I_switch), .O_mode_pending(image_mode_pending)
+);
 PLL u_PLL(
         .refclk      ( I_sys_clk         ),
         .reset    	 ( ~I_rst_n          ),
@@ -106,6 +119,7 @@ status_sync u_status_sync (
 );
 memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
+    .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),
     .I_capture_clk(S_csi_rx_clk), .I_rgb128(S_ISP_O_tdata),
     .I_data_valid(S_ISP_O_tvalid), .I_frame_start(S_ISP_O_tuser),

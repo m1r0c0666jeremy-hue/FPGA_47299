@@ -5,6 +5,7 @@
 `default_nettype none
 module memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire I_sys_clk, input wire I_rst_n,
+    input wire I_process_rst_n, input wire [1:0] I_process_mode,
     input wire I_pixel_clk, input wire I_serial_clk,
     input wire I_capture_clk, input wire [127:0] I_rgb128,
     input wire I_data_valid, input wire I_frame_start,
@@ -243,6 +244,18 @@ video_in u_video_in(
         .O_hdmi_data     ( S_hdmi_out_data    )
     );
 
+    wire process_vs, process_hs, process_de;
+    wire [23:0] process_rgb;
+    // Display-side RGB processing leaves the camera/DDR packed stream unchanged.
+    image_preprocess u_image_preprocess (
+        .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n),
+        .I_mode_pending(I_process_mode),
+        .I_vs(S_hdmi_out_vsync), .I_hs(S_hdmi_out_hsync),
+        .I_de(S_hdmi_out_de), .I_rgb(S_hdmi_out_data),
+        .O_vs(process_vs), .O_hs(process_hs), .O_de(process_de),
+        .O_rgb(process_rgb), .O_mode_active()
+    );
+
     hdmi_tx u_hdmi_tx(
         .I_pixel_clk        ( S_hdmi_pixel_clk  ),
         .I_serial_clk       ( S_hdmi_serial_clk ),
@@ -252,13 +265,13 @@ video_in u_video_in(
         .O_edid_read_valid  (                   ),
         .O_edid_read_data   (                   ),
         .I_video_rgb_enable ( 1'b1              ),
-        .I_video_in_vs      ( S_hdmi_out_vsync  ),
-        .I_video_in_de      ( S_hdmi_out_de     ),
+        .I_video_in_vs      ( process_vs       ),
+        .I_video_in_de      ( process_de       ),
         .I_video_in_user    ( 1'b0              ),
         .I_video_in_valid   ( 1'b0              ),
         .I_video_in_last    ( 1'b0              ),
         .O_video_in_ready   (                   ),
-        .I_video_in_data    ( S_hdmi_out_data   ),
+        .I_video_in_data    ( process_rgb      ),
         .I_audio_valid      ( 1'b0              ),
         .I_audio_left_data  ( 24'd0             ),
         .I_audio_right_data ( 24'd0             ),

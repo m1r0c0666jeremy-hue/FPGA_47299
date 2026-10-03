@@ -1,7 +1,3 @@
 # 10_memory_video_out
 
-职责：DDR帧缓存、读写调度、输出时序、HDMI发送。
-
-状态：已接入综合：memory_video_out.v。复用完整厂家链路；FIFO满空、完整帧提交与异常恢复有已知限制。
-
-本次范围及接口限制见[工程README](../../README.md)和[架构与接口](../../docs/架构与接口.md)。目录存在不代表板上实现；未实现目录仅作功能组织，不放空壳硬件模块。
+memory_video_out.v已接入综合，保留DDR、调度与显示时序，在hdmi_mixer与hdmi_tx之间连接02目录的image_preprocess。处理候选模式及局部复位由顶层传入。厂家FIFO尾字、完整帧恢复等问题本轮暂缓，见[当前清单](../../docs/问题清单_10_3.md)。
