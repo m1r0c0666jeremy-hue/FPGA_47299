@@ -1,0 +1,8 @@
+# Preserve original bytes, especially the hashed vendor reference files.
+* -text
+*.bit binary
+*.png binary
+*.exe binary
+*.dll binary
+*.zst binary
+*.db binary

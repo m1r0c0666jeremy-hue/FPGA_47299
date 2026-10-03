@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "checks": [
+    "193 baseline files match imported archive hashes; working vendor sources unchanged",
+    "56 project dependencies resolve inside project; only three active RTL directories; no simulation models",
+    "Board ports, PLL, camera and memory/display instance connections match baseline (DEBUG_MODE parameter exposed)",
+    "Timing constraints differ only by camera/video hierarchy prefixes; no constraint relaxation",
+    "Both fresh build completion markers and bitstreams present"
+  ],
+  "artifacts": [
+    {
+      "path": "build/baseline/baseline.bit",
+      "bytes": 1789539,
+      "sha256": "07181fbd16a6c510c7ccbb33383fd139d96f48afc7ea9c51af948bbd3034eaf2"
+    },
+    {
+      "path": "build/criticalwork/criticalwork.bit",
+      "bytes": 1789537,
+      "sha256": "493f4b1260791140188a13a799de499f6ca688d0435e8e059833910e5224815e"
+    }
+  ],
+  "hardware_status": "PINOUT UNVERIFIED - DO NOT PROGRAM BOARD",
+  "scope": "Static checks plus existing build evidence; not formal equivalence or hardware validation"
+}

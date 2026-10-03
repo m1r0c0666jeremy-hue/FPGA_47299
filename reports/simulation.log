@@ -1,0 +1,38 @@
+=== status: compile exit 0 ===
+
+=== status: run exit 0 ===
+PASS status: invalid/valid width, two frames, CDC flags, reset
+D:\aaa_FPGA\criticalwork\sim\tb_status.sv:39: $finish called at 13814024 (1ps)
+
+=== pack: compile exit 0 ===
+
+=== pack: run exit 0 ===
+PASS pack: 3 x 1280 RGB pixels, 96->128 bits, row blanking, SOF
+KNOWN_LIMITATION pack: I_rst_n ignored; reset during valid data does not flush group
+D:\aaa_FPGA\criticalwork\sim\tb_pack.sv:50: $finish called at 10030000 (1ps)
+
+=== axis: compile exit 0 ===
+
+=== axis: run exit 0 ===
+PASS RAW10 adapter: two frames, valid gaps, 4 pixels/beat, SOF/EOL, frame resync
+D:\aaa_FPGA\criticalwork\sim\tb_axis.sv:36: $finish called at 4939281000 (1ps)
+
+=== video_timing: compile exit 0 ===
+
+=== video_timing: run exit 0 ===
+PASS video: 2 complete 1280x720 frames, 1650x750 period, EOL/SOF, RGB/DE latency
+D:\aaa_FPGA\criticalwork\sim\tb_video_timing.sv:43: $finish called at 49502709345 (1ps)
+
+=== memory: compile exit 0 ===
+
+=== memory: run exit 0 ===
+PASS memory write control with ideal FIFO: 3x240 words, stalled DDR, buffer cycle and pause
+KNOWN_LIMITATION memory: camera keeps writing when FIFO full; no overflow recovery in reference
+D:\aaa_FPGA\criticalwork\sim\tb_memory.sv:56: $finish called at 46081490 (1ps)
+
+=== readout: compile exit 0 ===
+
+=== readout: run exit 0 ===
+PASS memory read control with ideal FIFO: 128->24 bit RGB ordering, 1280 pixels, frame buffer address
+KNOWN_LIMITATION memory: display reads when FIFO empty; reference does not blank/recover underflow
+D:\aaa_FPGA\criticalwork\sim\tb_readout.sv:58: $finish called at 39988666 (1ps)
