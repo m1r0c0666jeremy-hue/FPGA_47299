@@ -1,0 +1,40 @@
+Active packer from TD project: user_source/hdl_source/isp/data96_128/data96_128.v
+=== active_pack_reset: compile exit 0 ===
+
+=== active_pack_reset: run exit 1 ===
+FATAL: D:\aaa_FPGA\criticalwork\sim\tb_review_pack_reset.sv:15: reset during valid input did not flush the active packer
+       Time: 60000  Scope: tb_review_pack_reset
+
+=== unused_fixed_pack_reset: compile exit 0 ===
+
+=== unused_fixed_pack_reset: run exit 0 ===
+PASS packer reset and restart
+D:\aaa_FPGA\criticalwork\sim\tb_review_pack_reset.sv:22: $finish called at 90000 (1ps)
+
+=== write_full_guard: compile exit 0 ===
+
+=== write_full_guard: run exit 0 ===
+PASS memory write control with ideal FIFO: 3x240 words, stalled DDR, buffer cycle and pause
+PASS write full guard; dropped-data flag set, full-frame recovery NOT tested
+D:\aaa_FPGA\criticalwork\build\sim\review\tb_memory_guard.sv:56: $finish called at 46081490 (1ps)
+
+=== read_empty_guard: compile exit 0 ===
+
+=== read_empty_guard: run exit 0 ===
+PASS memory read control with ideal FIFO: 128->24 bit RGB ordering, 1280 pixels, frame buffer address
+PASS empty read guard and empty black output; recovery NOT tested
+D:\aaa_FPGA\criticalwork\build\sim\review\tb_readout_guard.sv:58: $finish called at 39988666 (1ps)
+
+=== read_last_word: compile exit 0 ===
+
+=== read_last_word: run exit 1 ===
+PIXEL_LOST index=10 actual=000000
+PIXEL_LOST index=11 actual=000000
+PIXEL_LOST index=12 actual=000000
+PIXEL_LOST index=13 actual=000000
+PIXEL_LOST index=14 actual=000000
+PIXEL_LOST index=15 actual=000000
+FATAL: D:\aaa_FPGA\criticalwork\sim\tb_review_last_word.sv:37: last FIFO word must remain usable: pixels=16 lost=6
+       Time: 1106722  Scope: tb_review_last_word
+
+FAILED ASSERTIONS: active_pack_reset, read_last_word
