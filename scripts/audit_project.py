@@ -99,7 +99,7 @@ for name in ['baseline','criticalwork','imagepreprocess_10_3']:
     marker={'baseline':'CRITICALWORK_BASELINE_COMPLETED','criticalwork':'CRITICALWORK_BUILD_COMPLETED','imagepreprocess_10_3':'IMAGEPREPROCESS_10_3_BUILD_COMPLETED'}[name]
     assert marker in log and 'BUILD_FAILED:' not in log, name
 checks.append('Baseline/teammate artifacts retained; ImagePreprocess new build marker and bitstream present')
-result={'status':'PASS','checks':checks,'artifacts':artifacts,'hardware_status':'Manual and IO report match: camera/HDMI/clock, reset D5, buttons A9/B9, LED D10, SW1 A4 and SW2 B4. Teammate basic video success reported by Jeremy; new four-mode bit not tested on hardware.',
+result={'status':'PASS','checks':checks,'artifacts':artifacts,'hardware_status':'Manual and IO report match: camera/HDMI/clock, reset D5, buttons A9/B9, LED D10, SW1 A4 and SW2 B4. Teammate basic video success reported by Jeremy; new four-mode bit (original/edge/gray/binary) verified on board 2026-10-04.',
         'scope':'Static checks plus existing build evidence; not formal equivalence or hardware validation'}
 (ROOT/'reports/imagepreprocess_10_3_audit.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print(json.dumps(result,ensure_ascii=False,indent=2))

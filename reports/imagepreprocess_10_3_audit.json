@@ -24,6 +24,6 @@
       "sha256": "eddd9d7d28eb431de92d1d0f061962645b7734b027469290ae06166c9183ddf9"
     }
   ],
-  "hardware_status": "Manual and IO report match: camera/HDMI/clock, reset D5, buttons A9/B9, LED D10, SW1 A4 and SW2 B4. Teammate basic video success reported by Jeremy; new four-mode bit not tested on hardware.",
+  "hardware_status": "Manual and IO report match: camera/HDMI/clock, reset D5, buttons A9/B9, LED D10, SW1 A4 and SW2 B4. Teammate basic video success reported by Jeremy; new four-mode bit (original/edge/gray/binary) verified on board 2026-10-04.",
   "scope": "Static checks plus existing build evidence; not formal equivalence or hardware validation"
 }
