@@ -11,6 +11,22 @@
     </HardWare>
     <Source_Files>
         <Verilog>
+            <File Path="../rtl/00_top_control/switch_mode_control.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true"/>
+                    <Attr Name="UsedInP&R" Val="true"/>
+                    <Attr Name="BelongTo" Val="design_1"/>
+                    <Attr Name="CompileOrder" Val="100"/>
+                </FileInfo>
+            </File>
+            <File Path="../rtl/02_image_preprocess/image_preprocess.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true"/>
+                    <Attr Name="UsedInP&R" Val="true"/>
+                    <Attr Name="BelongTo" Val="design_1"/>
+                    <Attr Name="CompileOrder" Val="101"/>
+                </FileInfo>
+            </File>
             <File Path="../rtl/00_top_control/criticalwork_top.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true"/>
@@ -384,7 +400,7 @@
             </File>
         </System_Verilog>
         <ADC_FILE>
-            <File Path="../user_source/constraints_source/pin.adc">
+            <File Path="imagepreprocess_10_3.adc">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true"/>
                     <Attr Name="UsedInP&R" Val="true"/>

@@ -10,7 +10,7 @@ if {[catch {
     open_project $project -single_run
     elaborate -top criticalwork_top
     cd $out
-    read_adc [file join $root user_source constraints_source pin.adc]
+    read_adc [file join $root td_project imagepreprocess_10_3.adc]
     read_ip_adc -ip ddr2 -file [file join $root user_source hdl_source ph1p35_ddr ddr2 src adc ddr2.adc]
     read_sdc [file join $root td_project criticalwork.sdc]
     read_sdc -ip ddr2 [file join $root user_source hdl_source ph1p35_ddr ddr2 src sdc ddr2.sdc]
