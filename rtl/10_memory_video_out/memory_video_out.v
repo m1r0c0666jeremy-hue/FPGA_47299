@@ -6,6 +6,8 @@
 module memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire I_sys_clk, input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
+    input wire [10:0] I_cx, input wire [9:0] I_cy,
+    input wire [1:0] I_zoom, I_direction, input wire [2:0] I_ui_status,
     input wire I_pixel_clk, input wire I_serial_clk,
     input wire I_capture_clk, input wire [127:0] I_rgb128,
     input wire I_data_valid, input wire I_frame_start,
@@ -121,24 +123,28 @@ video_in u_video_in(
 
     assign S_video_out_rst_n = S_hdmi_rst_n;
 
-    video_out u_video_out(
-        .I_rst_n             ( S_video_out_rst_n    ),
-        .I_ddr_clk           ( S_ddr_clk            ),
- 
-        .O_video_out_rd_busy ( S_video_out_rd_busy  ),
-        .I_video_in_wr_busy  ( S_video_in_wr_busy   ),
-        .I_video_out_rp      ( S_video_out_rp       ),
- 
-        .O_ddr_user_rd_en    ( S_vo_ddr_rd_en       ),
-        .O_ddr_user_addr     ( S_vo_ddr_rd_addr     ),
-        .I_ddr_user_ready    ( S_ddr_user_ready     ),
-        .I_ddr_user_rd_valid ( S_ddr_user_rd_valid  ),
-        .I_ddr_user_rd_data  ( S_ddr_user_rd_data   ),
-
-        .I_dsi_clk           ( S_hdmi_pixel_clk     ),
-        .I_video_vsync       ( S_video_out_vsync    ),
-        .I_video_rd_en       ( S_hdmi_window_rd_en  ),
-        .O_vdieo_data        ( S_video_rd_data      )
+    wire [10:0] active_cx, roi_x, cross_x;
+    wire [9:0] active_cy, roi_y, cross_y;
+    wire [1:0] active_zoom, active_direction;
+    wire [2:0] active_status;
+    wire video_ok;
+    scaling_viewport u_viewport (
+        .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n), .I_vs(S_hdmi_vsync),
+        .I_cx(I_cx), .I_cy(I_cy), .I_zoom(I_zoom), .I_direction(I_direction), .I_status(I_ui_status),
+        .O_cx(active_cx), .O_cy(active_cy), .O_x0(roi_x), .O_y0(roi_y),
+        .O_cross_x(cross_x), .O_cross_y(cross_y), .O_zoom(active_zoom),
+        .O_direction(active_direction), .O_status(active_status)
+    );
+    scaling_line_reader u_scaler (
+        .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
+        .I_write_busy(S_video_in_wr_busy), .I_write_en(S_vi_ddr_wr_en), .I_read_buffer(S_video_out_rp),
+        .I_ddr_ready(S_ddr_user_ready && S_init_calib_complete), .I_ddr_valid(S_ddr_user_rd_valid),
+        .I_ddr_data(S_ddr_user_rd_data), .O_read_busy(S_video_out_rd_busy),
+        .O_read_en(S_vo_ddr_rd_en), .O_read_addr(S_vo_ddr_rd_addr),
+        .I_pixel_clk(S_hdmi_pixel_clk), .I_vs(S_hdmi_vsync), .I_hs(S_hdmi_hsync), .I_de(S_hdmi_de),
+        .I_x0(roi_x), .I_y0(roi_y), .I_zoom(active_zoom),
+        .O_vs(S_hdmi_out_vsync), .O_hs(S_hdmi_out_hsync), .O_de(S_hdmi_out_de),
+        .O_rgb(S_hdmi_out_data), .O_video_ok(video_ok)
     );
 
     mc_to_user_interface u_mc_to_user_interface(
@@ -221,31 +227,9 @@ video_in u_video_in(
         .O_vtc_last    ( S_hdmi_last      )
     );
 
-    hdmi_mixer #(
-        .H_OFFSET   ( 0    ),
-        .V_OFFSET   ( 0    ),
-        .IMG_WIDTH  ( 1280 ),
-        .IMG_HEIGHT ( 720  ),
-        .DEBUG_MODE ( DEBUG_MODE ) 
-    )u_hdmi_mixer(
-        .I_clk           ( S_hdmi_pixel_clk   ),
-        .I_rst_n         ( S_hdmi_rst_n       ),
-        .I_video_vsync   ( S_hdmi_vsync       ),
-        .I_video_hsync   ( S_hdmi_hsync       ),
-        .I_video_de      ( S_hdmi_de          ),
-        .I_video_user    ( S_hdmi_user        ),
-        .I_video_last    ( S_hdmi_last        ),
-        .I_debug_status  ( S_hdmi_debug_status),
-        .O_video_rd_en   ( S_hdmi_window_rd_en),
-        .I_video_rd_data ( S_video_rd_data    ),
-        .O_hdmi_vsync    ( S_hdmi_out_vsync   ),
-        .O_hdmi_hsync    ( S_hdmi_out_hsync   ),
-        .O_hdmi_de       ( S_hdmi_out_de      ),
-        .O_hdmi_data     ( S_hdmi_out_data    )
-    );
-
     wire process_vs, process_hs, process_de;
     wire [23:0] process_rgb;
+    wire [1:0] actual_mode;
     // Display-side RGB processing leaves the camera/DDR packed stream unchanged.
     image_preprocess u_image_preprocess (
         .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n),
@@ -253,9 +237,19 @@ video_in u_video_in(
         .I_vs(S_hdmi_out_vsync), .I_hs(S_hdmi_out_hsync),
         .I_de(S_hdmi_out_de), .I_rgb(S_hdmi_out_data),
         .O_vs(process_vs), .O_hs(process_hs), .O_de(process_de),
-        .O_rgb(process_rgb), .O_mode_active()
+        .O_rgb(process_rgb), .O_mode_active(actual_mode)
     );
 
+    wire osd_vs, osd_hs, osd_de;
+    wire [23:0] osd_rgb;
+    scaling_osd u_osd (
+        .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n),
+        .I_vs(process_vs), .I_hs(process_hs), .I_de(process_de), .I_rgb(process_rgb),
+        .I_cx(active_cx), .I_cy(active_cy), .I_cross_x(cross_x), .I_cross_y(cross_y),
+        .I_zoom(active_zoom), .I_mode(actual_mode), .I_direction(active_direction),
+        .I_status(active_status), .I_video_ok(video_ok),
+        .O_vs(osd_vs), .O_hs(osd_hs), .O_de(osd_de), .O_rgb(osd_rgb)
+    );
     hdmi_tx u_hdmi_tx(
         .I_pixel_clk        ( S_hdmi_pixel_clk  ),
         .I_serial_clk       ( S_hdmi_serial_clk ),
@@ -265,13 +259,13 @@ video_in u_video_in(
         .O_edid_read_valid  (                   ),
         .O_edid_read_data   (                   ),
         .I_video_rgb_enable ( 1'b1              ),
-        .I_video_in_vs      ( process_vs       ),
-        .I_video_in_de      ( process_de       ),
+        .I_video_in_vs      ( osd_vs           ),
+        .I_video_in_de      ( osd_de           ),
         .I_video_in_user    ( 1'b0              ),
         .I_video_in_valid   ( 1'b0              ),
         .I_video_in_last    ( 1'b0              ),
         .O_video_in_ready   (                   ),
-        .I_video_in_data    ( process_rgb      ),
+        .I_video_in_data    ( osd_rgb          ),
         .I_audio_valid      ( 1'b0              ),
         .I_audio_left_data  ( 24'd0             ),
         .I_audio_right_data ( 24'd0             ),

@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "checks": [
+    "193 Lab1 baseline files and all registered working vendor hashes preserved",
+    "4 contest Lab3 reference files unchanged; original archive paths/hashes recorded",
+    "Generated OSD/logo/font hashes match generation manifest",
+    "65 dependencies resolve; 6 active RTL directories; board pins match agreed mapping",
+    "Current build inputs/bit match archived hashes; setup and hold slack non-negative; previous bit retained",
+    "Archived logs: 15 video cases / 15175680 pixels, controls, 6 OSD cases and 3 algorithm regression cases passed"
+  ],
+  "bit_sha256": "a598cff3ea804c0fbc9e54d1693e03cfc32fa4b9aef2d7133f234879dc6edf8c",
+  "timing": "SWNS: 1.064ns, STNS: 0.000ns.\nHWNS: 0.020ns, HTNS: 0.000ns.",
+  "validation_files": {
+    "scripts/test_scaling.py": "2485eb0ea8db9b9cbd7033478b4e25d27b1d29ed828084a345e3784e6c56917d",
+    "scripts/test_scaling_osd.py": "8a1a749e34b7c45fe5d0a85c1f75c936227e619f63f500e1b0027e56aad72127",
+    "scripts/test_imagepreprocess_10_3.py": "3a0af6b3cc376df84d3ba7f570f302a94192c09d75faf54b507cd01dc1272b9d",
+    "sim/tb_scaling_controls.sv": "2fff442976ab2cb1823b860da1de11b3421a0c9044dea97205dc33e5f24c61f9",
+    "sim/tb_scaling_video.sv": "7cb92fa5caea796a66e54fae18891e30fb35813eaba1b4b438f13261d5ada641",
+    "sim/tb_scaling_osd.sv": "ad5ba36f2018c1abccf9cd9beb01829b93b97b8ebbce6a6b68ed349d7205db0d",
+    "reports/scaling_simulation.log": "a7547c2f5ae4fd2531786a5c08305703b446f947bcd27b63412f065ce29ea7c2",
+    "reports/scaling_osd_simulation.log": "d61d8331f16ec0b90606021c3402a78fd6e24e9e40149b10ab55d2b124a08f20",
+    "reports/imagepreprocess_10_3_simulation.log": "dcd82c7a81dfa707381e736395c99a8111ce410ac77fed866895ccf526d66de5"
+  },
+  "scope": "Static dependency/hash/build audit, not equivalence, CDC formal proof, DDR PHY simulation or hardware acceptance."
+}
