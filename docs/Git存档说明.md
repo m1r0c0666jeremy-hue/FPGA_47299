@@ -1,6 +1,6 @@
 # Git存档与远程仓库
 
-首次建档日期：2026-10-03。仓库根目录：`D:\aaa_FPGA\criticalwork`。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
+首次建档日期：2026-10-03；2026-10-04 起仓库根目录＝本工程目录 `E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess`（早期 `D:\aaa_FPGA\criticalwork` 已不再使用）。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
 
 本次存档包含源码、TD工程/约束、厂家原始基线、脚本/测试、文档、bit及命名的编译报告/日志，以及当前便携仿真器和原始下载包。厂家原文件按字节保存，`.gitattributes` 禁用自动换行转换，避免来源哈希被Git改变。
 
@@ -15,7 +15,7 @@
 在PowerShell执行：
 
 ```powershell
-Set-Location 'D:\aaa_FPGA\criticalwork'
+Set-Location 'E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess'
 git status
 git log --oneline -5
 git show --stat archive-2026-10-03-camera-hdmi
@@ -36,3 +36,35 @@ git commit -m "说明本次改了什么"
 ## 图像处理分支（10_3）
 
 新分支名为 **ImagePreprocess**，从3844377创建，保留main历史。提交名称为“10_3 新增拨动开关四模式图像处理并整合顶层”。范围含两个新模块、顶层连接、工程约束、仿真/编译证据及文档清理。分支只是独立开发线，尚未合并main；新模式硬件测试状态见最新验证报告。
+
+## 2026-10-04 更新：提交身份与分支流程
+
+**仓库位置**：本地仓库根目录＝本工程目录本身（`E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess`），
+`origin` = `https://github.com/m1r0c0666jeremy-hue/FPGA_47299.git`，本地 `main` 跟踪 `origin/main`。
+仓库为**私有**仓库，仅协作者可访问（未登录访问 GitHub API 返回 404）。
+
+**提交身份（关联到 GitHub 账号）**：本机全局与仓库内均设置为
+`Jeremy <161012452+Fle068@users.noreply.github.com>`，对应 GitHub 账号 **Fle068**。
+使用 GitHub 的 noreply 地址可保证提交稳定归属该账号，且不暴露私人邮箱。
+
+- 历史提交（`45253e0` 起至 `ca44ead`，含队友的 `3eee5cf`/`1efd552`/`3844377`）署名均为
+  `Jeremy <m1r0c0666jeremy@gmail.com>`，归属仓库属主账号；若该邮箱也是你的，可在
+  GitHub → Settings → Emails 中添加并验证，历史提交会自动归到你名下；否则从下一次提交起按新身份署名。
+- 推送认证使用 Git Credential Manager（凭据助手中已登录 `Fle068`）。
+
+**分支流程（自 2026-10-04 起）**：
+
+```powershell
+# 1) 本地建特性分支（不动 main）
+git checkout -b feature/xxx
+# 2) 改代码 / 编译 / 补文档，提交到该分支
+git add -A; git commit -m "说明本次改了什么"
+# 3) 只推分支到 GitHub
+git push -u origin feature/xxx
+# 4) 经 Jeremy 在 GitHub 上确认后，才合并回主干
+git checkout main; git merge --no-ff feature/xxx; git push origin main
+```
+
+已存在分支：`ImagePreprocess`（队友的开发线，`1efd552`，尚未合并 main；其内容与 main 的差异仅为文档与验证材料）。
+标签：`v1.1`（`e57d821`）、`v1.2`（`8ce88b5`）、`archive-2026-10-03-camera-hdmi`、
+`archive-2026-10-04-pins-brightness`、`archive-2026-10-04-imagepreprocess`、`review-2026-10-03-teammate-v1.1`。
