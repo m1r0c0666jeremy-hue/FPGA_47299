@@ -1,6 +1,6 @@
 # Git存档与远程仓库
 
-首次建档日期：2026-10-03。仓库根目录＝本工程目录 `E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess`（原 `D:\aaa_FPGA\criticalwork` 已废弃）。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
+首次建档日期：2026-10-03。仓库根目录为各自电脑的工程目录：Jeremy 当前使用 `D:\aaa_FPGA\criticalwork`；队友记录的路径为 `E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess`。两者属于不同电脑的工作副本，不能把 Jeremy 的目录标为已废弃。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
 
 本次存档包含源码、TD工程/约束、厂家原始基线、脚本/测试、文档、bit及命名的编译报告/日志，以及当前便携仿真器和原始下载包。厂家原文件按字节保存，`.gitattributes` 禁用自动换行转换，避免来源哈希被Git改变。
 
@@ -15,7 +15,7 @@
 在PowerShell执行：
 
 ```powershell
-Set-Location 'E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess'
+Set-Location 'D:\aaa_FPGA\criticalwork' # 换成当前电脑的仓库路径
 git status
 git log --oneline -5
 git show --stat archive-2026-10-03-camera-hdmi
@@ -51,6 +51,8 @@ Jeremy反馈队友已验证图像处理；接收的报告记录原图/边缘/灰
 
 ## 2026-10-04 更新：提交身份与分支流程
 
+本节为队友电脑当时的配置记录，不代表所有协作者的身份或当前分支合并状态；不要据此覆盖另一台电脑的 Git 配置。
+
 **仓库位置**：本地仓库根目录＝本工程目录本身，`origin` = `https://github.com/m1r0c0666jeremy-hue/FPGA_47299.git`，
 本地 `main` 跟踪 `origin/main`。仓库为**私有**仓库，仅协作者可访问。
 
@@ -72,3 +74,15 @@ git checkout main; git merge --no-ff feature/xxx; git push origin main   # 4) �
 现存分支：`ImagePreprocess`（队友开发线，未合并）、`ScalingTest`（队友：手动缩放/按键复用/中文OSD，未合并）、
 `docs/git-workflow-and-identity`（本次文档分支）。
 标签：`v1.1`、`v1.2`、`archive-2026-10-03-camera-hdmi`、`archive-2026-10-04-pins-brightness`、`archive-2026-10-04-imagepreprocess`、`review-2026-10-03-teammate-v1.1`。
+
+## 2026-10-05 主干同步与功能验收存档
+
+存档名称：**同步main：存档队友已验收的十字准心、缩放与OSD功能**。
+
+按 Jeremy 要求，在本地工作区干净的情况下，从 ScalingTest 切换至 main，再将本地 main 从 `e671630` 快进到远端 `8136663`（接收 11 个提交）。远端已合入 ScalingTest 及验收文档；保留本地 ScalingTest（`8ae151f`）、ImagePreprocess（`1efd552`）和旧 bit，没有重写历史。提交作者沿用 Jeremy 本机既有配置，没有按队友电脑的配置修改身份。
+
+Jeremy 确认队友十字准心、放大与 OSD 已成功上板。接收报告记录第 0～5 步通过，SW3/SW4 上=0、下=1，设备为 HX1P35A V1.0 / MLK-CAM001 V1.0（SC500CS）/ KTC H25T7；第 6 步连续稳定性观察跳过，未烧 Flash。按报告末尾的新验收结果理解早期“未执行”描述。
+
+本次运行 `scripts/audit_scaling.py` 通过，核对 193 份 Lab1 来源文件、4 份 Lab3 来源文件、65 个工程依赖、字模/Logo、构建输入与 bit 哈希及存档日志。当前 bit 为 `build/scaling_test/scaling_test.bit`，SHA256 为 `a598cff3ea804c0fbc9e54d1693e03cfc32fa4b9aef2d7133f234879dc6edf8c`。与本地 ScalingTest 相比，RTL、厂家代码、工程约束、脚本、仿真源码和 bit 未变化；本轮未重新仿真、编译、下载。
+
+新提交仅更新 README 和本存档说明，修正当前入口及两台电脑的路径/身份范围。Jeremy 反馈 4 倍像素感明显，当前采用最近邻复制；双线性插值等优化仅为建议，未修改已验收实现。提交号以 `git log -1 --oneline` 为准。
