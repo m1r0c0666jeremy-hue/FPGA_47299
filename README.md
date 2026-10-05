@@ -1,4 +1,5 @@
 # 摄像头、图像处理与 HDMI 显示工程
+Maintainer: Fle & Jeremy
 
 更新：2026-10-04；当前主干 **main**，已同步队友四模式实物验收版本v1.2；功能最初在ImagePreprocess分支开发。平台 HX1P35A / PH1P35MDG324 −3，TD 6.2.168116。
 
