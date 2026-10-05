@@ -1,21 +1,5 @@
-# ScalingTest：手动缩放与中文 OSD
-
-更新：2026-10-05。当前开发分支 **ScalingTest**，从重新获取远端后确认一致的 `main / origin/main`（`e671630`）创建。新增 1／2／4 倍选点放大、黄色黑边准心、按键复用和底部 96 行中文信息栏；摄像头采集和原有四模式算法沿用已验收主干。**本分支已于 2026-10-05 完成首次上板验收**（第 0~5 步通过、第 6 步按决定跳过），逐项见 [验证报告](reports/ScalingTest验证报告.md)；旧 bit 的结论仍不适用于本 bit。
-
-- 当前工程：[scaling_test.al](td_project/scaling_test.al)，使用 [独立构建脚本](scripts/build_scaling_test.tcl)。不要用旧 `criticalwork.al` 编译此分支修改后的顶层。
-- 当前 bit：[scaling_test.bit](build/scaling_test/scaling_test.bit)，校验值见 [构建清单](reports/scaling_build_manifest.json)。旧 bit 均保留。
-- [操作、接口与实物检查](docs/ScalingTest使用与实现.md)、[验证报告](reports/ScalingTest验证报告.md)、[来源说明](vendor_reference/lab3_osd/README.md)。
-- 仿真入口：`scripts/test_scaling.py`、`scripts/test_scaling_osd.py`、原四模式回归 `scripts/test_imagepreprocess_10_3.py`；本分支审计入口 `scripts/audit_scaling.py`。
-
-SW1/2 仍选择原图、边缘、灰度、二值化。KEY1 复位；KEY2 按 SW3 电平调增益；KEY3 按 SW3/SW4 的 00/01/10/11 下/右/左/上移动；KEY4 按 SW4 的 1/0 放大/缩小。SW3/SW4 上下极性已实物核实（上0下1）。所有操作细节见使用说明。
-
-新增参与综合的目录为 `05_roi_processing`、`09_osd_ui`，现共六个功能目录。相机/DDR → 区域读出与整数缩放 → 四模式处理 → 准心/OSD → HDMI。输出仍为 1280×720、总节拍 1650×750、75 MHz；底栏覆盖画面，原图底部可通过平移访问。没有新增自动跟踪、颜色环识别或全帧片上缓存。
-
-以下保留 main 四模式阶段说明，仅对应当时的代码和旧 bit；其中旧按键用途、未实现缩放/OSD等描述不适用于 ScalingTest。
-
----
-
-# main 四模式阶段归档（2026-10-04）
+# 摄像头、图像处理与 HDMI 显示工程
+Maintainer: Fle & Jeremy
 
 更新：2026-10-04；当前主干 **main**，已同步队友四模式实物验收版本v1.2；功能最初在ImagePreprocess分支开发。平台 HX1P35A / PH1P35MDG324 −3，TD 6.2.168116。
 

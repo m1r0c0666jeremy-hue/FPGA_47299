@@ -1,6 +1,6 @@
 # Git存档与远程仓库
 
-首次建档日期：2026-10-03。仓库根目录：`D:\aaa_FPGA\criticalwork`。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
+首次建档日期：2026-10-03。仓库根目录＝本工程目录 `E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess`（原 `D:\aaa_FPGA\criticalwork` 已废弃）。Git是保留文件版本和改动历史的工具；一次commit（提交）就是一个可追溯快照。
 
 本次存档包含源码、TD工程/约束、厂家原始基线、脚本/测试、文档、bit及命名的编译报告/日志，以及当前便携仿真器和原始下载包。厂家原文件按字节保存，`.gitattributes` 禁用自动换行转换，避免来源哈希被Git改变。
 
@@ -15,7 +15,7 @@
 在PowerShell执行：
 
 ```powershell
-Set-Location 'D:\aaa_FPGA\criticalwork'
+Set-Location 'E:\FPGA\FPGA26\ImagePreprocess\FPGA_47299-ImagePreprocess'
 git status
 git log --oneline -5
 git show --stat archive-2026-10-03-camera-hdmi
@@ -48,3 +48,27 @@ Jeremy反馈队友已验证图像处理；接收的报告记录原图/边缘/灰
 同步后检查：58个TD工程文件依赖存在；RTL、user_source、工程约束及图像处理bit与ImagePreprocess完全一致。bit SHA256为eddd9d7d28eb431de92d1d0f061962645b7734b027469290ae06166c9183ddf9。此次只同步和补充存档记录，未重新编译、仿真或下载；硬件结论引用用户反馈与队友报告。
 
 本次新提交仅更新README主干身份和本存档说明，保留队友源码、bit及测试记录原样。提交号用git log -1 --oneline查询。
+
+## 2026-10-04 更新：提交身份与分支流程
+
+**仓库位置**：本地仓库根目录＝本工程目录本身，`origin` = `https://github.com/m1r0c0666jeremy-hue/FPGA_47299.git`，
+本地 `main` 跟踪 `origin/main`。仓库为**私有**仓库，仅协作者可访问。
+
+**提交身份（已关联 GitHub 账号）**：本机全局与仓库内均设置为
+`Jeremy <161012452+Fle068@users.noreply.github.com>`，对应 GitHub 账号 **Fle068**；
+用 noreply 地址可保证提交稳定归属该账号，且不暴露私人邮箱。推送认证使用 Git Credential Manager（已登录 Fle068）。
+
+- 历史提交（`45253e0`…`ca44ead`，含队友的 `3eee5cf`/`1efd552`/`3844377`/`e671630`）署名均为 `m1r0c0666jeremy@gmail.com`；
+  若该邮箱也是你的，可在 GitHub → Settings → Emails 添加并验证，历史提交会自动归到你名下。
+- 自 2026-10-04 起采用的流程：**特性分支 → 推分支 → 经确认后再合并 main**。
+
+```powershell
+git checkout -b feature/xxx      # 1) 本地建分支，不动 main
+git add -A; git commit -m "..."  # 2) 提交到分支
+git push -u origin feature/xxx   # 3) 只推分支
+git checkout main; git merge --no-ff feature/xxx; git push origin main   # 4) 确认后并入主干
+```
+
+现存分支：`ImagePreprocess`（队友开发线，未合并）、`ScalingTest`（队友：手动缩放/按键复用/中文OSD，未合并）、
+`docs/git-workflow-and-identity`（本次文档分支）。
+标签：`v1.1`、`v1.2`、`archive-2026-10-03-camera-hdmi`、`archive-2026-10-04-pins-brightness`、`archive-2026-10-04-imagepreprocess`、`review-2026-10-03-teammate-v1.1`。
