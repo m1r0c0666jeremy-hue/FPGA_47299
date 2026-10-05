@@ -1,0 +1,20 @@
+{
+  "font": "simhei.ttf",
+  "font_sha256": "aa4560dd8fe5645745fed3ffa301c3ca4d6c03cbd738145b613303961ba733b8",
+  "contest_glyphs_reused": "0123456789EKY安路：",
+  "characters": " (),0123456789EKY上下二倍值冲到动化原右向命图坐安就左度式待态技按方未标模灰状率界科移突绪缘视路边键频：",
+  "glyph_size": [
+    24,
+    24
+  ],
+  "logo_size": [
+    96,
+    62
+  ],
+  "files": {
+    "scaling_glyph_rom.v": "6ced9e2f6ae6fb23683df0d155d9541d50adc654c46524db17f1ce36d78ff43a",
+    "scaling_logo_rom.v": "4efbb9d3f18cf7d8c9d63fd45e75615765c1581826689baa3fca3e7aa8d573a0",
+    "scaling_osd.v": "235890607a1209647b5ced159ec6d36b65b7277cff5d98af18d036df3d61e8c4",
+    "anlogic_symbol_96x62.png": "9e213931df2f500c4f8d56b1749a20d2577a4cfd0faffd9c87534473cb5bbd37"
+  }
+}

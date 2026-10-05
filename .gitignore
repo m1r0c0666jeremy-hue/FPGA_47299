@@ -4,6 +4,8 @@
 /vendor_reference/lab1/td_project/log/
 /reports/td_*.log
 /reports/td_*.logw
+/td_*.log
+/td_*.logw
 
 # Reproducible intermediate outputs; named timing reports remain archived
 /build/sim/

@@ -5,7 +5,7 @@
 `default_nettype none
 module camera_capture (
     input wire I_control_clk, input wire I_camera_ref_clk,
-    input wire I_rst_n, input wire [1:0] I_button,
+    input wire I_rst_n, input wire I_gain_req, I_gain_up, output wire O_gain_ack,
     output wire O_cam_scl, inout wire IO_cam_sda,
     output wire O_cam_24m, output wire O_cam_rst,
     inout wire IO_rx_clk_pad_n, inout wire IO_rx_clk_pad_p,
@@ -63,17 +63,11 @@ camera_status u_status (
     .I_csi_valid(S_csi_valid), .I_frame_start(S_csi_frame_start),
     .O_status_async(O_status_async)
 );
-ae_set u_ae_set (
-      .I_clk(S_24m_clk),
-      .I_rst(~S_rst_n),
-      .I_btn({I_button,2'b11}),
-      .I_cam_cfg_done(S_cam_cfg_done),
-      .I_ae_cfg_done(S_ae_cfg_done),
-      .O_ae_req(S_ae_req),
-      .O_ae(S_ae),
-      .O_ag(S_ag)
-  );
-  
+camera_gain_control u_gain_control (
+    .I_clk(S_24m_clk), .I_rst_n(S_rst_n), .I_req(I_gain_req), .I_up(I_gain_up),
+    .I_cam_done(S_cam_cfg_done), .I_ae_done(S_ae_cfg_done),
+    .O_ack(O_gain_ack), .O_ae_req(S_ae_req), .O_ae(S_ae), .O_ag(S_ag)
+);
     uicfgcs500_720p #(
       .CLK_DIV(24000000 / 100000 - 1)
   ) u_uicfgcs500 (

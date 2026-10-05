@@ -1,0 +1,49 @@
+
+PASS controls: debounce, reset release, 2/10px repeats, direction lock, conflict, gain CDC/bounds, zoom/bounds, viewport atomicity and edges
+sim/tb_scaling_controls.sv:71: $finish called at 4241278720 (1ps)
+
+
+PASS scaling video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     150240 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          1 mode=          0 x0=         13 y0=         37 frames=          1 pixels=     798720 DDR=      75360 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          2 mode=          0 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      37920 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          1 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=     150240 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          2 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=     150240 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          3 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=     150240 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          1 mode=          1 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      75360 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          1 mode=          2 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      75360 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          1 mode=          3 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      75360 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          2 mode=          1 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      37920 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          2 mode=          2 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      37920 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          2 mode=          3 x0=          0 y0=          0 frames=          1 pixels=     798720 DDR=      37920 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 17050345808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     162960 black=     732160
+sim/tb_scaling_video.sv:132: $finish called at 33551170808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          3 pixels=    2396160 DDR=     297360 black=     814080
+sim/tb_scaling_video.sv:132: $finish called at 50051995808 (1ps)
+
+PASS scaling video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     187680 black=          0
+sim/tb_scaling_video.sv:132: $finish called at 33551170808 (1ps)

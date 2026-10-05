@@ -1,0 +1,26 @@
+{
+  "archive": "D:\\BaiduNetdiskDownload\\HX1P35A_Contest_202606\\7_lab_ex_2026_nosoft\\lab_ex3_osd_SC500_720P.zip",
+  "archive_sha256": "a66659fb3fe4ea8d3fd3e20f014c34246663889972e379a57bb875269b6581bf",
+  "files": [
+    {
+      "path": "hdmi_mixer.v",
+      "archive_entry": "lab_ex3_osd_SC500_720P/lab_ex3_osd/user_source/hdl_source/hdmi_mixer.v",
+      "sha256": "e0b3fa961da8bd91d58175ad57eec38e90cc9295215c854154bc0bf2f2f987c7"
+    },
+    {
+      "path": "osd_char_lib.v",
+      "archive_entry": "lab_ex3_osd_SC500_720P/lab_ex3_osd/user_source/hdl_source/osd_char_lib.v",
+      "sha256": "80269dee8af301d175a0b8ba0b0305149852916a3ed81082349bebc27feac311"
+    },
+    {
+      "path": "anlogic_logo_rom.v",
+      "archive_entry": "lab_ex3_osd_SC500_720P/lab_ex3_osd/user_source/hdl_source/anlogic_logo_rom.v",
+      "sha256": "37c76680345f17a85632b7835e46a3a197cf75fdd91ca6a970b75f5346e7a9f8"
+    },
+    {
+      "path": "key_remove_shakes.v",
+      "archive_entry": "lab_ex3_osd_SC500_720P/lab_ex3_osd/user_source/hdl_source/key_remove_shakes.v",
+      "sha256": "8832f59e7ba94bfb8cf31e4f5a772ef7177d5257a5a2532d53cbfa1d9b7f5cd9"
+    }
+  ]
+}

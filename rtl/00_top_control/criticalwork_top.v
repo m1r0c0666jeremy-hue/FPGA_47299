@@ -12,8 +12,9 @@ module criticalwork_top #(parameter integer DEBUG_MODE = 0) (
     output wire       O_cam_24m,
     output wire       O_cam_rst,
       
-    input wire [1:0]  I_button,          // 2026-10-04: was inout (bidirectional pad); board keys are pure inputs
-    input wire [1:0]  I_switch,          // [1]=SW1(A4), [0]=SW2(B4); up=1
+    input wire [2:0]  I_button,          // 2026-10-04: was inout (bidirectional pad); board keys are pure inputs
+    input wire [1:0]  I_switch,          // [1]=SW1(A4), [0]=SW2(B4); measured up=0
+    input wire [1:0]  I_ui_switch,       // [1]=SW3(E11), [0]=SW4(D11)
 
     output wire       O_screen_pwm,
     output wire       O_tmds_ch0_p,
@@ -65,6 +66,17 @@ switch_mode_control u_switch_mode (
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_switch(I_switch), .O_mode_pending(image_mode_pending)
 );
+wire [10:0] ui_cx;
+wire [9:0] ui_cy;
+wire [1:0] ui_zoom, ui_direction;
+wire [2:0] ui_status;
+wire gain_req, gain_up, gain_ack;
+scaling_controls u_controls (
+    .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
+    .I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),
+    .O_gain_req(gain_req), .O_gain_up(gain_up), .O_cx(ui_cx), .O_cy(ui_cy),
+    .O_zoom(ui_zoom), .O_direction(ui_direction), .O_status(ui_status)
+);
 PLL u_PLL(
         .refclk      ( I_sys_clk         ),
         .reset    	 ( ~I_rst_n          ),
@@ -103,7 +115,7 @@ end
 assign O_screen_pwm = S_heart_cnt[25];   // 100 MHz / 2^26 ~= 0.75 s toggle
 camera_capture u_camera (
     .I_control_clk(S_100m_clk), .I_camera_ref_clk(S_24m_clk),
-    .I_rst_n(S_rst_n), .I_button(I_button),
+    .I_rst_n(S_rst_n), .I_gain_req(gain_req), .I_gain_up(gain_up), .O_gain_ack(gain_ack),
     .O_cam_scl(O_cam_scl), .IO_cam_sda(IO_cam_sda),
     .O_cam_24m(O_cam_24m), .O_cam_rst(O_cam_rst),
     .IO_rx_clk_pad_n(IO_rx_clk_pad_n), .IO_rx_clk_pad_p(IO_rx_clk_pad_p),
@@ -120,6 +132,7 @@ status_sync u_status_sync (
 memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
+    .I_cx(ui_cx), .I_cy(ui_cy), .I_zoom(ui_zoom), .I_direction(ui_direction), .I_ui_status(ui_status),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),
     .I_capture_clk(S_csi_rx_clk), .I_rgb128(S_ISP_O_tdata),
     .I_data_valid(S_ISP_O_tvalid), .I_frame_start(S_ISP_O_tuser),
