@@ -60,3 +60,17 @@ SW1/2 仍选择原图、边缘、灰度、二值化。KEY1 复位；KEY2 按 SW3
 输出维持1280×720、总周期1650×750、75MHz像素时钟，理论约60.606Hz。不是分辨率放大，也不是已实测的标准60Hz。跟踪、局部放大、对准和“安路”Logo叠加尚未实现。
 
 按Jeremy要求，本轮暂不修改打包复位、缓存尾字、完整帧恢复等旧问题。已解决的基础引脚对照与基本出图不再列入当前待办；未解决项集中见问题清单。迁移工程应携带整个文件夹，不能只复制 `.al`。
+
+## ImproveFourfoldScale 上板验收结论（2026-10-06）
+
+分支 ScalingTest 之上还完成了 **ImproveFourfoldScale** 版本（4 倍的「原图/灰度」改为双线性插值，
+1/2 倍与边缘/二值化保持最近邻）。该版本已于 2026-10-06 完成**首次上板 A/B 验收并通过**：
+
+- 结论与量化数据：[docs/ImproveFourfoldScale上板验收结论.md](docs/ImproveFourfoldScale上板验收结论.md)
+- 测试流程与判据：[docs/上板测试流程_ImproveFourfoldScale.md](docs/上板测试流程_ImproveFourfoldScale.md)
+- 设计与软件验证：[docs/ImproveFourfoldScale使用与实现.md](docs/ImproveFourfoldScale使用与实现.md)、[reports/ImproveFourfoldScale验证报告.md](reports/ImproveFourfoldScale验证报告.md)
+- 证据与靶标：[细缝可辨性对比](reports/improve_fourfold_ab/细缝可辨性对比_旧bit_vs_新bit.png)、[四倍缩放 AB 对照卡](docs/四倍缩放AB对照卡_1920x1080.png)
+
+关键数据：4× 原图/灰度边缘过渡宽度 17 → 25 像素（平滑生效），窄缝平均深度 0.71 → 0.71（可辨性未下降）；
+1×/2× 与 4× 边缘/二值化与旧 bit 无可辨差异。
+**说明**：该版本的 RTL 与 bit 尚未纳入本仓库（队友按"不推送"处理），本分支归档的是说明文档与验收结论。
