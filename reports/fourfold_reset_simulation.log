@@ -1,0 +1,2 @@
+PASS fourfold video: zoom=          2 mode=          2 x0=        960 y0=        564 frames=          1 pixels=     798720 DDR=      45120 black=          0
+sim/tb_fourfold_reset.sv:222: $finish called at 19819310916 (1ps)

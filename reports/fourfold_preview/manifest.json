@@ -1,0 +1,46 @@
+[
+  {
+    "case": 22,
+    "source_y": 30,
+    "crop": [
+      0,
+      0,
+      320,
+      80
+    ],
+    "rtl_capture_sha256": "48715e0361d050da6bb739425d1d71edc880d129df71768c3852f2a8cbae4c36"
+  },
+  {
+    "case": 23,
+    "source_y": 200,
+    "crop": [
+      80,
+      0,
+      400,
+      80
+    ],
+    "rtl_capture_sha256": "fb45cca05eb201f56476678ab61c5cdc7766995e8df429c8033d7c453d703558"
+  },
+  {
+    "case": 24,
+    "source_y": 350,
+    "crop": [
+      0,
+      0,
+      320,
+      80
+    ],
+    "rtl_capture_sha256": "f8d62ee9c6477cb1ecd52ece86dff8fd3112809ae2cd90d656511e8adb8e5ac9"
+  },
+  {
+    "case": 25,
+    "source_y": 480,
+    "crop": [
+      616,
+      254,
+      680,
+      298
+    ],
+    "rtl_capture_sha256": "3949d0c4a4297b7ad44e07f9700ccb6ee1ee7a2a97e47d82b69ad1c4e9faf2e5"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "baseline": "4c2620782e7f29367620975b51e850a34f846ef1",
+  "checks": [
+    "193 Lab1 baseline files, registered vendor edits, 4 Lab3 references and OSD assets preserved",
+    "Main algorithms/controls/OSD/old bit/evidence retained byte-for-byte; no constraint exceptions added",
+    "66 TD dependencies resolve with PH1P35MDG324 -3",
+    "Bit matches complete build manifest; nonnegative setup/hold slack",
+    "Strict fault-boundary rerun: both latency faults, 5 frames, no first-pixel waiver",
+    "30 full-timing cases/36 frames, independent arithmetic, controls, 6 OSD cases and 3 preprocessing regressions passed"
+  ],
+  "bit_sha256": "979e1c92de9ca899f3cd798abbd5fcba51746dd2fd2a4aa33366618ec1c1f393",
+  "timing": "SWNS: 1.233ns, STNS: 0.000ns.\nHWNS: 0.020ns, HTNS: 0.000ns.",
+  "validation_files": {
+    "scripts/audit_fourfold.py": "d05c0d906584abef6ae538f62fd5ae804e106f19bd4d8461ff2bee9f30023292",
+    "scripts/preview_fourfold.py": "071e36c60559780d3f52254b486e5d5333cd5d067233660c37d677be7f4fa7c5",
+    "scripts/test_fourfold.py": "b1282c90a9509be5e50a0f220b8727f0fb2b8dd999f9b72e6f8d46b078e10296",
+    "scripts/test_fourfold_fault.py": "85f411d31097f3d0bb0d1a70dec7adb9d5046f1249eb2074583dee4f2caf1d92",
+    "scripts/test_fourfold_osd.py": "d158006b8247c8b56274bb9209d8aef8cea204f1abfe315f4f0c05506203932a",
+    "scripts/test_fourfold_preprocess.py": "8d776bf5d9b40abf67b40126906717dd8d75f57c0026362e192c256f516b46d3",
+    "scripts/test_fourfold_reset.py": "a1f34346550fc78caa776679cc24558056fabafa4ecf9b59ee7e646b23f006b6",
+    "sim/tb_fourfold_video.sv": "b1527cc1db3ecccadf2bf26dd16ebfb7aa573d5bc3bb19926aa87d0a80128d0a",
+    "sim/tb_fourfold_reset.sv": "4fb49d39321a2ae4762d2f68f8912582619f1be83087f2cf6c54916c25e4a809",
+    "sim/tb_bilinear_rgb.sv": "add49e99178edbff8d351df82c7edd42199bce0151f577082bc81b87a6dbbd4c",
+    "sim/tb_scaling_controls.sv": "70bf441f27ed018d4daca8fc11effcc6329c40a30d9d01286ef0972f5b496bd3",
+    "reports/fourfold_fault_simulation.log": "ad37fa6c908821e223d22dcd4f6b9d65aeb6d64131da8cb305b0076fb4c0396f",
+    "reports/fourfold_first_simulation.log": "abe513e4210196f2e170ae919d89939b3ff82e1288ea86e1ddf066d8cad50cd8",
+    "reports/fourfold_osd_simulation.log": "d61d8331f16ec0b90606021c3402a78fd6e24e9e40149b10ab55d2b124a08f20",
+    "reports/fourfold_preprocess_simulation.log": "dcd82c7a81dfa707381e736395c99a8111ce410ac77fed866895ccf526d66de5",
+    "reports/fourfold_reset_simulation.log": "455a387b96e614c0992f5bb9fd2410fc044387a5932c3c87a0382570ca270b9e",
+    "reports/fourfold_simulation.log": "1cb557a7258916df9d7fa8bfbc7e2c962feb0abfd03029d5baa9fbe8b8883e06",
+    "reports/fourfold_test_cases.json": "4c6c2eace88eb0b36755cab94ab572e2c9845b961520445c14195f93e06bede1"
+  },
+  "scope": "Software and static/build evidence only; not board acceptance, DDR PHY simulation or full CDC proof."
+}

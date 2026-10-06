@@ -3,11 +3,11 @@ module scaling_viewport (
     input wire I_clk, I_rst_n, I_vs,
     input wire [10:0] I_cx,
     input wire [9:0] I_cy,
-    input wire [1:0] I_zoom, I_direction,
+    input wire [1:0] I_zoom, I_direction, I_mode,
     input wire [2:0] I_status,
     output reg [10:0] O_cx, O_x0, O_cross_x,
     output reg [9:0] O_cy, O_y0, O_cross_y,
-    output reg [1:0] O_zoom, O_direction,
+    output reg [1:0] O_zoom, O_direction, O_mode,
     output reg [2:0] O_status
 );
     reg vs_d;
@@ -34,14 +34,14 @@ module scaling_viewport (
     always @(posedge I_clk or negedge I_rst_n) begin
         if(!I_rst_n) begin
             vs_d<=0; O_cx<=640; O_cy<=360; O_x0<=0; O_y0<=48;
-            O_zoom<=0; O_cross_x<=640; O_cross_y<=312; O_direction<=0; O_status<=0;
+            O_mode<=0; O_zoom<=0; O_cross_x<=640; O_cross_y<=312; O_direction<=0; O_status<=0;
         end else begin
             vs_d<=I_vs;
             if(I_vs&&!vs_d) begin
                 O_cx<=I_cx; O_cy<=I_cy; O_x0<=nx; O_y0<=ny; O_zoom<=I_zoom;
                 O_cross_x<=((I_cx-nx)<<I_zoom)+((1<<I_zoom)>>1);
                 O_cross_y<=((I_cy-ny)<<I_zoom)+((1<<I_zoom)>>1);
-                O_direction<=I_direction; O_status<=I_status;
+                O_mode<=I_mode; O_direction<=I_direction; O_status<=I_status;
             end
         end
     end

@@ -1,0 +1,9 @@
+{
+  "contest_archive": "D:\\BaiduNetdiskDownload\\HX1P35A_Contest_202606\\7_lab_ex_2026_nosoft\\lab_ex1_mipi_hdmi_SC500_720P.zip",
+  "member": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/isp/demosaic_4x_2_0/bilinear_interpolation.v",
+  "member_sha256": "53a4fc3dea805d59cee9bdab1a090c26c03eb555ab612a1a4698d810c1991baf",
+  "purpose": "Bayer demosaic; inspected, not reused as image scaler",
+  "github_reference": "https://github.com/freecores/video_stream_scaler/blob/master/rtl/verilog/scaler.v",
+  "reuse": "Algorithm/architecture reference only; no GitHub source copied",
+  "implementation": "Independent fixed-quarter RGB arithmetic and existing project DDR integration"
+}

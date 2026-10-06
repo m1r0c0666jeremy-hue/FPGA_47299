@@ -1,0 +1,9 @@
+PASS OSD raster captures: six full frames, all modes/states/directions and crosshair corners
+sim/tb_scaling_osd.sv:40: $finish called at 55296760000 (1ps)
+
+PASS OSD case 0: 921600 pixels; mode=0 coordinate=(0,0) zoom=1 direction=0 status=0
+PASS OSD case 1: 921600 pixels; mode=1 coordinate=(1279,719) zoom=2 direction=1 status=1
+PASS OSD case 2: 921600 pixels; mode=2 coordinate=(1279,0) zoom=4 direction=2 status=2
+PASS OSD case 3: 921600 pixels; mode=3 coordinate=(0,719) zoom=4 direction=3 status=3
+PASS OSD case 4: 921600 pixels; mode=0 coordinate=(640,360) zoom=1 direction=0 status=4
+PASS OSD case 5: 921600 pixels; mode=0 coordinate=(640,360) zoom=1 direction=1 status=0

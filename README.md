@@ -1,7 +1,19 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
-## 当前主干：准心、手动缩放与中文 OSD（2026-10-05）
+## 当前开发分支：ImproveFourfoldScale（2026-10-06）
+
+基于本地main存档 `4c26207` 创建。**仅原图、灰度4倍显示使用双线性插值**；1/2倍及边缘、二值化保持原像素结果，按键/增益/准心/OSD操作不变。软件验证、独立TD构建通过，**新bit尚未上板**。
+
+- 新工程：[improve_fourfold_scale.al](td_project/improve_fourfold_scale.al)，[构建脚本](scripts/build_improve_fourfold_scale.tcl)，[新bit](build/improve_fourfold_scale/improve_fourfold_scale.bit)。本分支不要使用旧scaling_test构建脚本覆盖旧输出。
+- [使用、原理与上板对照](docs/ImproveFourfoldScale使用与实现.md)、[验证报告](reports/ImproveFourfoldScale验证报告.md)、[同源画面对照](reports/fourfold_preview/comparison.png)。
+- 30组视频测试/36完整帧及额外复位后完整帧通过；算术、控制、四模式及OSD回归通过。最终时序+1.233ns/+0.020ns、覆盖96.61%；RAM80/108、Slice14600/21216、DSP10/40。
+- 五级缩放、五级处理、两级OSD；四行缓存与四读副本，不新增整帧片上缓存。双线性降低块状感，不增加真实采样细节。
+- 本地存档名：**ImproveFourfoldScale：实现原图与灰度4倍双线性缩放并完成软件验证**。不推送、不合并、不自动下载或烧Flash。
+
+以下为main和更早版本历史记录，旧构建入口及验收结论仅对应当时版本。
+
+## 历史主干：准心、手动缩放与中文 OSD（2026-10-05）
 
 当前为 **main**，已同步远端 `8136663`，包含 ScalingTest 功能及队友首次上板验收记录。Jeremy 本次确认队友的十字准心、放大、OSD 功能测试成功；报告记录第 0～5 步通过，第 6 步连续稳定性观察跳过，仅 SRAM 在线下载、未烧 Flash。测试设备为 HX1P35A V1.0、MLK-CAM001 V1.0（SC500CS）、KTC H25T7。
 

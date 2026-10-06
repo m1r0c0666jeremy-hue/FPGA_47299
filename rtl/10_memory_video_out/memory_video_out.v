@@ -125,15 +125,15 @@ video_in u_video_in(
 
     wire [10:0] active_cx, roi_x, cross_x;
     wire [9:0] active_cy, roi_y, cross_y;
-    wire [1:0] active_zoom, active_direction;
+    wire [1:0] active_zoom, active_direction, frame_mode;
     wire [2:0] active_status;
     wire video_ok;
     scaling_viewport u_viewport (
         .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n), .I_vs(S_hdmi_vsync),
-        .I_cx(I_cx), .I_cy(I_cy), .I_zoom(I_zoom), .I_direction(I_direction), .I_status(I_ui_status),
+        .I_cx(I_cx), .I_cy(I_cy), .I_zoom(I_zoom), .I_direction(I_direction), .I_status(I_ui_status), .I_mode(I_process_mode),
         .O_cx(active_cx), .O_cy(active_cy), .O_x0(roi_x), .O_y0(roi_y),
         .O_cross_x(cross_x), .O_cross_y(cross_y), .O_zoom(active_zoom),
-        .O_direction(active_direction), .O_status(active_status)
+        .O_direction(active_direction), .O_status(active_status), .O_mode(frame_mode)
     );
     scaling_line_reader u_scaler (
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
@@ -142,7 +142,7 @@ video_in u_video_in(
         .I_ddr_data(S_ddr_user_rd_data), .O_read_busy(S_video_out_rd_busy),
         .O_read_en(S_vo_ddr_rd_en), .O_read_addr(S_vo_ddr_rd_addr),
         .I_pixel_clk(S_hdmi_pixel_clk), .I_vs(S_hdmi_vsync), .I_hs(S_hdmi_hsync), .I_de(S_hdmi_de),
-        .I_x0(roi_x), .I_y0(roi_y), .I_zoom(active_zoom),
+        .I_x0(roi_x), .I_y0(roi_y), .I_zoom(active_zoom), .I_mode(frame_mode),
         .O_vs(S_hdmi_out_vsync), .O_hs(S_hdmi_out_hsync), .O_de(S_hdmi_out_de),
         .O_rgb(S_hdmi_out_data), .O_video_ok(video_ok)
     );
@@ -233,7 +233,7 @@ video_in u_video_in(
     // Display-side RGB processing leaves the camera/DDR packed stream unchanged.
     image_preprocess u_image_preprocess (
         .I_clk(S_hdmi_pixel_clk), .I_rst_n(I_process_rst_n),
-        .I_mode_pending(I_process_mode),
+        .I_mode_pending(frame_mode),
         .I_vs(S_hdmi_out_vsync), .I_hs(S_hdmi_out_hsync),
         .I_de(S_hdmi_out_de), .I_rgb(S_hdmi_out_data),
         .O_vs(process_vs), .O_hs(process_hs), .O_de(process_de),

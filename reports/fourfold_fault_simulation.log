@@ -1,0 +1,5 @@
+PASS fourfold video: zoom=          2 mode=          0 x0=          0 y0=          0 frames=          2 pixels=    1597440 DDR=      40560 black=     760320
+sim/tb_fourfold_video.sv:220: $finish called at 33551170808 (1ps)
+
+PASS fourfold video: zoom=          2 mode=          2 x0=        960 y0=        564 frames=          3 pixels=    2396160 DDR=      78960 black=     739840
+sim/tb_fourfold_video.sv:220: $finish called at 50051995808 (1ps)

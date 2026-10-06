@@ -23,9 +23,10 @@ module tb_scaling_controls;
     reg [1:0] vz=0;
     wire [10:0] ax,rx,sx;
     wire [9:0] ay,ry,sy;
-    wire [1:0] az,ad;
+    wire [1:0] az,ad,am;
+    reg [1:0] vm=0;
     wire [2:0] ast;
-    scaling_viewport viewport(clk,rst,vs,vx,vy,vz,2'd0,3'd0,ax,rx,sx,ay,ry,sy,az,ad,ast);
+    scaling_viewport viewport(clk,rst,vs,vx,vy,vz,2'd0,vm,3'd0,ax,rx,sx,ay,ry,sy,az,ad,am,ast);
     task commit; vs=1; repeat(2) @(negedge clk);vs=0;repeat(2) @(negedge clk);endtask
     initial begin
         // Held key during reset must never arm the UI.
@@ -60,9 +61,9 @@ module tb_scaling_controls;
         select_dir(3);keys=5;ms(8000);keys=7;ms(25);if(cy!=0) $fatal(1,"top saturation");
         // Viewport independently tests clamping, pan and atomic frame commit.
         commit();if(rx!=0||ry!=48||sx!=640||sy!=312) $fatal(1,"initial viewport");
-        vx=1279;vy=719;vz=2;repeat(4) @(negedge clk);
-        if(ax!=640||az!=0) $fatal(1,"mid-frame metadata changed");
-        commit();if(rx!=960||ry!=564||sx!=1278||sy!=622) $fatal(1,"4x lower right");
+        vx=1279;vy=719;vz=2;vm=2;repeat(4) @(negedge clk);
+        if(ax!=640||az!=0||am!=0) $fatal(1,"mid-frame metadata changed");
+        commit();if(rx!=960||ry!=564||sx!=1278||sy!=622||am!=2) $fatal(1,"4x lower right");
         vz=1;commit();if(rx!=640||ry!=408||sx!=1279||sy!=623) $fatal(1,"2x lower right");
         vz=0;commit();if(ry!=96||ay!=719||sy!=623) $fatal(1,"zoomout lost source coordinate");
         vy=0;vx=0;commit();if(ry!=0||sy!=0) $fatal(1,"1x full-source pan");
