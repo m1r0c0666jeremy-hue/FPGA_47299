@@ -95,5 +95,5 @@ STA覆盖率96.61%，不是100%；约束内容与main一致，没有新增或放
 本节的量化结论仅采用**同机位的细缝 A/B 一对**（证据图：`reports/improve_fourfold_ab/细缝可辨性对比_旧bit_vs_新bit.png`）。
 
 **结论：ImproveFourfoldScale 首次上板验收通过**——画质目标达成（方块感消除）且未牺牲细线/窄缝可辨性，
-其余功能与 ScalingTest 保持一致，未发现新增异常。本版 RTL 与 bit 尚未纳入 git 仓库（队友按"不推送"处理），
+**说明**：该版本的 RTL 与 bit 已归档在 `ImproveFourfoldScale` 分支（`86ef777`）；本分支归档说明文档与验收结论，未合并 main。
 本仓库归档的是说明文档与验收结论。
