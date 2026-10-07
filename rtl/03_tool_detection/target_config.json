@@ -1,0 +1,15 @@
+{
+  "L_mm": 40,
+  "D_mm": 20,
+  "color_min": 80,
+  "color_diff": 32,
+  "ratio_num": 3,
+  "ratio_den": 2,
+  "area_min": 64,
+  "area_max": 20000,
+  "fill_percent_min": 30,
+  "separation_min_px": 16,
+  "separation_max_px": 600,
+  "max_step_px": 96,
+  "confirm_frames": 3
+}

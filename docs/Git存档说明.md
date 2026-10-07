@@ -86,3 +86,13 @@ Jeremy 确认队友十字准心、放大与 OSD 已成功上板。接收报告�
 本次运行 `scripts/audit_scaling.py` 通过，核对 193 份 Lab1 来源文件、4 份 Lab3 来源文件、65 个工程依赖、字模/Logo、构建输入与 bit 哈希及存档日志。当前 bit 为 `build/scaling_test/scaling_test.bit`，SHA256 为 `a598cff3ea804c0fbc9e54d1693e03cfc32fa4b9aef2d7133f234879dc6edf8c`。与本地 ScalingTest 相比，RTL、厂家代码、工程约束、脚本、仿真源码和 bit 未变化；本轮未重新仿真、编译、下载。
 
 新提交仅更新 README 和本存档说明，修正当前入口及两台电脑的路径/身份范围。Jeremy 反馈 4 倍像素感明显，当前采用最近邻复制；双线性插值等优化仅为建议，未修改已验收实现。提交号以 `git log -1 --oneline` 为准。
+
+## 2026-10-07 LockingnTracking 开发状态存档与队友交接
+
+存档名称：**LockingnTracking：存档双色锁定跟踪与OSD开发版本，待队友联调**。
+
+从本地main `4c2620782e7f29367620975b51e850a34f846ef1` 创建LockingnTracking，沿用最近邻缩放；main和ImproveFourfoldScale分支保留。按Jeremy明确要求，将当前开发状态提交并推送到 `origin/LockingnTracking`，不合并或推送main，不继续处理本次发现的采集接入问题，具体测试和问题处理交由队友。
+
+归档范围包括双色检测／估算尖端／持续跟踪／OSD源码、独立工程和脚本、已有仿真与静态审计、OSD预览、帧头FIFO复位丢数据的复现证据，以及首轮中间bit和TD报告。中间bit不是最新源码的同源最终产物，不能直接作为可上板交付；尚未做最终完整集成验收、上板、下载或烧Flash。队友先读 `reports/LockingnTracking验证报告.md`，不要把推送成功理解为问题修复完成。
+
+精确提交号与上传状态以Git记录为准；本地仓库外的 `D:/aaa_FPGA/AGENTS.md` 不属于本次GitHub上传内容。

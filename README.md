@@ -1,7 +1,20 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
-## 当前主干：准心、手动缩放与中文 OSD（2026-10-05）
+## 当前开发：LockingnTracking（2026-10-07，接入验证未完成）
+
+从本地main `4c26207` 创建 **LockingnTracking**，main与ImproveFourfoldScale分支保留。新增红前蓝后双色检测、估算尖端、KEY3启停持续跟踪、窗口跟随与SW3标注显隐；沿用main最近邻缩放。
+
+- [使用、参数与实现](docs/LockingnTracking使用与实现.md)、[验证报告与接入问题](reports/LockingnTracking验证报告.md)、[锁定状态OSD仿真预览](reports/target_preview/osd_02.png)。
+- 新工程 `td_project/target_lock.al`、构建脚本 `scripts/build_target_lock.tcl`。不要使用旧scaling_test入口编译新顶层。
+- L=40mm、D=20mm、K=0.5；修改 `rtl/03_tool_detection/target_config.json` 后运行 `scripts/generate_target.py`，再重新编译。
+- 独立控制、检测／跟踪、15组完整显示、10幅OSD及原算法回归通过。**AWB→打包→旧FIFO联调复现帧头数据被复位吞掉；整体接入尚未完成。2026-10-07 Jeremy决定保存并上传本分支，具体测试与问题处理交给队友，本次不继续修复。**
+- 存档名：**LockingnTracking：存档双色锁定跟踪与OSD开发版本，待队友联调**。上传目标为GitHub同名分支，提交号以Git记录为准。
+- 当前target_lock.bit是中间构建，不代表最新源码同源、不可作为可上板交付。未下载、未烧Flash、未合并main；上传不代表问题已修复或实物验收通过。
+
+以下为旧main及更早版本历史记录，不能作为本分支新功能的上板结论。
+
+## 历史主干：准心、手动缩放与中文 OSD（2026-10-05）
 
 当前为 **main**，已同步远端 `8136663`，包含 ScalingTest 功能及队友首次上板验收记录。Jeremy 本次确认队友的十字准心、放大、OSD 功能测试成功；报告记录第 0～5 步通过，第 6 步连续稳定性观察跳过，仅 SRAM 在线下载、未烧 Flash。测试设备为 HX1P35A V1.0、MLK-CAM001 V1.0（SC500CS）、KTC H25T7。
 
