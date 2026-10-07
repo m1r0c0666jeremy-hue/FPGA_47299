@@ -1,0 +1,41 @@
+
+PASS target controls: debounce, toggle, hold, conflict, gain latch, zoom, reset
+sim/tb_target_controls.sv:27: $finish called at 92950000 (1ps)
+
+
+PASS display: frame/session match, follow, bounds, hide, stop, late response, video fault
+sim/tb_target_display.sv:39: $finish called at 2161108 (1ps)
+
+
+PASS frame store: matching, missing, overwritten, stale, short, long, nonsequential
+sim/tb_target_store.sv:39: $finish called at 1605000 (1ps)
+
+
+PASS bundled CDC: 100 coherent 256-bit transactions, asynchronous clocks
+sim/tb_target_mailbox.sv:21: $finish called at 9008040 (1ps)
+
+
+PASS detector 128x64 frames=22
+sim/tb_target_detector.sv:27: $finish called at 502120000 (1ps)
+
+
+PASS tracker L=40 D=20 cases=450
+sim/tb_target_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=40 D=0 cases=450
+sim/tb_target_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=30 D=20 cases=450
+sim/tb_target_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=20 D=30 cases=450
+sim/tb_target_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS detector 1280x720 frames=2
+sim/tb_target_detector.sv:27: $finish called at 4627690000 (1ps)
+
+TARGET_UNIT_TESTS_PASSED

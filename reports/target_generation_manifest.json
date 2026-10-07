@@ -1,0 +1,29 @@
+{
+  "config": {
+    "L_mm": 40,
+    "D_mm": 20,
+    "color_min": 80,
+    "color_diff": 32,
+    "ratio_num": 3,
+    "ratio_den": 2,
+    "area_min": 64,
+    "area_max": 20000,
+    "fill_percent_min": 30,
+    "separation_min_px": 16,
+    "separation_max_px": 600,
+    "max_step_px": 96,
+    "confirm_frames": 3
+  },
+  "K_Q16": 32768,
+  "K_display": "0.500",
+  "characters": " (),-.0123456789=ABDEKLTYm中二估倍值停冲前化原后启命图失安定尖就已度式待态技按搜未模止灰状率科突端算索红绪缘蓝视跟路踪边锁键频：",
+  "contest_glyphs_reused": "0123456789ABDEKLTY安路：",
+  "font_sha256": "aa4560dd8fe5645745fed3ffa301c3ca4d6c03cbd738145b613303961ba733b8",
+  "files": {
+    "rtl/04_tracking/target_capture_pipeline.v": "ffc803d98d685537c4824bcd168c7c0a18f30b1525da7cf270f3cb8e4ea03c75",
+    "rtl/09_osd_ui/target_glyph_rom.v": "dbd57661024ba588860ff875af97ecf73b934c5e22dfd128d9d3be6f0bf5cb8d",
+    "rtl/09_osd_ui/target_osd.v": "ac7549bf6590858c88818dce3d957fd0b126ccd45fb71aac0a424c40fc9201f9",
+    "rtl/03_tool_detection/target_config.json": "ee990196d77508b097d3cde8a3bf642421d39d3d74d2f7232bf10284abbce231",
+    "scripts/target_osd_template.v.txt": "1746bacb781fddc26ccff1baa254aad5ddab93fa4242e68d1fda956440e8d554"
+  }
+}

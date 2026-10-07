@@ -9,6 +9,7 @@
 
 # Reproducible intermediate outputs; named timing reports remain archived
 /build/sim/
+/build/target_syntax.vvp
 /build/*/final_timing.rpt
 /build/*/*_inst.bid
 __pycache__/

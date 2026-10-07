@@ -10,6 +10,8 @@ module camera_capture (
     output wire O_cam_24m, output wire O_cam_rst,
     inout wire IO_rx_clk_pad_n, inout wire IO_rx_clk_pad_p,
     inout wire [3:0] IO_rx_data_pad_n, inout wire [3:0] IO_rx_data_pad_p,
+    output wire [95:0] O_detect_rgb,
+    output wire O_detect_sof,O_detect_valid,
     output wire O_capture_clk, output wire [127:0] O_rgb128,
     output wire O_data_valid, output wire O_frame_start,
     output wire [3:0] O_status_async
@@ -171,6 +173,7 @@ assign S_raw_tlast  = S_axis_tlast;
 assign S_raw_tuser  = S_axis_tuser;
 
 isp_top u_isp_top (
+.O_detect_rgb(O_detect_rgb),.O_detect_sof(O_detect_sof),.O_detect_valid(O_detect_valid),
 .axi4s_video_aclk(S_csi_rx_clk),
 .I_rst_n         (S_rst_n),
 .I_tlast         (S_raw_tlast	),

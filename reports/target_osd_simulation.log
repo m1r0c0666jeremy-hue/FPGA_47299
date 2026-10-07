@@ -1,0 +1,10 @@
+PASS OSD case 0: state=0 show=1 zoom=1 pixels=921600
+PASS OSD case 1: state=1 show=1 zoom=1 pixels=921600
+PASS OSD case 2: state=2 show=1 zoom=1 pixels=921600
+PASS OSD case 3: state=3 show=1 zoom=1 pixels=921600
+PASS OSD case 4: state=4 show=1 zoom=1 pixels=921600
+PASS OSD case 5: state=5 show=1 zoom=1 pixels=921600
+PASS OSD case 6: state=6 show=1 zoom=1 pixels=921600
+PASS OSD case 7: state=2 show=0 zoom=1 pixels=921600
+PASS OSD case 8: state=2 show=1 zoom=4 pixels=921600
+PASS OSD case 9: state=2 show=1 zoom=2 pixels=921600

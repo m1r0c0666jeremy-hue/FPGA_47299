@@ -66,16 +66,17 @@ switch_mode_control u_switch_mode (
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_switch(I_switch), .O_mode_pending(image_mode_pending)
 );
-wire [10:0] ui_cx;
-wire [9:0] ui_cy;
-wire [1:0] ui_zoom, ui_direction;
-wire [2:0] ui_status;
+wire [1:0] ui_zoom;
+wire ui_tracking,ui_show,ui_conflict;
+wire [7:0] ui_session;
+wire [95:0] detect_rgb;
+wire detect_sof,detect_valid;
 wire gain_req, gain_up, gain_ack;
-scaling_controls u_controls (
+target_controls u_controls (
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),
-    .O_gain_req(gain_req), .O_gain_up(gain_up), .O_cx(ui_cx), .O_cy(ui_cy),
-    .O_zoom(ui_zoom), .O_direction(ui_direction), .O_status(ui_status)
+    .O_gain_req(gain_req), .O_gain_up(gain_up), .O_zoom(ui_zoom),
+    .O_tracking(ui_tracking),.O_show(ui_show),.O_session(ui_session),.O_conflict(ui_conflict)
 );
 PLL u_PLL(
         .refclk      ( I_sys_clk         ),
@@ -120,6 +121,7 @@ camera_capture u_camera (
     .O_cam_24m(O_cam_24m), .O_cam_rst(O_cam_rst),
     .IO_rx_clk_pad_n(IO_rx_clk_pad_n), .IO_rx_clk_pad_p(IO_rx_clk_pad_p),
     .IO_rx_data_pad_n(IO_rx_data_pad_n), .IO_rx_data_pad_p(IO_rx_data_pad_p),
+    .O_detect_rgb(detect_rgb),.O_detect_sof(detect_sof),.O_detect_valid(detect_valid),
     .O_capture_clk(S_csi_rx_clk), .O_rgb128(S_ISP_O_tdata),
     .O_data_valid(S_ISP_O_tvalid), .O_frame_start(S_ISP_O_tuser),
     .O_status_async(camera_status_async)
@@ -132,7 +134,8 @@ status_sync u_status_sync (
 memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
-    .I_cx(ui_cx), .I_cy(ui_cy), .I_zoom(ui_zoom), .I_direction(ui_direction), .I_ui_status(ui_status),
+    .I_zoom(ui_zoom),.I_tracking(ui_tracking),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
+    .I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),
     .I_capture_clk(S_csi_rx_clk), .I_rgb128(S_ISP_O_tdata),
     .I_data_valid(S_ISP_O_tvalid), .I_frame_start(S_ISP_O_tuser),

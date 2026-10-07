@@ -5,6 +5,9 @@ module video_in (
 
     input wire         I_camera_clk,
     input wire         I_camera_frame_start,
+    input wire [31:0] I_camera_frame_id,
+    output wire O_frame_begin,output wire [1:0] O_frame_bank,
+    output wire [31:0] O_frame_id,output wire O_capture_overflow,
     input wire         I_camera_valid,
     input wire[127:0]  I_camera_data,
     input wire         I_mipi_rx_error,
@@ -45,6 +48,16 @@ module video_in (
     localparam IMAGE_BASE_ADDR_3 = 25'd21000000;
 
 
+    // Observe the SAME start/bank used by the existing writer. The frame ID
+    // is bundled with the stretched frame pulse and held for a full frame.
+    reg [31:0] camera_id_hold;
+    always @(posedge I_camera_clk or negedge I_rst_n)
+        if(!I_rst_n) camera_id_hold<=0;
+        else if(I_camera_frame_start) camera_id_hold<=I_camera_frame_id;
+    assign O_frame_begin=S_frame_start;
+    assign O_frame_bank=S_video_in_wp;
+    assign O_frame_id=camera_id_hold;
+    assign O_capture_overflow=S_fifo_overflow;
     assign S_fifo_rst = S_camera_frame_start_extend_3d;
 
     // S_ddr_wr_valid is the ownership flag for the complete DDR write burst.

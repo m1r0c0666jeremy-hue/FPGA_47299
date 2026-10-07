@@ -7,6 +7,8 @@ module isp_top (
     input 			I_tvalid		,
     input [9:0] 	I_tdest			,
     input 			O_tready		,
+    output [95:0] O_detect_rgb,
+    output O_detect_sof,O_detect_valid,
     output [127:0] 	O_tdata			,
     output 			O_tlast			,
     output 			O_tuser			,
@@ -33,6 +35,9 @@ wire         m_aixs_tvalid;  //synthesis keep
   wire         awb_O_tvalid_128;  //synthesis keep 
   wire [127:0] awb_O_tdata_128;  //synthesis keep 
 
+  assign O_detect_rgb=awb_O_tdata;
+  assign O_detect_sof=awb_O_tuser;
+  assign O_detect_valid=awb_O_tvalid;
   assign awb_O_tready = O_tready;
   assign O_tdata  = awb_O_tdata_128;
   assign O_tlast  = awb_O_tlast    ;
