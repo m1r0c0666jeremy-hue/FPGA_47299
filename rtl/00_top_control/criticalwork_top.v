@@ -67,16 +67,16 @@ switch_mode_control u_switch_mode (
     .I_switch(I_switch), .O_mode_pending(image_mode_pending)
 );
 wire [1:0] ui_zoom;
-wire ui_tracking,ui_show,ui_conflict;
+wire ui_tracking,ui_show,ui_conflict,ui_pair;
 wire [7:0] ui_session;
 wire [95:0] detect_rgb;
 wire detect_sof,detect_valid;
 wire gain_req, gain_up, gain_ack;
-target_controls u_controls (
+target_controls #(.LONG_PRESS_MS(1000)) u_controls (
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),
     .O_gain_req(gain_req), .O_gain_up(gain_up), .O_zoom(ui_zoom),
-    .O_tracking(ui_tracking),.O_show(ui_show),.O_session(ui_session),.O_conflict(ui_conflict)
+    .O_pair(ui_pair),.O_tracking(ui_tracking),.O_show(ui_show),.O_session(ui_session),.O_conflict(ui_conflict)
 );
 PLL u_PLL(
         .refclk      ( I_sys_clk         ),
@@ -134,7 +134,7 @@ status_sync u_status_sync (
 memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
-    .I_zoom(ui_zoom),.I_tracking(ui_tracking),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
+    .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
     .I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),
     .I_capture_clk(S_csi_rx_clk), .I_rgb128(S_ISP_O_tdata),

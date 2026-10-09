@@ -1,0 +1,41 @@
+
+PASS dualcolor controls: 999/1000/1001ms, held, conflict, reset, SW4 gain, pair session
+sim/tb_dualcolor_controls.sv:36: $finish called at 1127840000 (1ps)
+
+
+PASS display: frame/session match, follow, bounds, hide, stop, late response, video fault
+sim/tb_dualcolor_display.sv:49: $finish called at 2454456 (1ps)
+
+
+PASS frame store: matching, missing, overwritten, stale, short, long, nonsequential
+sim/tb_dualcolor_store.sv:39: $finish called at 1605000 (1ps)
+
+
+PASS bundled CDC: 100 coherent 256-bit transactions, asynchronous clocks
+sim/tb_dualcolor_mailbox.sv:21: $finish called at 9008040 (1ps)
+
+
+PASS detector 128x64 frames=22
+sim/tb_dualcolor_detector.sv:27: $finish called at 502120000 (1ps)
+
+
+PASS tracker L=40 D=20 cases=450
+sim/tb_dualcolor_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=40 D=0 cases=450
+sim/tb_dualcolor_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=30 D=20 cases=450
+sim/tb_dualcolor_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=20 D=30 cases=450
+sim/tb_dualcolor_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS detector 1280x720 frames=2
+sim/tb_dualcolor_detector.sv:27: $finish called at 4627690000 (1ps)
+
+DUALCOLOR_UNIT_TESTS_PASSED

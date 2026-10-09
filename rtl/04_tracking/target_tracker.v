@@ -8,7 +8,7 @@ module target_tracker #(
     input wire I_valid,
     input wire [255:0] I_meta,
     output reg O_valid,
-    output reg [255:0] O_meta
+    output reg [255:0] O_meta,input wire I_pair
 );
     localparam signed [47:0] K_Q16=(D_MM*65536+L_MM/2)/L_MM;
     wire signed [12:0] ax=$signed({2'b0,I_meta[47:37]}),ay=$signed({3'b0,I_meta[57:48]});
@@ -29,6 +29,7 @@ module target_tracker #(
                bx-pbx>MAX_STEP || pbx-bx>MAX_STEP || by-pby>MAX_STEP || pby-by>MAX_STEP);
     wire geometry=I_meta[32] && distance2>=SEP_MIN*SEP_MIN && distance2<=SEP_MAX*SEP_MAX &&
                   tx>=0 && tx<WIDTH && ty>=0 && ty<HEIGHT;
+    wire matching=I_meta[242:235]==I_session && I_meta[243]==I_pair && I_meta[244];
     wire good=geometry && (!prev_good || (!jump && I_meta[31:0]==last_id+1'b1));
     always @(posedge I_clk or negedge I_rst_n) begin
         if(!I_rst_n) begin
@@ -40,10 +41,10 @@ module target_tracker #(
                 session<=I_session;streak<=0;prev_good<=0;ever_locked<=0;
             end
             if(I_valid) begin
-                O_valid<=1;O_meta<=I_meta;O_meta[242:235]<=I_session;O_meta[32]<=0;
+                O_valid<=1;O_meta<=I_meta;O_meta[32]<=0;
                 O_meta[234:232]<=I_enable?(ever_locked?3:1):0;
                 O_meta[89:79]<=tx[10:0];O_meta[99:90]<=ty[9:0];
-                if(I_enable && I_session==session && I_meta[31:0]!=last_id) begin
+                if(I_enable && I_session==session && matching && I_meta[31:0]!=last_id) begin
                     last_id<=I_meta[31:0];prev_good<=geometry;
                     pax<=ax;pay<=ay;pbx<=bx;pby<=by;
                     if(good) begin

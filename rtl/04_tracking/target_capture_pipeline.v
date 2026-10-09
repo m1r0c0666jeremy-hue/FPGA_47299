@@ -2,15 +2,15 @@
 `default_nettype none
 module target_capture_pipeline(
  input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
- input wire [95:0] I_rgb,input wire I_enable,input wire [7:0] I_session,
+ input wire [95:0] I_rgb,input wire I_pair,input wire I_enable,input wire [7:0] I_session,
  output wire [31:0] O_frame_id,output wire O_valid,output wire [255:0] O_meta
 );
  wire dv;wire [255:0] dm;
- target_detector #(.COLOR_MIN(80),.COLOR_DIFF(32),.RATIO_NUM(3),.RATIO_DEN(2),.AREA_MIN(64),.AREA_MAX(20000),.FILL_PERCENT_MIN(30)) u_detect(
+ target_detector #(.COLOR_MIN(80),.COLOR_DIFF(32),.RATIO_NUM(3),.RATIO_DEN(2),.AREA_MIN(64),.AREA_MAX(20000),.FILL_PERCENT_MIN(30),.YP_MIN(80),.YP_DIFF(24),.YP_RATIO_NUM(5),.YP_RATIO_DEN(4),.YP_BALANCE(2)) u_detect(
  .I_clk(I_clk),.I_rst_n(I_rst_n),.I_sof(I_sof),.I_valid(I_valid),.I_frame_fault(I_fault),
- .I_rgb(I_rgb),.O_frame_id(O_frame_id),.O_valid(dv),.O_meta(dm));
+ .I_pair(I_pair),.I_enable(I_enable),.I_session(I_session),.I_rgb(I_rgb),.O_frame_id(O_frame_id),.O_valid(dv),.O_meta(dm));
  target_tracker #(.L_MM(40),.D_MM(20),.SEP_MIN(16),.SEP_MAX(600),.MAX_STEP(96),.CONFIRM_FRAMES(3)) u_track(
  .I_clk(I_clk),.I_rst_n(I_rst_n),.I_enable(I_enable),.I_session(I_session),
- .I_valid(dv),.I_meta(dm),.O_valid(O_valid),.O_meta(O_meta));
+ .I_pair(I_pair),.I_valid(dv),.I_meta(dm),.O_valid(O_valid),.O_meta(O_meta));
 endmodule
 `default_nettype wire

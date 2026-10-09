@@ -7,7 +7,7 @@ module memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire I_sys_clk, input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
     input wire [1:0] I_zoom,
-    input wire I_tracking,I_show,I_conflict,input wire [7:0] I_session,
+    input wire I_pair,I_tracking,I_show,I_conflict,input wire [7:0] I_session,
     input wire [95:0] I_detect_rgb,input wire I_detect_sof,I_detect_valid,
     input wire I_pixel_clk, input wire I_serial_clk,
     input wire I_capture_clk, input wire [127:0] I_rgb128,
@@ -135,7 +135,7 @@ video_in u_video_in(
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
     wire [255:0] active_meta;
-    wire active_show,tip_valid,video_ok,frame_commit,selected_good;
+    wire active_pair,active_show,tip_valid,video_ok,frame_commit,selected_good;
     (* async_reg="true", syn_preserve=1 *) reg [1:0] capture_reset,ddr_reset;
     wire capture_rst_n=capture_reset[1],ddr_rst_n=ddr_reset[1];
     always @(posedge I_capture_clk or negedge I_rst_n)
@@ -145,22 +145,22 @@ video_in u_video_in(
     // Control-session bundle prevents results from a previous enable cycle
     // from reappearing after rapid stop/restart.
     wire command_ready,command_valid;
-    wire [8:0] command_data;
-    reg [8:0] command_sent,command_active;
-    wire [8:0] command_now={I_session,I_tracking};
+    wire [9:0] command_data;
+    reg [9:0] command_sent,command_active;
+    wire [9:0] command_now={I_pair,I_session,I_tracking};
     wire command_send=command_now!=command_sent && command_ready;
     always @(posedge I_pixel_clk or negedge I_process_rst_n)
         if(!I_process_rst_n) command_sent<=0;else if(command_send) command_sent<=command_now;
     always @(posedge I_capture_clk or negedge capture_rst_n)
         if(!capture_rst_n) command_active<=0;else if(command_valid) command_active<=command_data;
-    target_mailbox #(.WIDTH(9)) u_command(
+    target_mailbox #(.WIDTH(10)) u_command(
         .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
         .D_clk(I_capture_clk),.D_rst_n(capture_rst_n),.D_valid(command_valid),.D_data(command_data));
     wire capture_result,ddr_result,result_ready;
     wire [255:0] capture_meta,ddr_meta;
     target_capture_pipeline u_detection(
         .I_clk(I_capture_clk),.I_rst_n(capture_rst_n),.I_sof(I_detect_sof),.I_valid(I_detect_valid),
-        .I_fault(capture_overflow),.I_rgb(I_detect_rgb),.I_enable(command_active[0]),.I_session(command_active[8:1]),
+        .I_fault(capture_overflow),.I_rgb(I_detect_rgb),.I_pair(command_active[9]),.I_enable(command_active[0]),.I_session(command_active[8:1]),
         .O_frame_id(capture_frame_id),.O_valid(capture_result),.O_meta(capture_meta));
     target_mailbox u_results(
         .S_clk(I_capture_clk),.S_rst_n(capture_rst_n),.S_send(capture_result),.S_data(capture_meta),.S_ready(result_ready),
@@ -186,7 +186,7 @@ video_in u_video_in(
         .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
     target_display u_viewport(
         .I_clk(I_pixel_clk),.I_rst_n(I_process_rst_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
-        .I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
+        .I_pair(I_pair),.O_pair(active_pair),.I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
         .I_live(video_ok),.I_session(I_session),.I_zoom(I_zoom),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
@@ -303,7 +303,7 @@ video_in u_video_in(
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
         .I_vs(process_vs),.I_hs(process_hs),.I_de(process_de),.I_rgb(process_rgb),
         .I_meta(active_meta),.I_x0(roi_x),.I_y0(roi_y),.I_zoom(active_zoom),.I_mode(actual_mode),
-        .I_state(active_status),.I_show(active_show),.I_tip_valid(tip_valid),.I_video_ok(video_ok),
+        .I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_tip_valid(tip_valid),.I_video_ok(video_ok),
         .O_vs(osd_vs),.O_hs(osd_hs),.O_de(osd_de),.O_rgb(osd_rgb)
     );
     hdmi_tx u_hdmi_tx(

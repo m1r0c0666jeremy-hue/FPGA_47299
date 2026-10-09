@@ -14,7 +14,7 @@ module target_display #(parameter STALE_DISPLAY_FRAMES=15)(
     output reg [1:0] O_zoom,O_mode,
     output reg [255:0] O_meta,
     output reg O_show,output wire O_tip_valid,
-    output wire [2:0] O_state
+    output wire [2:0] O_state,input wire I_pair,output reg O_pair
 );
     reg ever_enabled,ever_locked;
     reg [7:0] active_session;
@@ -24,8 +24,8 @@ module target_display #(parameter STALE_DISPLAY_FRAMES=15)(
     reg [9:0] cy,ny;
     wire fresh=(I_data[287:256]!=O_frame_id) || age<STALE_DISPLAY_FRAMES;
     wire qualified=I_tracking && fresh && I_data[290] && I_data[32] &&
-                   I_data[242:235]==I_session && I_data[31:0]==I_data[287:256];
-    assign O_tip_valid=I_tracking && active_session==I_session && O_meta[32] && I_live && age<STALE_DISPLAY_FRAMES;
+                   I_data[242:235]==I_session && I_data[243]==I_pair && I_data[244] && I_data[31:0]==I_data[287:256];
+    assign O_tip_valid=I_tracking && active_session==I_session && O_meta[243]==I_pair && O_meta[244] && O_meta[32] && I_live && age<STALE_DISPLAY_FRAMES;
     assign O_state=I_conflict?3'd5:!I_live?3'd6:
                    !I_tracking?(ever_enabled?3'd4:3'd0):O_tip_valid?3'd2:ever_locked?3'd3:3'd1;
     always @* begin
@@ -44,11 +44,11 @@ module target_display #(parameter STALE_DISPLAY_FRAMES=15)(
     always @(posedge I_clk or negedge I_rst_n) begin
         if(!I_rst_n) begin
             O_commit<=0;O_bank<=0;O_frame_id<=0;O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;
-            O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=0;active_session<=0;
+            O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;active_session<=0;
             ever_enabled<=0;ever_locked<=0;vs_d<=0;in_blank<=0;age<=0;
         end else begin
             vs_d<=I_vs;O_commit<=0;
-            if(I_vs&&!vs_d) begin in_blank<=1;if(age<255)age<=age+1'b1;end
+            if(I_vs&&!vs_d) begin O_show<=I_show;O_pair<=I_pair;in_blank<=1;if(age<255)age<=age+1'b1;end
             if(I_de) in_blank<=0;
             if(I_tracking) ever_enabled<=1;
             if(!I_tracking || active_session!=I_session) ever_locked<=0;
@@ -56,7 +56,7 @@ module target_display #(parameter STALE_DISPLAY_FRAMES=15)(
                 in_blank<=0;O_commit<=1;O_bank<=I_data[289:288];O_frame_id<=I_data[287:256];
                 O_cx<=cx;O_cy<=cy;O_x0<=nx;O_y0<=ny;O_zoom<=I_zoom;O_mode<=I_mode;
                 O_meta<=I_data[255:0];O_meta[32]<=qualified;
-                O_show<=I_show;active_session<=I_session;
+                active_session<=I_session;
                 if(I_data[287:256]!=O_frame_id) age<=0;
                 if(qualified) ever_locked<=1;
             end

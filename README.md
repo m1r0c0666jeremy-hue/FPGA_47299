@@ -1,6 +1,15 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 最新开发：双配色、中文标注与KEY3长短按（2026-10-09）
+
+在LockingnTracking的061cfd7上新增中文随目标标签、红蓝／黄紫切换和KEY3长短按。**SW3=0红A蓝B，SW3=1黄A紫B；KEY3短按松手启停，长按1秒显隐视频标注；KEY2改为按SW4增减增益。** 长按隐藏仍检测／跟随，底栏状态、配色、标定和安路Logo保留。KEY4按SW4缩放、SW1/2四模式保持。
+
+- [最新操作、参数及接口](docs/LockingnTracking双配色与中文标注.md)，[本轮验证报告](reports/LockingnTracking双配色验证报告.md)。下方旧操作仅作历史，不再按SW3控制显隐／增益。
+- 独立入口 `td_project/target_lock_dualcolor.al`／`scripts/build_target_lock_dualcolor.tcl`，输出 `build/target_lock_dualcolor/target_lock_dualcolor.bit`；旧工程及bit保留。
+- 存档名：**LockingnTracking：存档中文标注、双配色与KEY3长短按联调版本**。2026-10-09按Jeremy要求将源码、同源bit和验证证据一并纳入本次Git存档，上传目标仅为GitHub的LockingnTracking分支。
+- 本轮不加入离焦滤波、锐化或双线性。原帧头丢数据问题未修复；构建同源及本轮软件验证不代替完整采集接入和实物验收。未下载、烧Flash或合并main。
+
 ## 最新接续：同步队友实物测试记录（2026-10-08）
 
 已将本地 LockingnTracking 从 `067664c` 快进到 GitHub 同名分支 `21609e587b3d68540f85ec1856ae5b2d7d8966f6`，接收两条提交、三个文档文件的更新；检测源码、参数和 bit 没有随这次远端更新改变。Jeremy确认队友实测“离焦模糊时可以锁定、对焦清晰后不能锁定”，详见 [实物问题记录](docs/实物问题记录_对焦依赖检测.md)。这属于部分实物观察，不是完整验收通过。

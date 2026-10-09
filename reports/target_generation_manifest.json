@@ -12,18 +12,24 @@
     "separation_min_px": 16,
     "separation_max_px": 600,
     "max_step_px": 96,
-    "confirm_frames": 3
+    "confirm_frames": 3,
+    "yp_min": 80,
+    "yp_diff": 24,
+    "yp_ratio_num": 5,
+    "yp_ratio_den": 4,
+    "yp_balance": 2,
+    "long_press_ms": 1000
   },
   "K_Q16": 32768,
   "K_display": "0.500",
-  "characters": " (),-.0123456789=ABDEKLTYm中二估倍值停冲前化原后启命图失安定尖就已度式待态技按搜未模止灰状率科突端算索红绪缘蓝视跟路踪边锁键频：",
-  "contest_glyphs_reused": "0123456789ABDEKLTY安路：",
+  "characters": " (),-.0123456789=ABDKLTm中二估倍值停关冲准前化十原后命图失字安定尖就已度开式待心态技按搜未标模止注灰点状率科突端算索紫红绪缘色蓝视记跟路踪边配锁键频黄：",
+  "contest_glyphs_reused": "0123456789ABDKLT安路：",
   "font_sha256": "aa4560dd8fe5645745fed3ffa301c3ca4d6c03cbd738145b613303961ba733b8",
   "files": {
-    "rtl/04_tracking/target_capture_pipeline.v": "ffc803d98d685537c4824bcd168c7c0a18f30b1525da7cf270f3cb8e4ea03c75",
-    "rtl/09_osd_ui/target_glyph_rom.v": "dbd57661024ba588860ff875af97ecf73b934c5e22dfd128d9d3be6f0bf5cb8d",
-    "rtl/09_osd_ui/target_osd.v": "ac7549bf6590858c88818dce3d957fd0b126ccd45fb71aac0a424c40fc9201f9",
-    "rtl/03_tool_detection/target_config.json": "ee990196d77508b097d3cde8a3bf642421d39d3d74d2f7232bf10284abbce231",
-    "scripts/target_osd_template.v.txt": "1746bacb781fddc26ccff1baa254aad5ddab93fa4242e68d1fda956440e8d554"
+    "rtl/04_tracking/target_capture_pipeline.v": "f902f7659d2bc70e7d9f6e26ba85b3733c16aea8260cf999e4f112e76856053c",
+    "rtl/09_osd_ui/target_glyph_rom.v": "f33ef5a0346443f7f489f950e802eb11811bbbb8cc2ef684018ef995c1b014ab",
+    "rtl/09_osd_ui/target_osd.v": "9a5cdaa264ddc77435a4c15043e26ea27f6f372a9973972c008dcefed44961ce",
+    "rtl/03_tool_detection/target_config.json": "b4e6211bfc65bea45027063e9e6e13958ed75515c243a8c626142c6ac7257ebd",
+    "scripts/target_osd_template.v.txt": "362eb97d8758115f18ae3f7d231dbdbaecad87eb59030e37022021ae0a02e0ca"
   }
 }
