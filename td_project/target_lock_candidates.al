@@ -11,7 +11,14 @@
     </HardWare>
     <Source_Files>
         <Verilog>
-<File Path="../rtl/09_osd_ui/target_diagnostics.v"><FileInfo><Attr Name="UsedInSyn" Val="true"/><Attr Name="UsedInP&amp;R" Val="true"/><Attr Name="BelongTo" Val="design_1"/><Attr Name="CompileOrder" Val="130"/></FileInfo></File>
+            <File Path="../rtl/09_osd_ui/target_diagnostics.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true"/>
+                    <Attr Name="UsedInP&R" Val="true"/>
+                    <Attr Name="BelongTo" Val="design_1"/>
+                    <Attr Name="CompileOrder" Val="69"/>
+                </FileInfo>
+            </File>
             <File Path="../rtl/03_tool_detection/target_detector.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true"/>

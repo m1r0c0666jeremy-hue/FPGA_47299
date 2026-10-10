@@ -1,0 +1,3 @@
+
+PASS robust geometry: 24 frames, both palettes, 120000/4000 unequal areas, 650/700px center distance, out-of-range and too-close rejection
+sim/tb_robust_geometry.sv:33: $finish called at 1330000 (1ps)

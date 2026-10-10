@@ -259,7 +259,7 @@ endcase end
     if(!I_detection_valid) color_status=0;
     else if(!I_meta[247]) color_status=1;
     else if((y<568?I_meta[203:184]:I_meta[223:204])==0) color_status=2;
-    else if((y<568?I_meta[203:184]:I_meta[223:204])<64 || (y<568?I_meta[203:184]:I_meta[223:204])>20000) color_status=3;
+    else if((y<568?I_meta[203:184]:I_meta[223:204])<32 || (y<568?I_meta[203:184]:I_meta[223:204])>921600) color_status=3;
     else if(y<568?I_meta[245]:I_meta[246]) color_status=5;
     else color_status=4;
     case(column) 1:glyph=7'd34;

@@ -1,0 +1,25 @@
+{
+  "archive": "D:\\BaiduNetdiskDownload\\HX1P35A_Contest_202606\\7_lab_ex_2026_nosoft\\lab_ex1_mipi_hdmi_SC500_720P.zip",
+  "verified_files": [
+    {
+      "archive_member": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/video_in.v",
+      "sha256": "811f5261715885023fddbd1f556e0c04db6b8523a9d68167482d237069c7898d",
+      "vendor_copy_matches": true
+    },
+    {
+      "archive_member": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/isp/data96_128/data96_128.v",
+      "sha256": "c79a102378c70ce5faacbc46a62b5ae6eaac151b93891379eda2880a7d68fe30",
+      "vendor_copy_matches": true
+    },
+    {
+      "archive_member": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/isp/awb/awb.v",
+      "sha256": "bd7f8178ecdc372dcaac28195f97cc52e23a8db9824854a10376002b244e428c",
+      "vendor_copy_matches": true
+    }
+  ],
+  "github_reference_urls": [
+    "https://github.com/alexforencich/verilog-axis/blob/master/rtl/axis_async_fifo.v",
+    "https://github.com/delhatch/Red_Tracker"
+  ],
+  "notes": "Reviewed contest originals first. External sources are conceptual references, not copied RTL."
+}

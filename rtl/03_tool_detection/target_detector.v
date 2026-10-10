@@ -61,9 +61,9 @@ module target_detector #(
                     else begin lo=r<b?r:b;hi=r>b?r:b;other=g;end
                     hit=lo>=YP_MIN && lo>=other+YP_DIFF && color_scale(lo[7:0],YP_RATIO_DEN)>=color_scale(other[7:0],YP_RATIO_NUM) && hi<=color_scale(lo[7:0],YP_BALANCE);
                 end else if(c==0) hit=(r>=COLOR_MIN && {1'b0,r}>={1'b0,g}+COLOR_DIFF &&
-                    {1'b0,r}>={1'b0,b}+COLOR_DIFF && r*RATIO_DEN>=g*RATIO_NUM && r*RATIO_DEN>=b*RATIO_NUM);
+                    {1'b0,r}>={1'b0,b}+COLOR_DIFF && color_scale(r,RATIO_DEN)>=color_scale(g,RATIO_NUM) && color_scale(r,RATIO_DEN)>=color_scale(b,RATIO_NUM));
                 else hit=(b>=COLOR_MIN && {1'b0,b}>={1'b0,g}+COLOR_DIFF &&
-                    {1'b0,b}>={1'b0,r}+COLOR_DIFF && b*RATIO_DEN>=g*RATIO_NUM && b*RATIO_DEN>=r*RATIO_NUM);
+                    {1'b0,b}>={1'b0,r}+COLOR_DIFF && color_scale(b,RATIO_DEN)>=color_scale(g,RATIO_NUM) && color_scale(b,RATIO_DEN)>=color_scale(r,RATIO_NUM));
                 if(hit) begin
                     next_area[c]=next_area[c]+1'b1;
                     next_sx[c]=next_sx[c]+xx+lane;next_sy[c]=next_sy[c]+yy;

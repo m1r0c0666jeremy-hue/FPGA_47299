@@ -1,0 +1,17 @@
+AWB SOF cycle=66 valid=1
+packed cycle=68 FIFO reset=0
+packed cycle=69 FIFO reset=0
+packed cycle=70 FIFO reset=1
+packed cycle=72 FIFO reset=1
+packed cycle=73 FIFO reset=1
+packed cycle=74 FIFO reset=1
+packed cycle=76 FIFO reset=1
+packed cycle=77 FIFO reset=1
+packed cycle=78 FIFO reset=0
+packed cycle=80 FIFO reset=0
+packed cycle=81 FIFO reset=0
+packed cycle=82 FIFO reset=0
+packed cycle=84 FIFO reset=0
+packed cycle=85 FIFO reset=0
+INGRESS_PROBE AWB_words=1280 packed_words=960 DDR_writes=720 expected=960
+sim/tb_target_ingress_probe.sv:32: $finish called at 59216000 (1ps)

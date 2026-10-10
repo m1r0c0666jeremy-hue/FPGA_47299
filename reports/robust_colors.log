@@ -1,0 +1,17 @@
+
+PASS detector 128x64 frames=24
+D:\aaa_FPGA\criticalwork\build\sim\robust\colors_0_128.sv:27: $finish called at 547870000 (1ps)
+
+
+PASS detector 1280x720 frames=7
+D:\aaa_FPGA\criticalwork\build\sim\robust\colors_0_1280.sv:27: $finish called at 16146610000 (1ps)
+
+
+PASS detector 128x64 frames=24
+D:\aaa_FPGA\criticalwork\build\sim\robust\colors_1_128.sv:27: $finish called at 547870000 (1ps)
+
+
+PASS detector 1280x720 frames=7
+D:\aaa_FPGA\criticalwork\build\sim\robust\colors_1_1280.sv:27: $finish called at 16146610000 (1ps)
+
+ROBUST_COLORS_PASSED: 48 small + 14 full frames, independent unequal areas and centroid/fill calculations

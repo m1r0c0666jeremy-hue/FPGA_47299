@@ -1,0 +1,870 @@
+[
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 0,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 1,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 2,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 3,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 4,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 5,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 6,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 7,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 8,
+    "areas": [
+      0,
+      128
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 9,
+    "areas": [
+      0,
+      128
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 10,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 11,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 12,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 13,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 14,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 15,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 16,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 17,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 18,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 19,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 20,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 21,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 22,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      128,
+      64
+    ],
+    "case": 23,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 0,
+    "areas": [
+      31,
+      32
+    ],
+    "valid": false,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 1,
+    "areas": [
+      32,
+      32
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 2,
+    "areas": [
+      20000,
+      32
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 3,
+    "areas": [
+      120000,
+      4000
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 4,
+    "areas": [
+      280000,
+      15000
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 5,
+    "areas": [
+      921600,
+      0
+    ],
+    "valid": false,
+    "fillA": 100
+  },
+  {
+    "pair": 0,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 6,
+    "areas": [
+      33,
+      32
+    ],
+    "valid": true,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 0,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 1,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 2,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 3,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 4,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 5,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 6,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 7,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 8,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 9,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 10,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 11,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 12,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 13,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 14,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 15,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 16,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 17,
+    "areas": [
+      64,
+      64
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 18,
+    "areas": [
+      0,
+      128
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 19,
+    "areas": [
+      0,
+      128
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 20,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 21,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 22,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      128,
+      64
+    ],
+    "case": 23,
+    "areas": [
+      0,
+      64
+    ],
+    "valid": false,
+    "fillA": 0
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 0,
+    "areas": [
+      31,
+      32
+    ],
+    "valid": false,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 1,
+    "areas": [
+      32,
+      32
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 2,
+    "areas": [
+      20000,
+      32
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 3,
+    "areas": [
+      120000,
+      4000
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 4,
+    "areas": [
+      280000,
+      15000
+    ],
+    "valid": true,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 5,
+    "areas": [
+      921600,
+      0
+    ],
+    "valid": false,
+    "fillA": 100
+  },
+  {
+    "pair": 1,
+    "size": [
+      1280,
+      720
+    ],
+    "case": 6,
+    "areas": [
+      33,
+      32
+    ],
+    "valid": true,
+    "fillA": 0
+  }
+]

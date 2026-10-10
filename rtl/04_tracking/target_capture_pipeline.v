@@ -6,10 +6,10 @@ module target_capture_pipeline(
  output wire [31:0] O_frame_id,output wire O_valid,output wire [255:0] O_meta
 );
  wire dv;wire [255:0] dm;
- target_detector #(.COLOR_MIN(80),.COLOR_DIFF(32),.RATIO_NUM(3),.RATIO_DEN(2),.AREA_MIN(64),.AREA_MAX(20000),.FILL_PERCENT_MIN(30),.YP_MIN(80),.YP_DIFF(24),.YP_RATIO_NUM(5),.YP_RATIO_DEN(4),.YP_BALANCE(2)) u_detect(
+ target_detector #(.COLOR_MIN(40),.COLOR_DIFF(12),.RATIO_NUM(9),.RATIO_DEN(8),.AREA_MIN(32),.AREA_MAX(921600),.FILL_PERCENT_MIN(0),.YP_MIN(40),.YP_DIFF(12),.YP_RATIO_NUM(9),.YP_RATIO_DEN(8),.YP_BALANCE(4)) u_detect(
  .I_clk(I_clk),.I_rst_n(I_rst_n),.I_sof(I_sof),.I_valid(I_valid),.I_frame_fault(I_fault),
  .I_pair(I_pair),.I_enable(I_enable),.I_session(I_session),.I_rgb(I_rgb),.O_frame_id(O_frame_id),.O_valid(dv),.O_meta(dm));
- target_tracker #(.L_MM(40),.D_MM(20),.SEP_MIN(16),.SEP_MAX(600),.MAX_STEP(96),.CONFIRM_FRAMES(3)) u_track(
+ target_tracker #(.L_MM(40),.D_MM(20),.SEP_MIN(16),.SEP_MAX(1468),.MAX_STEP(96),.CONFIRM_FRAMES(3)) u_track(
  .I_clk(I_clk),.I_rst_n(I_rst_n),.I_enable(I_enable),.I_session(I_session),
  .I_pair(I_pair),.I_valid(dv),.I_meta(dm),.O_valid(O_valid),.O_meta(O_meta));
 endmodule

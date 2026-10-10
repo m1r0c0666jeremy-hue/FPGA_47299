@@ -1,6 +1,14 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 最新开发：帧头采集修复与宽范围判色（2026-10-10）
+
+基于LockingnTracking的f395cc0，修复已复现的FIFO帧头复位吞数据：960个打包字现能完整写入960字，并逐字核对数据与地址。放宽红蓝、黄紫的深浅颜色范围，每色面积32～921600，填充率默认只显示不硬拒绝；两色可以不同尺寸，仍按各自像素中心计算间距和尖端。
+
+- [新参数、操作和实物测试](docs/LockingnTracking采集修复与宽范围判色.md)、[本轮验证报告](reports/LockingnTracking采集修复验证报告.md)。
+- 新构建入口 `td_project/target_lock_robust.al` / `scripts/build_target_lock_robust.tcl`，输出 `build/target_lock_robust/target_lock_robust.bit`。旧bit保留。
+- 帧头缺陷的软件修复不等于所有闪屏原因已排除；同色背景仍可能拉偏全画面统计中心。新bit尚待实物验证。
+
 ## 最新开发：单色候选框与诊断（2026-10-10）
 
 开启搜索后，红／蓝或黄／紫各自通过检查即可独立画框；只有双色连续3帧合格才显示估算尖端并跟随。视频区新增A/B像素数、填充率和失败原因，KEY3长按可一并隐藏。颜色阈值及原操作不变。

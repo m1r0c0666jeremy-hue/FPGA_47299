@@ -11,7 +11,7 @@ assert 1<=cfg['L_mm']<=9999 and 0<=cfg['D_mm']<=9999
 assert 0<=cfg['color_min']<=255 and 0<=cfg['color_diff']<=255
 assert 1<=cfg['ratio_den']<=16 and 1<=cfg['ratio_num']<=16
 assert 1<=cfg['area_min']<=cfg['area_max']<=921600
-assert 1<=cfg['fill_percent_min']<=100
+assert 0<=cfg['fill_percent_min']<=100 # 0: report fill, do not reject sparse colors
 assert 1<=cfg['separation_min_px']<cfg['separation_max_px']<=1468
 assert 0<=cfg['yp_min']<=255 and 0<=cfg['yp_diff']<=255
 assert 1<=cfg['yp_ratio_num']<=16 and 1<=cfg['yp_ratio_den']<=16 and 1<=cfg['yp_balance']<=16
