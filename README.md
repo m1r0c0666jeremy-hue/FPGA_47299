@@ -1,6 +1,15 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 最新开发：单色候选框与诊断（2026-10-10）
+
+开启搜索后，红／蓝或黄／紫各自通过检查即可独立画框；只有双色连续3帧合格才显示估算尖端并跟随。视频区新增A/B像素数、填充率和失败原因，KEY3长按可一并隐藏。颜色阈值及原操作不变。
+
+- [单色候选操作与模块路径](docs/LockingnTracking单色候选诊断.md)、[本轮验证报告](reports/LockingnTracking单色候选验证报告.md)。
+- 新工程 `td_project/target_lock_candidates.al`，构建脚本 `scripts/build_target_lock_candidates.tcl`，输出 `build/target_lock_candidates/target_lock_candidates.bit`。旧工程和bit保留。
+- 存档名：**LockingnTracking：存档单色候选框与中文诊断联调版本**。单元、帧同步、完整视频、72幅OSD及原算法回归通过；TD综合布局布线和源码／bit同源审计通过。
+- 仍为联调版本，旧采集帧头丢数据及离焦识别问题未修复。本次按Jeremy要求完成后提交并上传LockingnTracking，不合并main，不下载板卡或烧Flash。
+
 ## 最新开发：双配色、中文标注与KEY3长短按（2026-10-09）
 
 在LockingnTracking的061cfd7上新增中文随目标标签、红蓝／黄紫切换和KEY3长短按。**SW3=0红A蓝B，SW3=1黄A紫B；KEY3短按松手启停，长按1秒显隐视频标注；KEY2改为按SW4增减增益。** 长按隐藏仍检测／跟随，底栏状态、配色、标定和安路Logo保留。KEY4按SW4缩放、SW1/2四模式保持。

@@ -44,7 +44,9 @@ kq=(cfg['D_mm']*65536+cfg['L_mm']//2)//cfg['L_mm']
 ktext=f'{kq/65536:.3f}'
 row3=f"L={cfg['L_mm']:04d}mm D={cfg['D_mm']:04d}mm K={ktext}"
 labels=['红色标记点A','蓝色标记点B','黄色标记点A','紫色标记点B','十字准心T','估算尖端']
-static=labels+['配色：红蓝黄紫','标注：开关','模式：','倍率：','状态：','红A前 蓝B后 估算尖端：(','安路科技',row3,')0123456789,-T']
+diagnoses=[' ','帧无效','缺少双色','面积不符','填充不足','间距不符','尖端越界','位移或帧号异常','采集溢出','等待结果','确认中','已锁定']
+color_states=['待结果','帧无效','无像素','面积不符','填充不足','候选']
+static=diagnoses+color_states+['诊断：A像素： 填充：%缺少A缺少B']+labels+['配色：红蓝黄紫','标注：开关','模式：','倍率：','状态：','红A前 蓝B后 估算尖端：(','安路科技',row3,')0123456789,-T']
 chars=''.join(sorted(set(' '.join(static+states+modes))))
 assert len(chars)<=128
 fontpath=Path('C:/Windows/Fonts/simhei.ttf');font=ImageFont.truetype(str(fontpath),24)
@@ -79,7 +81,11 @@ def case_text(s,start=0):return '\n'.join(f'{i+start}:glyph=7\'d{gid(c)};' for i
 def multi(texts,sel):
     return f'case({sel})\n'+'\n'.join(f'{i}:case(column)\n{case_text(s)}\nendcase' for i,s in enumerate(texts))+'\nendcase'
 template=(ROOT/'scripts/target_osd_template.v.txt').read_text(encoding='utf-8')
-replacements={'@SPACE@':str(gid(' ')),'@ZERO@':str(gid('0')),'@DASH@':str(gid('-')),
+replacements={'@AREA_MIN@':str(cfg['area_min']),'@AREA_MAX@':str(cfg['area_max']),
+'@DIAG_ROW@':case_text('像素：',1)+'\n'+case_text('填充：',11)+'\n'+case_text('%',17),'@DIAG_TITLE@':case_text('诊断：'),
+'@COLOR_STATUS@':multi(color_states,'color_status'),'@DIAG_REASONS@':multi(diagnoses,'diagnosis'),
+'@MISSING_A@':case_text('缺少A'),'@MISSING_B@':case_text('缺少B'),'@MISSING_BOTH@':case_text('缺少双色'),
+'@SPACE@':str(gid(' ')),'@ZERO@':str(gid('0')),'@DASH@':str(gid('-')),
 '@A@':str(gid('A')),'@B@':str(gid('B')),'@T@':str(gid('T')),
 '@ROW1@':case_text('模式：',0)+'\n'+case_text('倍率：',8)+'\n'+case_text('状态：',14),
 '@MODES@':multi(modes,'I_mode'),'@STATES@':multi(states,'I_state'),

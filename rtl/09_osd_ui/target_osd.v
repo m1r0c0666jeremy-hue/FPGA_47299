@@ -5,7 +5,7 @@ module target_osd(
  input wire [255:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
  input wire [1:0] I_zoom,I_mode,input wire [2:0] I_state,
  input wire I_show,I_tip_valid,I_video_ok,input wire I_pair,
- output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb
+ output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,input wire I_detection_valid
 );
  reg [10:0] x;reg [9:0] y;reg vs_last;
  wire signed [13:0] px=$signed({3'b0,x}),py=$signed({4'b0,y});
@@ -31,10 +31,11 @@ module target_osd(
  wire signed [13:0] dx=px>=tx?px-tx:tx-px,dy=py>=ty?py-ty:ty-py;
  wire cross_on=(dx>=3&&dx<=12&&dy<=1)||(dy>=3&&dy<=12&&dx<=1);
  wire outline=(dx>=2&&dx<=13&&dy<=2)||(dy>=2&&dy<=13&&dx<=2);
- wire overlay=I_show&&I_tip_valid&&I_video_ok&&y<624;
- wire av= ax1>=0 && ax0<1280 && ay1>=0 && ay0<624;
- wire bv= bx1>=0 && bx0<1280 && by1>=0 && by0<624;
- wire tv=tx>=0&&tx<1280&&ty>=0&&ty<624;
+ wire overlay=I_show&&I_detection_valid&&I_video_ok&&y<624;
+ wire panel=I_show&&I_video_ok&&(I_state==1||I_state==2||I_state==3);
+ wire av=I_meta[247]&&I_meta[245]&& ax1>=0 && ax0<1280 && ay1>=0 && ay0<624;
+ wire bv=I_meta[247]&&I_meta[246]&& bx1>=0 && bx0<1280 && by1>=0 && by0<624;
+ wire tv=I_tip_valid&&tx>=0&&tx<1280&&ty>=0&&ty<624;
  wire [23:0] color_a=I_pair?24'hffff00:24'hff5050;
  wire [23:0] color_b=I_pair?24'hd070ff:24'h40a0ff;
  function signed [13:0] clamp(input signed [13:0] v,maximum);
@@ -49,16 +50,16 @@ module target_osd(
  reg a_fallback,b_fallback;
  wire signed [13:0] a_left=clamp(ax0,1136),b_left=clamp(bx0,1136);
  wire signed [13:0] a_align_right=clamp(ax1-143,1136);
- wire signed [13:0] a_top=clamp(ay0>=26?ay0-26:ay1+3,600),a_bottom=clamp(ay1+3,600);
- wire signed [13:0] b_top=clamp(by0>=26?by0-26:by1+3,600),b_bottom=clamp(by1+3,600);
- wire signed [13:0] b_right=clamp(bx1+3,1136),b_leftside=clamp(bx0-147,1136),b_middle=clamp(by0,600);
+ wire signed [13:0] a_top=clamp(ay0>=26?ay0-26:ay1+3,518),a_bottom=clamp(ay1+3,518);
+ wire signed [13:0] b_top=clamp(by0>=26?by0-26:by1+3,518),b_bottom=clamp(by1+3,518);
+ wire signed [13:0] b_right=clamp(bx1+3,1136),b_leftside=clamp(bx0-147,1136),b_middle=clamp(by0,518);
  function blocked_b(input signed [13:0] lx,ly,txi,tyi,axi,ayi,input vt,va);
   blocked_b=(vt&&overlap(lx,ly,144,24,txi,tyi,120,48)) || (va&&overlap(lx,ly,144,24,axi,ayi,144,24));
  endfunction
  always @(posedge I_clk or negedge I_rst_n) begin
   if(!I_rst_n) begin t_x<=0;t_y<=0;a_x<=0;a_y<=0;b_x<=0;b_y<=0;a_fallback<=0;b_fallback<=0;end
   else begin
-   t_x<=clamp(tx+137<=1280?tx+17:tx-137,1160);t_y<=clamp(ty-24,576);
+   t_x<=clamp(tx+137<=1280?tx+17:tx-137,1160);t_y<=clamp(ty-24,494);
    a_x<=a_left;a_y<=a_top;a_fallback<=0;
    if(av&&tv&&overlap(a_left,a_top,144,24,t_x,t_y,120,48)) begin
     a_y<=a_bottom;
@@ -88,7 +89,11 @@ module target_osd(
  wire signed [13:0] blx=fallback?8:b_x,bly=fallback?88:b_y;
  wire signed [13:0] tlx=fallback?8:t_x,tly=fallback?8:t_y;
  reg [6:0] glyph;reg [4:0] gx,gy;reg [5:0] column;
- reg text_on,brand,label_bg;reg [23:0] text_color;
+ reg text_on,brand,label_bg;
+ wire [23:0] count_a,count_b;wire [11:0] fill_a,fill_b;
+ target_diagnostics u_diag(I_clk,I_rst_n,I_meta[203:184],I_meta[223:204],I_meta[230:224],I_meta[254:248],count_a,count_b,fill_a,fill_b);
+ reg [23:0] count_digits;reg [11:0] fill_digits;reg [2:0] color_status;
+ wire [3:0] diagnosis=!I_detection_valid?4'd9:!I_meta[247]?4'd1:I_tip_valid?4'd11:I_meta[36:33]!=0?I_meta[36:33]:4'd10;reg [23:0] text_color;
  wire [23:0] glyph_bits;wire [1:0] logo_bits;
  wire [11:0] glyph_addr={5'd0,glyph}*12'd24+gy;
  wire logo_on=x>=1032&&x<1128&&y>=641&&y<703;
@@ -96,206 +101,349 @@ module target_osd(
  target_glyph_rom u_font(I_clk,glyph_addr,glyph_bits);
  scaling_logo_rom u_logo(I_clk,logo_addr,logo_bits);
  always @* begin
+  count_digits=0;fill_digits=0;color_status=0;
   glyph=0;gx=0;gy=0;column=0;text_on=0;brand=0;label_bg=0;text_color=24'hffffff;
   if(x>=16&&x<1000&&y>=628&&y<652) begin
    text_on=1;column=(x-16)/24;gx=(x-16)%24;gy=y-628;
    case(column)
-   0:glyph=7'd58;
-1:glyph=7'd49;
-2:glyph=7'd87;
-8:glyph=7'd27;
-9:glyph=7'd64;
-10:glyph=7'd87;
-14:glyph=7'd63;
-15:glyph=7'd52;
-16:glyph=7'd87;
-   11:glyph=6+(1<<I_zoom);
+   0:glyph=7'd77;
+1:glyph=7'd63;
+2:glyph=7'd126;
+8:glyph=7'd30;
+9:glyph=7'd84;
+10:glyph=7'd126;
+14:glyph=7'd83;
+15:glyph=7'd66;
+16:glyph=7'd126;
+   11:glyph=7+(1<<I_zoom);
    endcase
    if(column>=3&&column<=5) begin column=column-3;case(I_mode)
 0:case(column)
-0:glyph=7'd36;
-1:glyph=7'd39;
+0:glyph=7'd43;
+1:glyph=7'd48;
 endcase
 1:case(column)
-0:glyph=7'd81;
-1:glyph=7'd73;
+0:glyph=7'd115;
+1:glyph=7'd101;
 endcase
 2:case(column)
-0:glyph=7'd61;
-1:glyph=7'd47;
+0:glyph=7'd81;
+1:glyph=7'd60;
 endcase
 3:case(column)
-0:glyph=7'd25;
-1:glyph=7'd28;
-2:glyph=7'd34;
+0:glyph=7'd27;
+1:glyph=7'd32;
+2:glyph=7'd41;
 endcase
 endcase end
    else if(column>=17&&column<=22) begin column=column-17;case(I_state)
 0:case(column)
-0:glyph=7'd50;
-1:glyph=7'd38;
+0:glyph=7'd64;
+1:glyph=7'd47;
 endcase
 1:case(column)
-0:glyph=7'd55;
-1:glyph=7'd69;
-2:glyph=7'd24;
+0:glyph=7'd70;
+1:glyph=7'd96;
+2:glyph=7'd26;
 endcase
 2:case(column)
-0:glyph=7'd83;
-1:glyph=7'd43;
-2:glyph=7'd78;
-3:glyph=7'd80;
+0:glyph=7'd119;
+1:glyph=7'd53;
+2:glyph=7'd112;
+3:glyph=7'd114;
 endcase
 3:case(column)
-0:glyph=7'd40;
-1:glyph=7'd83;
+0:glyph=7'd50;
+1:glyph=7'd119;
 endcase
 4:case(column)
-0:glyph=7'd46;
-1:glyph=7'd29;
-2:glyph=7'd59;
+0:glyph=7'd57;
+1:glyph=7'd33;
+2:glyph=7'd78;
 endcase
 5:case(column)
-0:glyph=7'd54;
-1:glyph=7'd84;
-2:glyph=7'd31;
-3:glyph=7'd66;
+0:glyph=7'd69;
+1:glyph=7'd120;
+2:glyph=7'd37;
+3:glyph=7'd90;
 endcase
 6:case(column)
-0:glyph=7'd76;
-1:glyph=7'd85;
-2:glyph=7'd56;
-3:glyph=7'd45;
-4:glyph=7'd72;
+0:glyph=7'd105;
+1:glyph=7'd124;
+2:glyph=7'd74;
+3:glyph=7'd56;
+4:glyph=7'd100;
 endcase
 endcase end
   end else if(x>=16&&x<1000&&y>=658&&y<682) begin
    text_on=1;column=(x-16)/24;gx=(x-16)%24;gy=y-658;
    case(column)
-   0:glyph=7'd82;
-1:glyph=7'd74;
-2:glyph=7'd87;
-7:glyph=7'd26;
-8:glyph=7'd68;
-9:glyph=7'd44;
-10:glyph=7'd67;
-11:glyph=7'd87;
-12:glyph=7'd1;
-18:glyph=7'd3;
-23:glyph=7'd2;
-   14:glyph=I_tip_valid?6+I_meta[89:79]/1000:4;
-   15:glyph=I_tip_valid?6+(I_meta[89:79]/100)%10:4;
-   16:glyph=I_tip_valid?6+(I_meta[89:79]/10)%10:4;
-   17:glyph=I_tip_valid?6+I_meta[89:79]%10:4;
-   19:glyph=I_tip_valid?6+I_meta[99:90]/1000:4;
-   20:glyph=I_tip_valid?6+(I_meta[99:90]/100)%10:4;
-   21:glyph=I_tip_valid?6+(I_meta[99:90]/10)%10:4;
-   22:glyph=I_tip_valid?6+I_meta[99:90]%10:4;
+   0:glyph=7'd117;
+1:glyph=7'd103;
+2:glyph=7'd126;
+7:glyph=7'd28;
+8:glyph=7'd94;
+9:glyph=7'd55;
+10:glyph=7'd91;
+11:glyph=7'd126;
+12:glyph=7'd2;
+18:glyph=7'd4;
+23:glyph=7'd3;
+   14:glyph=I_tip_valid?7+I_meta[89:79]/1000:5;
+   15:glyph=I_tip_valid?7+(I_meta[89:79]/100)%10:5;
+   16:glyph=I_tip_valid?7+(I_meta[89:79]/10)%10:5;
+   17:glyph=I_tip_valid?7+I_meta[89:79]%10:5;
+   19:glyph=I_tip_valid?7+I_meta[99:90]/1000:5;
+   20:glyph=I_tip_valid?7+(I_meta[99:90]/100)%10:5;
+   21:glyph=I_tip_valid?7+(I_meta[99:90]/10)%10:5;
+   22:glyph=I_tip_valid?7+I_meta[99:90]%10:5;
    endcase
    if(column>=3&&column<=4) begin column=column-3;case(I_pair)
 0:case(column)
-0:glyph=7'd71;
-1:glyph=7'd75;
+0:glyph=7'd98;
+1:glyph=7'd104;
 endcase
 1:case(column)
-0:glyph=7'd86;
-1:glyph=7'd70;
+0:glyph=7'd125;
+1:glyph=7'd97;
 endcase
 endcase end
   end else if(x>=16&&x<1000&&y>=688&&y<712) begin
    text_on=1;column=(x-16)/24;gx=(x-16)%24;gy=y-688;
-   case(column) 0:glyph=7'd21;
-1:glyph=7'd16;
-2:glyph=7'd6;
-3:glyph=7'd6;
-4:glyph=7'd10;
-5:glyph=7'd6;
-6:glyph=7'd23;
-7:glyph=7'd23;
+   case(column) 0:glyph=7'd22;
+1:glyph=7'd17;
+2:glyph=7'd7;
+3:glyph=7'd7;
+4:glyph=7'd11;
+5:glyph=7'd7;
+6:glyph=7'd24;
+7:glyph=7'd24;
 8:glyph=7'd0;
-9:glyph=7'd19;
-10:glyph=7'd16;
-11:glyph=7'd6;
-12:glyph=7'd6;
-13:glyph=7'd8;
-14:glyph=7'd6;
-15:glyph=7'd23;
-16:glyph=7'd23;
+9:glyph=7'd20;
+10:glyph=7'd17;
+11:glyph=7'd7;
+12:glyph=7'd7;
+13:glyph=7'd9;
+14:glyph=7'd7;
+15:glyph=7'd24;
+16:glyph=7'd24;
 17:glyph=7'd0;
-18:glyph=7'd20;
-19:glyph=7'd16;
-20:glyph=7'd6;
-21:glyph=7'd5;
-22:glyph=7'd11;
-23:glyph=7'd6;
-24:glyph=7'd6;
-27:glyph=7'd57;
-28:glyph=7'd60;
-29:glyph=7'd87; endcase
+18:glyph=7'd21;
+19:glyph=7'd17;
+20:glyph=7'd7;
+21:glyph=7'd6;
+22:glyph=7'd12;
+23:glyph=7'd7;
+24:glyph=7'd7;
+27:glyph=7'd76;
+28:glyph=7'd79;
+29:glyph=7'd126; endcase
    if(column==30) begin column=0;case(I_show)
 0:case(column)
-0:glyph=7'd30;
+0:glyph=7'd36;
 endcase
 1:case(column)
-0:glyph=7'd48;
+0:glyph=7'd61;
 endcase
 endcase end
   end else if(x>=1144&&x<1240&&y>=660&&y<684) begin
    text_on=1;brand=1;gx=(x-1144)%24;gy=y-660;column=(x-1144)/24;
-   case(column) 0:glyph=7'd42;
-1:glyph=7'd79;
-2:glyph=7'd65;
-3:glyph=7'd53; endcase
+   case(column) 0:glyph=7'd52;
+1:glyph=7'd113;
+2:glyph=7'd87;
+3:glyph=7'd68; endcase
+  end else if(panel&&x>=8&&x<848&&y>=544&&y<616) begin
+   text_on=1;label_bg=1;column=(x-8)/24;gx=(x-8)%24;gy=(y-544)%24;
+   if(y<592) begin
+    count_digits=y<568?count_a:count_b;fill_digits=y<568?fill_a:fill_b;
+    if(!I_detection_valid) color_status=0;
+    else if(!I_meta[247]) color_status=1;
+    else if((y<568?I_meta[203:184]:I_meta[223:204])==0) color_status=2;
+    else if((y<568?I_meta[203:184]:I_meta[223:204])<64 || (y<568?I_meta[203:184]:I_meta[223:204])>20000) color_status=3;
+    else if(y<568?I_meta[245]:I_meta[246]) color_status=5;
+    else color_status=4;
+    case(column) 1:glyph=7'd34;
+2:glyph=7'd95;
+3:glyph=7'd126;
+11:glyph=7'd49;
+12:glyph=7'd35;
+13:glyph=7'd126;
+17:glyph=7'd1; 0:glyph=y<568?18:19;endcase
+    if(column>=4&&column<=9) glyph=I_detection_valid?7+((count_digits>>((9-column)*4))&24'hf):5;
+    if(column>=14&&column<=16) glyph=I_detection_valid?7+((fill_digits>>((16-column)*4))&12'hf):5;
+    if(column>=19&&column<=22) begin column=column-19;case(color_status)
+0:case(column)
+0:glyph=7'd64;
+1:glyph=7'd99;
+2:glyph=7'd75;
+endcase
+1:case(column)
+0:glyph=7'd58;
+1:glyph=7'd73;
+2:glyph=7'd71;
+endcase
+2:case(column)
+0:glyph=7'd73;
+1:glyph=7'd34;
+2:glyph=7'd95;
+endcase
+3:case(column)
+0:glyph=7'd123;
+1:glyph=7'd88;
+2:glyph=7'd25;
+3:glyph=7'd92;
+endcase
+4:case(column)
+0:glyph=7'd49;
+1:glyph=7'd35;
+2:glyph=7'd25;
+3:glyph=7'd110;
+endcase
+5:case(column)
+0:glyph=7'd31;
+1:glyph=7'd116;
+endcase
+endcase end
+   end else begin
+    case(column) 0:glyph=7'd108;
+1:glyph=7'd72;
+2:glyph=7'd126; endcase
+    if(column>=3&&column<=10) begin
+     column=column-3;
+     if(diagnosis==2) begin
+      if(I_meta[203:184]==0&&I_meta[223:204]==0) begin case(column) 0:glyph=7'd102;
+1:glyph=7'd54;
+2:glyph=7'd44;
+3:glyph=7'd103; endcase end
+      else if(I_meta[203:184]==0) begin case(column) 0:glyph=7'd102;
+1:glyph=7'd54;
+2:glyph=7'd18; endcase end
+      else begin case(column) 0:glyph=7'd102;
+1:glyph=7'd54;
+2:glyph=7'd19; endcase end
+     end else begin case(diagnosis)
+0:case(column)
+0:glyph=7'd0;
+endcase
+1:case(column)
+0:glyph=7'd58;
+1:glyph=7'd73;
+2:glyph=7'd71;
+endcase
+2:case(column)
+0:glyph=7'd102;
+1:glyph=7'd54;
+2:glyph=7'd44;
+3:glyph=7'd103;
+endcase
+3:case(column)
+0:glyph=7'd123;
+1:glyph=7'd88;
+2:glyph=7'd25;
+3:glyph=7'd92;
+endcase
+4:case(column)
+0:glyph=7'd49;
+1:glyph=7'd35;
+2:glyph=7'd25;
+3:glyph=7'd110;
+endcase
+5:case(column)
+0:glyph=7'd121;
+1:glyph=7'd111;
+2:glyph=7'd25;
+3:glyph=7'd92;
+endcase
+6:case(column)
+0:glyph=7'd55;
+1:glyph=7'd91;
+2:glyph=7'd109;
+3:glyph=7'd85;
+endcase
+7:case(column)
+0:glyph=7'd29;
+1:glyph=7'd89;
+2:glyph=7'd67;
+3:glyph=7'd58;
+4:glyph=7'd45;
+5:glyph=7'd62;
+6:glyph=7'd59;
+endcase
+8:case(column)
+0:glyph=7'd118;
+1:glyph=7'd122;
+2:glyph=7'd80;
+3:glyph=7'd39;
+endcase
+9:case(column)
+0:glyph=7'd93;
+1:glyph=7'd64;
+2:glyph=7'd99;
+3:glyph=7'd75;
+endcase
+10:case(column)
+0:glyph=7'd86;
+1:glyph=7'd106;
+2:glyph=7'd26;
+endcase
+11:case(column)
+0:glyph=7'd57;
+1:glyph=7'd119;
+2:glyph=7'd53;
+endcase
+endcase end
+    end
+   end
   end else if(overlay) begin
    if(tv&&px>=tlx&&px<tlx+120&&py>=tly&&py<tly+48) begin
     gx=(px-tlx)%24;gy=(py-tly)%24;column=(px-tlx)/24;text_on=1;label_bg=1;text_color=24'hffff00;
-    if(py<tly+24) begin case(column) 0:glyph=7'd35;
-1:glyph=7'd41;
-2:glyph=7'd32;
-3:glyph=7'd51;
-4:glyph=7'd22; endcase end
-    else begin case(column) 0:glyph=7'd26;
-1:glyph=7'd68;
-2:glyph=7'd44;
-3:glyph=7'd67; endcase end
+    if(py<tly+24) begin case(column) 0:glyph=7'd42;
+1:glyph=7'd51;
+2:glyph=7'd38;
+3:glyph=7'd65;
+4:glyph=7'd23; endcase end
+    else begin case(column) 0:glyph=7'd28;
+1:glyph=7'd94;
+2:glyph=7'd55;
+3:glyph=7'd91; endcase end
    end else if(av&&px>=alx&&px<alx+144&&py>=aly&&py<aly+24) begin
     gx=(px-alx)%24;gy=py-aly;column=(px-alx)/24;text_on=1;label_bg=1;text_color=color_a;
     case(I_pair)
 0:case(column)
-0:glyph=7'd71;
-1:glyph=7'd74;
-2:glyph=7'd57;
-3:glyph=7'd77;
-4:glyph=7'd62;
-5:glyph=7'd17;
+0:glyph=7'd98;
+1:glyph=7'd103;
+2:glyph=7'd76;
+3:glyph=7'd107;
+4:glyph=7'd82;
+5:glyph=7'd18;
 endcase
 1:case(column)
-0:glyph=7'd86;
-1:glyph=7'd74;
-2:glyph=7'd57;
-3:glyph=7'd77;
-4:glyph=7'd62;
-5:glyph=7'd17;
+0:glyph=7'd125;
+1:glyph=7'd103;
+2:glyph=7'd76;
+3:glyph=7'd107;
+4:glyph=7'd82;
+5:glyph=7'd18;
 endcase
 endcase
    end else if(bv&&px>=blx&&px<blx+144&&py>=bly&&py<bly+24) begin
     gx=(px-blx)%24;gy=py-bly;column=(px-blx)/24;text_on=1;label_bg=1;text_color=color_b;
     case(I_pair)
 0:case(column)
-0:glyph=7'd75;
-1:glyph=7'd74;
-2:glyph=7'd57;
-3:glyph=7'd77;
-4:glyph=7'd62;
-5:glyph=7'd18;
+0:glyph=7'd104;
+1:glyph=7'd103;
+2:glyph=7'd76;
+3:glyph=7'd107;
+4:glyph=7'd82;
+5:glyph=7'd19;
 endcase
 1:case(column)
-0:glyph=7'd70;
-1:glyph=7'd74;
-2:glyph=7'd57;
-3:glyph=7'd77;
-4:glyph=7'd62;
-5:glyph=7'd18;
+0:glyph=7'd97;
+1:glyph=7'd103;
+2:glyph=7'd76;
+3:glyph=7'd107;
+4:glyph=7'd82;
+5:glyph=7'd19;
 endcase
 endcase
    end
@@ -315,10 +463,10 @@ endcase
    if(y>=624) background0<=(x>=1024&&x<1264&&y>=632&&y<712)?24'hffffff:24'h102030;
    else if(!I_video_ok) background0<=0;
    else if(label_bg) background0<=0;
-   else if(overlay&&cross_on) background0<=24'hffff00;
-   else if(overlay&&outline) background0<=0;
-   else if(overlay&&red) background0<=I_pair?24'hffff00:24'hff3030;
-   else if(overlay&&blue) background0<=I_pair?24'hc050ff:24'h3080ff;
+   else if(overlay&&I_tip_valid&&cross_on) background0<=24'hffff00;
+   else if(overlay&&I_tip_valid&&outline) background0<=0;
+   else if(overlay&&av&&red) background0<=I_pair?24'hffff00:24'hff3030;
+   else if(overlay&&bv&&blue) background0<=I_pair?24'hc050ff:24'h3080ff;
    else background0<=I_rgb;
    O_vs<=vs0;O_hs<=hs0;O_de<=de0;
    if(!de0) O_rgb<=0;

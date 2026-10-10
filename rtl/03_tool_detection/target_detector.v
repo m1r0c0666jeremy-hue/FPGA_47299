@@ -82,13 +82,13 @@ module target_detector #(
     reg [21:0] box_area[0:1];
     reg [255:0] result;
     reg [3:0] state;
-    reg [1:0] component;
+    reg [2:0] component;
     reg [5:0] bits_left;
     reg [31:0] quotient;
     reg [32:0] remainder;
-    reg [19:0] denominator;
+    reg [21:0] denominator;
     wire [32:0] trial={remainder[31:0],quotient[31]};
-    wire subtract=trial>={13'd0,denominator};
+    wire subtract=trial>={11'd0,denominator};
     wire [31:0] qnext={quotient[30:0],subtract};
     integer i;
     always @(posedge I_clk or negedge I_rst_n) begin
@@ -119,6 +119,7 @@ module target_detector #(
                     result<=0;result[31:0]<=frame_id;
                     result[242:235]<=frame_session;result[243]<=frame_pair;result[244]<=frame_enable;
                     result[32]<=!frame_bad && !I_frame_fault && pixels==WIDTH*HEIGHT && state==0;
+                    result[247]<=!frame_bad && !I_frame_fault && pixels==WIDTH*HEIGHT && state==0;
                     result[36:33]<=I_frame_fault?8:((!frame_bad && pixels==WIDTH*HEIGHT && state==0)?0:1);
                     result[110:100]<=xmin[0];result[121:111]<=xmax[0];
                     result[131:122]<=ymin[0];result[141:132]<=ymax[0];
@@ -145,16 +146,25 @@ module target_detector #(
             end
             if(!sof) case(state)
             1: begin
-                if(counts[0]==0 || counts[1]==0) begin result[32]<=0;result[36:33]<=2;state<=5;end
+                // Each candidate survives independently; a bad capture never draws.
+                for(i=0;i<2;i=i+1)
+                    result[245+i]<=result[247] && counts[i]>=AREA_MIN && counts[i]<=AREA_MAX &&
+                        counts[i]*100>=box_area[i]*FILL_PERCENT_MIN;
+                state<=2;
+                if(counts[0]==0 || counts[1]==0) begin result[32]<=0;if(result[247])result[36:33]<=2;end
                 else if(counts[0]<AREA_MIN || counts[1]<AREA_MIN || counts[0]>AREA_MAX || counts[1]>AREA_MAX) begin
-                    result[32]<=0;result[36:33]<=3;state<=5;
+                    result[32]<=0;if(result[247])result[36:33]<=3;
                 end else if(counts[0]*100<box_area[0]*FILL_PERCENT_MIN || counts[1]*100<box_area[1]*FILL_PERCENT_MIN) begin
-                    result[32]<=0;result[36:33]<=4;state<=5;
-                end else state<=2;
+                    result[32]<=0;if(result[247])result[36:33]<=4;
+                end
             end
             2: begin
-                quotient<={1'b0,nums[component]};remainder<=0;
-                denominator<=counts[component[1]];bits_left<=32;state<=3;
+                // Reuse the existing iterative divider for centers AND fill %.
+                quotient<=component<4?{1'b0,nums[component[1:0]]}:counts[component[0]]*32'd100;
+                remainder<=0;
+                if(component<4) denominator<=counts[component[1]]==0?22'd1:{2'd0,counts[component[1]]};
+                else denominator<=counts[component[0]]==0?22'd1:box_area[component[0]];
+                bits_left<=32;state<=3;
             end
             3: begin
                 quotient<=qnext;remainder<=subtract?trial-denominator:trial;bits_left<=bits_left-1'b1;
@@ -162,8 +172,9 @@ module target_detector #(
                     case(component)
                     0:result[47:37]<=qnext[10:0];1:result[57:48]<=qnext[9:0];
                     2:result[68:58]<=qnext[10:0];3:result[78:69]<=qnext[9:0];
+                    4:result[230:224]<=qnext[6:0];5:result[254:248]<=qnext[6:0];
                     endcase
-                    if(component==3) state<=5;else begin component<=component+1'b1;state<=2;end
+                    if(component==5) state<=5;else begin component<=component+1'b1;state<=2;end
                 end
             end
             5:begin O_meta<=result;O_valid<=1;state<=0;end

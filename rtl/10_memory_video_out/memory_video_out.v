@@ -135,6 +135,7 @@ video_in u_video_in(
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
     wire [255:0] active_meta;
+    wire detection_valid;
     wire active_pair,active_show,tip_valid,video_ok,frame_commit,selected_good;
     (* async_reg="true", syn_preserve=1 *) reg [1:0] capture_reset,ddr_reset;
     wire capture_rst_n=capture_reset[1],ddr_rst_n=ddr_reset[1];
@@ -190,7 +191,7 @@ video_in u_video_in(
         .I_live(video_ok),.I_session(I_session),.I_zoom(I_zoom),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
-        .O_meta(active_meta),.O_show(active_show),.O_tip_valid(tip_valid),.O_state(active_status));
+        .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_tip_valid(tip_valid),.O_state(active_status));
     target_line_reader u_scaler (
         .I_frame_commit(frame_commit),.I_selected_good(selected_good),
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
@@ -303,7 +304,7 @@ video_in u_video_in(
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
         .I_vs(process_vs),.I_hs(process_hs),.I_de(process_de),.I_rgb(process_rgb),
         .I_meta(active_meta),.I_x0(roi_x),.I_y0(roi_y),.I_zoom(active_zoom),.I_mode(actual_mode),
-        .I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_tip_valid(tip_valid),.I_video_ok(video_ok),
+        .I_detection_valid(detection_valid),.I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_tip_valid(tip_valid),.I_video_ok(video_ok),
         .O_vs(osd_vs),.O_hs(osd_hs),.O_de(osd_de),.O_rgb(osd_rgb)
     );
     hdmi_tx u_hdmi_tx(
