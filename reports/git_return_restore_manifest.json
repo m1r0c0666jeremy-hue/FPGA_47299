@@ -1,0 +1,144 @@
+{
+  "head": "f395cc011ef4c21f15863192ce148938834bd639",
+  "fix_source": "cf8b7c463a415bd8741fed4ec68ff3eeac252455",
+  "archive": "D:/aaa_FPGA/archives/criticalwork_before_git_return_20261011_203250",
+  "tracked_files": 2827,
+  "only_tracked_change": "user_source/hdl_source/video_in.v",
+  "fix_sha256": "6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b",
+  "build_inputs_matched": 78,
+  "bit": "build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit",
+  "bit_sha256": "92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d",
+  "refs_preserved": true,
+  "old_bits_preserved_in_archive": 10,
+  "remote_unchanged": true,
+  "committed": false,
+  "pushed": false,
+  "hardware_tested": false,
+  "status": "GIT_RETURN_SOURCES_AND_REGRESSIONS_PASSED_REUSED_BIT_HARDWARE_PENDING",
+  "complete_backup_record": "D:/aaa_FPGA/archives/git_return_record_20261011_203250.json",
+  "original_files_archived": 6309,
+  "original_bytes_archived": 1551589804,
+  "archive_sha256_verified": true,
+  "td_saved_updates": {
+    "td_project/target_lock_candidates_ingress.al": {
+      "size": 29781,
+      "sha256": "9a6707681acc28deedafd6ea30b7a6db1a360e1151a4f56d527f5e608405526d"
+    }
+  },
+  "td_saved_directory": "D:/aaa_FPGA/archives/criticalwork_before_git_return_20261011_203250_td_saved",
+  "directory_move_note": "Windows directory handles prevented whole-folder rename; each file was moved without deletion, and the empty directory containers were retained.",
+  "expected_refs": {
+    "refs/heads/ImagePreprocess": {
+      "object": "1efd552b19c1cdf1c201af17c444c6918f05d316",
+      "symref": null
+    },
+    "refs/heads/ImproveFourfoldScale": {
+      "object": "86ef7776788d6627e2dbacfb0e4581839e108373",
+      "symref": null
+    },
+    "refs/heads/LockingnTracking": {
+      "object": "f395cc011ef4c21f15863192ce148938834bd639",
+      "symref": null
+    },
+    "refs/heads/ScalingTest": {
+      "object": "8ae151fd1ea46e6842743979c42901613c7c77c8",
+      "symref": null
+    },
+    "refs/heads/main": {
+      "object": "4c2620782e7f29367620975b51e850a34f846ef1",
+      "symref": null
+    },
+    "refs/remotes/origin/HEAD": {
+      "object": "8136663112f3c580e3c51b099d4aaed44e05139f",
+      "symref": "refs/remotes/origin/main"
+    },
+    "refs/remotes/origin/ImagePreprocess": {
+      "object": "1efd552b19c1cdf1c201af17c444c6918f05d316",
+      "symref": null
+    },
+    "refs/remotes/origin/ImproveFourfoldScale": {
+      "object": "86ef7776788d6627e2dbacfb0e4581839e108373",
+      "symref": null
+    },
+    "refs/remotes/origin/LockingnTracking": {
+      "object": "cf8b7c463a415bd8741fed4ec68ff3eeac252455",
+      "symref": null
+    },
+    "refs/remotes/origin/ScalingTest": {
+      "object": "57a704a40336f82469e8e237bed3d8a307bb27c5",
+      "symref": null
+    },
+    "refs/remotes/origin/docs/contributor-note": {
+      "object": "633f4e8cafef27d75aab8e6fc8bfbe4377ee0ddb",
+      "symref": null
+    },
+    "refs/remotes/origin/docs/git-workflow-and-identity": {
+      "object": "6eb1f15619427f69cf9c79285c00d89bb7f6d716",
+      "symref": null
+    },
+    "refs/remotes/origin/docs/scalingtest-acceptance": {
+      "object": "a5665e16cc577f51be33f169bb35d307f9e2c1b7",
+      "symref": null
+    },
+    "refs/remotes/origin/main": {
+      "object": "8136663112f3c580e3c51b099d4aaed44e05139f",
+      "symref": null
+    },
+    "refs/tags/archive-2026-10-03-camera-hdmi": {
+      "object": "c115b24480a799316cb5ae77713b591597418af0",
+      "symref": null
+    },
+    "refs/tags/archive-2026-10-04-imagepreprocess": {
+      "object": "cf961cb507d02d89dc5bb370101db78f8fca4853",
+      "symref": null
+    },
+    "refs/tags/archive-2026-10-04-pins-brightness": {
+      "object": "9accccc3b4fa71ec462521eb7abac66e1ef1e943",
+      "symref": null
+    },
+    "refs/tags/review-2026-10-03-teammate-v1.1": {
+      "object": "eac0270d69cf3b9ee747b6841ec63bbefe830d0b",
+      "symref": null
+    },
+    "refs/tags/v1.1": {
+      "object": "aa7e28e75e612e339bd32fb0ac51dddf0e491188",
+      "symref": null
+    },
+    "refs/tags/v1.2": {
+      "object": "52a27bd68fd94981b98bdd7bea7791fd6467c165",
+      "symref": null
+    }
+  },
+  "remote_url": "https://github.com/m1r0c0666jeremy-hue/FPGA_47299.git",
+  "evidence_sha256": {
+    "reports/git_return_ingress.log": "d9af9ff18485ca23096c67ca5954569871893b4c0283827b9cacafc12406bbc1",
+    "reports/git_return_video_simulation.log": "40223889b04ac61129d5c708f27d15f6294ee581e98c254ab3b988a4a09cf82a",
+    "reports/git_return_video_cases.json": "8d30303f3c8bbb87638fbeac28462ee977ad0473d426be79094c5d1ccd8b0fec",
+    "reports/git_return_source_audit.json": "919b2698aa6c7339ec842396ed25b020d8a18cf962537e6d73b9704d00025a6d",
+    "reports/git_return_project_selection.json": "1b3afb7e79e9df37e846e95f2b0a3857f7884569307af45f7c5b4e103b2c960b",
+    "reports/candidate_ingress_build_inputs.json": "56a740ec23fc83a3478da4f6852f7de531645fb38c25d9a299237c8645d4192b"
+  },
+  "video_cases": 15,
+  "video_frames": 19,
+  "video_pixels": 15175680,
+  "reused_bit": true,
+  "new_td_build_executed": false,
+  "ingress_awb_packed_words": 960,
+  "ingress_awb_ddr_writes": 960,
+  "ingress_fifo_types": 2,
+  "ingress_clock_pairs": [
+    [
+      8,
+      7
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      11,
+      5
+    ]
+  ],
+  "ingress_full_frame_words": 172800
+}

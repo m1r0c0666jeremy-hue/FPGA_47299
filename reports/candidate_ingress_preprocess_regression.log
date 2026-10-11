@@ -1,0 +1,17 @@
+=== switch compile exit 0 ===
+
+=== switch run exit 0 ===
+PASS switch synchronizer/debounce: bounce rejected, all 4 mode words, reset
+D:\aaa_FPGA\criticalwork\sim\tb_switch_mode_10_3.sv:21: $finish called at 771000 (1ps)
+
+=== image_small compile exit 0 ===
+
+=== image_small run exit 0 ===
+PASS four 17x9 frames: RGB/Sobel/gray/binary, thresholds, borders, HS/VS/DE, frame-latched modes, reset and stale-line masking; pixels=646
+D:\aaa_FPGA\criticalwork\sim\tb_imagepreprocess_10_3.sv:105: $finish called at 12514959 (1ps)
+
+=== image_720p compile exit 0 ===
+
+=== image_720p run exit 0 ===
+PASS four 1280x720 frames: RGB/Sobel/gray/binary, thresholds, borders, HS/VS/DE, frame-latched modes, reset and stale-line masking; pixels=3688960
+D:\aaa_FPGA\criticalwork\sim\tb_imagepreprocess_10_3.sv:105: $finish called at 49420025211 (1ps)
