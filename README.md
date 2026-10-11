@@ -1,6 +1,14 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 最新存档：单色候选功能与帧头丢字修复（2026-10-11）
+
+当前 LockingnTracking 活动源码采用单色候选框与中文诊断存档 `f395cc0` 的功能与颜色参数，只移植 `cf8b7c4` 的 `video_in.v` 帧头暂存／跨时钟握手修复。存档名：**LockingnTracking：恢复单色候选并修复帧头丢字**。代码提交 `fc383a5066740a4cb1b6a425cea64da554ca3cca`，已通过保留远端历史的合并提交推送到 GitHub `LockingnTracking`。远端分支地址：[FPGA_47299 / LockingnTracking](https://github.com/m1r0c0666jeremy-hue/FPGA_47299/tree/LockingnTracking)。
+
+- TD 工程：[target_lock_candidates_ingress.al](td_project/target_lock_candidates_ingress.al)，BitWriter 文件：[target_lock_candidates_ingress.bit](build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit)，SHA256 `92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d`。
+- 完整说明：[Git恢复与帧头修复](docs/LockingnTracking_Git回退与帧头修复_2026-10-11.md)，[工程使用及回归入口](docs/LockingnTracking单色候选与帧头修复.md)，[验证报告](reports/LockingnTracking单色候选与帧头修复验证报告.md)。
+- 960 个打包字写入 960 个 DDR 字及视频回归通过；新组合仍需上板验证，不能据此宣称颜色识别或硬件验收通过。
+
 ## 最新开发：单色候选框与诊断（2026-10-10）
 
 开启搜索后，红／蓝或黄／紫各自通过检查即可独立画框；只有双色连续3帧合格才显示估算尖端并跟随。视频区新增A/B像素数、填充率和失败原因，KEY3长按可一并隐藏。颜色阈值及原操作不变。
