@@ -1,0 +1,3 @@
+
+PASS association: 6 asynchronous full transactions, 416/451-bit CDC, actual selected bank/first-line ID, late/empty results, command, reuse abort and reset
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_association.sv:73: $finish called at 50408000 (1ps)

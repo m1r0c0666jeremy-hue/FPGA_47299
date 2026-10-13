@@ -1,0 +1,60 @@
+{
+  "synthesis_attempts": [
+    {
+      "directory": "build/color_regions_full_20261012_225900",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 21161,
+      "eram": 85,
+      "dsp": 9
+    },
+    {
+      "directory": "build/color_regions_full_20261013_073609",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 20898,
+      "eram": 85,
+      "dsp": 9
+    },
+    {
+      "directory": "build/color_regions_full_20261013_073802",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 20945,
+      "eram": 85,
+      "dsp": 9
+    },
+    {
+      "directory": "build/color_regions_synth_20261012_223855",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 41472,
+      "eram": 77,
+      "dsp": 9
+    },
+    {
+      "directory": "build/color_regions_synth_20261012_224447",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 23590,
+      "eram": 85,
+      "dsp": 9
+    },
+    {
+      "directory": "build/color_regions_synth_20261012_225454",
+      "stage": "SYNTHESIS_ESTIMATE_NOT_FINAL_PNR",
+      "slice_estimate": 21248,
+      "eram": 85,
+      "dsp": 9
+    }
+  ],
+  "final_pnr": {
+    "Slice": 19873,
+    "LUT6": 18429,
+    "Register": 21416,
+    "ERAM20K": 85,
+    "DSP": 9
+  },
+  "notes": [
+    "Initial noncanonical multi-port run RAM expanded to flip-flops; replaced by canonical dual-port RAM.",
+    "Two direct record write lanes plus a single-write spill FIFO preserved up to three EOL events.",
+    "Fixed image-bank selection tree and non-reset metadata RAM replaced wide repeated register multiplexers.",
+    "One background ROI datapath and four-bit validity avoid redundant parallel arithmetic/candidate copies.",
+    "AWB and vendor interfaces unchanged; throughput always four pixels per capture clock."
+  ]
+}

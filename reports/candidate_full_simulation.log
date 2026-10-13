@@ -1,0 +1,3 @@
+
+PASS detector 1280x720 frames=5
+D:\aaa_FPGA\criticalwork\build\sim\candidate\tb_full_yp.sv:27: $finish called at 11531170000 (1ps)

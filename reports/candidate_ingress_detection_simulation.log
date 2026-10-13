@@ -1,0 +1,3 @@
+
+PASS dualcolor pipeline: frames=71 locks=10 stale_rejected=11, asynchronous commands and frame-stamped config
+sim/tb_candidate_pipeline.sv:54: $finish called at 1608770000 (1ps)

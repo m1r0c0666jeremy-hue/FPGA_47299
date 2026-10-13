@@ -1,0 +1,28 @@
+{
+  "status": "FUNCTIONAL_SOFTWARE_AND_TD_PASSED_HARDWARE_PENDING",
+  "branch": "LockingnTracking",
+  "baseline_head": "e82a62fca10dc6e8e6807b426666866ef4217054",
+  "ui_version": "R1-01",
+  "bit_path": "D:/aaa_FPGA/criticalwork/build/target_color_regions/target_color_regions.bit",
+  "bit_sha256": "87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f",
+  "source_snapshot": "D:/aaa_FPGA/criticalwork/build/target_color_regions/color_regions_source_snapshot.zip",
+  "source_snapshot_sha256": "62bbfead927fc96883abc18eef82f17f5c08917ce3ef7eb2ecec3334246bc902",
+  "resources": {
+    "Slice": 19873,
+    "LUT6": 18429,
+    "Register": 21416,
+    "ERAM20K": 85,
+    "DSP": 9
+  },
+  "timing_ns": {
+    "SWNS": 0.128,
+    "HWNS": 0.02
+  },
+  "instructions": "D:/aaa_FPGA/criticalwork/docs/LockingnTracking颜色区域功能版上板.md",
+  "report": "D:/aaa_FPGA/criticalwork/reports/LockingnTracking颜色区域功能版验证报告.md",
+  "hardware_record": "D:/aaa_FPGA/criticalwork/reports/color_regions_hardware_record.csv",
+  "source_files": 312,
+  "build_inputs": 200,
+  "hardware": "NOT TESTED",
+  "git": "HEAD preserved; functional changes uncommitted; no push; no download or Flash programming"
+}

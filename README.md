@@ -1,6 +1,52 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前功能工程：独立颜色区域框选（2026-10-13）
+
+唯一推荐的新功能入口为 `td_project/target_color_regions.al`，下载 [target_color_regions.bit](build/target_color_regions/target_color_regions.bit)。采用四像素并行的相对色差/简化色相分类、全图粗网格寻找、局部连通区域分离和三帧确认，每色最多两个独立框；四页为原图、色彩高亮、灰度、色彩二值。移除顶部大诊断面板与旧尖端/自动跟随链路，底栏及原按键、手动倍率保留。
+
+[上板操作与测试](docs/LockingnTracking颜色区域功能版上板.md)、[验证报告](reports/LockingnTracking颜色区域功能版验证报告.md)、[交付与哈希](reports/color_regions_delivery.json)。软件与TD综合布局布线通过：Slice19873、LUT6 18429、ERAM85、DSP9；SWNS+0.128ns/HWNS+0.020ns。bit SHA256 `87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f`。实物尚未验收，请先验证清晰色环/打印颜色与视频稳定性。后面的老师诊断及旧候选章节是保留的历史入口，不参与新工程编译。工作区从e82a62f继续，没有重置、提交或推送；帧头丢字修复及10份已有bit保持。
+
+## 当前实验：老师 YCbCr 思路的独立颜色诊断（2026-10-12）
+
+从 `LockingnTracking` 的 `e82a62f` 继续，新增8×8真实AWB前后RGB与AWB后Y/Cb/Cr采样、四页旧RGB掩码对照，以及独立窗口标定工具。原判色、面积/填充规则、帧头修复及正常工程保留；当前YCbCr目标分类尚未用实物数据标定。
+
+- 入口：[诊断上板操作](docs/LockingnTracking老师判色诊断上板操作.md)、[标定工具](docs/LockingnTracking老师判色标定工具.md)、[实测记录表](reports/teacher_color_hardware_record.csv)。
+- 独立工程 `td_project/target_teacher_color_diag.al`、构建脚本 `scripts/build_target_teacher_color_diag.tcl`、下载输出 `build/target_teacher_color_diag/target_teacher_color_diag.bit`。最终有效版本/构建状态以 `reports/teacher_color_delivery.json` 为准。
+- 诊断版 `598716C1` 已通过软件回归、TD综合布局布线及97项输入/9份旧bit哈希审计：Slice20117、LUT6 17612、ERAM75、DSP19，SWNS+0.125ns/HWNS+0.012ns。完整记录见[诊断验证报告](reports/LockingnTracking老师判色诊断验证报告.md)。没有真实样本时不启用YC窗口，不声称色环识别已修复。当前改动尚未提交/推送、未下载或烧Flash；按操作说明先做SRAM诊断采样。
+
+## 最新存档：单色候选功能与帧头丢字修复（2026-10-11）
+
+当前 LockingnTracking 活动源码采用单色候选框与中文诊断存档 `f395cc0` 的功能与颜色参数，只移植 `cf8b7c4` 的 `video_in.v` 帧头暂存／跨时钟握手修复。存档名：**LockingnTracking：恢复单色候选并修复帧头丢字**。代码提交 `fc383a5066740a4cb1b6a425cea64da554ca3cca`，已通过保留远端历史的合并提交推送到 GitHub `LockingnTracking`。远端分支地址：[FPGA_47299 / LockingnTracking](https://github.com/m1r0c0666jeremy-hue/FPGA_47299/tree/LockingnTracking)。
+
+- TD 工程：[target_lock_candidates_ingress.al](td_project/target_lock_candidates_ingress.al)，BitWriter 文件：[target_lock_candidates_ingress.bit](build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit)，SHA256 `92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d`。
+- 完整说明：[Git恢复与帧头修复](docs/LockingnTracking_Git回退与帧头修复_2026-10-11.md)，[工程使用及回归入口](docs/LockingnTracking单色候选与帧头修复.md)，[验证报告](reports/LockingnTracking单色候选与帧头修复验证报告.md)。
+- 960 个打包字写入 960 个 DDR 字及视频回归通过；新组合仍需上板验证，不能据此宣称颜色识别或硬件验收通过。
+
+## 最新开发：单色候选框与诊断（2026-10-10）
+
+开启搜索后，红／蓝或黄／紫各自通过检查即可独立画框；只有双色连续3帧合格才显示估算尖端并跟随。视频区新增A/B像素数、填充率和失败原因，KEY3长按可一并隐藏。颜色阈值及原操作不变。
+
+- [单色候选操作与模块路径](docs/LockingnTracking单色候选诊断.md)、[本轮验证报告](reports/LockingnTracking单色候选验证报告.md)。
+- 新工程 `td_project/target_lock_candidates.al`，构建脚本 `scripts/build_target_lock_candidates.tcl`，输出 `build/target_lock_candidates/target_lock_candidates.bit`。旧工程和bit保留。
+- 存档名：**LockingnTracking：存档单色候选框与中文诊断联调版本**。单元、帧同步、完整视频、72幅OSD及原算法回归通过；TD综合布局布线和源码／bit同源审计通过。
+- 仍为联调版本，旧采集帧头丢数据及离焦识别问题未修复。本次按Jeremy要求完成后提交并上传LockingnTracking，不合并main，不下载板卡或烧Flash。
+
+## 最新开发：双配色、中文标注与KEY3长短按（2026-10-09）
+
+在LockingnTracking的061cfd7上新增中文随目标标签、红蓝／黄紫切换和KEY3长短按。**SW3=0红A蓝B，SW3=1黄A紫B；KEY3短按松手启停，长按1秒显隐视频标注；KEY2改为按SW4增减增益。** 长按隐藏仍检测／跟随，底栏状态、配色、标定和安路Logo保留。KEY4按SW4缩放、SW1/2四模式保持。
+
+- [最新操作、参数及接口](docs/LockingnTracking双配色与中文标注.md)，[本轮验证报告](reports/LockingnTracking双配色验证报告.md)。下方旧操作仅作历史，不再按SW3控制显隐／增益。
+- 独立入口 `td_project/target_lock_dualcolor.al`／`scripts/build_target_lock_dualcolor.tcl`，输出 `build/target_lock_dualcolor/target_lock_dualcolor.bit`；旧工程及bit保留。
+- 存档名：**LockingnTracking：存档中文标注、双配色与KEY3长短按联调版本**。2026-10-09按Jeremy要求将源码、同源bit和验证证据一并纳入本次Git存档，上传目标仅为GitHub的LockingnTracking分支。
+- 本轮不加入离焦滤波、锐化或双线性。原帧头丢数据问题未修复；构建同源及本轮软件验证不代替完整采集接入和实物验收。未下载、烧Flash或合并main。
+
+## 最新接续：同步队友实物测试记录（2026-10-08）
+
+已将本地 LockingnTracking 从 `067664c` 快进到 GitHub 同名分支 `21609e587b3d68540f85ec1856ae5b2d7d8966f6`，接收两条提交、三个文档文件的更新；检测源码、参数和 bit 没有随这次远端更新改变。Jeremy确认队友实测“离焦模糊时可以锁定、对焦清晰后不能锁定”，详见 [实物问题记录](docs/实物问题记录_对焦依赖检测.md)。这属于部分实物观察，不是完整验收通过。
+
+本地接续存档名：**LockingnTracking：同步队友实物测试记录并存档离焦锁定问题**。本轮只同步、阅读代码并记录说明，未修复、重新构建或下载；新接续提交仅保存在本地，未推送。标记不要求圆形，颜色、面积、填充率及跟踪条件说明见 [本次接续说明](docs/LockingnTracking接续_2026-10-08.md)。下文2026-10-07内容保留为开发历史，中间bit和采集接入问题仍待处理。
+
 ## 当前开发：LockingnTracking（2026-10-07，接入验证未完成）
 
 从本地main `4c26207` 创建 **LockingnTracking**，main与ImproveFourfoldScale分支保留。新增红前蓝后双色检测、估算尖端、KEY3启停持续跟踪、窗口跟随与SW3标注显隐；沿用main最近邻缩放。

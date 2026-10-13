@@ -1,0 +1,8 @@
+{
+  "archive_name": "ColorRegionDetection：基于色相分割与连通域分析的多目标颜色识别框选版",
+  "branch": "ColorRegionDetection",
+  "branched_from": "61762e2",
+  "bit": "build/target_color_regions/target_color_regions.bit",
+  "bit_sha256": "87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f",
+  "hardware_validation": "待上板"
+}

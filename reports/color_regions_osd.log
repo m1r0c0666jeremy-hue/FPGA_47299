@@ -1,0 +1,23 @@
+PASS compact OSD full frame mode=0 show=1 zoom=0 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=1 show=1 zoom=0 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=2 show=1 zoom=0 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=3 show=1 zoom=0 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=1 show=0 zoom=0 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=0 show=1 zoom=1 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=1 show=1 zoom=2 pair=0
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)
+
+PASS compact OSD full frame mode=0 show=1 zoom=2 pair=1
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_osd.sv:37: $finish called at 9273740000 (1ps)

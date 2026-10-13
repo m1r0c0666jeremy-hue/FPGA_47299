@@ -1,0 +1,17 @@
+{
+  "head": "f395cc011ef4c21f15863192ce148938834bd639",
+  "fix_source": "cf8b7c463a415bd8741fed4ec68ff3eeac252455",
+  "archive": "D:/aaa_FPGA/archives/criticalwork_before_git_return_20261011_203250",
+  "tracked_files": 2827,
+  "only_tracked_change": "user_source/hdl_source/video_in.v",
+  "fix_sha256": "6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b",
+  "build_inputs_matched": 78,
+  "bit": "build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit",
+  "bit_sha256": "92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d",
+  "refs_preserved": true,
+  "old_bits_preserved_in_archive": 10,
+  "remote_unchanged": true,
+  "committed": false,
+  "pushed": false,
+  "hardware_tested": false
+}

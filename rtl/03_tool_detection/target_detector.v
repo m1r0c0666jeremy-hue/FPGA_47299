@@ -6,13 +6,15 @@
 module target_detector #(
     parameter WIDTH=1280, HEIGHT=720,
     parameter COLOR_MIN=80,COLOR_DIFF=32,RATIO_NUM=3,RATIO_DEN=2,
-    parameter AREA_MIN=64,AREA_MAX=20000,FILL_PERCENT_MIN=30
+    parameter AREA_MIN=64,AREA_MAX=20000,FILL_PERCENT_MIN=30,
+    parameter YP_MIN=80,YP_DIFF=24,YP_RATIO_NUM=5,YP_RATIO_DEN=4,YP_BALANCE=2
 )(
     input wire I_clk,I_rst_n,I_sof,I_valid,I_frame_fault,
     input wire [95:0] I_rgb,
     output wire [31:0] O_frame_id,
     output reg O_valid,
-    output reg [255:0] O_meta
+    output reg [255:0] O_meta,
+    input wire I_pair,I_enable,input wire [7:0] I_session
 );
     reg sof_d,seen;
     wire sof=I_sof&&!sof_d;
@@ -32,16 +34,33 @@ module target_detector #(
     reg [9:0] next_ymin[0:1],next_ymax[0:1];
     integer c,lane,xx,yy;
     reg [7:0] r,g,b;
+    reg [31:0] lo,hi,other;
+    reg frame_pair,frame_enable;reg [7:0] frame_session;
+    wire selected_pair=sof?I_pair:frame_pair;
+    // Factors are compile-time parameters (1..16). Explicit add/shift avoids
+    // spending scarce DSPs on four-pixel constant color-ratio comparisons.
+    function [12:0] color_scale(input [7:0] value,input [4:0] factor);
+        integer bit_index;
+        begin
+            color_scale=0;
+            for(bit_index=0;bit_index<5;bit_index=bit_index+1)
+                if(factor[bit_index]) color_scale=color_scale+({5'd0,value}<<bit_index);
+        end
+    endfunction
     reg hit;
     always @* begin
-        xx=sof?0:x; yy=sof?0:y;r=0;g=0;b=0;hit=0;
+        xx=sof?0:x; yy=sof?0:y;r=0;g=0;b=0;hit=0;lo=0;hi=0;other=0;
         for(c=0;c<2;c=c+1) begin
             next_area[c]=sof?0:area[c];next_sx[c]=sof?0:sx[c];next_sy[c]=sof?0:sy[c];
             next_xmin[c]=sof?WIDTH-1:xmin[c];next_xmax[c]=sof?0:xmax[c];
             next_ymin[c]=sof?HEIGHT-1:ymin[c];next_ymax[c]=sof?0:ymax[c];
             for(lane=0;lane<4;lane=lane+1) begin
                 r=I_rgb[95-lane*24-:8];g=I_rgb[87-lane*24-:8];b=I_rgb[79-lane*24-:8];
-                if(c==0) hit=(r>=COLOR_MIN && {1'b0,r}>={1'b0,g}+COLOR_DIFF &&
+                if(selected_pair) begin
+                    if(c==0) begin lo=r<g?r:g;hi=r>g?r:g;other=b;end
+                    else begin lo=r<b?r:b;hi=r>b?r:b;other=g;end
+                    hit=lo>=YP_MIN && lo>=other+YP_DIFF && color_scale(lo[7:0],YP_RATIO_DEN)>=color_scale(other[7:0],YP_RATIO_NUM) && hi<=color_scale(lo[7:0],YP_BALANCE);
+                end else if(c==0) hit=(r>=COLOR_MIN && {1'b0,r}>={1'b0,g}+COLOR_DIFF &&
                     {1'b0,r}>={1'b0,b}+COLOR_DIFF && r*RATIO_DEN>=g*RATIO_NUM && r*RATIO_DEN>=b*RATIO_NUM);
                 else hit=(b>=COLOR_MIN && {1'b0,b}>={1'b0,g}+COLOR_DIFF &&
                     {1'b0,b}>={1'b0,r}+COLOR_DIFF && b*RATIO_DEN>=g*RATIO_NUM && b*RATIO_DEN>=r*RATIO_NUM);
@@ -63,17 +82,18 @@ module target_detector #(
     reg [21:0] box_area[0:1];
     reg [255:0] result;
     reg [3:0] state;
-    reg [1:0] component;
+    reg [2:0] component;
     reg [5:0] bits_left;
     reg [31:0] quotient;
     reg [32:0] remainder;
-    reg [19:0] denominator;
+    reg [21:0] denominator;
     wire [32:0] trial={remainder[31:0],quotient[31]};
-    wire subtract=trial>={13'd0,denominator};
+    wire subtract=trial>={11'd0,denominator};
     wire [31:0] qnext={quotient[30:0],subtract};
     integer i;
     always @(posedge I_clk or negedge I_rst_n) begin
         if(!I_rst_n) begin
+            frame_pair<=0;frame_enable<=0;frame_session<=0;
             sof_d<=0;seen<=0;frame_id<=0;pixels<=0;frame_bad<=0;x<=0;y<=0;
             O_valid<=0;O_meta<=0;state<=0;component<=0;bits_left<=0;
             quotient<=0;remainder<=0;denominator<=1;result<=0;
@@ -85,6 +105,7 @@ module target_detector #(
         end else begin
             sof_d<=I_sof;O_valid<=0;
             if(sof) begin
+                frame_pair<=I_pair;frame_enable<=I_enable;frame_session<=I_session;
                 seen<=1;frame_id<=frame_id+1'b1;pixels<=I_valid?4:0;
                 x<=I_valid?4:0;y<=0;frame_bad<=0;
                 for(i=0;i<2;i=i+1) begin
@@ -96,7 +117,9 @@ module target_detector #(
                 // SOF invalidates/cancels the unfinished transaction, never reuses it.
                 if(seen) begin
                     result<=0;result[31:0]<=frame_id;
+                    result[242:235]<=frame_session;result[243]<=frame_pair;result[244]<=frame_enable;
                     result[32]<=!frame_bad && !I_frame_fault && pixels==WIDTH*HEIGHT && state==0;
+                    result[247]<=!frame_bad && !I_frame_fault && pixels==WIDTH*HEIGHT && state==0;
                     result[36:33]<=I_frame_fault?8:((!frame_bad && pixels==WIDTH*HEIGHT && state==0)?0:1);
                     result[110:100]<=xmin[0];result[121:111]<=xmax[0];
                     result[131:122]<=ymin[0];result[141:132]<=ymax[0];
@@ -123,16 +146,25 @@ module target_detector #(
             end
             if(!sof) case(state)
             1: begin
-                if(counts[0]==0 || counts[1]==0) begin result[32]<=0;result[36:33]<=2;state<=5;end
+                // Each candidate survives independently; a bad capture never draws.
+                for(i=0;i<2;i=i+1)
+                    result[245+i]<=result[247] && counts[i]>=AREA_MIN && counts[i]<=AREA_MAX &&
+                        counts[i]*100>=box_area[i]*FILL_PERCENT_MIN;
+                state<=2;
+                if(counts[0]==0 || counts[1]==0) begin result[32]<=0;if(result[247])result[36:33]<=2;end
                 else if(counts[0]<AREA_MIN || counts[1]<AREA_MIN || counts[0]>AREA_MAX || counts[1]>AREA_MAX) begin
-                    result[32]<=0;result[36:33]<=3;state<=5;
+                    result[32]<=0;if(result[247])result[36:33]<=3;
                 end else if(counts[0]*100<box_area[0]*FILL_PERCENT_MIN || counts[1]*100<box_area[1]*FILL_PERCENT_MIN) begin
-                    result[32]<=0;result[36:33]<=4;state<=5;
-                end else state<=2;
+                    result[32]<=0;if(result[247])result[36:33]<=4;
+                end
             end
             2: begin
-                quotient<={1'b0,nums[component]};remainder<=0;
-                denominator<=counts[component[1]];bits_left<=32;state<=3;
+                // Reuse the existing iterative divider for centers AND fill %.
+                quotient<=component<4?{1'b0,nums[component[1:0]]}:counts[component[0]]*32'd100;
+                remainder<=0;
+                if(component<4) denominator<=counts[component[1]]==0?22'd1:{2'd0,counts[component[1]]};
+                else denominator<=counts[component[0]]==0?22'd1:box_area[component[0]];
+                bits_left<=32;state<=3;
             end
             3: begin
                 quotient<=qnext;remainder<=subtract?trial-denominator:trial;bits_left<=bits_left-1'b1;
@@ -140,8 +172,9 @@ module target_detector #(
                     case(component)
                     0:result[47:37]<=qnext[10:0];1:result[57:48]<=qnext[9:0];
                     2:result[68:58]<=qnext[10:0];3:result[78:69]<=qnext[9:0];
+                    4:result[230:224]<=qnext[6:0];5:result[254:248]<=qnext[6:0];
                     endcase
-                    if(component==3) state<=5;else begin component<=component+1'b1;state<=2;end
+                    if(component==5) state<=5;else begin component<=component+1'b1;state<=2;end
                 end
             end
             5:begin O_meta<=result;O_valid<=1;state<=0;end

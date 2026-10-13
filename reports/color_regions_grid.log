@@ -1,0 +1,8 @@
+
+PASS grid RTL streams
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\grid\tb.sv:25: $finish called at 10297900000 (1ps)
+
+PASS empty: all 920 two-colour counts, distinct ROIs, 17483 cycles
+PASS two_regions: all 920 two-colour counts, distinct ROIs, 17721 cycles
+PASS many_and_bottom: all 920 two-colour counts, distinct ROIs, 17565 cycles
+PASS all_active: all 920 two-colour counts, distinct ROIs, 53541 cycles

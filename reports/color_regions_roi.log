@@ -1,0 +1,3 @@
+
+PASS ROI: duplicate/adjacent union, real frame edge, four-slot expansion and SOF collision atomicity
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_roi.sv:36: $finish called at 20073000 (1ps)

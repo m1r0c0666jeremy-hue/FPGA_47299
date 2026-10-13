@@ -1,0 +1,44 @@
+PASS functional video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     150240 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     150240 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     150240 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     150240 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          1 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      75360 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          1 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      75360 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          1 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      75360 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          1 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      75360 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          2 mode=          0 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      37920 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          2 mode=          1 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      37920 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          2 mode=          2 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      37920 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          2 mode=          3 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      37920 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 17050345808 (1ps)
+
+PASS functional video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     162960 black=     732160
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 33551170808 (1ps)
+
+PASS functional video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          3 pixels=    2396160 DDR=     297360 black=     814080
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 50051995808 (1ps)
+
+PASS functional video: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     187680 black=          0
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\video\tb_color_regions_video.sv:161: $finish called at 33551170808 (1ps)

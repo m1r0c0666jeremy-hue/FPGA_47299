@@ -1,0 +1,12 @@
+
+PASS labeler RTL stream completed
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\labeler\tb.sv:31: $finish called at 1033040000 (1ps)
+
+PASS empty: 0 independent pixel components, max row 1 cycles
+PASS solid: 1 independent pixel components, max row 7 cycles
+PASS ring: 2 independent pixel components, max row 19 cycles
+PASS diagonal_equality: 2 independent pixel components, max row 19 cycles
+PASS 32_runs: 32 independent pixel components, max row 193 cycles
+PASS 128_labels: 128 independent pixel components, max row 203 cycles
+PASS full_width: 1 independent pixel components, max row 203 cycles
+PASS three_eol_events: 3 independent pixel components, max row 203 cycles

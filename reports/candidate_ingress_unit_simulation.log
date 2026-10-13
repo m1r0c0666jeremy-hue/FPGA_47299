@@ -1,0 +1,45 @@
+
+PASS diagnostics decimal: 202 cases, count 0..921600, fill 0..100
+sim/tb_candidate_diagnostics.sv:19: $finish called at 94980000 (1ps)
+
+
+PASS dualcolor controls: 999/1000/1001ms, held, conflict, reset, SW4 gain, pair session
+sim/tb_candidate_controls.sv:36: $finish called at 1127840000 (1ps)
+
+
+PASS display: frame/session match, follow, bounds, hide, stop, late response, video fault
+sim/tb_candidate_display.sv:57: $finish called at 3975532 (1ps)
+
+
+PASS frame store: matching, missing, overwritten, stale, short, long, nonsequential
+sim/tb_candidate_store.sv:39: $finish called at 1605000 (1ps)
+
+
+PASS bundled CDC: 100 coherent 256-bit transactions, asynchronous clocks
+sim/tb_candidate_mailbox.sv:21: $finish called at 9008040 (1ps)
+
+
+PASS detector 128x64 frames=22
+sim/tb_candidate_detector.sv:27: $finish called at 503120000 (1ps)
+
+
+PASS tracker L=40 D=20 cases=450
+sim/tb_candidate_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=40 D=0 cases=450
+sim/tb_candidate_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=30 D=20 cases=450
+sim/tb_candidate_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS tracker L=20 D=30 cases=450
+sim/tb_candidate_tracker.sv:25: $finish called at 27040000 (1ps)
+
+
+PASS detector 1280x720 frames=2
+sim/tb_candidate_detector.sv:27: $finish called at 4628690000 (1ps)
+
+CANDIDATE_UNIT_TESTS_PASSED

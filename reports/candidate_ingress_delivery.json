@@ -1,0 +1,18 @@
+{
+  "bit": "build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit",
+  "bit_sha256": "92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d",
+  "metrics": {
+    "slice": 19105,
+    "lut6": 17250,
+    "reg": 18733,
+    "eram": 56,
+    "dsp": 31,
+    "SWNS": 0.117,
+    "HWNS": 0.02,
+    "coverage": 97.5
+  },
+  "source_snapshot": "build/target_lock_candidates_ingress/candidate_ingress_source_snapshot.zip",
+  "source_snapshot_sha256": "628529673d888df6813f5e6128343bfaa32aed70e3adc81b8e5a12bccbeb11ad",
+  "source_snapshot_files": 158,
+  "report": "reports/LockingnTracking单色候选与帧头修复验证报告.md"
+}

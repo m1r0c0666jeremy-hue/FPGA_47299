@@ -1,0 +1,7 @@
+{
+  "TD_saved_project_preserved": "D:\\aaa_FPGA\\archives\\criticalwork_before_git_return_20261011_203250\\td_project\\target_lock_candidates_ingress.al",
+  "TD_saved_sha256": "9a6707681acc28deedafd6ea30b7a6db1a360e1151a4f56d527f5e608405526d",
+  "active_project_from": "candidate_ingress_source_snapshot.zip",
+  "active_project_sha256": "2c78cb290205011b64556031855d187cbb9048795a8f0ee249bcb92d647bf9e6",
+  "reason": "Restore exact project bytes used to generate the preserved bit."
+}

@@ -1,0 +1,80 @@
+
+AWB SOF cycle=66 valid=1
+packed cycle=68 FIFO reset=0
+packed cycle=69 FIFO reset=0
+packed cycle=70 FIFO reset=0
+packed cycle=72 FIFO reset=1
+packed cycle=73 FIFO reset=1
+packed cycle=74 FIFO reset=1
+packed cycle=76 FIFO reset=1
+packed cycle=77 FIFO reset=1
+packed cycle=78 FIFO reset=1
+packed cycle=80 FIFO reset=1
+packed cycle=81 FIFO reset=1
+packed cycle=82 FIFO reset=1
+packed cycle=84 FIFO reset=1
+packed cycle=85 FIFO reset=1
+INGRESS_PROBE AWB_words=1280 packed_words=960 DDR_writes=960 expected=960
+PASS AWB 960 packed = 960 DDR, all data/addresses matched
+D:\aaa_FPGA\criticalwork\build\sim\candidate_ingress\tb_robust_awb.sv:37: $finish called at 59216000 (1ps)
+
+
+PASS ingress CP=8 DP=7: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 11856726000 (1ps)
+
+
+PASS ingress CP=5 DP=11: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 7410590000 (1ps)
+
+
+PASS ingress CP=11 DP=5: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 16302830000 (1ps)
+
+VENDOR_FIFO_RTL: actual Gray-pointer/reset/flag/RAM-inference implementation, no physical timing model
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+
+AWB SOF cycle=66 valid=1
+packed cycle=68 FIFO reset=0
+packed cycle=69 FIFO reset=0
+packed cycle=70 FIFO reset=0
+packed cycle=72 FIFO reset=1
+packed cycle=73 FIFO reset=1
+packed cycle=74 FIFO reset=1
+packed cycle=76 FIFO reset=1
+packed cycle=77 FIFO reset=1
+packed cycle=78 FIFO reset=1
+packed cycle=80 FIFO reset=1
+packed cycle=81 FIFO reset=1
+packed cycle=82 FIFO reset=1
+packed cycle=84 FIFO reset=1
+packed cycle=85 FIFO reset=1
+INGRESS_PROBE AWB_words=1280 packed_words=960 DDR_writes=960 expected=960
+PASS AWB 960 packed = 960 DDR, all data/addresses matched
+D:\aaa_FPGA\criticalwork\build\sim\candidate_ingress\tb_robust_awb.sv:37: $finish called at 59216000 (1ps)
+
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+
+PASS ingress CP=8 DP=7: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 11856726000 (1ps)
+
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+
+PASS ingress CP=5 DP=11: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 7410590000 (1ps)
+
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+
+PASS ingress CP=11 DP=5: SOF+data, 960/full172800, stalls, short/overflow/reset recovery, exact payload/address
+sim/tb_robust_ingress.sv:78: $finish called at 16302830000 (1ps)

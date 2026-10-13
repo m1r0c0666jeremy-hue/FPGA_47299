@@ -1,0 +1,11 @@
+
+PASS functional frame store: 12 selections, actual bank, empty/latest, command, age, reuse, wrap and same-cycle finish
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_frame_store.sv:51: $finish called at 936000 (1ps)
+
+
+PASS confirmation: duplicates, identity swaps, gap, missing, jump, bad colour, session, invalid, enable
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_confirm.sv:28: $finish called at 1230000 (1ps)
+
+
+PASS display atomic blank commit, centered zoom, 15 stale frames, empty, session/pair/enable, sample and video loss
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_display.sv:31: $finish called at 1511000 (1ps)
