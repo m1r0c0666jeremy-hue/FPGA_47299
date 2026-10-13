@@ -1,0 +1,35 @@
+-----------------------------------------------------------
+| QoR metrics               |         value               |
+-----------------------------------------------------------
+| Timing                    |                             |
+|     Setup WNS             |         1272                |
+|     Setup TNS             |            0                |
+|     Num of violated S-EP  |            0                |
+|     FMAX                  |   717.360MHz                |
+|     SWNS path clock period |       2666ps                |
+|     Hold WNS              |         -278                |
+|     Hold TNS              |       -83260                |
+|     Num of violated H-EP  |          678                |
+-----------------------------------------------------------
+| Routing Resource          |                             |
+|     Wire length           |      2866313                |
+|     Route Net Num         |        38958                |
+|     DontRoute Net Num     |        14854                |
+|     RouteSinks Num        |       125864                |
+-----------------------------------------------------------
+| Utilization               |                             |
+|     #slices               |        19873                |
+|     slices percentage     |       93.67%                |
+|     #RAMs                 |           85                |
+|     #DSPs                 |            9                |
+|     #DRAMHARDCON          |           63                |
+-----------------------------------------------------------
+| Congestion                |                             |
+|     Top 1% tile util      |           90                |
+|     Top 1% tile avg util  |       93.08%                |
+|     Over 100% util #tile  |            6                |
+|     Max level             |            2                |
+|     Window                |  [ 13   4] - [ 18   8]      |
+-----------------------------------------------------------
+Report place stage QoR done.
+

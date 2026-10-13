@@ -1,0 +1,3 @@
+
+PASS color regions classifier: 9029 groups, four independent pixels, rational oracle
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\classifier\tb.sv:26: $finish called at 103310000 (1ps)

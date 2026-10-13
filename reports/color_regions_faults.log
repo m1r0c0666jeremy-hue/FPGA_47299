@@ -1,0 +1,14 @@
+
+PASS fault result id=1 complete=0 enable=1 pair=0 sample=000000 boxes=00
+PASS fault result id=2 complete=1 enable=1 pair=0 sample=5f5f5f boxes=00
+PASS fault result id=3 complete=0 enable=1 pair=0 sample=5f5f5f boxes=00
+PASS fault result id=4 complete=0 enable=1 pair=0 sample=5f5f5f boxes=00
+PASS fault result id=5 complete=1 enable=0 pair=0 sample=5f5f5f boxes=00
+PASS fault result id=6 complete=1 enable=1 pair=1 sample=5f5f5f boxes=00
+PASS fault result id=7 complete=1 enable=1 pair=1 sample=5f5f5f boxes=00
+PASS fault result id=8 complete=1 enable=1 pair=1 sample=5f5f5f boxes=00
+PASS fault result id=9 complete=1 enable=1 pair=1 sample=5f5f5f boxes=00
+PASS fault result id=10 complete=1 enable=1 pair=1 sample=5f5f5f boxes=11
+PASS fault result id=11 complete=1 enable=1 pair=1 sample=5f5f5f boxes=11
+PASS capture faults: short/long/fault, simultaneous SOF+pixel, valid bubbles, stop/restart, colour/session change, exact centre RGB, recovery
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_faults.sv:51: $finish called at 25136730000 (1ps)

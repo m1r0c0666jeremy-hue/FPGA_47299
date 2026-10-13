@@ -1,0 +1,3 @@
+
+PASS runs4: 36800 groups, three-event EOL, moments, flags and overflow
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\runs\tb.sv:15: $finish called at 368036000 (1ps)

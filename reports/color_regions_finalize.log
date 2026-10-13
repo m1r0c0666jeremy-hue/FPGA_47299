@@ -1,0 +1,18 @@
+
+PASS finalizer RTL
+D:\aaa_FPGA\criticalwork\build\sim\color_regions\finalize\tb.sv:21: $finish called at 366420000 (1ps)
+
+PASS frame-finalizer case 0, 1 cycles, candidates=0
+PASS frame-finalizer case 1, 136 cycles, candidates=1
+PASS frame-finalizer case 2, 145 cycles, candidates=1
+PASS frame-finalizer case 3, 43 cycles, candidates=0
+PASS frame-finalizer case 4, 290 cycles, candidates=0
+PASS frame-finalizer case 5, 1 cycles, candidates=0
+PASS frame-finalizer case 6, 1154 cycles, candidates=0
+PASS frame-finalizer case 7, 1 cycles, candidates=0
+PASS frame-finalizer case 8, 11 cycles, candidates=0
+PASS frame-finalizer case 9, 29 cycles, candidates=0
+PASS frame-finalizer case 10, 404 cycles, candidates=2
+PASS frame-finalizer case 11, 11 cycles, candidates=0
+PASS frame-finalizer case 12, 17174 cycles, candidates=1
+PASS frame-finalizer case 13, 17154 cycles, candidates=2

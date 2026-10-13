@@ -1,6 +1,20 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前功能工程：独立颜色区域框选（2026-10-13）
+
+唯一推荐的新功能入口为 `td_project/target_color_regions.al`，下载 [target_color_regions.bit](build/target_color_regions/target_color_regions.bit)。采用四像素并行的相对色差/简化色相分类、全图粗网格寻找、局部连通区域分离和三帧确认，每色最多两个独立框；四页为原图、色彩高亮、灰度、色彩二值。移除顶部大诊断面板与旧尖端/自动跟随链路，底栏及原按键、手动倍率保留。
+
+[上板操作与测试](docs/LockingnTracking颜色区域功能版上板.md)、[验证报告](reports/LockingnTracking颜色区域功能版验证报告.md)、[交付与哈希](reports/color_regions_delivery.json)。软件与TD综合布局布线通过：Slice19873、LUT6 18429、ERAM85、DSP9；SWNS+0.128ns/HWNS+0.020ns。bit SHA256 `87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f`。实物尚未验收，请先验证清晰色环/打印颜色与视频稳定性。后面的老师诊断及旧候选章节是保留的历史入口，不参与新工程编译。工作区从e82a62f继续，没有重置、提交或推送；帧头丢字修复及10份已有bit保持。
+
+## 当前实验：老师 YCbCr 思路的独立颜色诊断（2026-10-12）
+
+从 `LockingnTracking` 的 `e82a62f` 继续，新增8×8真实AWB前后RGB与AWB后Y/Cb/Cr采样、四页旧RGB掩码对照，以及独立窗口标定工具。原判色、面积/填充规则、帧头修复及正常工程保留；当前YCbCr目标分类尚未用实物数据标定。
+
+- 入口：[诊断上板操作](docs/LockingnTracking老师判色诊断上板操作.md)、[标定工具](docs/LockingnTracking老师判色标定工具.md)、[实测记录表](reports/teacher_color_hardware_record.csv)。
+- 独立工程 `td_project/target_teacher_color_diag.al`、构建脚本 `scripts/build_target_teacher_color_diag.tcl`、下载输出 `build/target_teacher_color_diag/target_teacher_color_diag.bit`。最终有效版本/构建状态以 `reports/teacher_color_delivery.json` 为准。
+- 诊断版 `598716C1` 已通过软件回归、TD综合布局布线及97项输入/9份旧bit哈希审计：Slice20117、LUT6 17612、ERAM75、DSP19，SWNS+0.125ns/HWNS+0.012ns。完整记录见[诊断验证报告](reports/LockingnTracking老师判色诊断验证报告.md)。没有真实样本时不启用YC窗口，不声称色环识别已修复。当前改动尚未提交/推送、未下载或烧Flash；按操作说明先做SRAM诊断采样。
+
 ## 最新存档：单色候选功能与帧头丢字修复（2026-10-11）
 
 当前 LockingnTracking 活动源码采用单色候选框与中文诊断存档 `f395cc0` 的功能与颜色参数，只移植 `cf8b7c4` 的 `video_in.v` 帧头暂存／跨时钟握手修复。存档名：**LockingnTracking：恢复单色候选并修复帧头丢字**。代码提交 `fc383a5066740a4cb1b6a425cea64da554ca3cca`，已通过保留远端历史的合并提交推送到 GitHub `LockingnTracking`。远端分支地址：[FPGA_47299 / LockingnTracking](https://github.com/m1r0c0666jeremy-hue/FPGA_47299/tree/LockingnTracking)。

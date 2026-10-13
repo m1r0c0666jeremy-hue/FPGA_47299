@@ -1,0 +1,3 @@
+
+PASS backpressure: frozen banks preserved, busy output waits, skipped IDs not forged, frame wrap and recovery
+D:\aaa_FPGA\criticalwork\sim\tb_color_regions_backpressure.sv:26: $finish called at 2446150000 (1ps)
