@@ -7,6 +7,7 @@ module stable_memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire I_sys_clk, input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
     input wire [1:0] I_zoom,
+    input wire I_rotate,input wire [1:0] I_diag,
     input wire I_pair,I_tracking,I_show,I_conflict,input wire [7:0] I_session,
     input wire [95:0] I_detect_rgb,input wire I_detect_sof,I_detect_valid,
     input wire [127:0] I_models,input wire [15:0] I_revision,input wire [23:0] I_gains,
@@ -133,7 +134,7 @@ video_in u_video_in(
 
     wire [10:0] active_cx,roi_x;
     wire [9:0] active_cy,roi_y;
-    wire [1:0] active_zoom,frame_mode,selected_bank;
+    wire active_rotate;wire [1:0] active_zoom,frame_mode,selected_bank;
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
     wire [639:0] active_meta;
@@ -171,10 +172,10 @@ video_in u_video_in(
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(ddr_result),.D_data(ddr_meta));
     // At every display VS request an atomic bank/generation/result snapshot.
     reg vs_last;
-    reg [1:0] mode_at_vs,zoom_at_vs;
+    reg rotate_at_vs;reg [1:0] diag_at_vs,mode_at_vs,zoom_at_vs;
     always @(posedge I_pixel_clk or negedge I_process_rst_n)
-        if(!I_process_rst_n) begin vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;end
-        else begin vs_last<=S_hdmi_vsync;if(S_hdmi_vsync&&!vs_last) begin mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;end end
+        if(!I_process_rst_n) begin vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;rotate_at_vs<=1;diag_at_vs<=0;end
+        else begin vs_last<=S_hdmi_vsync;if(S_hdmi_vsync&&!vs_last) begin mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;rotate_at_vs<=I_rotate;diag_at_vs<=I_diag;end end
     wire snap_request_ready,snap_request;wire [9:0] snapshot_command;
     target_mailbox #(.WIDTH(10)) u_snapshot_request(
         .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
@@ -189,6 +190,7 @@ video_in u_video_in(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
         .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
     stable_display u_viewport(
+        .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
         .I_clk(I_pixel_clk),.I_rst_n(I_process_rst_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
         .I_pair(I_pair),.O_pair(active_pair),.I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
         .I_live(video_ok),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
@@ -196,6 +198,7 @@ video_in u_video_in(
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
         .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status));
     stable_line_reader u_scaler (
+        .I_rotate(active_rotate),
         .I_frame_commit(frame_commit),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
         .I_write_busy(S_video_in_wr_busy), .I_write_en(S_vi_ddr_wr_en), .I_read_buffer(selected_bank),.I_frame_id(selected_frame_id),
@@ -304,6 +307,7 @@ video_in u_video_in(
     wire osd_vs, osd_hs, osd_de;
     wire [23:0] osd_rgb;
     stable_osd u_osd (
+        .I_rotate(active_rotate),.I_diag(diag_at_vs),.I_image_id(selected_frame_id),
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
         .I_vs(process_vs),.I_hs(process_hs),.I_de(process_de),.I_rgb(process_rgb),
         .I_tracking(I_tracking),.I_meta(active_meta),.I_x0(roi_x),.I_y0(roi_y),.I_zoom(active_zoom),.I_mode(actual_mode),

@@ -2,7 +2,7 @@
 // Real AWB/packing/writer/capture/CDC/store/view/reader/pages/OSD modules.
 // DDR physical pins are replaced by an ordered memory response model. Every
 // written byte is checked against the independently generated source image.
-module tb_stable_live #(parameter PAIR_MODE=0);
+module tb_stable_live #(parameter PAIR_MODE=0,ROTATE=0);
 reg cc=0,dc=0,pc=0,rst=0;always #8.334 cc=~cc;always #7.5 dc=~dc;always #6.667 pc=~pc;
 reg rawsof=0,rawv=0;reg [95:0] raw=0;wire asf,av,al;wire [95:0] ar;
 stable_awb awb(cc,rst,1'b0,rawsof,rawv,raw,12'd1024,12'd1024,al,asf,av,ar);
@@ -26,12 +26,12 @@ target_mailbox #(.WIDTH(675)) snapshots(dc,rst,ss,sd,sready,pc,rst,ps,pd);
 wire commit;wire [1:0] selected,zoom,mode;wire [31:0] selected_id;wire [10:0] cx,x0;wire [9:0] cy,y0;
 wire [639:0] active;wire shown,pair,detection,sample,video_ok;wire [2:0] state;
 reg [1:0] requested_zoom=1,requested_mode=0;
-stable_display view(pc,rst,vs,de,ps,pd,1'b1,1'b1,1'b0,video_ok,8'd1,requested_zoom,requested_mode,1'(PAIR_MODE),commit,selected,selected_id,cx,x0,cy,y0,zoom,mode,active,shown,pair,detection,sample,state);
+stable_display view(pc,rst,vs,de,ps,pd,1'b1,1'b1,1'b0,video_ok,8'd1,requested_zoom,requested_mode,1'(PAIR_MODE),commit,selected,selected_id,cx,x0,cy,y0,zoom,mode,active,shown,pair,detection,sample,state,1'(ROTATE),);
 wire rvs,rhs,rde;wire [23:0] rgb;wire [1:0] mask;
-stable_line_reader reader(commit,sg,rst,dc,wrbusy,wr,selected,selected_id,active[543:416],ready,rdvalid,rddata,rbusy,re,ra,pc,vs,hs,de,x0,y0,zoom,rvs,rhs,rde,rgb,mask,video_ok);
+stable_line_reader reader(commit,sg,rst,dc,wrbusy,wr,selected,selected_id,active[543:416],ready,rdvalid,rddata,rbusy,re,ra,pc,vs,hs,de,x0,y0,zoom,rvs,rhs,rde,rgb,mask,video_ok,1'(ROTATE));
 wire pvs,phs,pde,ovs,ohs,ode;wire [23:0] prgb,orgb;wire [1:0] actual_mode;
 stable_preprocess preprocess(pc,rst,mode,pair,rvs,rhs,rde,rgb,mask,pvs,phs,pde,prgb,actual_mode);
-stable_osd osd(pc,rst,pvs,phs,pde,prgb,active,x0,y0,zoom,actual_mode,state,1'b1,shown,video_ok,pair,detection,sample,ovs,ohs,ode,orgb);
+stable_osd osd(pc,rst,pvs,phs,pde,prgb,active,x0,y0,zoom,actual_mode,state,1'b1,shown,video_ok,pair,detection,sample,ovs,ohs,ode,orgb,1'(ROTATE),2'd0,selected_id);
 function [23:0] pixel(input integer f,x,y);
 begin
 pixel=24'h303030;
@@ -66,8 +66,8 @@ if(rvs && !old_rvs)begin ox=0;oy=0;end old_rvs=rvs;
 if(rde)begin
 if(oy<624)begin
 if(!video_ok)$fatal(1,"live video underrun frame%0d xy%0d/%0d",frame,ox,oy);
-if(rgb!==pixel(selected_id,x0+(ox>>zoom),y0+(oy>>zoom)))$fatal(1,"image/metadata/window mismatch frame%0d sourceid%0d xy%0d/%0d got%h",frame,selected_id,ox,oy,rgb);
-expected_pixel=pixel(selected_id,x0+(ox>>zoom),y0+(oy>>zoom));expected_mask=expected_pixel==(PAIR_MODE?24'hc8c820:24'hc82020)?1:expected_pixel==(PAIR_MODE?24'hb420c8:24'h2020c8)?2:0;
+if(rgb!==pixel(selected_id,ROTATE?x0+(1280>>zoom)-1-(ox>>zoom):x0+(ox>>zoom),ROTATE?y0+(624>>zoom)-1-(oy>>zoom):y0+(oy>>zoom)))$fatal(1,"image/metadata/window mismatch frame%0d sourceid%0d xy%0d/%0d got%h",frame,selected_id,ox,oy,rgb);
+expected_pixel=pixel(selected_id,ROTATE?x0+(1280>>zoom)-1-(ox>>zoom):x0+(ox>>zoom),ROTATE?y0+(624>>zoom)-1-(oy>>zoom):y0+(oy>>zoom));expected_mask=expected_pixel==(PAIR_MODE?24'hc8c820:24'hc82020)?1:expected_pixel==(PAIR_MODE?24'hb420c8:24'h2020c8)?2:0;
 if(mask!==expected_mask)$fatal(1,"live supported source mask/frame model mismatch");
 seen_modes[mode]=1;seen_zooms[zoom]=1;
 checked=checked+1;end
@@ -84,7 +84,7 @@ end
 if(h==1649)begin h=0;if(v==749)begin v=0;frame=frame+1;requested_mode=frame%4;requested_zoom=(frame+1)%3;end else v=v+1;end else h=h+1;
 if(frame==5 && v==749 && h==1600)begin
 if(checked!=5*1280*624 || transactions<5 || valid_tips<3 || dropped!=0 || !changed_version_seen || seen_modes!=15 || seen_zooms!=7)$fatal(1,"live coverage %0d %0d %0d %0d",checked,transactions,valid_tips,cx);
-$display("STABLE_LIVE_PASS pair%0d real capture->DDR->640/675 CDC->moving viewport->source masks->OSD: four pages, three zooms, parameter switch, %0d pixels, %0d snapshots, %0d tip snapshots, %0d written words",PAIR_MODE,checked,transactions,valid_tips,written);$finish;end
+$display("STABLE_LIVE_PASS pair%0d rotation%0d real capture->DDR->640/675 CDC->moving viewport->source masks->OSD: four pages, three zooms, parameter switch, %0d pixels, %0d snapshots, %0d tip snapshots, %0d written words",PAIR_MODE,ROTATE,checked,transactions,valid_tips,written);$finish;end
 end
 always @(posedge cc)if(cv && cm[31:0]==3)primed<=1;
 function [63:0] model(input integer lo,hi);begin model=(64'h8000000000000000)|(64'(lo)<<54)|(64'(hi)<<45)|(64'd32<<37)|(64'd16<<29)|(64'd1<<27);end endfunction

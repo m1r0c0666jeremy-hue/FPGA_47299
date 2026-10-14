@@ -1,4 +1,4 @@
-// Image bank, v2 metadata, model and moving viewport commit together in blank.
+// Image bank, v3 metadata, model and moving viewport commit together in blank.
 `default_nettype none
 module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  input wire I_clk,I_rst_n,I_vs,I_de,I_snapshot,input wire [674:0] I_data,
@@ -7,7 +7,7 @@ module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  output reg O_commit,output reg [1:0] O_bank,output reg [31:0] O_frame_id,
  output reg [10:0] O_cx,O_x0,output reg [9:0] O_cy,O_y0,
  output reg [1:0] O_zoom,O_mode,output reg [639:0] O_meta,
- output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state);
+ output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state,input wire I_rotate,output reg O_rotate);
  reg vs_last,in_blank,associated;reg [7:0] age,session;
  wire match=I_data[674] && I_data[255] && I_data[415:413]==3 && I_data[31:0]==I_data[671:640] &&
  I_data[242:235]==I_session && I_data[243]==I_pair && I_data[244]==I_tracking;
@@ -27,7 +27,7 @@ module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  end
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin vs_last<=0;in_blank<=0;associated<=0;age<=0;session<=0;O_commit<=0;O_bank<=0;O_frame_id<=0;
- O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;end
+ O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;O_rotate<=1;end
  else begin
  vs_last<=I_vs;O_commit<=0;
  if(I_vs && !vs_last)begin
@@ -38,7 +38,7 @@ module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  if(session!=I_session || O_pair!=I_pair || O_meta[244]!=I_tracking)associated<=0;
  if(I_snapshot && in_blank && !I_de)begin
  in_blank<=0;O_commit<=1;O_bank<=I_data[673:672];O_frame_id<=I_data[671:640];
- O_zoom<=I_zoom;O_mode<=I_mode;O_pair<=I_pair;O_show<=I_show;session<=I_session;associated<=match;
+ O_zoom<=I_zoom;O_mode<=I_mode;O_rotate<=I_rotate;O_pair<=I_pair;O_show<=I_show;session<=I_session;associated<=match;
  O_meta<=match?I_data[639:0]:640'd0;if(I_data[671:640]!=O_frame_id)age<=0;
  O_cx<=cx;O_cy<=cy;O_x0<=cx-hx;O_y0<=cy-hy;
  if(match && I_data[567:565]!=0)begin

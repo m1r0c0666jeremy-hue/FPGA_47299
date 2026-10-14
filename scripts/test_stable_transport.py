@@ -8,7 +8,7 @@ def transform(s):
     for a,b in [('regions_frame_store','stable_frame_store'),('regions_display','stable_display'),('regions_line_reader','stable_line_reader'),
                 ('[450:0]','[674:0]'),('[449:448]','[673:672]'),('[447:416]','[671:640]'),('[450]','[674]'),('[415:0]','[639:0]'),
                 ("416'd0","640'd0"),('.WIDTH(416)','.WIDTH(640)'),('.WIDTH(451)','.WIDTH(675)'),('[415:413]=1','[415:413]=3')]:s=s.replace(a,b)
-    return s.replace('tb_color_regions_','tb_stable_')
+    return s.replace('tb_color_regions_','tb_stable_').replace('dv,sv,state);',"dv,sv,state,1'b0,);").replace('det,sample,state);',"det,sample,state,1'b0,);")
 for name in ['frame_store','display','association']:
     s=transform((R/f'sim/tb_color_regions_{name}.sv').read_text(encoding='utf-8'))
     if name=='display':
@@ -24,7 +24,7 @@ packet(18,1,0,0);blank;if(oz!=2 || om!=3 || cx!=640 || cy!=360)$fatal(1,"request
 $display("PASS stable moving display: 24px max-step, 4px deadzone, missing tip freeze, duplicate suppression");
 $display("PASS display''')
     if name=='association':
-        s=s.replace("ob,oi,1'b1,rdvalid","ob,oi,active[543:416],1'b1,rdvalid").replace('ode,rgb,ok);','ode,rgb,,ok);')
+        s=s.replace("ob,oi,1'b1,rdvalid","ob,oi,active[543:416],1'b1,rdvalid").replace('ode,rgb,ok);',"ode,rgb,,ok,1'b0);")
         s=s.replace('reader.frame_id_d','reader.image_id').replace('base(b)+48*1920','base(b)+47*1920').replace('repeat(1000)','repeat(10000)')
         s=s.replace('416/451-bit','640/675-bit')
     file=O/(name+'.sv');file.write_text(s,encoding='utf-8');exe=O/(name+'.vvp')

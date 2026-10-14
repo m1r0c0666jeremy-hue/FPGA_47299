@@ -327,7 +327,7 @@
                     <Attr Name="CompileOrder" Val="38" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/regions_divide.v">
+            <File Path="../rtl/09_osd_ui/scaling_logo_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -335,7 +335,7 @@
                     <Attr Name="CompileOrder" Val="39" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_model_lane.v">
+            <File Path="../rtl/color_regions/regions_divide.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -343,7 +343,7 @@
                     <Attr Name="CompileOrder" Val="40" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_awb.v">
+            <File Path="../rtl/color_regions/stable_footer_program_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -351,7 +351,7 @@
                     <Attr Name="CompileOrder" Val="41" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_packer.v">
+            <File Path="../rtl/color_regions/stable_footer_text_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -359,7 +359,7 @@
                     <Attr Name="CompileOrder" Val="42" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_calibration.v">
+            <File Path="../rtl/color_regions/stable_footer_glyph_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -367,7 +367,7 @@
                     <Attr Name="CompileOrder" Val="43" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_controls.v">
+            <File Path="../rtl/color_regions/stable_model_lane.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -375,7 +375,7 @@
                     <Attr Name="CompileOrder" Val="44" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_filter4.v">
+            <File Path="../rtl/color_regions/stable_awb.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -383,7 +383,7 @@
                     <Attr Name="CompileOrder" Val="45" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_grid.v">
+            <File Path="../rtl/color_regions/stable_packer.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -391,7 +391,7 @@
                     <Attr Name="CompileOrder" Val="46" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_tracker.v">
+            <File Path="../rtl/color_regions/stable_calibration.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -399,7 +399,7 @@
                     <Attr Name="CompileOrder" Val="47" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_capture.v">
+            <File Path="../rtl/color_regions/stable_controls.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -407,7 +407,7 @@
                     <Attr Name="CompileOrder" Val="48" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_frame_store.v">
+            <File Path="../rtl/color_regions/stable_filter4.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -415,7 +415,7 @@
                     <Attr Name="CompileOrder" Val="49" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_display.v">
+            <File Path="../rtl/color_regions/stable_grid.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -423,7 +423,7 @@
                     <Attr Name="CompileOrder" Val="50" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_line_reader.v">
+            <File Path="../rtl/color_regions/stable_tracker.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -431,7 +431,7 @@
                     <Attr Name="CompileOrder" Val="51" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_preprocess.v">
+            <File Path="../rtl/color_regions/stable_capture.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -439,7 +439,7 @@
                     <Attr Name="CompileOrder" Val="52" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_osd.v">
+            <File Path="../rtl/color_regions/stable_frame_store.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -447,7 +447,7 @@
                     <Attr Name="CompileOrder" Val="53" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_glyph_rom.v">
+            <File Path="../rtl/color_regions/stable_display.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -455,7 +455,7 @@
                     <Attr Name="CompileOrder" Val="54" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_isp.v">
+            <File Path="../rtl/color_regions/stable_line_reader.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -463,7 +463,7 @@
                     <Attr Name="CompileOrder" Val="55" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_camera_capture.v">
+            <File Path="../rtl/color_regions/stable_preprocess.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -471,7 +471,7 @@
                     <Attr Name="CompileOrder" Val="56" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_memory_video_out.v">
+            <File Path="../rtl/color_regions/stable_osd.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -479,12 +479,44 @@
                     <Attr Name="CompileOrder" Val="57" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stable_top.v">
+            <File Path="../rtl/color_regions/stable_glyph_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
                     <Attr Name="CompileOrder" Val="58" />
+                </FileInfo>
+            </File>
+            <File Path="../rtl/color_regions/stable_isp.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true" />
+                    <Attr Name="UsedInP&R" Val="true" />
+                    <Attr Name="BelongTo" Val="design_1" />
+                    <Attr Name="CompileOrder" Val="59" />
+                </FileInfo>
+            </File>
+            <File Path="../rtl/color_regions/stable_camera_capture.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true" />
+                    <Attr Name="UsedInP&R" Val="true" />
+                    <Attr Name="BelongTo" Val="design_1" />
+                    <Attr Name="CompileOrder" Val="60" />
+                </FileInfo>
+            </File>
+            <File Path="../rtl/color_regions/stable_memory_video_out.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true" />
+                    <Attr Name="UsedInP&R" Val="true" />
+                    <Attr Name="BelongTo" Val="design_1" />
+                    <Attr Name="CompileOrder" Val="61" />
+                </FileInfo>
+            </File>
+            <File Path="../rtl/color_regions/stable_top.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true" />
+                    <Attr Name="UsedInP&R" Val="true" />
+                    <Attr Name="BelongTo" Val="design_1" />
+                    <Attr Name="CompileOrder" Val="62" />
                 </FileInfo>
             </File>
         </Verilog>

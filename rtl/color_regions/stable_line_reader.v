@@ -8,7 +8,7 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  output wire O_read_busy,O_read_en,output wire [24:0] O_read_addr,
  input wire I_pixel_clk,I_vs,I_hs,I_de,input wire [10:0] I_x0,input wire [9:0] I_y0,
  input wire [1:0] I_zoom,output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
- output reg [1:0] O_mask,output reg O_video_ok);
+ output reg [1:0] O_mask,output reg O_video_ok,input wire I_rotate);
  (* ram_style="block" *) reg [95:0] lines[0:1023];
  (* ram_style="block" *) reg [127:0] source[0:255];
  (* ram_style="block" *) reg [7:0] masks[0:1023];
@@ -16,21 +16,24 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  (* async_reg="true" *) reg [1:0] dr,pr;wire d_rst=dr[1],p_rst=pr[1];
  always @(posedge I_ddr_clk or negedge I_rst_n)if(!I_rst_n)dr<=0;else dr<={dr[0],1'b1};
  always @(posedge I_pixel_clk or negedge I_rst_n)if(!I_rst_n)pr<=0;else pr<={pr[0],1'b1};
- reg req,req_first;reg [1:0] req_slot,req_image;reg [31:0] req_id;
+ reg req,req_first,req_rotate;reg [1:0] req_slot,req_image;reg [31:0] req_id;
  reg [9:0] req_y;reg [31:0] req_epoch;reg [127:0] req_models;
  (* async_reg="true" *) reg req1,req2;reg ack;
  localparam IDLE=0,WAIT_BUS=1,SEND=2,RECEIVE=3,CLASS=4,CLOSE=5,LOAD0=6,LOAD1=7,LOAD2=8,LOAD3=9;
- reg [3:0] state;reg [1:0] slot,image;reg [31:0] image_id,job_epoch;
+ reg job_rotate,frame_rotate;reg [3:0] state;reg [1:0] slot,image;reg [31:0] image_id,job_epoch;
  reg [9:0] job_y;reg [127:0] models;reg [24:0] frame_base,line_base;
  reg [7:0] sent,received;reg [1:0] part;reg [6:0] group_index;reg [255:0] assembly;
  reg [9:0] pair_index;reg [2:0] pos;reg class_valid;reg [10:0] class_x;
  reg [9:0] class_y;reg [8:0] close_wait;
  function [24:0] base_for;input [1:0] b;begin case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase end endfunction
  wire [9:0] rgb_write_addr=(slot<<8)+(slot<<6)+pair_index[9:1];
- wire [7:0] source_addr=(group_index<<1)+group_index+(state==LOAD1?1:state==LOAD2?2:0);
+ wire [7:0] source_addr=((job_rotate?7'd79-group_index:group_index)<<1)+(job_rotate?7'd79-group_index:group_index)+(state==LOAD1?1:state==LOAD2?2:0);
  wire source_we=(state==SEND || state==RECEIVE) && I_ddr_valid;
  wire [7:0] source_port=source_we?received:source_addr;
- wire [47:0] pair_rgb=linegroup >> ((7-pair_index[2:0])*48);
+ wire [47:0] ordered_pair=linegroup >> ((job_rotate?pair_index[2:0]:7-pair_index[2:0])*48);
+ wire [47:0] pair_rgb=job_rotate?{ordered_pair[23:0],ordered_pair[47:24]}:ordered_pair;
+ wire [95:0] ordered_quad=linegroup >> ((job_rotate?pair_index[2:1]:3-pair_index[2:1])*96);
+ wire [95:0] pixel_quad=job_rotate?{ordered_quad[23:0],ordered_quad[47:24],ordered_quad[71:48],ordered_quad[95:72]}:ordered_quad;
  wire [3:0] hit;stable_model_lane c0(I_ddr_clk,d_rst,pair_rgb[47:24],models,hit[1:0]);
  stable_model_lane c1(I_ddr_clk,d_rst,pair_rgb[23:0],models,hit[3:2]);
  reg [3:0] vp;reg [10:0] xp[0:3];reg [9:0] yp[0:3];reg [3:0] half_mask;
@@ -49,12 +52,12 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  assign O_read_addr=line_base+{14'd0,sent,3'd0};
  always @(posedge I_ddr_clk)begin
  source_q<=source[source_port];if(source_we)source[source_port]<=I_ddr_data;
- if(state==CLASS && !pair_index[0])lines[rgb_write_addr]<=linegroup>>((3-pair_index[2:1])*96);
+ if(state==CLASS && !pair_index[0])lines[rgb_write_addr]<=pixel_quad;
  if(fv)masks[mask_addr]<=mask_word;
  end
  integer j;
  always @(posedge I_ddr_clk or negedge d_rst)begin
- if(!d_rst)begin req1<=0;req2<=0;ack<=0;state<=IDLE;slot<=0;image<=0;image_id<=0;job_epoch<=0;job_y<=0;models<=0;
+ if(!d_rst)begin req1<=0;req2<=0;ack<=0;job_rotate<=1;frame_rotate<=1;state<=IDLE;slot<=0;image<=0;image_id<=0;job_epoch<=0;job_y<=0;models<=0;
  frame_base<=0;line_base<=0;sent<=0;received<=0;part<=0;group_index<=0;assembly<=0;linegroup<=0;pair_index<=0;pos<=0;
  class_valid<=0;class_x<=0;class_y<=0;close_wait<=0;vp<=0;half_mask<=0;filter_valid<=0;filter_x<=0;filter_y<=0;filter_mask<=0;
  for(j=0;j<4;j=j+1)begin xp[j]<=0;yp[j]<=0;end end
@@ -69,8 +72,9 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  case(state)
  IDLE:if(req2!=ack)begin
  slot<=req_slot;job_y<=req_y;job_epoch<=req_epoch;
- if(req_first)begin frame_base<=base_for(req_image);image<=req_image;image_id<=req_id;models<=req_models;end
- line_base<=(req_first?base_for(req_image):frame_base)+req_y*25'd1920;
+ job_rotate<=req_first?req_rotate:frame_rotate;
+ if(req_first)begin frame_rotate<=req_rotate;frame_base<=base_for(req_image);image<=req_image;image_id<=req_id;models<=req_models;end
+ line_base<=(req_first?base_for(req_image):frame_base)+((req_first?req_rotate:frame_rotate)?10'd719-req_y:req_y)*25'd1920;
  sent<=0;received<=0;part<=0;group_index<=0;state<=WAIT_BUS;end
  WAIT_BUS:if(!I_write_busy && !I_write_en)state<=SEND;
  SEND:if(O_read_en)begin if(sent==239)state<=RECEIVE;else sent<=sent+1'b1;end
@@ -90,16 +94,18 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  (* async_reg="true" *) reg ack1,ack2;(* async_reg="true" *) reg live1,live2;
  reg pending,frame_live,abort_frame,first;reg [2:0] ready;
  reg [9:0] tags[0:2];reg [10:0] x,x0;reg [9:0] y,y0,last_y,prefetch;
- reg [1:0] zoom,image_bank;reg [31:0] frame_id;reg [127:0] pixel_models;
+ reg pixel_rotate;reg [1:0] zoom,image_bank;reg [31:0] frame_id;reg [127:0] pixel_models;
  reg [31:0] epoch;reg vs_old;reg [3:0] offset_d;reg [1:0] moffset_d;reg good_d,vs_d,hs_d,de_d;
+ wire [10:0] view_x0=I_rotate?1280-(1280>>I_zoom)-I_x0:I_x0;
+ wire [9:0] view_y0=I_rotate?720-(624>>I_zoom)-I_y0:I_y0;
  wire [10:0] sx=x0+(x>>zoom);wire [9:0] sy=y0+(y>>zoom);wire [1:0] pb=sy%3;
  wire [1:0] next_slot=prefetch%3;wire good=frame_live && !abort_frame && live2 && ready[pb] && tags[pb]==sy;
  wire [9:0] rgb_read_addr=(pb<<8)+(pb<<6)+sx[10:2];wire [9:0] mask_read_addr=rgb_read_addr;
  always @(posedge I_pixel_clk)begin pixel_q<=lines[rgb_read_addr];mask_q<=masks[mask_read_addr];end
  always @(posedge I_pixel_clk or negedge p_rst)begin
  if(!p_rst)begin ack1<=0;ack2<=0;live1<=0;live2<=0;pending<=0;frame_live<=0;abort_frame<=1;first<=1;ready<=0;
- req<=0;req_first<=0;req_slot<=0;req_image<=0;req_id<=0;req_y<=0;req_epoch<=0;req_models<=0;
- x<=0;x0<=0;y<=0;y0<=48;last_y<=671;prefetch<=47;zoom<=0;image_bank<=0;frame_id<=0;pixel_models<=0;epoch<=0;vs_old<=0;
+ req<=0;req_first<=0;req_rotate<=1;req_slot<=0;req_image<=0;req_id<=0;req_y<=0;req_epoch<=0;req_models<=0;
+ pixel_rotate<=1;x<=0;x0<=0;y<=0;y0<=48;last_y<=671;prefetch<=47;zoom<=0;image_bank<=0;frame_id<=0;pixel_models<=0;epoch<=0;vs_old<=0;
  offset_d<=0;moffset_d<=0;good_d<=0;vs_d<=0;hs_d<=0;de_d<=0;O_vs<=0;O_hs<=0;O_de<=0;O_rgb<=0;O_mask<=0;O_video_ok<=0;
  for(j=0;j<3;j=j+1)tags[j]<=0;end
  else begin
@@ -118,13 +124,13 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  if(notify && notice[77:46]==epoch && notice[45:14]==frame_id && notice[13:12]==image_bank &&
  notice[11:2]>=y0 && notice[11:2]<=last_y && !abort_frame)begin ready[notice[1:0]]<=1;tags[notice[1:0]]<=notice[11:2];end
  if(frame_live && !abort_frame && !pending && prefetch<720 && prefetch<=last_y+1 && !ready[next_slot])begin
- req_y<=prefetch;req_slot<=next_slot;req_first<=first;req_epoch<=epoch;req_image<=image_bank;req_id<=frame_id;req_models<=pixel_models;
+ req_rotate<=pixel_rotate;req_y<=prefetch;req_slot<=next_slot;req_first<=first;req_epoch<=epoch;req_image<=image_bank;req_id<=frame_id;req_models<=pixel_models;
  req<=~req;pending<=1;first<=0;prefetch<=prefetch+1'b1;
  end
  if(I_frame_commit)begin
- x<=0;y<=0;x0<=I_x0;y0<=I_y0;zoom<=I_zoom;image_bank<=I_read_buffer;frame_id<=I_frame_id;pixel_models<=I_models;
+ x<=0;y<=0;pixel_rotate<=I_rotate;x0<=view_x0;y0<=view_y0;zoom<=I_zoom;image_bank<=I_read_buffer;frame_id<=I_frame_id;pixel_models<=I_models;
  epoch<=epoch+1'b1;ready<=0;frame_live<=1;abort_frame<=0;first<=1;
- prefetch<=I_y0==0?0:I_y0-1;last_y<=I_y0+(624>>I_zoom)-1;
+ prefetch<=view_y0==0?0:view_y0-1;last_y<=view_y0+(624>>I_zoom)-1;
  end end end
 endmodule
 `default_nettype wire
