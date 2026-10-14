@@ -14,8 +14,11 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  wire [31:0] gap=frame_id-last_id;
  wire [5:0] skipped_loss={1'b0,lost}+{1'b0,gap[4:0]}-1'b1;
  reg [127:0] olda,oldb,besta,bestb;reg [31:0] bestscore;
+ reg [7:0] best_quality,rejected;reg [3:0] chosen_indices;reg [1:0] chosen_reason;
+ reg [7:0] reject_bits;
  reg found;reg [10:0] fax,fbx;reg [9:0] fay,fby;
  reg [127:0] ca,cb;reg signed [12:0] dax,day,dbx,dby,dx,dy,odx,ody;
+ wire [7:0] pair_quality={1'b0,ca[89:83]}+{1'b0,cb[89:83]};
  reg [31:0] distance,old_distance,score;reg match,guide;
  reg signed [13:0] nt_x,nt_y;reg [11:0] midx;reg [10:0] midy;
  // Two shared registered multipliers. Never chain a square, sum and comparison
@@ -53,6 +56,19 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  match=match && guide && !expired;
  score=abs13($signed({1'b0,midx})-1280)+abs13($signed({2'd0,midy})-720);
  end
+ // Rejection bits describe the union of rejected *valid* pairs. Missing slots
+ // contribute only bit0; the summary is suppressed whenever a pair is found.
+ reject_bits=0;
+ if(!ca[120] || !cb[120])reject_bits[0]=1;
+ else begin
+ reject_bits[2]=distance<256 || distance>360000;
+ if(history_valid)begin
+ reject_bits[3]=abs13(dax)>96 || abs13(day)>96 || abs13(dbx)>96 || abs13(dby)>96;
+ reject_bits[4]=product_sum<=0;
+ reject_bits[5]=(distance<<2)<((old_distance<<1)+old_distance) || ((distance<<1)+distance)>(old_distance<<2);
+ reject_bits[6]={2'd0,ca[61:42]}>({2'd0,olda[61:42]}<<2) || {2'd0,olda[61:42]}>({2'd0,ca[61:42]}<<2) ||
+ {2'd0,cb[61:42]}>({2'd0,oldb[61:42]}<<2) || {2'd0,oldb[61:42]}>({2'd0,cb[61:42]}<<2);
+ end else begin reject_bits[1]=!guide;reject_bits[7]=expired;end end
  // Round the complete (3*A-B)/2 once, including negative/outside results.
  nt_x=half_away(($signed({3'd0,fax})<<<1)+$signed({3'd0,fax})-$signed({3'd0,fbx}));
  nt_y=half_away(($signed({4'd0,fay})<<<1)+$signed({4'd0,fay})-$signed({4'd0,fby}));
@@ -64,11 +80,13 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  besta<=0;bestb<=0;bestscore<=32'hffffffff;found<=0;fax<=0;fbx<=0;fay<=0;fby<=0;
  product0<=0;product1<=0;distance<=0;old_distance<=0;
  frame_ok<=0;advance<=0;
+ best_quality<=0;rejected<=0;chosen_indices<=0;chosen_reason<=0;
  end else begin
  done<=0;
  case(state)
  0:if(start)begin
  tip_valid<=0;a<=candidates[127:0];b<=candidates[639:512];found<=0;bestscore<=32'hffffffff;pair_index<=0;state<=1;
+ best_quality<=0;rejected<=0;chosen_indices<=0;chosen_reason<=0;
  frame_ok<=complete;advance<=1;
  if(!have_id || command!=last_command || revision!=last_revision)begin
  locked<=0;streak<=0;lost<=0;expired<=0;olda<=0;oldb<=0;
@@ -99,7 +117,10 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  8:begin distance<=product_sum;state<=6;end
  6:begin product0<=mx0*my0;product1<=mx1*my1;state<=9;end
  9:begin
- if(match && (!found || score<bestscore))begin found<=1;bestscore<=score;besta<=ca;bestb<=cb;end
+ if(!match)rejected<=rejected|reject_bits;
+ if(match && (!found || score<bestscore || (score==bestscore && pair_quality>best_quality)))begin
+ found<=1;bestscore<=score;best_quality<=pair_quality;besta<=ca;bestb<=cb;
+ chosen_indices<=pair_index;chosen_reason<=history_valid?2:1;end
  if(pair_index==15)state<=3;else begin pair_index<=pair_index+1'b1;state<=2;end
  end
  3:begin
@@ -119,7 +140,13 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  if(streak>=3 && nt_x>=0 && nt_x<1280 && nt_y>=0 && nt_y<720)begin tip_valid<=1;tip_x<=nt_x[10:0];tip_y<=nt_y[9:0];end
  else if(streak>=3)reason<=7;
  state<=4;end
- 4:begin done<=1;state<=0;end
+ 4:begin
+ // Output candidate A rank is no longer needed by consumers. Its 28 bits carry
+ // an atomic decision diagnostic; geometry, count, quality and validity retain
+ // their original offsets. Stored identity still uses untouched besta/bestb.
+ a[119:92]<={8'd0,(found?8'd0:rejected),(expired?4'd15:lost[3:0]),streak,
+ (found?chosen_reason:((a[120] || b[120])?2'd3:2'd0)),chosen_indices[3:2],chosen_indices[1:0]};
+ done<=1;state<=0;end
  endcase end end
 endmodule
 `default_nettype wire
