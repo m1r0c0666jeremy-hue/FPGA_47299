@@ -1,7 +1,11 @@
 # Run from any directory with td_commands_prompt.exe <this-file>.
 set root [file normalize [file join [file dirname [info script]] ..]]
 set project [file join $root td_project target_color_regions.al]
-set out [file join $root build target_color_regions]
+# PRODUCTION_OUTPUT_BEGIN
+set stamp [clock format [clock seconds] -format {%Y%m%d_%H%M%S}]
+set out [file join $root build stable_regions_full_$stamp]
+if {[file exists $out]} {error "Refusing to overwrite an existing production attempt: $out"}
+# PRODUCTION_OUTPUT_END
 file mkdir $out
 cd $out
 if {[catch {

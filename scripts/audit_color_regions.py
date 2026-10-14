@@ -5,6 +5,9 @@ R=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def read(p):return p.read_text(encoding='utf-8-sig',errors='replace')
 def audit(attempt,check_build=False):
+ if json.loads(read(R/'rtl/03_tool_detection/target_config.json')).get('stable_release'):
+  from audit_stable_regions import audit as stable_audit
+  return stable_audit(attempt,check_build)
  attempt=Path(attempt).resolve();assert attempt.is_relative_to(R/'build') and attempt.is_dir()
  baseline=json.loads(read(R/'reports/color_regions_baseline.json'))
  for name,h in baseline['protected_bits'].items():assert sha(R/name)==h,'Historical bit changed: '+name

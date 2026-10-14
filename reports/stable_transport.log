@@ -1,0 +1,12 @@
+
+PASS functional frame store: 12 selections, actual bank, empty/latest, command, age, reuse, wrap and same-cycle finish
+D:\aaa_FPGA\color-regions-env-issues\build\sim\stable_transport\frame_store.sv:51: $finish called at 936000 (1ps)
+
+
+PASS stable moving display: 24px max-step, 4px deadzone, missing tip freeze, duplicate suppression
+PASS display atomic blank commit, centered zoom, 15 stale frames, empty, session/pair/enable, sample and video loss
+D:\aaa_FPGA\color-regions-env-issues\build\sim\stable_transport\display.sv:41: $finish called at 2000000 (1ps)
+
+
+PASS association: 6 asynchronous full transactions, 640/675-bit CDC, actual selected bank/first-line ID, late/empty results, command, reuse abort and reset
+D:\aaa_FPGA\color-regions-env-issues\build\sim\stable_transport\association.sv:73: $finish called at 482376000 (1ps)
