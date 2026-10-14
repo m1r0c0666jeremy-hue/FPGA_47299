@@ -1,0 +1,130 @@
+"""Compact upright footer/labels using the tracked official Anlogic symbol."""
+from pathlib import Path
+import hashlib,json,math
+import re
+from PIL import Image,ImageDraw,ImageFont
+R=Path(__file__).resolve().parents[1]
+STATES=['待命','中央选取','确认中','跟踪中','缺色','失锁保持','中央重选','尖端越界','无效帧',
+        '白纸校准','空背景校准','A色校准','B色校准','采样处理中','采样失败','请重新校准','视频未就绪','按键冲突','无新帧','等待结果']
+ERRORS=['','无效采集帧','白纸质量不足','增益超范围','混色或采样不足','模型重叠','背景不可分','材料保留不足','采样窗暗部过多','亮度改变','中性弱色差过多']
+HELP=['','中央白纸 KEY3采样 KEY2取消','移走工具 保持背景 KEY3采样 KEY2取消',
+      'A近尖端色对准中央 KEY3采样 KEY2取消','B后方色对准中央 KEY3采样 KEY2取消']
+MODES=['原图','色彩高亮','灰度','色彩二值']
+LABELS=' 红蓝黄紫色AB1'
+BUSY='8帧采样或串行回放 请保持画面 KEY2取消'
+RETRY=' KEY3重采 KEY2取消'
+def ui_assets():
+    chars=' 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'+''.join(dict.fromkeys(''.join(STATES+ERRORS+HELP+MODES)+LABELS+BUSY+RETRY+'校准状态:RGB/.-%> '))
+    chars=''.join(dict.fromkeys(chars));assert len(chars)<=256,('footer glyphs',len(chars))
+    ids={c:i for i,c in enumerate(chars)}
+    def literal(t):return [f"8'd{ids[c]}" for c in t]
+    def number(i,n,valid='fm[604]'):
+        return [f"({valid})?(8'd1+numbers[{i}][{4*(n-1-k)}+:4]):8'd{ids['-']}" for k in range(n)]
+    def hx(expr,n,valid="1'b1"):
+        return [f"({valid})?(8'd1+({expr}>>{4*(n-1-k)} & 4'hf)):8'd{ids['-']}" for k in range(n)]
+    def field(expr,valid='fm[604]'):return [f"({valid})?(8'd1+{expr}):8'd{ids['-']}"]
+    def fn(name,texts,width):
+        out=f'function [7:0] {name};input [4:0] id;input [5:0] pos;begin {name}=0;case(id)\n'
+        for i,t in enumerate(texts):
+            if not t:continue
+            out+=f'{i}:case(pos)\n'+''.join(f"{j}:{name}=8'd{ids[c]};\n" for j,c in enumerate(t))+ 'endcase\n'
+        return out+'endcase end endfunction\n'
+    valid='fm[255] && fm[415:413]==3'
+    selected_a='fdetection && fm[245]';selected_b='fdetection && fm[246]'
+    sample='fsample && fmode==1 && fshow'
+    overview0=[f'mode_char(fmode,{i})' for i in range(4)]+literal(' ')+["fzoom==0?8'd2:fzoom==1?8'd3:8'd5"]+literal('X ')+[f"fpair?8'd{ids['黄']}:8'd{ids['红']}",f"fpair?8'd{ids['紫']}:8'd{ids['蓝']}"]+literal(' ')+[f"frotate?8'd{ids[c]}:8'd{ids[d]}" for c,d in zip('180','000')]+literal(' 状态:')+[f'status_char(status_id,{i})' for i in range(8)]+literal(' RGB:')+number(18,3,sample)+literal('/')+number(19,3,sample)+literal('/')+number(20,3,sample)
+    overview1=literal('F:')+hx('fimage',8)+literal(' V:')+hx('fm[559:544]',4,valid)+literal(' A:')+number(0,6,selected_a)+literal('/')+number(6,3,selected_a)+literal(' B:')+number(1,6,selected_b)+literal('/')+number(7,3,selected_b)
+    detail0=literal('A')+number(2,6)+literal('>')+number(3,6)+literal(' N')+field('fm[338:336]')+literal(' Q')+number(6,3,selected_a)+literal(' S')+field('fm[365:364]',selected_a)+literal(' F')+hx('fm[345:342]',1,valid)
+    detail1=literal('B')+number(4,6)+literal('>')+number(5,6)+literal(' N')+field('fm[341:339]')+literal(' Q')+number(7,3,selected_b)+literal(' S')+field('fm[367:366]',selected_b)+literal(' F')+hx('fm[349:346]',1,valid)+literal(' P')+field('fm[369:368]',valid)+literal(' R')+hx('fm[377:370]',2,valid)+literal(' C')+field('fm[379:378]',valid)+literal(' L')+number(21,2,valid)
+    def saturation(expr):return [f"{expr}==0?8'd4:{expr}==1?8'd5:{expr}==2?8'd7:8'd9"]
+    model0=literal('A H')+number(8,3,valid)+literal('/')+number(9,3,valid)+literal(' M')+number(10,3,valid)+literal(' D')+number(11,3,valid)+literal(' S')+saturation('fm[444:443]')+literal('/16 R')+number(16,4,valid)+literal(' B')+number(17,4,valid)
+    model1=literal('B H')+number(12,3,valid)+literal('/')+number(13,3,valid)+literal(' M')+number(14,3,valid)+literal(' D')+number(15,3,valid)+literal(' S')+saturation('fm[508:507]')+literal('/16 T')+number(22,6,valid)+literal(' Z')+number(23,5,valid)
+    cal0=literal('校准:')+[f'status_char(status_id,{i})' for i in range(9)]+literal(' E')+hx('fm[563:560]',2,valid)+literal(' F:')+hx('fimage',8)+literal(' V:')+hx('fm[559:544]',4,valid)
+    lines=[overview0,overview1,detail0,detail1,model0,model1,cal0]
+    longest=max(max(map(len,lines)),len(BUSY),max(len(e+RETRY) for e in ERRORS),max(map(len,HELP)))
+    size=next(n for n in (32,24,16) if longest*n<=1120);columns=1120//size
+    def cases(name,tokens):return 'case(col)\n'+''.join(f'{i}:{name}={expr};\n' for i,expr in enumerate(tokens))+'endcase\n'
+    # A serial display program replaces a large combinational text/field mux.
+    # One token addresses one glyph. It never runs in the per-pixel shader.
+    templates=lines+[literal(t) for t in HELP[1:]]+[literal(BUSY)]+[literal(e+RETRY) for e in ERRORS]
+    validity=["1'b1"];hex_fields=[];small_fields=[];dynamic=[];program=[0]*2048
+    def idx(values,v):
+        if v not in values:values.append(v)
+        return values.index(v)
+    def token(expr):
+        m=re.fullmatch(r"8'd(\d+)",expr)
+        if m:return int(m[1])
+        m=re.fullmatch(r"\((.+)\)\?\(8'd1\+numbers\[(\d+)\]\[(\d+)\+:4\]\):8'd\d+",expr)
+        if m:return (1<<13)|(int(m[2])<<8)|(idx(validity,m[1])<<4)|(int(m[3])//4)
+        m=re.fullmatch(r"\((.+)\)\?\(8'd1\+\((.+)>>([0-9]+) & 4'hf\)\):8'd\d+",expr)
+        if m:return (2<<13)|(idx(hex_fields,m[2])<<8)|(idx(validity,m[1])<<4)|(int(m[3])//4)
+        m=re.fullmatch(r"(mode|status)_char\(.+,(\d+)\)",expr)
+        if m:return (5<<13)|((m[1]=='status')<<8)|int(m[2])
+        m=re.fullmatch(r"\((.+)\)\?\(8'd1\+(.+)\):8'd\d+",expr)
+        if m:return (4<<13)|(idx(small_fields,m[2])<<8)|(idx(validity,m[1])<<4)
+        return (3<<13)|(idx(dynamic,expr)<<8)
+    for row,tokens in enumerate(templates):
+        assert len(tokens)<=columns
+        for col,t in enumerate(tokens):program[row*64+col]=token(t)
+    dynamic_text=[0]*512
+    for i,t in enumerate(MODES):
+        for j,c in enumerate(t):dynamic_text[i*4+j]=ids[c]
+    for i,t in enumerate(STATES):
+        for j,c in enumerate(t):dynamic_text[64+i*16+j]=ids[c]
+    functions='''reg [4:0] template_index;reg token_valid;reg [31:0] hex_value;reg [7:0] decoded_glyph;
+wire [15:0] token_data;wire [7:0] dynamic_glyph;
+wire [10:0] program_addr={template_index,format_col};
+wire [8:0] dynamic_addr=token_data[12:8]==0?({7'd0,fmode}<<2)+{5'd0,token_data[3:0]}:
+9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]};
+stable_footer_program_rom program_rom(I_clk,program_addr,token_data);
+stable_footer_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
+always @*begin
+template_index=({3'd0,fdiag}<<1)+format_row;
+if(fm[567:565]!=0)begin
+if(!format_row)template_index=6;
+else if(fm[563:560]!=0)template_index=12+{1'b0,fm[563:560]};
+else if(fm[564])template_index=11;
+else template_index=6+{2'd0,fm[567:565]};end
+token_valid=1;case(token_data[7:4])
+'''+''.join(f'{i}:token_valid={v};\n' for i,v in enumerate(validity))+'''default:token_valid=0;endcase
+hex_value=0;case(token_data[12:8])
+'''+''.join(f'{i}:hex_value={v};\n' for i,v in enumerate(hex_fields))+'''endcase
+decoded_glyph=0;case(token_data[15:13])
+0:decoded_glyph=token_data[7:0];
+1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd'''+str(ids['-'])+''';
+2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd'''+str(ids['-'])+''';
+3:case(token_data[12:8])
+'''+''.join(f'{i}:decoded_glyph={v};\n' for i,v in enumerate(dynamic))+'''endcase
+4:begin if(!token_valid)decoded_glyph=8'd'''+str(ids['-'])+''';else case(token_data[12:8])
+'''+''.join(f"{i}:decoded_glyph=8'd1+{v};\n" for i,v in enumerate(small_fields))+'''endcase end
+5:decoded_glyph=dynamic_glyph;
+endcase end
+'''
+    s=(R/'scripts/ring_osd.v.txt').read_text(encoding='utf-8')
+    for key,value in {'@FONT@':str(size),'@COLUMNS@':str(columns),'@FUNCTIONS@':functions,
+                      '@WAIT_GLYPHS@':','.join(f"8'd{ids[c]}" for c in '等待结果'),
+                      '@FADDR@':f'(footer_glyph<<{int(math.log2(size))})+footer_gy' if size in (16,32) else '(footer_glyph<<4)+(footer_glyph<<3)+footer_gy'}.items():s=s.replace(key,value)
+    out={'rtl/color_regions/stable_osd.v':s}
+    def data_rom(name,width,rows):
+        depth=len(rows);addr=(depth-1).bit_length()
+        return f'module {name}(input wire clk,input wire [{addr-1}:0] addr,output reg [{width-1}:0] q);\n(* ram_style="block" *) reg [{width-1}:0] mem[0:{depth-1}];\ninitial begin\n'+''.join(f"mem[{i}]={width}'h{v:x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)q<=mem[addr];\nendmodule\n'
+    out['rtl/color_regions/stable_footer_program_rom.v']=data_rom('stable_footer_program_rom',16,program)
+    out['rtl/color_regions/stable_footer_text_rom.v']=data_rom('stable_footer_text_rom',8,dynamic_text)
+    fontfile=Path('C:/Windows/Fonts/simhei.ttf')
+    def rom(module,chars,size,depth,addrwidth):
+        font=ImageFont.truetype(str(fontfile),size);rows=[]
+        for ch in chars:
+            im=Image.new('1',(size,size));ImageDraw.Draw(im).text((0,-max(1,size//16)),ch,font=font,fill=1)
+            rows.extend(sum(int(im.getpixel((x,y)))<<(size-1-x) for x in range(size)) for y in range(size))
+        rows +=[0]*(depth-len(rows))
+        text=f'module {module}(input wire clk,input wire [{addrwidth-1}:0] addr,output reg [{size-1}:0] data);\n(* ram_style="block" *) reg [{size-1}:0] rom[0:{depth-1}];\ninitial begin\n'
+        text+=''.join(f"rom[{i}]={size}'h{v:0{size//4}x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)data<=rom[addr];\nendmodule\n'
+        return text
+    depth=1<<(len(chars)*size-1).bit_length()
+    out['rtl/color_regions/stable_footer_glyph_rom.v']=rom('stable_footer_glyph_rom',chars,size,depth,depth.bit_length()-1)
+    out['rtl/color_regions/stable_glyph_rom.v']=rom('stable_glyph_rom',LABELS,16,256,8)
+    manifest=dict(font_size=size,footer_columns=columns,longest_line=longest,glyphs=len(chars),characters=chars,
+                  source_font_sha256=hashlib.sha256(fontfile.read_bytes()).hexdigest(),
+                  official_symbol_sha256=hashlib.sha256((R/'assets/osd/anlogic/anlogic_logo_mobile_official.svg').read_bytes()).hexdigest())
+    out['assets/osd/anlogic/transparent_ring_ui_manifest.json']=json.dumps(manifest,ensure_ascii=False,indent=2)+'\n'
+    return out
