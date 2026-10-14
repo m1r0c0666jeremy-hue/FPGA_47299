@@ -8,8 +8,8 @@ module stable_osd(
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb
 );
  reg [10:0] x;reg [9:0] y;reg vs_last;
- wire [1:0] na=I_detection_valid?{1'b0,I_meta[245]}+{1'b0,I_meta[318]}:0;
- wire [1:0] nb=I_detection_valid?{1'b0,I_meta[246]}+{1'b0,I_meta[382]}:0;
+ wire [2:0] na=I_meta[604]?I_meta[338:336]:0;
+ wire [2:0] nb=I_meta[604]?I_meta[341:339]:0;
  wire [23:0] color_a=I_pair?24'hFFFF40:24'hFF6060,color_b=I_pair?24'hE080FF:24'h6090FF;
  function signed [13:0] mapx;input [10:0] v;begin mapx=($signed({3'b0,v})-$signed({3'b0,I_x0}))<<<I_zoom;end endfunction
  function signed [13:0] mapy;input [9:0] v;begin mapy=($signed({4'b0,v})-$signed({4'b0,I_y0}))<<<I_zoom;end endfunction
@@ -50,11 +50,11 @@ module stable_osd(
 24:footer=11;
 25:footer=37;
 26:footer=1+na;
-27:footer=I_detection_valid && I_meta[319]?38:0;
+27:footer=I_detection_valid && I_meta[605]?38:0;
 29:footer=12;
 30:footer=37;
 31:footer=1+nb;
-32:footer=I_detection_valid && I_meta[383]?38:0;
+32:footer=I_detection_valid && I_meta[606]?38:0;
 35:footer=122;
 36:footer=123;
 37:footer=29;
@@ -69,12 +69,12 @@ endcase end else begin case(col)
 5:footer=I_state==0?0:I_state==1?68:I_state==2?0:I_state==3?69:I_state==4?73:I_state==5?77:I_state==6?81:I_state==7?86:0;
 6:footer=I_state==0?0:I_state==1?0:I_state==2?0:I_state==3?70:I_state==4?74:I_state==5?78:I_state==6?82:I_state==7?0:0;
 7:footer=I_state==0?0:I_state==1?0:I_state==2?0:I_state==3?0:I_state==4?0:I_state==5?0:I_state==6?83:I_state==7?0:0;
-11:footer=I_detection_valid && (I_meta[412] || I_meta[411])?87:0;
-12:footer=I_detection_valid && (I_meta[412] || I_meta[411])?71:0;
-13:footer=I_detection_valid && (I_meta[412] || I_meta[411])?69:0;
-14:footer=I_detection_valid && (I_meta[412] || I_meta[411])?70:0;
-15:footer=I_detection_valid && (I_meta[412] || I_meta[411])?64:0;
-16:footer=I_detection_valid && (I_meta[412] || I_meta[411])?88:0;
+11:footer=I_detection_valid && 1'b0?87:0;
+12:footer=I_detection_valid && 1'b0?71:0;
+13:footer=I_detection_valid && 1'b0?69:0;
+14:footer=I_detection_valid && 1'b0?70:0;
+15:footer=I_detection_valid && 1'b0?64:0;
+16:footer=I_detection_valid && 1'b0?88:0;
 19:footer=28;
 20:footer=17;
 21:footer=12;
@@ -244,26 +244,26 @@ end
        row=y>=676;col=x[10:5];glyph=footer(row,col);gx=x[4:1];gy=row?(y-676)>>1:(y-632)>>1;text_on=1;
      end
    end else if(I_video_ok)begin
-     if(I_show && I_detection_valid)for(j=0;j<4;j=j+1)begin
+     if(I_show && I_detection_valid)for(j=0;j<2;j=j+1)begin
        case(j)
          0:begin box=I_meta[141:100];valid_box=I_meta[245];end
-         1:begin box=I_meta[297:256];valid_box=I_meta[318];end
-         2:begin box=I_meta[183:142];valid_box=I_meta[246];end
-         3:begin box=I_meta[361:320];valid_box=I_meta[382];end
+         1:begin box=I_meta[183:142];valid_box=I_meta[246];end
+         
+         
        endcase
        bx0=mapx(box[10:0]);bx1=mapx(box[21:11])+(14'sd1<<<I_zoom)-1;
        by0=mapy(box[31:22]);by1=mapy(box[41:32])+(14'sd1<<<I_zoom)-1;
        if(valid_box && bx1>=0 && bx0<1280 && by1>=0 && by0<624)begin
-         if(border(xx,yy,bx0,bx1,by0,by1))begin back_on=1;back=j<2?color_a:color_b;end
+         if(border(xx,yy,bx0,bx1,by0,by1))begin back_on=1;back=j==0?color_a:color_b;end
          lx=bx0<0?0:bx0>1216?1216:bx0;ly=by0>=18?by0-18:by1+3;
          if(ly>608)ly=608;if(ly<0)ly=0;
          ldx=xx-lx;ldy=yy-ly;
          if(ldx[13:6]==0 && ldy[13:4]==0)begin
-           back_on=1;back=24'h101824;text_on=1;ink=j<2?color_a:color_b;
+           back_on=1;back=24'h101824;text_on=1;ink=j==0?color_a:color_b;
            gx=ldx[3:0];gy=ldy[3:0];lc=ldx[5:4];
            case(lc)
-             0:glyph=j<2?(I_pair?58:56):(I_pair?59:57);
-             1:glyph=43;2:glyph=j<2?11:12;3:glyph=(j==0||j==2)?2:3;
+             0:glyph=j==0?(I_pair?58:56):(I_pair?59:57);
+             1:glyph=43;2:glyph=j==0?11:12;3:glyph=2;
            endcase
          end
        end

@@ -23,6 +23,8 @@ for strict in (0,4):
         if name=='rejected_first_owner':extra='if(cand[61:42]!=48)$fatal(1,"first ownership was silently reassigned");'
         if name in ('quality_top4','weak_print_and_ring'):
             extra+='if(cand[89:83]!=100 || cand[61:42]!=48)$fatal(1,"strong thin target lost top rank");'
+        extra+=f'if(cand[123:121]!={expected})$fatal(1,"candidate count metadata");'
+        if name=='quality_top4':extra+=f'if(cand[124]!={int(strict==0)})$fatal(1,"candidate truncation metadata");'
         src=f'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,start=0;wire busy,done,failed;wire [1023:0] cand;wire [17:0] cycles;
 reg [79:0] words[0:3599];integer j,n=0,c;

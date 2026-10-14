@@ -53,7 +53,7 @@ reg [127:0] models;integer f,x,y,i,n,count=0;reg [23:0] pixel;
 function [63:0] model;input integer lo,hi;begin model=(64'h8000000000000000)|(64'(lo)<<54)|(64'(hi)<<45)|(64'd32<<37)|(64'd16<<29)|(64'd1<<27);end endfunction
 stable_capture dut(clk,rst,sof,v,fault,rgb,pair,enable,8'd1,models,16'd0,24'h400400,8'd0,1'b0,1'b0,ready,fid,ov,meta,dropped);
 always @(posedge clk)begin #1;if(ov)begin count=count+1;
-if(meta[415:413]!=2 || meta[543:416]!==models || !meta[247])$fatal(1,"capture identity/incomplete");
+if(meta[415:413]!=3 || meta[543:416]!==models || !meta[247])$fatal(1,"capture identity/incomplete");
 if(meta[31:0]==3 && (!meta[32] || meta[89:79]!=694 || meta[99:90]!=364))$fatal(1,"third-frame tip %0d/%0d valid%0d",meta[89:79],meta[99:90],meta[32]);
 if(meta[31:0]==6 && meta[32])$fatal(1,"missing blue stale tip");
 if(meta[31:0]==9 && !meta[32])$fatal(1,"short loss not recovered");

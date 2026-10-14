@@ -9,7 +9,7 @@ module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  output reg [1:0] O_zoom,O_mode,output reg [639:0] O_meta,
  output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state);
  reg vs_last,in_blank,associated;reg [7:0] age,session;
- wire match=I_data[674] && I_data[255] && I_data[415:413]==2 && I_data[31:0]==I_data[671:640] &&
+ wire match=I_data[674] && I_data[255] && I_data[415:413]==3 && I_data[31:0]==I_data[671:640] &&
  I_data[242:235]==I_session && I_data[243]==I_pair && I_data[244]==I_tracking;
  assign O_detection_valid=associated && I_tracking && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247];
  assign O_sample_valid=associated && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247] && O_meta[408];

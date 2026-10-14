@@ -33,7 +33,7 @@ def assets():
     s=swap(s,'isp_top u_isp_top (','stable_isp u_isp_top (\n.I_gain_r(I_gain_r),.I_gain_b(I_gain_b),.O_raw_rgb(O_raw_rgb),.O_raw_sof(O_raw_sof),.O_raw_valid(O_raw_valid),')
     out['rtl/color_regions/stable_camera_capture.v']=s
     s=(R/'rtl/color_regions/regions_frame_store.v').read_text(encoding='utf-8')
-    s=s.replace('module regions_frame_store','module stable_frame_store').replace('[415:0]','[639:0]').replace('[450:0]','[674:0]').replace("==1;","==2;").replace("416'd0","640'd0").replace('O_data[415:0]','O_data[639:0]')
+    s=s.replace('module regions_frame_store','module stable_frame_store').replace('[415:0]','[639:0]').replace('[450:0]','[674:0]').replace("==1;","==3;").replace("416'd0","640'd0").replace('O_data[415:0]','O_data[639:0]')
     out['rtl/color_regions/stable_frame_store.v']=s
     s=(R/'rtl/color_regions/regions_memory_video_out.v').read_text(encoding='utf-8')
     s=s.replace('module regions_memory_video_out','module stable_memory_video_out')
@@ -140,6 +140,7 @@ end
      if(I_meta[567:565]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
      if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,mapx(320),mapx(959),mapy(180),mapy(539)))begin back_on=1;back=24'h40c080;end
 '''+s[index:]
+    s=protocol_v3_ui(s)
     out={'rtl/color_regions/stable_osd.v':s}
     font=ImageFont.truetype('C:/Windows/Fonts/simhei.ttf',16);rows=[]
     for ch in chars:
@@ -148,6 +149,20 @@ end
     rows+=[0]*(2048-len(rows))
     out['rtl/color_regions/stable_glyph_rom.v']='module stable_glyph_rom(input wire clk,input wire [10:0] addr,output reg [15:0] data);\n(* ram_style="block" *) reg [15:0] rom[0:2047];\ninitial begin\n'+''.join(f"rom[{i}]=16'h{v:04x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)data<=rom[addr];\nendmodule\n'
     return out
+def protocol_v3_ui(s):
+    s=s.replace("wire [1:0] na=I_detection_valid?{1'b0,I_meta[245]}+{1'b0,I_meta[318]}:0;", "wire [2:0] na=I_meta[604]?I_meta[338:336]:0;")
+    s=s.replace("wire [1:0] nb=I_detection_valid?{1'b0,I_meta[246]}+{1'b0,I_meta[382]}:0;", "wire [2:0] nb=I_meta[604]?I_meta[341:339]:0;")
+    s=s.replace('I_meta[319]','I_meta[605]').replace('I_meta[383]','I_meta[606]')
+    s=s.replace('(I_meta[412] || I_meta[411])',"1'b0")
+    s=s.replace('for(j=0;j<4;j=j+1)begin','for(j=0;j<2;j=j+1)begin')
+    s=s.replace('1:begin box=I_meta[297:256];valid_box=I_meta[318];end','1:begin box=I_meta[183:142];valid_box=I_meta[246];end')
+    s=s.replace('2:begin box=I_meta[183:142];valid_box=I_meta[246];end','')
+    s=s.replace('3:begin box=I_meta[361:320];valid_box=I_meta[382];end','')
+    s=s.replace('j<2','j==0').replace('3:glyph=(j==0||j==2)?2:3;','3:glyph=2;')
+    # Replace only colour-selection tests; loop bound must remain two.
+    s=s.replace('for(j=0;j==0;j=j+1)','for(j=0;j<2;j=j+1)')
+    return s
+
 def generate(check=False):
     for name,s in assets().items():
         p=R/name;data=s.replace('\r\n','\n').encode('utf-8')

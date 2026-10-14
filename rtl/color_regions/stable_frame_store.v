@@ -13,7 +13,7 @@ module stable_frame_store #(parameter WORDS=172800)(
  reg [18:0] count;reg [24:0] expected;
  reg [3:0] co,hit,eligible;reg [9:0] tags[0:3];
  reg found,new_result_found;reg [1:0] newest,chosen,write_slot,lo,hi;integer i;
- wire result_ok=I_result && I_meta[255] && I_meta[415:413]==2;
+ wire result_ok=I_result && I_meta[255] && I_meta[415:413]==3;
  wire [9:0] result_tag={I_meta[243],I_meta[242:235],I_meta[244]};
  function [24:0] base_for;input [1:0] b;begin
   case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase

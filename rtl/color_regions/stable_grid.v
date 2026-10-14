@@ -60,6 +60,7 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  {3'd0,lower[17:9]}+{3'd0,l1[17:9]}+{3'd0,l0[17:9]};
  reg signed [8:0] nx;reg signed [7:0] ny;reg neighbor_ok;
  reg [19:0] count,strong_count;reg edge_only;reg [30:0] sx,sy;reg [6:0] xmin,xmax;reg [5:0] ymin,ymax;
+ reg [2:0] qualified[0:1],reject_stage[0:1];reg [1:0] saw_core;
  reg [127:0] best[0:7];reg [61:0] moments[0:7];reg [127:0] item;
  reg [61:0] item_moment;reg [19:0] supports[0:7];reg [1:0] quality_tier;reg [27:0] score;reg nearby,central;
  reg [2:0] insert_index,divide_index;reg found_insert;reg [1:0] axis;
@@ -113,13 +114,15 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  head<=0;tail<=0;tx<=0;ty<=0;direction<=0;u0<=0;u1<=0;m0<=0;m1<=0;l0<=0;l1<=0;
  count<=0;sx<=0;sy<=0;xmin<=0;xmax<=0;ymin<=0;ymax<=0;divide_index<=0;axis<=0;ds<=0;numerator<=0;denominator<=0;
  for(i=0;i<8;i=i+1)begin best[i]<=0;moments[i]<=0;supports[i]<=0;end
- strong_count<=0;edge_only<=0;end
+ strong_count<=0;edge_only<=0;saw_core<=0;
+ for(i=0;i<2;i=i+1)begin qualified[i]<=0;reject_stage[i]<=0;end end
  else begin
  done<=0;ds<=0;if(busy)cycles<=cycles+1'b1;
  if(busy && cycles>=212000)begin busy<=0;done<=1;failed<=1;candidates<=0;state<=IDLE;end
  else case(state)
  IDLE:if(start)begin
  busy<=1;failed<=0;cycles<=0;wb<=work_bank;color<=0;pc<=0;py<=0;u0<=0;u1<=0;m0<=0;m1<=0;l0<=0;l1<=0;
+ saw_core<=0;for(i=0;i<2;i=i+1)begin qualified[i]<=0;reject_stage[i]<=0;end
  for(i=0;i<8;i=i+1)best[i]<=0;state<=PADDR;end
  PADDR:state<=PWAIT;PWAIT:state<=PREAD;PREAD:state<=PFEED;
  PFEED:begin
@@ -129,6 +132,7 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  else begin pc<=pc+1'b1;state<=PADDR;end end
  SCAN:state<=SCGET;
  SCGET:begin
+ if(fq[color+2])saw_core[color]<=1;
  if(fq[color+2] && !fq[color+4])begin
  head<=0;tail<=1;count<=0;strong_count<=0;sx<=0;sy<=0;xmin<=79;xmax<=0;ymin<=44;ymax<=0;state<=POP;end
  else if(scan==3599)state<=NEXTCOLOR;else begin scan<=scan+1'b1;state<=SCAN;end end
@@ -145,6 +149,8 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(direction==7)begin if(head<tail || (neighbor_ok && fq[color] && !fq[color+4]))state<=POP;else state<=RETIRE;end
  else begin direction<=direction+1'b1;state<=NSET;end end
  RETIRE:begin
+ if(item[120])begin if(qualified[color]<5)qualified[color]<=qualified[color]+1'b1;end
+ else reject_stage[color]<=count<48?4:5;
  if(item[120] && found_insert)for(i=0;i<4;i=i+1)begin
  if(i==insert_index)begin best[offset+i]<=item;moments[offset+i]<=item_moment;supports[offset+i]<=strong_count;end
  else if(i>insert_index)begin best[offset+i]<=best[offset+i-1];moments[offset+i]<=moments[offset+i-1];supports[offset+i]<=supports[offset+i-1];end end
@@ -161,7 +167,12 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(axis!=2)begin axis<=axis+1'b1;state<=DSET;end
  else if(divide_index==7)state<=FINISH;
  else begin divide_index<=divide_index+1'b1;axis<=0;state<=DSET;end end
- FINISH:begin for(i=0;i<8;i=i+1)candidates[i*128+:128]<=failed?128'd0:best[i];busy<=0;done<=1;state<=IDLE;end
+ FINISH:begin for(i=0;i<8;i=i+1)candidates[i*128+:128]<=failed?128'd0:best[i];
+ candidates[123:121]<=failed?0:(qualified[0]>4?4:qualified[0]);candidates[124]<=qualified[0]>4;
+ candidates[127:125]<=failed?7:!saw_core[0]?3:reject_stage[0];
+ candidates[635:633]<=failed?0:(qualified[1]>4?4:qualified[1]);candidates[636]<=qualified[1]>4;
+ candidates[639:637]<=failed?7:!saw_core[1]?3:reject_stage[1];
+ busy<=0;done<=1;state<=IDLE;end
  endcase end end
 endmodule
 `default_nettype wire

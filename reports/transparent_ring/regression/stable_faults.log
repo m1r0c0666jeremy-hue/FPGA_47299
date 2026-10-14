@@ -1,0 +1,3 @@
+
+STABLE_FAULTS_PASS closed-frame validation, late extra, previous fault recovery, short/long, mailbox latest without blocking banks
+D:\aaa_FPGA\transparent-ring-stability\sim\tb_stable_faults.sv:27: $finish called at 20780570000 (1ps)

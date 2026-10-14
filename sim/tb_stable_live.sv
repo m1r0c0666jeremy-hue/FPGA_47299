@@ -73,7 +73,7 @@ seen_modes[mode]=1;seen_zooms[zoom]=1;
 checked=checked+1;end
 if(ox==1279)begin ox=0;oy=oy+1;end else ox=ox+1;end
 if(commit)begin
-if(active[31:0]!==selected_id || active[415:413]!=2 || active[543:416]!==models_for(selected_id) || active[559:544]!=(selected_id>=8?1:0))$fatal(1,"live snapshot provenance");
+if(active[31:0]!==selected_id || active[415:413]!=3 || active[543:416]!==models_for(selected_id) || active[559:544]!=(selected_id>=8?1:0))$fatal(1,"live snapshot provenance");
 if(active[603:595]!=(2+PAIR_MODE) || (active[32] && active[594:593]!=2))$fatal(1,"selected tool identity/status CDC mismatch");
 if(selected_id>=8)changed_version_seen=1;
 if(zoom==last_zoom)begin

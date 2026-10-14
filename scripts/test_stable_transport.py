@@ -7,7 +7,7 @@ def transform(s):
     s=s.replace('tb_color_regions_','tb_stable_')
     for a,b in [('regions_frame_store','stable_frame_store'),('regions_display','stable_display'),('regions_line_reader','stable_line_reader'),
                 ('[450:0]','[674:0]'),('[449:448]','[673:672]'),('[447:416]','[671:640]'),('[450]','[674]'),('[415:0]','[639:0]'),
-                ("416'd0","640'd0"),('.WIDTH(416)','.WIDTH(640)'),('.WIDTH(451)','.WIDTH(675)'),('[415:413]=1','[415:413]=2')]:s=s.replace(a,b)
+                ("416'd0","640'd0"),('.WIDTH(416)','.WIDTH(640)'),('.WIDTH(451)','.WIDTH(675)'),('[415:413]=1','[415:413]=3')]:s=s.replace(a,b)
     return s.replace('tb_color_regions_','tb_stable_')
 for name in ['frame_store','display','association']:
     s=transform((R/f'sim/tb_color_regions_{name}.sv').read_text(encoding='utf-8'))
@@ -18,7 +18,7 @@ packet(14,1,1,1);data[32]=1;data[89:79]=900;data[99:90]=500;blank;if(cx!=688 || 
 blank;if(cx!=688 || cy!=408)$fatal(1,"duplicate frame moved viewport");
 packet(15,1,1,1);data[32]=1;data[89:79]=691;data[99:90]=411;blank;if(cx!=688 || cy!=408)$fatal(1,"deadzone");
 packet(16,1,1,1);blank;if(cx!=688 || cy!=408)$fatal(1,"loss did not freeze");
-tracking=0;session=4;mode=3;packet(17,1,0,0);data[567:566]=1;blank;
+tracking=0;session=4;mode=3;packet(17,1,0,0);data[567:565]=1;blank;
 if(cx!=640 || cy!=360 || x0!=0 || y0!=48 || oz!=0 || om!=0)$fatal(1,"calibration guide off-screen");
 packet(18,1,0,0);blank;if(oz!=2 || om!=3 || cx!=640 || cy!=360)$fatal(1,"requested page/zoom not restored after calibration");
 $display("PASS stable moving display: 24px max-step, 4px deadzone, missing tip freeze, duplicate suppression");
