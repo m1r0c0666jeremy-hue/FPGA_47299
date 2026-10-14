@@ -1,0 +1,3 @@
+
+RING_DISTRIBUTION_PASS yellow_bright_neutral baseline=1 success=1 cycles=341357 model=8d08a785b0000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\before_yellow_bright_neutral.sv:11: $finish called at 3413610 (1s)

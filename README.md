@@ -1,6 +1,14 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前分支：透明色环稳定性优化（2026-10-15）
+
+`feature/transparent-ring-stability`，基线43564ee；在独立工作区实施四步材料/背景校准、候选质量、v3同帧诊断、官方图标、组合键和默认180°显示，保留双色工具/尖端/跟随。软件与TD通过，实物待验。
+
+[新独立上板测试bit](build/target_color_regions_ring_stability_20261015_025936/target_color_regions.bit)、[同源源码包](build/target_color_regions_ring_stability_20261015_025936/transparent_ring_stability_source.zip)、[操作与最小复测](docs/透明色环稳定性优化_上板与复测.md)、[实际验证报告](reports/transparent_ring/最终验证报告.md)。历史bit和下方历史说明保留，不能用旧bit执行四步流程。
+
+本版实际Slice18981/21216、ERAM100/108、DSP40/40，建立+0.110ns/保持+0.020ns。新输出独立且输入冻结，未放宽约束。完整构建用 `scripts/run_stable_regions_build.py --stage full --prefix ring_stability`；只读审计用 `scripts/audit_color_regions.py --attempt build/ring_stability_full_20261015_014510 --check-build`。不要直接重跑冻结目录run.tcl覆盖历史输出。
+
 ## 当前正式工程：双色工具识别、尖端定位与自动跟随（2026-10-14）
 
 本地仓库 `D:/aaa_FPGA/color-regions-env-issues`，分支 `docs/color-regions-env-issues`，基线 `0735398`。沿用 `td_project/target_color_regions.al`：固定白平衡与两组材料校准、八邻域去孤立、80×45 双银行网格、每色四候选、中央选取一件工具、K=0.5 尖端和平滑放大跟随。四页面、配色与倍率操作保留。

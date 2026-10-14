@@ -1,0 +1,38 @@
+{
+  "inputs": {
+    "sim/tb_stable_live.sv": "453b3b51c4b96d7202d39e9a25c1debe56756d93cefe20e871976caac73dd920",
+    "rtl/color_regions/stable_awb.v": "23d822472a1d49b27dddaac02a5e1ed5ca2d7bfb8190f2e7a7752c88565087bf",
+    "rtl/color_regions/stable_packer.v": "d321fd9740e28608f7082337af1050a6b0999f404bce9b0f89be8880a34b7908",
+    "rtl/color_regions/stable_capture.v": "26eb5d4ce2f8c19e52abe7a7d481d9ede8d5d8ce0349e51c961e62c66d09d738",
+    "rtl/color_regions/stable_model_lane.v": "c221c0d834f863e89dca5113dfd59d4afd0a0accdd7694770264d89fdec1d320",
+    "rtl/color_regions/stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl/color_regions/stable_grid.v": "cd243ccf55fb9d5815963919e2040106a45cffd5c8330fcce7b09a0355a26ef4",
+    "rtl/color_regions/regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729",
+    "rtl/color_regions/stable_tracker.v": "d151ed230a0f991826bc3eb428dcd0bbdce99d123e4a90d5b43be7fbb39214b3",
+    "rtl/color_regions/stable_frame_store.v": "06c51ee9c12f9f1d95a29663c09c9cb0599bdaf5144ab0198f7fa3652755dafd",
+    "rtl/color_regions/stable_display.v": "f8555ef670406990eb9c604ccd2323649b996e6ef77017b53eedf4d50a4a2f3a",
+    "rtl/color_regions/stable_line_reader.v": "a81ecadaf9047e75962d8619211ab3dbed926a69ac0a0b4003cf4fd80917f5b5",
+    "rtl/color_regions/stable_preprocess.v": "022a23602c48cf28644f15e7d72e50ca46b77d7f172310c951cb4bc99fff4d4b",
+    "rtl/color_regions/stable_osd.v": "d9e25b88da4e81caea640b6a4a4fc0c73656f2e1e6524efce150ed5df46dbebe",
+    "rtl/color_regions/stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+    "rtl/color_regions/stable_footer_glyph_rom.v": "6ccc646e6f77f14fbd422447e0cceb1a1fdcad7f8e351146a818b4252e7fc050",
+    "rtl/color_regions/stable_footer_program_rom.v": "b59608f654d5d8d8f784bb93aa6f6e00ef5d4d132bf0f0847ec3c65588f4d4ec",
+    "rtl/color_regions/stable_footer_text_rom.v": "13f63defc4004411db37588e01c0a1989c1900a4fe6bed68bed8842ff5e76bf1",
+    "rtl/04_tracking/target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "rtl/09_osd_ui/scaling_logo_rom.v": "4efbb9d3f18cf7d8c9d63fd45e75615765c1581826689baa3fca3e7aa8d573a0",
+    "user_source/hdl_source/video_in.v": "6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b",
+    "user_source/ip_source/w128_d512_fifo/w128_d512_fifo.v": "5cd5f8e2216dd8989dc1e54d42b4da348dbb09f130bbe92deaa205db53a96bb4",
+    "user_source/ip_source/w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v": "75e5785ae0733b4ef7ce9a80d09f68419ceb0a6a5143baf866c5442ca310cb5e"
+  },
+  "input_hashes_unchanged": true,
+  "pairs": [
+    0,
+    1
+  ],
+  "rotations": [
+    0,
+    1
+  ],
+  "frames": 20,
+  "pixels": 15974400
+}

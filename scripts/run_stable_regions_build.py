@@ -2,9 +2,9 @@
 from pathlib import Path
 import argparse,datetime,subprocess,os,json,hashlib,zipfile,re
 R=Path(__file__).resolve().parents[1]
-p=argparse.ArgumentParser();p.add_argument('--stage',choices=['synth','full'],default='synth');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--stage',choices=['synth','full'],default='synth');p.add_argument('--prefix',choices=['stable_regions','ring_stability'],default='stable_regions');a=p.parse_args()
 stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
-name=f'stable_regions_{a.stage}_{stamp}';out=R/'build'/name;out.mkdir(exist_ok=False)
+name=f'{a.prefix}_{a.stage}_{stamp}';out=R/'build'/name;out.mkdir(exist_ok=False)
 project=R/'td_project/target_color_regions.al'
 paths=[project,R/'td_project/target_lock.adc',R/'td_project/target_lock.sdc',R/'rtl/03_tool_detection/target_config.json']
 for s in re.findall(r'<File Path="([^"]+)"',project.read_text(encoding='utf-8')):
