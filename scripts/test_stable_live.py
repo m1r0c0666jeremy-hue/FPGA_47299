@@ -10,5 +10,5 @@ for pair in (0,1):
     commands.extend(([iv,'-g2012','-s','tb_stable_live',f'-Ptb_stable_live.PAIR_MODE={pair}','-o',exe,*files],[iv.with_name('vvp.exe'),exe]))
 for cmd in commands:
     q=subprocess.run(list(map(str,cmd)),cwd=R,env=env,capture_output=True,text=True,timeout=1800);logs.append(q.stdout+q.stderr);print(logs[-1],flush=True)
-    (R/'reports/stable_live.log').write_text('\n'.join(logs),encoding='utf-8')
+    (R/'reports/transparent_ring/regression/stable_live.log').write_text('\n'.join(logs),encoding='utf-8')
     if q.returncode:raise SystemExit(q.returncode)

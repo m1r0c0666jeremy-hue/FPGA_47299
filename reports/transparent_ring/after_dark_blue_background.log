@@ -1,0 +1,3 @@
+
+RING_DISTRIBUTION_PASS dark_blue_background baseline=0 success=1 cycles=1706996 model=b29b678990000000d643c40208000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\after_dark_blue_background.sv:10: $finish called at 17070000 (1s)

@@ -6,7 +6,7 @@ iv=R/'tools/iverilog/ucrt64/bin/iverilog.exe';env=os.environ.copy();env['PATH']=
 def run(cmd):
     q=subprocess.run(list(map(str,cmd)),cwd=R,env=env,capture_output=True,text=True,timeout=900)
     logs.append(q.stdout+q.stderr);print(logs[-1],flush=True)
-    (R/'reports/stable_ingress.log').write_text('\n'.join(logs),encoding='utf-8')
+    (R/'reports/transparent_ring/regression/stable_ingress.log').write_text('\n'.join(logs),encoding='utf-8')
     if q.returncode:raise SystemExit(q.returncode)
 s=(R/'sim/tb_target_ingress_probe.sv').read_text(encoding='utf-8')
 s=s[:s.index('module divider')]

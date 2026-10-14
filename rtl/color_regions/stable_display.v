@@ -41,7 +41,7 @@ module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
  O_zoom<=I_zoom;O_mode<=I_mode;O_pair<=I_pair;O_show<=I_show;session<=I_session;associated<=match;
  O_meta<=match?I_data[639:0]:640'd0;if(I_data[671:640]!=O_frame_id)age<=0;
  O_cx<=cx;O_cy<=cy;O_x0<=cx-hx;O_y0<=cy-hy;
- if(match && I_data[567:566]!=0)begin
+ if(match && I_data[567:565]!=0)begin
  O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;
  end
  end end end

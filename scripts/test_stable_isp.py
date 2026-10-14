@@ -57,5 +57,5 @@ files.extend([next((R/'user_source').rglob('data128_96.v')),ram])
 logs=[]
 for cmd in ([iv,'-g2012','-s','tb','-o',O/'isp.vvp',*files],[iv.with_name('vvp.exe'),O/'isp.vvp']):
     p=subprocess.run(list(map(str,cmd)),cwd=R,env=env,capture_output=True,text=True,timeout=900);logs.append(p.stdout+p.stderr);print(logs[-1],flush=True)
-    (R/'reports/stable_isp.log').write_text('\n'.join(logs),encoding='utf-8')
+    (R/'reports/transparent_ring/regression/stable_isp.log').write_text('\n'.join(logs),encoding='utf-8')
     if p.returncode:raise SystemExit(p.returncode)

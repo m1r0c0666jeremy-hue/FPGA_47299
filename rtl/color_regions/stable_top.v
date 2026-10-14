@@ -159,7 +159,7 @@ stable_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
     .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
     .I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),
-    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:6]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),
+    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:5]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),
     .I_capture_clk(S_csi_rx_clk), .I_rgb128(S_ISP_O_tdata),
     .I_data_valid(S_ISP_O_tvalid), .I_frame_start(S_ISP_O_tuser),

@@ -31,6 +31,6 @@ $display("PASS display''')
     files=[R/f'rtl/color_regions/{n}.v' for n in ('stable_frame_store','stable_display','stable_line_reader','stable_model_lane','stable_filter4')]+[R/'rtl/04_tracking/target_mailbox.v']
     for cmd in ([iv,'-g2012','-s','tb_stable_'+name,'-o',exe,file,*files],[iv.with_name('vvp.exe'),exe]):
         q=subprocess.run(list(map(str,cmd)),cwd=R,env=env,capture_output=True,text=True,timeout=180);logs.append(q.stdout+q.stderr);print(logs[-1],flush=True)
-        (R/'reports/stable_transport.log').write_text('\n'.join(logs),encoding='utf-8')
+        (R/'reports/transparent_ring/regression/stable_transport.log').write_text('\n'.join(logs),encoding='utf-8')
         if q.returncode:raise SystemExit(q.returncode)
 print('STABLE_TRANSPORT_ALL_PASS',flush=True)

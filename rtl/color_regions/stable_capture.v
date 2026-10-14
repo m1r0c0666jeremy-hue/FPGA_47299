@@ -36,7 +36,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  wire td,tv;wire [127:0] a,b;wire [10:0] tx;wire [9:0] ty;wire [3:0] reason;
  wire [1:0] selected_state;
  wire work_complete=complete[wb] && !gfailed;
- wire detect_allowed=cmds[wb][0] && !needs[wb] && status[wb][7:6]==0;
+ wire detect_allowed=cmds[wb][0] && !needs[wb] && status[wb][7:5]==0;
  stable_tracker tracker(clk,rst_n,ts,ids[wb],{cmds[wb][9:1],detect_allowed},revs[wb],work_complete,
  candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state);
  reg [2:0] state;reg [639:0] packet,waiting_packet;reg waiting_result;

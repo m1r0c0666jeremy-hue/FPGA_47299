@@ -76,7 +76,7 @@ target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n
     s=swap(s,'.I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),','.I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),\n    .O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),')
     s=s.replace('camera_capture u_camera (','stable_camera_capture u_camera (\n    .I_gain_r(wb_r),.I_gain_b(wb_b),.O_raw_rgb(raw_rgb),.O_raw_sof(raw_sof),.O_raw_valid(raw_valid),')
     s=s.replace('regions_memory_video_out #','stable_memory_video_out #')
-    s=swap(s,'.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),','.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),\n    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:6]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),')
+    s=swap(s,'.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),','.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),\n    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:5]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),')
     out['rtl/color_regions/stable_top.v']=s
     out.update(ui_assets())
     root=ET.fromstring((R/'td_project/target_color_regions.al').read_text(encoding='utf-8').replace('&','&amp;').replace('::','__TD_COLON__'))
@@ -101,7 +101,7 @@ target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n
 def ui_assets():
     chars=' '+''.join(dict.fromkeys('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ:+-/原图色彩高亮灰度二值模式倍率配红蓝黄紫候选状态待命搜索中区域多个拥挤按键冲突视频未就绪无新帧更多判取样隐藏'))
     labels=['待命','中央选取','确认中','跟踪中','缺色','失锁保持','中央重选','尖端越界','无效帧']
-    cal_labels=['请重新校准','白纸按KEY3','A色按KEY3','B色按KEY3','采样处理中','采样失败重试']
+    cal_labels=['请重新校准','白纸按KEY3','空背景按KEY3','A色按KEY3','B色按KEY3','采样处理中','采样失败重试']
     chars=''.join(dict.fromkeys(chars+''.join(labels+cal_labels)+'安路等待结果'))
     assert len(chars)<=128,len(chars)
     ids={c:i for i,c in enumerate(chars)}
@@ -113,18 +113,18 @@ def ui_assets():
 footer=0;
 '''+''.join(f'if(I_meta[36:33]=={n} && I_tracking)case(col)\n{text_cases(t)}\nendcase\n' for n,t in enumerate(labels))+'''
 if(!I_tracking)case(col)
-'''+text_cases('待命')+'\nendcase\n'+''.join(f'if(I_meta[567:566]=={n})case(col)\n{text_cases(cal_labels[n])}\nendcase\n' for n in range(1,4))+'''
-if(I_meta[565] && I_meta[567:566]!=0)case(col)
-'''+text_cases(cal_labels[4])+'''\nendcase
-if(I_meta[563:560]!=0 && I_meta[567:566]!=0)case(col)
+'''+text_cases('待命')+'\nendcase\n'+''.join(f'if(I_meta[567:565]=={n})case(col)\n{text_cases(cal_labels[n])}\nendcase\n' for n in range(1,5))+'''
+if(I_meta[564] && I_meta[567:565]!=0)case(col)
 '''+text_cases(cal_labels[5])+'''\nendcase
-if(I_meta[568] && I_meta[567:566]==0)case(col)
+if(I_meta[563:560]!=0 && I_meta[567:565]!=0)case(col)
+'''+text_cases(cal_labels[6])+'''\nendcase
+if(I_meta[568] && I_meta[567:565]==0)case(col)
 '''+text_cases(cal_labels[0])+'''\nendcase
 end
 '''+s[a:]
     s=s.replace('39:footer=2;','39:footer=3;').replace('35:footer=28;','35:footer=29;')
     s=s.replace('35:footer=29;',f'35:footer={ids["安"]};').replace('36:footer=2;',f'36:footer={ids["路"]};').replace('37:footer=39;',f'37:footer={ids["S"]};').replace('38:footer=1;',f'38:footer={ids["2"]};').replace('39:footer=3;','39:footer=0;')
-    s=s.replace('if(I_meta[568] && I_meta[567:566]==0)case(col)',f'if(I_meta[563:560]!=0 && I_meta[567:566]!=0)begin if(col==15)footer={ids["E"]};if(col==16)footer={ids["0"]}+I_meta[563:560];end\nif(I_meta[568] && I_meta[567:566]==0)case(col)')
+    s=s.replace('if(I_meta[568] && I_meta[567:565]==0)case(col)',f'if(I_meta[563:560]!=0 && I_meta[567:565]!=0)begin if(col==15)footer={ids["E"]};if(col==16)footer={ids["0"]}+I_meta[563:560];end\nif(I_meta[568] && I_meta[567:565]==0)case(col)')
     # Live/stale state always wins over a historical tracking/calibration label.
     end=s.index(' end endfunction',s.index('function [6:0] footer'))
     priority=' if(row && col>=3 && col<19)begin\n'
@@ -137,7 +137,7 @@ end
        lx=mapx(I_meta[89:79]);ly=mapy(I_meta[99:90]);ldx=xx-lx;ldy=yy-ly;
        if((ldx>=-6 && ldx<=6 && ldy>=-1 && ldy<=1)||(ldy>=-6 && ldy<=6 && ldx>=-1 && ldx<=1))begin back_on=1;back=24'h40ff90;end
      end
-     if(I_meta[567:566]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
+     if(I_meta[567:565]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
      if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,mapx(320),mapx(959),mapy(180),mapy(539)))begin back_on=1;back=24'h40c080;end
 '''+s[index:]
     out={'rtl/color_regions/stable_osd.v':s}

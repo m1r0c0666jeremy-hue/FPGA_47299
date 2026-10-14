@@ -23,8 +23,8 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  O_tracking<=0;O_show<=1;O_session<=0;O_pair<=0;O_cal_enter<=0;O_cal_sample<=0;O_cal_cancel<=0;end
  else begin
  if(tick)ms<=0;else ms<=ms+1'b1;
- if(I_cal_status[7:6]!=0)cal_seen<=1;
- if(cal_ui && cal_seen && I_cal_status[7:6]==0)begin cal_ui<=0;cal_seen<=0;end
+ if(I_cal_status[7:5]!=0)cal_seen<=1;
+ if(cal_ui && cal_seen && I_cal_status[7:5]==0)begin cal_ui<=0;cal_seen<=0;end
  if(tick)begin
  if(k2!=kc)begin kc<=k2;kd<=0;end else if(kd<DEBOUNCE_MS)begin kd<=kd+1'b1;if(kd==DEBOUNCE_MS-1)keys<=kc;end
  if(s2!=sc)begin sc<=s2;sd<=0;end else if(sd<DEBOUNCE_MS)begin sd<=sd+1'b1;if(sd==DEBOUNCE_MS-1)sw<=sc;end

@@ -12,7 +12,7 @@ def run(name,source,modules):
                 [str(iv.with_name('vvp.exe')),str(O/(name+'.vvp'))]):
         p=subprocess.run(cmd,cwd=R,env=env,capture_output=True,text=True,timeout=900)
         logs.append(p.stdout+p.stderr);print(logs[-1],flush=True)
-        (R/'reports/stable_units.log').write_text('\n'.join(logs),encoding='utf-8')
+        (R/'reports/transparent_ring/regression/stable_units.log').write_text('\n'.join(logs),encoding='utf-8')
         if p.returncode:raise SystemExit(p.returncode)
 def model(lo,hi,m,d,s):return (1<<63)|(lo<<54)|(hi<<45)|(m<<37)|(d<<29)|(s<<27)
 def oracle(rgb,c):

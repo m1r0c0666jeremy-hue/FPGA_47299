@@ -80,7 +80,7 @@ logs=[]
 with ThreadPoolExecutor(max_workers=3) as pool:
     for job,code,log in pool.map(run,jobs):
         logs.append(str(job)+'\n'+log);print(log,flush=True)
-        (R/'reports/stable_video.log').write_text('\n'.join(logs),encoding='utf-8')
+        (R/'reports/transparent_ring/regression/stable_video.log').write_text('\n'.join(logs),encoding='utf-8')
         if code:raise SystemExit(code)
-(R/'reports/stable_video_cases.json').write_text(json.dumps(jobs,indent=2),encoding='utf-8')
+(R/'reports/transparent_ring/regression/stable_video_cases.json').write_text(json.dumps(jobs,indent=2),encoding='utf-8')
 print('STABLE_VIDEO_ALL_PASS',flush=True)

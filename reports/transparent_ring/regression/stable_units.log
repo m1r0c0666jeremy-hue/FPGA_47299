@@ -1,0 +1,19 @@
+
+STABLE_CLASSIFIER_PASS 9000 independent Fraction inputs
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\classifier.sv:10: $finish called at 90076 (1s)
+
+
+STABLE_AWB_PASS SOF, freeze, rounding, saturation
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\awb.sv:11: $finish called at 86 (1s)
+
+
+STABLE_GRID_PASS case0 cycles=30997
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:13: $finish called at 2614060 (1s)
+
+
+STABLE_GRID_PASS case1 cycles=173869
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:11: $finish called at 4042780 (1s)
+
+
+STABLE_GRID_PASS case2 cycles=69019
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:11: $finish called at 2994280 (1s)

@@ -55,8 +55,8 @@ module stable_osd(
 30:footer=37;
 31:footer=1+nb;
 32:footer=I_detection_valid && I_meta[383]?38:0;
-35:footer=119;
-36:footer=120;
+35:footer=122;
+36:footer=123;
 37:footer=29;
 38:footer=3;
 39:footer=0;
@@ -145,7 +145,7 @@ if(!I_tracking)case(col)
 3:footer=64;
 4:footer=65;
 endcase
-if(I_meta[567:566]==1)case(col)
+if(I_meta[567:565]==1)case(col)
 3:footer=112;
 4:footer=113;
 5:footer=75;
@@ -154,7 +154,17 @@ if(I_meta[567:566]==1)case(col)
 8:footer=35;
 9:footer=4;
 endcase
-if(I_meta[567:566]==2)case(col)
+if(I_meta[567:565]==2)case(col)
+3:footer=114;
+4:footer=115;
+5:footer=116;
+6:footer=75;
+7:footer=21;
+8:footer=15;
+9:footer=35;
+10:footer=4;
+endcase
+if(I_meta[567:565]==3)case(col)
 3:footer=11;
 4:footer=43;
 5:footer=75;
@@ -163,7 +173,7 @@ if(I_meta[567:566]==2)case(col)
 8:footer=35;
 9:footer=4;
 endcase
-if(I_meta[567:566]==3)case(col)
+if(I_meta[567:565]==4)case(col)
 3:footer=12;
 4:footer=43;
 5:footer=75;
@@ -173,23 +183,23 @@ if(I_meta[567:566]==3)case(col)
 9:footer=4;
 endcase
 
-if(I_meta[565] && I_meta[567:566]!=0)case(col)
-3:footer=114;
+if(I_meta[564] && I_meta[567:565]!=0)case(col)
+3:footer=117;
 4:footer=90;
-5:footer=115;
-6:footer=116;
+5:footer=118;
+6:footer=119;
 7:footer=68;
 endcase
-if(I_meta[563:560]!=0 && I_meta[567:566]!=0)case(col)
-3:footer=114;
+if(I_meta[563:560]!=0 && I_meta[567:565]!=0)case(col)
+3:footer=117;
 4:footer=90;
 5:footer=99;
-6:footer=117;
+6:footer=120;
 7:footer=103;
-8:footer=118;
+8:footer=121;
 endcase
-if(I_meta[563:560]!=0 && I_meta[567:566]!=0)begin if(col==15)footer=15;if(col==16)footer=1+I_meta[563:560];end
-if(I_meta[568] && I_meta[567:566]==0)case(col)
+if(I_meta[563:560]!=0 && I_meta[567:565]!=0)begin if(col==15)footer=15;if(col==16)footer=1+I_meta[563:560];end
+if(I_meta[568] && I_meta[567:565]==0)case(col)
 3:footer=109;
 4:footer=103;
 5:footer=85;
@@ -200,10 +210,10 @@ end
  if(row && col>=19 && col<=33 && !(I_mode==1 && I_show))footer=0;
  if(row && col>=3 && col<19)begin
 if(I_tracking && !I_detection_valid)begin footer=0;case(col)
-3:footer=121;
+3:footer=124;
 4:footer=64;
-5:footer=122;
-6:footer=123;
+5:footer=125;
+6:footer=126;
 endcase end
 if(I_state==5)begin footer=0;case(col)
 3:footer=75;
@@ -262,7 +272,7 @@ end
        lx=mapx(I_meta[89:79]);ly=mapy(I_meta[99:90]);ldx=xx-lx;ldy=yy-ly;
        if((ldx>=-6 && ldx<=6 && ldy>=-1 && ldy<=1)||(ldy>=-6 && ldy<=6 && ldx>=-1 && ldx<=1))begin back_on=1;back=24'h40ff90;end
      end
-     if(I_meta[567:566]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
+     if(I_meta[567:565]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
      if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,mapx(320),mapx(959),mapy(180),mapy(539)))begin back_on=1;back=24'h40c080;end
      if(I_show && I_mode==1 && border(xx,yy,mapx(636),mapx(643)+(14'sd1<<<I_zoom)-1,mapy(356),mapy(363)+(14'sd1<<<I_zoom)-1))begin
        back_on=1;back=24'h80FF80;
