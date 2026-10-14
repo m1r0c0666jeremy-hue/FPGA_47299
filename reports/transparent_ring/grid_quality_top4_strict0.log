@@ -1,0 +1,3 @@
+
+RING_GRID_EDGES_PASS quality_top4 strict=0 kept=4 cycles=30501
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_quality_top4_strict0.sv:10: $finish called at 305060 (1s)

@@ -35,7 +35,7 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  stable_model_lane c1(I_ddr_clk,d_rst,pair_rgb[23:0],models,hit[3:2]);
  reg [3:0] vp;reg [10:0] xp[0:3];reg [9:0] yp[0:3];reg [3:0] half_mask;
  reg filter_valid;reg [10:0] filter_x;reg [9:0] filter_y;reg [7:0] filter_mask;
- wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [3:0] fa,fb;
+ wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [7:0] fa,fb;
  stable_filter4 filter(I_ddr_clk,d_rst,filter_valid,filter_x,filter_y,2'd0,filter_mask,fv,ft,fx,fy,fa,fb);
  wire [1:0] mask_slot=fy%3;wire [9:0] mask_addr=(mask_slot<<8)+(mask_slot<<6)+fx[10:2];
  wire mask_finish=fv && fx==1276;wire notify_ready,notify;wire [77:0] notice;

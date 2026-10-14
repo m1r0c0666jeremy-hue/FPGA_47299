@@ -1,0 +1,3 @@
+
+RING_GRID_EDGES_PASS shared_fringe strict=0 kept=2 cycles=30129
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_shared_fringe_strict0.sv:10: $finish called at 301340 (1s)

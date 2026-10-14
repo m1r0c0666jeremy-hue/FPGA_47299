@@ -1,0 +1,15 @@
+
+STABLE_TRACKER_ADVERSARIAL_PASS four quadrants, signed odd rounding, central multi-pair, area/direction identity, recovery/expiry, version, projection and outside
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\tracker.sv:45: $finish called at 52700 (1s)
+
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\banks.sv:4: warning: Port 7 (ha) of module stable_grid expects 8 bit(s), given 4.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\banks.sv:4:        : Padding 4 high bits of the port.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\banks.sv:4: warning: Port 8 (hb) of module stable_grid expects 8 bit(s), given 4.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\banks.sv:4:        : Padding 4 high bits of the port.
+
+STABLE_GRID_BANKS_PASS simultaneous capture/worker, four candidates, 16x16 minimum, 3px band, 32px same-colour gap, exact moments and top-left edge_ok
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\banks.sv:25: $finish called at 4913110 (1s)
+
+
+STABLE_CAPTURE_MODELS_PASS continuous frames, pre-WB parameter update two clocks before post-WB SOF, frozen tail, model/revision provenance
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_adversarial\model_boundary.sv:17: $finish called at 6738060 (1s)

@@ -1,0 +1,3 @@
+
+RING_GRID_EDGES_PASS rejected_first_owner strict=0 kept=1 cycles=30033
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_rejected_first_owner_strict0.sv:10: $finish called at 300380 (1s)

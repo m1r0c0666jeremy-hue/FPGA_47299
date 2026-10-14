@@ -1,0 +1,5 @@
+{
+  "cases": 512,
+  "retained": 432,
+  "oracle": "source rectangles and independent graph traversal"
+}

@@ -1,0 +1,3 @@
+
+RING_GRID_EDGES_PASS thin_shapes strict=0 kept=2 cycles=30185
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_thin_shapes_strict0.sv:10: $finish called at 301900 (1s)

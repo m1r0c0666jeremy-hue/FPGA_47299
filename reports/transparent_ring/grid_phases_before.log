@@ -1,0 +1,3 @@
+
+RING_GRID_PHASES_PASS baseline=1 retained=432/512 maxcycles=30867
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_phases_before.sv:698: $finish called at 19603390 (1s)

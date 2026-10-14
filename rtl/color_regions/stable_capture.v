@@ -27,7 +27,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  wire [127:0] pixel_models=sof?I_models:(have?models[cb]:I_models);
  generate for(lane=0;lane<4;lane=lane+1)begin:classify
  stable_model_lane u_lane(clk,rst_n,I_rgb[95-lane*24-:24],pixel_models,mask[lane*2+:2]);end endgenerate
- wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [3:0] fa,fb;
+ wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [7:0] fa,fb;
  stable_filter4 filter(clk,rst_n,vp[3],xp[3],yp[3],tags[3],mask,fv,ft,fx,fy,fa,fb);
  reg gs,ts,wb;wire gb,gd,gfailed;wire [1023:0] candidates;wire [17:0] work_cycles;
  wire hist_valid;wire [83:0] hist_boxes;

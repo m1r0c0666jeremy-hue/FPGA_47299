@@ -1,0 +1,3 @@
+
+RING_FILTER_PASS two continuous full frames, original and strong masks, thin ring, one-pixel line, all edges, isolated noise
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\strong_filter.sv:16: $finish called at 4611440 (1s)
