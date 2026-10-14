@@ -85,7 +85,7 @@ if a.stage in ('all','controls'):
     run('controls','''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0;reg [2:0] keys=7;reg [1:0] sw=0;reg ack=0;reg [7:0] status=0;
 wire req,up,tracking,show,pair,conflict,enter,sample,cancel;wire [1:0] zoom;wire [7:0] session;
-stable_controls #(.CYCLES_PER_MS(2),.DEBOUNCE_MS(2),.LONG_PRESS_MS(20)) dut(clk,rst,keys,sw,ack,status,req,up,zoom,tracking,show,session,conflict,pair,enter,sample,cancel);
+stable_controls #(.CYCLES_PER_MS(2),.DEBOUNCE_MS(2),.LONG_PRESS_MS(20)) dut(clk,rst,keys,sw,ack,status,req,up,zoom,tracking,show,session,conflict,pair,enter,sample,cancel,,);
 task hold;input [2:0] k;input integer ticks;begin @(negedge clk);keys=k;repeat(ticks*2+10)@(negedge clk);keys=7;repeat(16)@(negedge clk);end endtask
 initial begin repeat(3)@(negedge clk);rst=1;repeat(16)@(negedge clk);
 hold(2,25);if(!enter || req || zoom!=0 || tracking)$fatal(1,"calibration chord leaked single actions");
