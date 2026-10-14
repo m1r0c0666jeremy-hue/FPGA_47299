@@ -1,0 +1,3 @@
+
+STABLE_CALIBRATION_PASS red/blue and yellow/purple white/A/B eight full frames, 3px band, quantiles, neutral background, independent profiles, cancel, dark/overexposure/gain/sample/mixed rejects, gain invalidate, SOF versions, reset
+D:\aaa_FPGA\color-regions-env-issues\build\sim\stable_pipeline\calibration.sv:73: $finish called at 227961940 (1s)

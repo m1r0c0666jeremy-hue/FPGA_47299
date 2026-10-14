@@ -1,0 +1,3 @@
+
+STABLE_PACKER_PASS 960 exact words with valid gaps
+D:\aaa_FPGA\color-regions-env-issues\build\sim\stable_pipeline\packer.sv:11: $finish called at 15910 (1s)

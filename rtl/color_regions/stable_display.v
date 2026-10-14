@@ -1,0 +1,49 @@
+// Image bank, v2 metadata, model and moving viewport commit together in blank.
+`default_nettype none
+module stable_display #(parameter STALE_DISPLAY_FRAMES=15)(
+ input wire I_clk,I_rst_n,I_vs,I_de,I_snapshot,input wire [674:0] I_data,
+ input wire I_tracking,I_show,I_conflict,I_live,input wire [7:0] I_session,
+ input wire [1:0] I_zoom,I_mode,input wire I_pair,
+ output reg O_commit,output reg [1:0] O_bank,output reg [31:0] O_frame_id,
+ output reg [10:0] O_cx,O_x0,output reg [9:0] O_cy,O_y0,
+ output reg [1:0] O_zoom,O_mode,output reg [639:0] O_meta,
+ output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state);
+ reg vs_last,in_blank,associated;reg [7:0] age,session;
+ wire match=I_data[674] && I_data[255] && I_data[415:413]==2 && I_data[31:0]==I_data[671:640] &&
+ I_data[242:235]==I_session && I_data[243]==I_pair && I_data[244]==I_tracking;
+ assign O_detection_valid=associated && I_tracking && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247];
+ assign O_sample_valid=associated && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247] && O_meta[408];
+ assign O_state=I_conflict?5:!I_live?6:age>=STALE_DISPLAY_FRAMES?7:!I_tracking?0:!O_detection_valid?1:O_meta[32]?2:O_meta[36:33]==8?4:1;
+ reg signed [12:0] dx,dy;reg [10:0] cx,hx;reg [9:0] cy,hy;
+ always @*begin
+ dx=$signed({2'd0,I_data[89:79]})-$signed({2'd0,O_cx});dy=$signed({3'd0,I_data[99:90]})-$signed({3'd0,O_cy});
+ cx=O_cx;cy=O_cy;
+ if(dx>4)cx=O_cx+(dx>24?24:dx);if(dx< -4)cx=O_cx+(dx< -24?-24:dx);
+ if(dy>4)cy=O_cy+(dy>24?24:dy);if(dy< -4)cy=O_cy+(dy< -24?-24:dy);
+ if(!match || !I_data[32] || I_data[671:640]==O_frame_id)begin cx=O_cx;cy=O_cy;end
+ hx=640>>I_zoom;hy=312>>I_zoom;
+ if(cx<hx)cx=hx;if(cx>1280-hx)cx=1280-hx;
+ if(cy<hy)cy=hy;if(cy>720-hy)cy=720-hy;
+ end
+ always @(posedge I_clk or negedge I_rst_n)begin
+ if(!I_rst_n)begin vs_last<=0;in_blank<=0;associated<=0;age<=0;session<=0;O_commit<=0;O_bank<=0;O_frame_id<=0;
+ O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;end
+ else begin
+ vs_last<=I_vs;O_commit<=0;
+ if(I_vs && !vs_last)begin
+ in_blank<=1;O_show<=I_show;if(age<255)age<=age+1'b1;
+ if(I_tracking && session!=I_session)begin O_cx<=640;O_cy<=360;end
+ end
+ if(I_de)in_blank<=0;
+ if(session!=I_session || O_pair!=I_pair || O_meta[244]!=I_tracking)associated<=0;
+ if(I_snapshot && in_blank && !I_de)begin
+ in_blank<=0;O_commit<=1;O_bank<=I_data[673:672];O_frame_id<=I_data[671:640];
+ O_zoom<=I_zoom;O_mode<=I_mode;O_pair<=I_pair;O_show<=I_show;session<=I_session;associated<=match;
+ O_meta<=match?I_data[639:0]:640'd0;if(I_data[671:640]!=O_frame_id)age<=0;
+ O_cx<=cx;O_cy<=cy;O_x0<=cx-hx;O_y0<=cy-hy;
+ if(match && I_data[567:566]!=0)begin
+ O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;
+ end
+ end end end
+endmodule
+`default_nettype wire

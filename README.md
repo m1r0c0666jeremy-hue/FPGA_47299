@@ -1,6 +1,18 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前正式工程：双色工具识别、尖端定位与自动跟随（2026-10-14）
+
+本地仓库 `D:/aaa_FPGA/color-regions-env-issues`，分支 `docs/color-regions-env-issues`，基线 `0735398`。沿用 `td_project/target_color_regions.al`：固定白平衡与两组材料校准、八邻域去孤立、80×45 双银行网格、每色四候选、中央选取一件工具、K=0.5 尖端和平滑放大跟随。四页面、配色与倍率操作保留。
+
+[正式 bit](build/target_color_regions_stable_20261014_040811/target_color_regions.bit)、[同源源码包](build/target_color_regions_stable_20261014_040811/color_regions_stable_source.zip)。
+
+[上板与校准](docs/双色工具正式功能版上板.md)、[软件／构建／实物验证报告](reports/双色工具正式功能版验证报告.md)、[正式 bit 与同源 ZIP 清单](reports/stable_regions_delivery.json)。新版实物验收待执行，记录表为 `reports/stable_regions_hardware_trials.csv` 和 `reports/stable_regions_hardware_metrics.csv`。下载文件以新交付清单为准；下方旧版本路径和数据保留为历史记录。
+
+生成正式资产：`python scripts/generate_target.py --color-regions`；只读核对加 `--check`。完整编译：`python scripts/run_stable_regions_build.py --stage full`，每次创建新版本目录。只读审计：`python scripts/audit_color_regions.py --attempt build/最终构建目录 --check-build`。旧版本生成器和无参数入口不用于本次正式工程。
+
+---
+
 ## 当前功能工程：独立颜色区域框选（2026-10-13）
 
 唯一推荐的新功能入口为 `td_project/target_color_regions.al`，下载 [target_color_regions.bit](build/target_color_regions/target_color_regions.bit)。采用四像素并行的相对色差/简化色相分类、全图粗网格寻找、局部连通区域分离和三帧确认，每色最多两个独立框；四页为原图、色彩高亮、灰度、色彩二值。移除顶部大诊断面板与旧尖端/自动跟随链路，底栏及原按键、手动倍率保留。

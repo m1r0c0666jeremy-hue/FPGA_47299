@@ -5,6 +5,9 @@ from color_regions_reference import DEFAULTS
 R=Path(__file__).resolve().parents[1]
 def generate(check=False):
     c=json.loads((R/'rtl/03_tool_detection/target_config.json').read_text(encoding='utf-8'))
+    if c.get('stable_release',0):
+        from generate_stable_regions import generate as production_generate
+        return production_generate(check)
     cfg={k:c['regions_'+k] for k in DEFAULTS}
     assert all(type(v) is int for v in cfg.values())
     assert (cfg['sat_num'],cfg['sat_den'])==(3,16),'Current shift datapath implements 3/16'

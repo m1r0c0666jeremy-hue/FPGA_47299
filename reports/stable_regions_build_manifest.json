@@ -1,0 +1,53 @@
+{
+  "head": "0735398c4204179bf1fe7b14d225db1635c8bd63",
+  "branch": "docs/color-regions-env-issues",
+  "attempt": "build/stable_regions_full_20261014_032739",
+  "input_count": 202,
+  "ingress_sha256": "6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b",
+  "protected": {
+    "build/baseline/baseline.bit": "07181fbd16a6c510c7ccbb33383fd139d96f48afc7ea9c51af948bbd3034eaf2",
+    "build/criticalwork/criticalwork.bit": "5905f0042fa1e562aafbba9a22d8029e54aee6b67b21811b45ee65ce0b5dd4dd",
+    "build/debug1/debug1.bit": "b1e2ad162d3ec56dfc7cbd575f7daf9b1a21e33e0e5a5930fd0ce5576b9411f2",
+    "build/imagepreprocess_10_3/imagepreprocess_10_3.bit": "eddd9d7d28eb431de92d1d0f061962645b7734b027469290ae06166c9183ddf9",
+    "build/scaling_test/scaling_test.bit": "a598cff3ea804c0fbc9e54d1693e03cfc32fa4b9aef2d7133f234879dc6edf8c",
+    "build/target_color_regions/color_regions_source_snapshot.zip": "62bbfead927fc96883abc18eef82f17f5c08917ce3ef7eb2ecec3334246bc902",
+    "build/target_color_regions/target_color_regions.bit": "87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f",
+    "build/target_lock/target_lock.bit": "e9a28707a3b68d02ff711512c0079b8918d67ffe509a299ca0f093c08315425a",
+    "build/target_lock_candidates/target_lock_candidates.bit": "cb3e71c356a288772f23397e3e280c6e2d6c9789f112306ab9fcede3095517c2",
+    "build/target_lock_candidates_ingress/candidate_ingress_source_snapshot.zip": "628529673d888df6813f5e6128343bfaa32aed70e3adc81b8e5a12bccbeb11ad",
+    "build/target_lock_candidates_ingress/target_lock_candidates_ingress.bit": "92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d",
+    "build/target_lock_dualcolor/target_lock_dualcolor.bit": "40ca82c86b289eb3392623bfaa0e5270bc067c2130b78ae5e4c0b70f301d01e5"
+  },
+  "hardware": "PENDING",
+  "status": "PRODUCTION_SOFTWARE_AND_BUILD_PASSED_HARDWARE_PENDING",
+  "bit_sha256": "5cf695092e8b1a5d6dbf601f751cdbd33e0f74ae9bd349054fff9e16eac5fbde",
+  "timing_ns": {
+    "SWNS": 0.116,
+    "HWNS": 0.02
+  },
+  "resources": {
+    "Slice": 19010,
+    "LUT6": 18318,
+    "Register": 16579,
+    "ERAM20K": 79,
+    "DSP": 40
+  },
+  "sta_coverage_percent": 97.95,
+  "ignored_max_delay_constraints": 18,
+  "evidence": {
+    "stable_units.log": "af3a818934de0c212441cce0aba129cb4b3523c4b3133d10e56ab749f5c333e0",
+    "stable_filter.log": "7c93cec99b25cacd141f2b4afae8b0b18b07e63519b44d62a7679d0b3e87081d",
+    "stable_calibration.log": "7cfa8e545b651bab59fefd55db1e5632e2198048c9b7ce26294162c330544561",
+    "stable_capture.log": "8234b2fe4ff328147b39410f18618daabc6872125a6ee566c08bf9458af50812",
+    "stable_controls.log": "bbaba419aba71517af52ed68ef48fe19a444b2b4d1b233af17fd34690df8fb40",
+    "stable_packer.log": "841edd17e13f1f1138f651c22b6e4b99dd8e7cd2e1c1e0c0b505738bd6c7ba0a",
+    "stable_ingress.log": "3943a0fb35800fee325a0f988dd2b1edb2587ead044b2069b7a4f938576f57f5",
+    "stable_video.log": "30b5067d452805cbb813a0498cd3f1733d28a2c0cfe7343fb91fa4cf6cf2b3a3",
+    "stable_transport.log": "a522f3f3b7612df17317c406728a6d16e2a16552422c9288fd20eb90324bab1c",
+    "stable_live.log": "277899e0306a995eed333005d4e5a94d707eba74cece4386a12963305a53ea0b",
+    "stable_isp.log": "bcb63c5b6f713745079b8a01d32e6651922acb78cd6b54e4ca722f973d7da5f7",
+    "stable_faults.log": "12cdfb7fed5ea9463f2c64cf038a097262de89e3b2f441b61b9f460e5e717d6d",
+    "stable_adversarial.log": "ec36151922f304e47cae70fa9be60e2628d90ddda3be96f59464ddc1ff5b1236"
+  },
+  "production_directory": "build/target_color_regions_stable_20261014_040811"
+}

@@ -1,4 +1,12 @@
-# 当前实施状态（2026-10-13）
+# 当前实施状态（2026-10-14）
+
+当前仓库为 `D:/aaa_FPGA/color-regions-env-issues`，分支 `docs/color-regions-env-issues`，基线 `0735398`。Jeremy 已批准实施正式双色工具、尖端与跟随方案；沿用 `td_project/target_color_regions.al`，编译白名单切至 `stable_*` 和串行 `regions_divide`。具体交付文件、同源哈希与最终状态以 `reports/stable_regions_delivery.json` 为准。
+
+操作见 [双色工具正式功能版上板](双色工具正式功能版上板.md)，软件/构建/实物结果分别见 [验证报告](../reports/双色工具正式功能版验证报告.md)。实物记录为两份 `stable_regions_hardware_*.csv`，尚无新版实测数据。原 `criticalwork` 工作区及其未提交 `.al` 修改保留。
+
+以下为历史颜色区域版记录，其 bit 路径、旧协议及“不输出尖端/不自动跟随”描述不适用于当前正式工程。
+
+# 历史实施状态（2026-10-13）
 
 **最终状态：功能bit已经完成综合布局布线，软件与同源审计通过，实物待验。** 唯一下载文件为 `build/target_color_regions/target_color_regions.bit`，SHA256 `87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f`。最终Slice19873/21216、LUT6 18429/21216、寄存器21416、ERAM85/108、DSP9/40；SWNS+0.128ns/HWNS+0.020ns，覆盖97.87%。200项冻结输入和10份历史bit核对通过。交付包、报告和测试路径以 `reports/color_regions_delivery.json` 为准。
 
