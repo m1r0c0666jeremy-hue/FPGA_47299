@@ -5,7 +5,7 @@ Maintainer: Fle & Jeremy
 
 `feature/transparent-ring-stability`，基线43564ee；在独立工作区实施四步材料/背景校准、候选质量、v3同帧诊断、官方图标、组合键和默认180°显示，保留双色工具/尖端/跟随。软件与TD通过，实物待验。
 
-[新独立上板测试bit](build/target_color_regions_ring_stability_20261015_025936/target_color_regions.bit)、[同源源码包](build/target_color_regions_ring_stability_20261015_025936/transparent_ring_stability_source.zip)、[操作与最小复测](docs/透明色环稳定性优化_上板与复测.md)、[实际验证报告](reports/transparent_ring/最终验证报告.md)。历史bit和下方历史说明保留，不能用旧bit执行四步流程。
+[新独立上板测试bit](build/target_color_regions_ring_stability_20261015_033550/target_color_regions.bit)、[同源源码包](build/target_color_regions_ring_stability_20261015_033550/transparent_ring_stability_source.zip)、[操作与最小复测](docs/透明色环稳定性优化_上板与复测.md)、[实际验证报告](reports/transparent_ring/最终验证报告.md)。历史bit和下方历史说明保留，不能用旧bit执行四步流程。
 
 本版实际Slice18981/21216、ERAM100/108、DSP40/40，建立+0.110ns/保持+0.020ns。新输出独立且输入冻结，未放宽约束。完整构建用 `scripts/run_stable_regions_build.py --stage full --prefix ring_stability`；只读审计用 `scripts/audit_color_regions.py --attempt build/ring_stability_full_20261015_014510 --check-build`。不要直接重跑冻结目录run.tcl覆盖历史输出。
 
