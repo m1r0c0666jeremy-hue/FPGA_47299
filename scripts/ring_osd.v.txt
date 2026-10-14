@@ -56,7 +56,9 @@ module stable_osd(
  else bit_index<=bit_index+1'b1;end
  3:format_state<=4;
  4:format_state<=5;
- 5:begin characters[(format_row?COLS:0)+format_col]<=decoded_glyph;
+ 5:format_state<=6;
+ 6:format_state<=7;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end

@@ -11,21 +11,21 @@ D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:2:       
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:2: warning: Port 8 (hb) of module stable_grid expects 8 bit(s), given 4.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:2:        : Padding 4 high bits of the port.
 
-STABLE_GRID_PASS case0 cycles=31085
-D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:13: $finish called at 2614940 (1s)
+STABLE_GRID_PASS case0 cycles=31135
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid0.sv:13: $finish called at 2615440 (1s)
 
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:2: warning: Port 7 (ha) of module stable_grid expects 8 bit(s), given 4.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:2:        : Padding 4 high bits of the port.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:2: warning: Port 8 (hb) of module stable_grid expects 8 bit(s), given 4.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:2:        : Padding 4 high bits of the port.
 
-STABLE_GRID_PASS case1 cycles=173893
-D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:11: $finish called at 4043020 (1s)
+STABLE_GRID_PASS case1 cycles=181093
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid1.sv:11: $finish called at 4115020 (1s)
 
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:2: warning: Port 7 (ha) of module stable_grid expects 8 bit(s), given 4.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:2:        : Padding 4 high bits of the port.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:2: warning: Port 8 (hb) of module stable_grid expects 8 bit(s), given 4.
 D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:2:        : Padding 4 high bits of the port.
 
-STABLE_GRID_PASS case2 cycles=69299
-D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:11: $finish called at 2997080 (1s)
+STABLE_GRID_PASS case2 cycles=71139
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_units\grid2.sv:11: $finish called at 3015480 (1s)

@@ -1,5 +1,6 @@
 module stable_footer_text_rom(input wire clk,input wire [8:0] addr,output reg [7:0] q);
-(* ram_style="block" *) reg [7:0] mem[0:511];
+(* syn_preserve=1 *) reg [8:0] registered_addr;
+(* rom_style="bram" *) reg [7:0] mem[0:511];
 initial begin
 mem[0]=8'h80;
 mem[1]=8'h81;
@@ -514,5 +515,5 @@ mem[509]=8'h0;
 mem[510]=8'h0;
 mem[511]=8'h0;
 end
-always @(posedge clk)q<=mem[addr];
+always @(posedge clk)begin registered_addr<=addr;q<=mem[registered_addr];end
 endmodule

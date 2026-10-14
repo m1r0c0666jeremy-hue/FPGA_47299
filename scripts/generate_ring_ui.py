@@ -107,7 +107,7 @@ endcase end
     out={'rtl/color_regions/stable_osd.v':s}
     def data_rom(name,width,rows):
         depth=len(rows);addr=(depth-1).bit_length()
-        return f'module {name}(input wire clk,input wire [{addr-1}:0] addr,output reg [{width-1}:0] q);\n(* ram_style="block" *) reg [{width-1}:0] mem[0:{depth-1}];\ninitial begin\n'+''.join(f"mem[{i}]={width}'h{v:x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)q<=mem[addr];\nendmodule\n'
+        return f'module {name}(input wire clk,input wire [{addr-1}:0] addr,output reg [{width-1}:0] q);\n(* syn_preserve=1 *) reg [{addr-1}:0] registered_addr;\n(* rom_style="bram" *) reg [{width-1}:0] mem[0:{depth-1}];\ninitial begin\n'+''.join(f"mem[{i}]={width}'h{v:x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)begin registered_addr<=addr;q<=mem[registered_addr];end\nendmodule\n'
     out['rtl/color_regions/stable_footer_program_rom.v']=data_rom('stable_footer_program_rom',16,program)
     out['rtl/color_regions/stable_footer_text_rom.v']=data_rom('stable_footer_text_rom',8,dynamic_text)
     fontfile=Path('C:/Windows/Fonts/simhei.ttf')

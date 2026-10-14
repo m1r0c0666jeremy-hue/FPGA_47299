@@ -7,7 +7,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  input wire [127:0] I_models,input wire [15:0] I_revision,
  input wire [23:0] I_gains,input wire [7:0] I_cal_status,input wire I_cal_active,I_needs_cal,
  input wire I_result_ready,output reg [31:0] O_frame_id,
- output reg O_valid,output reg [639:0] O_meta,output reg [31:0] O_dropped);
+ output reg O_valid,output wire [639:0] O_meta,output reg [31:0] O_dropped);
  wire clk=I_clk,rst_n=I_rst_n;reg last_sof,have,cb,accepted;
  wire sof=I_sof && !last_sof;wire nb=have?!cb:1'b0;
  reg [1:0] owned,pending,complete,closed;reg [3:0] invalid_drain[0:1];
@@ -43,6 +43,11 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  stable_tracker tracker(clk,rst_n,ts,ids[wb],{cmds[wb][9:1],detect_allowed},revs[wb],work_complete,
  candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state);
  reg [2:0] state;reg [639:0] packet,waiting_packet;reg waiting_result;
+ // The mailbox samples only on O_valid. This independent pending bank is
+ // already immutable until its next complete result copy; a second 640-bit
+ // output register adds no protection. Do not issue a pulse on a copy cycle:
+ // the following source edge must sample the packet identified by that pulse.
+ assign O_meta=waiting_packet;
  function [3:0] failure_stage;input c;reg [19:0] raw,filtered;reg [2:0] n,gr;begin
  raw=c?raw_b[wb]:raw_a[wb];filtered=c?filtered_b[wb]:filtered_a[wb];
  n=c?candidates[635:633]:candidates[123:121];gr=c?candidates[639:637]:candidates[127:125];
@@ -74,7 +79,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  if(!rst_n)begin
  last_sof<=0;have<=0;cb<=0;accepted<=0;owned<=0;pending<=0;complete<=0;closed<=0;pixels<=0;fault<=0;x<=0;y<=0;
  sr<=0;sg<=0;sb<=0;sn<=0;needs<=0;sample_ok<=0;vp<=0;gs<=0;ts<=0;wb<=0;state<=0;
- waiting_packet<=0;waiting_result<=0;O_frame_id<=0;O_valid<=0;O_meta<=0;O_dropped<=0;
+ waiting_packet<=0;waiting_result<=0;O_frame_id<=0;O_valid<=0;O_dropped<=0;
  for(i=0;i<2;i=i+1)begin ids[i]<=0;cmds[i]<=0;models[i]<=0;revs[i]<=0;gains[i]<=0;mean[i]<=0;status[i]<=0;invalid_drain[i]<=0;
  raw_a[i]<=0;raw_b[i]<=0;filtered_a[i]<=0;filtered_b[i]<=0;end
  for(i=0;i<4;i=i+1)begin xp[i]<=0;yp[i]<=0;tags[i]<=0;end end
@@ -110,7 +115,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  if(pixels==921596 && accepted)begin complete[cb]<=!fault && !I_fault;mean[cb]<={sr[13:6],sg[13:6],sb[13:6]};sample_ok[cb]<=sn==64;end
  end else begin fault<=1;if(accepted)complete[cb]<=0;end end end
  if(fv && ft[1] && fx==1276 && fy==719)pending[ft[0]]<=1;
- if(waiting_result && I_result_ready)begin O_meta<=waiting_packet;O_valid<=1;waiting_result<=0;end
+ if(waiting_result && I_result_ready && state!=5)begin O_valid<=1;waiting_result<=0;end
  case(state)
  0:if(pending!=0)begin wb<=pending[0]?0:1;pending[pending[0]?0:1]<=0;state<=1;end
  1:if(complete[wb])begin gs<=1;state<=2;end else state<=3;
@@ -118,7 +123,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  3:if(closed[wb])begin ts<=1;state<=4;end
  4:if(td)state<=5;
  5:begin
- if(waiting_result && !I_result_ready)O_dropped<=O_dropped+1'b1;
+ if(waiting_result)O_dropped<=O_dropped+1'b1;
  waiting_packet<=packet;waiting_result<=1;owned[wb]<=0;state<=0;
  end
  endcase end end

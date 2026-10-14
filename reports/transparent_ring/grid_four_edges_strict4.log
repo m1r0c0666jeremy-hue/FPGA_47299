@@ -1,3 +1,3 @@
 
-RING_GRID_EDGES_PASS four_edges strict=4 kept=4 cycles=30359
-D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_four_edges_strict4.sv:10: $finish called at 303640 (1s)
+RING_GRID_EDGES_PASS four_edges strict=4 kept=4 cycles=30363
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_four_edges_strict4.sv:10: $finish called at 303680 (1s)

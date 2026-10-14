@@ -5,9 +5,9 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  input wire valid,bank,input wire [10:0] x,input wire [9:0] y,
  input wire [7:0] ha,hb,input wire start,work_bank,
  input wire tracking,input wire [83:0] previous_boxes,input wire previous_valid,
- output reg busy,done,failed,output reg [1023:0] candidates,
+ output reg busy,done,failed,output wire [1023:0] candidates,
  output reg [17:0] cycles);
- (* ram_style="block" *) reg [79:0] stats0[0:4095],stats1[0:4095];
+ (* ram_style="bram" *) reg [79:0] stats0[0:4095],stats1[0:4095];
  reg [79:0] sq0,sq1;
  wire [11:0] tile_addr=(y[9:4]<<6)+(y[9:4]<<4)+x[10:4];
  wire [12:0] cap_addr={bank,tile_addr};reg [79:0] cache;
@@ -29,25 +29,32 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(!rst_n)begin cv<=0;cb<=0;ca<=0;last_ca<=8191;cache<=0;ah<=0;bh<=0;lx<=0;ly<=0;end
  else begin cv<=valid;cb<=bank;ca<=cap_addr;ah<=ha;bh<=hb;lx<=x[3:0];ly<=y[3:0];
  if(cv)begin cache<=next_stat;last_ca<=ca;end end end
- (* ram_style="block" *) reg [5:0] flags[0:4095];
- (* ram_style="block" *) reg [13:0] queue[0:4095];
- (* ram_style="block" *) reg [17:0] rows0[0:127],rows1[0:127];
+ // TD's documented directive is "bram", not the ignored "block" value.
+ (* ram_style="bram" *) reg [5:0] flags[0:4095];
+ (* ram_style="bram" *) reg [13:0] queue[0:4095];
+ // Two row histories in a single true dual-port RAM. Each physical port has
+ // one explicit address; a mux around two separately read arrays can cause
+ // four inferred read ports and distributed-RAM expansion in TD.
+ (* ram_style="bram" *) reg [17:0] rows[0:255];
  wire [79:0] wq=wb?sq1:sq0;reg [5:0] fq;reg [13:0] qq;reg [17:0] uq,mq;
  reg [12:0] wa;reg [11:0] fa;reg [12:0] qa;
  reg fw,qw,rw;reg [5:0] fd;reg [13:0] qd;reg [17:0] rd;
  reg [6:0] rowaddr;reg rowbank;
+ (* syn_preserve=1 *) reg [11:0] queue_read_addr;
+ always @(posedge clk)begin queue_read_addr<=qa[11:0];qq<=queue[queue_read_addr];end
+ wire [7:0] row_a={rowbank,rowaddr},row_b={!rowbank,rowaddr};
+ always @(posedge clk)begin uq<=rows[row_a];if(rw)rows[row_a]<=rd;end
+ always @(posedge clk)mq<=rows[row_b];
  always @(posedge clk)begin
  sq0<=stats0[valid && !bank?tile_addr:wa[11:0]];
  sq1<=stats1[valid && bank?tile_addr:wa[11:0]];
  if(cv)begin if(ca[12])stats1[ca[11:0]]<=next_stat;else stats0[ca[11:0]]<=next_stat;end
- fq<=flags[fa];qq<=queue[qa];
- uq<=rowbank?rows1[rowaddr]:rows0[rowaddr];mq<=rowbank?rows0[rowaddr]:rows1[rowaddr];
+ fq<=flags[fa];
  if(fw)flags[fa]<=fd;if(qw)queue[qa]<=qd;
- if(rw)begin if(rowbank)rows1[rowaddr]<=rd;else rows0[rowaddr]<=rd;end
  end
  localparam IDLE=0,PADDR=1,PWAIT=2,PREAD=3,PFEED=4,SCAN=5,SCGET=6,
  POP=7,WADDR=8,WWAIT=9,ADD=10,NSET=11,NGET=12,RETIRE=13,
- NEXTCOLOR=14,DSET=15,DWAIT=16,FINISH=17;
+ NEXTCOLOR=14,DSET=15,DWAIT=16,FINISH=17,POPWAIT=18;
  reg [4:0] state;reg color;reg [6:0] pc;reg [5:0] py;reg [11:0] scan;
  wire [6:0] scan_x=scan%80;wire [5:0] scan_y=scan/80;
  reg [12:0] head,tail;reg [6:0] tx;reg [5:0] ty;reg [3:0] direction;
@@ -62,6 +69,15 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  reg [19:0] count,strong_count;reg edge_only;reg [30:0] sx,sy;reg [6:0] xmin,xmax;reg [5:0] ymin,ymax;
  reg [2:0] qualified[0:1],reject_stage[0:1];reg [1:0] saw_core;
  reg [127:0] best[0:7];reg [61:0] moments[0:7];reg [127:0] item;
+ // The consumer starts only after done and copies before the next start.
+ // Publish the completed candidate bank directly; do not duplicate 1024 FFs.
+ reg published;wire [1023:0] published_best;genvar slot_index;
+ generate for(slot_index=0;slot_index<8;slot_index=slot_index+1)begin:publish_slot
+ if(slot_index==0)assign published_best[127:0]={(!saw_core[0]?3'd3:reject_stage[0]),qualified[0]>4,(qualified[0]>4?3'd4:qualified[0]),best[0][120:0]};
+ else if(slot_index==4)assign published_best[639:512]={(!saw_core[1]?3'd3:reject_stage[1]),qualified[1]>4,(qualified[1]>4?3'd4:qualified[1]),best[4][120:0]};
+ else assign published_best[slot_index*128+:128]=best[slot_index];
+ end endgenerate
+ assign candidates=published && !failed?published_best:1024'd0;
  reg [61:0] item_moment;reg [19:0] supports[0:7];reg [1:0] quality_tier;reg [27:0] score;reg nearby,central;
  reg [2:0] insert_index,divide_index;reg found_insert;reg [1:0] axis;
  wire [30:0] tcx=({24'd0,tx}<<4)*(color?wq[39:31]:wq[8:0])+(color?wq[50:40]:wq[19:9]);
@@ -86,7 +102,7 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(state==SCAN || state==SCGET)begin fa=scan;
  if(state==SCGET && fq[color+2] && !fq[color+4])begin
  fw=1;fd=fq|(6'b010000<<color);qa=0;qw=1;qd={1'b0,scan_y,scan_x};end end
- if(state==POP)qa=head;
+ if(state==POP || state==POPWAIT)qa=head;
  if(state==WADDR || state==WWAIT || state==ADD)wa={wb,12'd0}+ty*80+tx;
  if(state==NSET || state==NGET)begin
  fa=neighbor_ok?(ny*80+nx):0;
@@ -110,7 +126,7 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  integer i;
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin
- state<=IDLE;busy<=0;done<=0;failed<=0;candidates<=0;cycles<=0;wb<=0;color<=0;pc<=0;py<=0;scan<=0;
+ state<=IDLE;busy<=0;done<=0;failed<=0;published<=0;cycles<=0;wb<=0;color<=0;pc<=0;py<=0;scan<=0;
  head<=0;tail<=0;tx<=0;ty<=0;direction<=0;u0<=0;u1<=0;m0<=0;m1<=0;l0<=0;l1<=0;
  count<=0;sx<=0;sy<=0;xmin<=0;xmax<=0;ymin<=0;ymax<=0;divide_index<=0;axis<=0;ds<=0;numerator<=0;denominator<=0;
  for(i=0;i<8;i=i+1)begin best[i]<=0;moments[i]<=0;supports[i]<=0;end
@@ -118,10 +134,10 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  for(i=0;i<2;i=i+1)begin qualified[i]<=0;reject_stage[i]<=0;end end
  else begin
  done<=0;ds<=0;if(busy)cycles<=cycles+1'b1;
- if(busy && cycles>=212000)begin busy<=0;done<=1;failed<=1;candidates<=0;state<=IDLE;end
+ if(busy && cycles>=212000)begin busy<=0;done<=1;failed<=1;published<=0;state<=IDLE;end
  else case(state)
  IDLE:if(start)begin
- busy<=1;failed<=0;cycles<=0;wb<=work_bank;color<=0;pc<=0;py<=0;u0<=0;u1<=0;m0<=0;m1<=0;l0<=0;l1<=0;
+ busy<=1;failed<=0;published<=0;cycles<=0;wb<=work_bank;color<=0;pc<=0;py<=0;u0<=0;u1<=0;m0<=0;m1<=0;l0<=0;l1<=0;
  saw_core<=0;for(i=0;i<2;i=i+1)begin qualified[i]<=0;reject_stage[i]<=0;end
  for(i=0;i<8;i=i+1)best[i]<=0;state<=PADDR;end
  PADDR:state<=PWAIT;PWAIT:state<=PREAD;PREAD:state<=PFEED;
@@ -136,7 +152,8 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(fq[color+2] && !fq[color+4])begin
  head<=0;tail<=1;count<=0;strong_count<=0;sx<=0;sy<=0;xmin<=79;xmax<=0;ymin<=44;ymax<=0;state<=POP;end
  else if(scan==3599)state<=NEXTCOLOR;else begin scan<=scan+1'b1;state<=SCAN;end end
- POP:state<=WADDR;
+ POP:state<=POPWAIT;
+ POPWAIT:state<=WADDR;
  WADDR:begin edge_only<=qq[13];tx<=qq[6:0];ty<=qq[12:7];head<=head+1'b1;state<=WWAIT;end
  WWAIT:state<=ADD;
  ADD:begin strong_count<=strong_count+(color?wq[79:71]:wq[70:62]);count<=count+(color?wq[39:31]:wq[8:0]);sx<=sx+tcx;sy<=sy+tcy;
@@ -167,11 +184,7 @@ module stable_grid #(parameter STRICT_SUPPORT=0)(input wire clk,rst_n,
  if(axis!=2)begin axis<=axis+1'b1;state<=DSET;end
  else if(divide_index==7)state<=FINISH;
  else begin divide_index<=divide_index+1'b1;axis<=0;state<=DSET;end end
- FINISH:begin for(i=0;i<8;i=i+1)candidates[i*128+:128]<=failed?128'd0:best[i];
- candidates[123:121]<=failed?0:(qualified[0]>4?4:qualified[0]);candidates[124]<=qualified[0]>4;
- candidates[127:125]<=failed?7:!saw_core[0]?3:reject_stage[0];
- candidates[635:633]<=failed?0:(qualified[1]>4?4:qualified[1]);candidates[636]<=qualified[1]>4;
- candidates[639:637]<=failed?7:!saw_core[1]?3:reject_stage[1];
+ FINISH:begin published<=!failed;
  busy<=0;done<=1;state<=IDLE;end
  endcase end end
 endmodule

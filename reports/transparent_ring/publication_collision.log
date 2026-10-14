@@ -1,0 +1,3 @@
+
+RING_PUBLICATION_PASS same-cycle ready/copy, previous-pulse mailbox sampling, latest independent cache and no duplicates
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\publication_collision.sv:15: $finish called at 1090 (1s)

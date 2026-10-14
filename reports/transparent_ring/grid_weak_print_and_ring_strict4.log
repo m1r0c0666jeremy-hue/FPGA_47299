@@ -1,3 +1,3 @@
 
-RING_GRID_EDGES_PASS weak_print_and_ring strict=4 kept=1 cycles=30049
-D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_weak_print_and_ring_strict4.sv:10: $finish called at 300540 (1s)
+RING_GRID_EDGES_PASS weak_print_and_ring strict=4 kept=1 cycles=30052
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\grid_weak_print_and_ring_strict4.sv:10: $finish called at 300570 (1s)
