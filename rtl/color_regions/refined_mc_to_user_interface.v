@@ -12,7 +12,7 @@ module refined_mc_to_user_interface (
  output wire [15:0] O_mc_app_wdf_mask,input wire I_mc_app_wdf_rdy,
  input wire [127:0] I_mc_app_rd_data,input wire I_mc_app_rd_data_end,I_mc_app_rd_data_valid,
  output wire O_write_commit,output wire [24:0] O_write_addr,
- output reg [9:0] O_outstanding_reads,output reg O_unexpected_return
+ output reg [9:0] O_outstanding_reads,output reg O_unexpected_return,output reg [31:0] O_accepted_reads
 );
  wire [154:0] head;wire empty,almost_full,full,head_valid;
  reg holding,read_command,address_done,data_done;
@@ -40,9 +40,10 @@ module refined_mc_to_user_interface (
   .dout(head),.empty_flag(empty),.aempty(),.rdusedw());
  always @(posedge I_clk or negedge I_rst_n)begin
   if(!I_rst_n)begin holding<=0;read_command<=0;address_done<=0;data_done<=0;address<=0;payload<=0;
-   O_outstanding_reads<=0;O_unexpected_return<=0;end
+   O_outstanding_reads<=0;O_unexpected_return<=0;O_accepted_reads<=0;end
   else begin
    O_unexpected_return<=I_mc_app_rd_data_valid && O_outstanding_reads==0 && !(address_fire && read_command);
+   if(address_fire && read_command)O_accepted_reads<=O_accepted_reads+1'b1;
    case({address_fire && read_command,I_mc_app_rd_data_valid})
     2'b10:O_outstanding_reads<=O_outstanding_reads+1'b1;
     2'b01:if(O_outstanding_reads!=0)O_outstanding_reads<=O_outstanding_reads-1'b1;

@@ -8,7 +8,7 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  output reg O_gain_req,O_gain_up,output reg [1:0] O_zoom,
  output reg O_tracking,O_show,output reg [7:0] O_session,
  output wire O_conflict,output reg O_pair,
- output reg O_cal_enter,O_cal_sample,O_cal_cancel,output reg O_rotate,output reg [1:0] O_diag);
+ output reg O_cal_enter,O_cal_sample,O_cal_cancel,output reg O_rotate,output reg [1:0] O_diag,input wire I_pause);
  (* async_reg="true" *) reg [2:0] k1,k2;(* async_reg="true" *) reg [1:0] s1,s2;
  (* async_reg="true", syn_preserve=1 *) reg ack1,ack2;reg [2:0] kc,keys,previous,gesture,chord;
  reg [1:0] sc,sw;reg [7:0] kd,sd;reg [16:0] ms;
@@ -69,6 +69,9 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  else if(O_gain_req==ack2)begin O_gain_up<=sw[0];O_gain_req<=~O_gain_req;O_tracking<=0;O_session<=O_session+1'b1;end end
  if(chord==0 && pressed==4 && !consumed && !cal_ui && (held==CHORD_WINDOW_MS || (held>CHORD_WINDOW_MS && (held-CHORD_WINDOW_MS)%600==0)))begin
  did_action<=1;if(sw[0])begin if(O_zoom<2)O_zoom<=O_zoom+1'b1;end else if(O_zoom>0)O_zoom<=O_zoom-1'b1;end
- end end end
+ end
+ if(I_pause)begin O_tracking<=0;O_session<=O_session+1'b1;
+ if(cal_ui)O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end
+ end end
 endmodule
 `default_nettype wire

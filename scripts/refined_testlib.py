@@ -1,10 +1,15 @@
 """Isolated simulation outputs and immutable per-run source hashes."""
 from pathlib import Path
 import datetime, hashlib, json, os, subprocess
+import ast
 R=Path(__file__).resolve().parents[1]
 IV=R/'tools/iverilog/ucrt64/bin/iverilog.exe'
 ENV=os.environ.copy();ENV['PATH']=str(IV.parent)+os.pathsep+ENV.get('PATH','')
-def run(name,source,modules,top='tb',args=(),expected_failure=False,timeout=1800):
+def literal_fixture(path,name='src'):
+    for node in ast.parse(Path(path).read_text(encoding='utf-8')).body:
+        if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id==name for t in node.targets):return ast.literal_eval(node.value)
+    raise ValueError(f'No literal fixture {name} in {path}')
+def run(name,source,modules,top='tb',args=(),expected_failure=False,timeout=1800,compile_args=()):
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
     out=R/'build/sim/refined'/f'{name}_{stamp}';out.mkdir(parents=True,exist_ok=False)
     report=R/'reports/refined/regression';report.mkdir(parents=True,exist_ok=True)
@@ -12,7 +17,7 @@ def run(name,source,modules,top='tb',args=(),expected_failure=False,timeout=1800
     modules=list(map(Path,modules))
     hashes={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in modules}
     logs=[];code=0
-    for cmd in ([IV,'-g2012','-s',top,'-o',out/'test.vvp',tb,*modules],[IV.with_name('vvp.exe'),out/'test.vvp',*args]):
+    for cmd in ([IV,'-g2012',*compile_args,'-s',top,'-o',out/'test.vvp',tb,*modules],[IV.with_name('vvp.exe'),out/'test.vvp',*args]):
         p=subprocess.run(list(map(str,cmd)),cwd=R,env=ENV,capture_output=True,text=True,timeout=timeout)
         logs.append(p.stdout+p.stderr);code=p.returncode
         if code:break

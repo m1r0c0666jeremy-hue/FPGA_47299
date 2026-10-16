@@ -75,11 +75,19 @@ wire ui_rotate;wire [1:0] ui_diag;wire gain_req, gain_up, gain_ack;
 wire cal_enter,cal_sample,cal_cancel;wire [7:0] cal_status,ui_cal_status,capture_cal_status;
 wire [95:0] raw_rgb;wire raw_sof,raw_valid;wire [11:0] wb_r,wb_b;
 wire [127:0] color_models;wire [15:0] color_revision;wire [23:0] frame_gains;wire cal_active,needs_cal,frame_pair;
+wire camera_parameter_event,camera_ready;wire [3:0] camera_fault,camera_phase;wire [1:0] camera_retries;wire [6:0] camera_gain;
+(* async_reg="true" *) reg [1:0] camera_event_sync;
+(* async_reg="true" *) reg [1:0] camera_ready_sync;reg camera_event_previous;
+wire camera_pause=camera_event_sync[1]!=camera_event_previous;
+always @(posedge S_hdmi_pixel_clk or negedge process_rst_n)begin
+ if(!process_rst_n)begin camera_event_sync<=0;camera_event_previous<=0;camera_ready_sync<=0;end
+ else begin camera_event_sync<={camera_event_sync[0],camera_parameter_event};camera_event_previous<=camera_event_sync[1];camera_ready_sync<={camera_ready_sync[0],camera_ready};end
+end
 (* async_reg="true" *) reg [1:0] cal_reset_bridge;
 wire cal_rst_n=cal_reset_bridge[1];
 always @(posedge S_csi_rx_clk or negedge S_rst_n)if(!S_rst_n)cal_reset_bridge<=0;else cal_reset_bridge<={cal_reset_bridge[0],1'b1};
 wire event_ready,event_valid;wire [4:0] event_data;reg [4:0] event_sent,event_previous;
-wire [4:0] event_now={ui_pair,gain_req,cal_cancel,cal_sample,cal_enter};
+wire [4:0] event_now={ui_pair,camera_event_sync[1],cal_cancel,cal_sample,cal_enter};
 wire event_send=event_ready && event_now!=event_sent;
 always @(posedge S_hdmi_pixel_clk or negedge process_rst_n)if(!process_rst_n)event_sent<=0;else if(event_send)event_sent<=event_now;
 always @(posedge S_csi_rx_clk or negedge cal_rst_n)if(!cal_rst_n)event_previous<=0;else if(event_valid)event_previous<=event_data;
@@ -94,6 +102,7 @@ always @(posedge S_csi_rx_clk or negedge cal_rst_n)if(!cal_rst_n)status_sent<=0;
 target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n),.S_send(status_send),.S_data(cal_status),.S_ready(status_ready),
 .D_clk(S_hdmi_pixel_clk),.D_rst_n(process_rst_n),.D_valid(),.D_data(ui_cal_status));
 stable_controls #(.LONG_PRESS_MS(1000)) u_controls (
+    .I_pause(camera_pause),
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),
     .O_rotate(ui_rotate),.O_diag(ui_diag),.O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),
@@ -137,6 +146,8 @@ end
 
 assign O_screen_pwm = S_heart_cnt[25];   // 100 MHz / 2^26 ~= 0.75 s toggle
 stable_camera_capture u_camera (
+    .O_parameter_event(camera_parameter_event),.O_camera_ready(camera_ready),.O_camera_fault(camera_fault),
+    .O_camera_retries(camera_retries),.O_camera_phase(camera_phase),.O_camera_gain(camera_gain),
     .I_gain_r(wb_r),.I_gain_b(wb_b),.O_raw_rgb(raw_rgb),.O_raw_sof(raw_sof),.O_raw_valid(raw_valid),
     .I_control_clk(S_100m_clk), .I_camera_ref_clk(S_24m_clk),
     .I_rst_n(S_rst_n), .I_gain_req(gain_req), .I_gain_up(gain_up), .O_gain_ack(gain_ack),
@@ -157,7 +168,7 @@ status_sync u_status_sync (
 stable_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
-    .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
+    .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking && camera_ready_sync[1]),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
     .I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),
     .I_rotate(ui_rotate),.I_diag(ui_diag),.I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:5]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),
     .I_pixel_clk(S_hdmi_pixel_clk), .I_serial_clk(S_hdmi_serial_clk),

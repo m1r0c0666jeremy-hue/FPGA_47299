@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_camera_capture.v": "00d87312e8425e74b35e1484f0c40b2ec5485c1ec0c83eee3f2bb416d6c598ee",
+    "rtl\\color_regions\\refined_camera_config.v": "c7781bde56288a92176ceec29e722ab52182db8fe4c63b8d6c927e2212028a1a",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e"
+  },
+  "exit_code": 1,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\camera_frame_admission_20261016_192945_714800"
+}

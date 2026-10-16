@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_ddr_recovery.v": "6b6d37f84ef4868ae2a9661ceb2df4194d742653656dca75d40410b96223d4b9"
+  },
+  "exit_code": 1,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\recovery_budget_20261016_191713_716146"
+}

@@ -45,7 +45,15 @@ wire        S_ddr_user_rd_valid;
 wire        S_ddr_user_ready;
 wire[127:0] S_ddr_user_wr_data;
 wire        S_ddr_user_wr_en;
+wire S_init_calib_complete;wire [1:0] source_mask;
 wire committed_write;wire [24:0] committed_address;wire [9:0] outstanding_reads;wire unexpected_return;
+wire [31:0] accepted_reads;
+wire controller_reset_n,stream_async_n,stream_pixel_n,read_fault_toggle,recovery_failed;
+wire [15:0] stream_epoch,recovery_count;wire [1:0] recovery_retries;wire [3:0] recovery_reason;
+wire [127:0] ddr_diagnostics,pixel_diagnostics;
+refined_ddr_recovery #(.CYCLES_PER_MS(50000)) recover_ddr(.clk(I_sys_clk),.rst_n(I_rst_n),.init_ready(S_init_calib_complete),.fault_toggle(read_fault_toggle),
+ .controller_n(controller_reset_n),.pipeline_n(stream_async_n),.epoch(stream_epoch),.recoveries(recovery_count),.retries(recovery_retries),.reason(recovery_reason),.failed(recovery_failed));
+refined_reset_bridge pixel_stream_reset(I_pixel_clk,stream_async_n,stream_pixel_n);
 wire        S_hdmi_de;
 wire[3:0]   S_hdmi_debug_status;
 wire        S_hdmi_hsync;
@@ -60,7 +68,6 @@ wire        S_hdmi_serial_clk;
 wire        S_hdmi_user;
 wire        S_hdmi_vsync;
 wire        S_hdmi_window_rd_en;
-wire        S_init_calib_complete;
 wire[24:0]  S_mc_app_addr;
 wire[2:0]   S_mc_app_cmd;
 wire        S_mc_app_en;
@@ -99,8 +106,8 @@ assign S_video_out_vsync = ~S_hdmi_vsync;
 wire write_frame_begin,capture_overflow;
 wire [1:0] write_frame_bank;
 wire [31:0] write_frame_id,capture_frame_id;
-video_in u_video_in(
-        .I_rst_n              (  S_rst_n             ),
+refined_video_in u_video_in(
+        .I_rst_n              (  stream_async_n      ),
 
         .I_camera_clk         ( S_csi_rx_clk          ),
         .I_camera_frame_start ( S_ISP_O_tuser  ),
@@ -143,10 +150,10 @@ video_in u_video_in(
     wire active_pair,active_show,tip_valid,video_ok,frame_commit,selected_good;
     (* async_reg="true", syn_preserve=1 *) reg [1:0] capture_reset,ddr_reset;
     wire capture_rst_n=capture_reset[1],ddr_rst_n=ddr_reset[1];
-    always @(posedge I_capture_clk or negedge I_rst_n)
-        if(!I_rst_n) capture_reset<=0;else capture_reset<={capture_reset[0],1'b1};
-    always @(posedge S_ddr_clk or negedge I_rst_n)
-        if(!I_rst_n) ddr_reset<=0;else ddr_reset<={ddr_reset[0],1'b1};
+    always @(posedge I_capture_clk or negedge stream_async_n)
+        if(!stream_async_n) capture_reset<=0;else capture_reset<={capture_reset[0],1'b1};
+    always @(posedge S_ddr_clk or negedge stream_async_n)
+        if(!stream_async_n) ddr_reset<=0;else ddr_reset<={ddr_reset[0],1'b1};
     // Control-session bundle prevents results from a previous enable cycle
     // from reappearing after rapid stop/restart.
     wire command_ready,command_valid;
@@ -154,12 +161,12 @@ video_in u_video_in(
     reg [9:0] command_sent,command_active;
     wire [9:0] command_now={I_pair,I_session,I_tracking};
     wire command_send=command_now!=command_sent && command_ready;
-    always @(posedge I_pixel_clk or negedge I_process_rst_n)
-        if(!I_process_rst_n) command_sent<=0;else if(command_send) command_sent<=command_now;
+    always @(posedge I_pixel_clk or negedge stream_pixel_n)
+        if(!stream_pixel_n) command_sent<=0;else if(command_send) command_sent<=command_now;
     always @(posedge I_capture_clk or negedge capture_rst_n)
         if(!capture_rst_n) command_active<=0;else if(command_valid) command_active<=command_data;
     target_mailbox #(.WIDTH(10)) u_command(
-        .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
+        .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
         .D_clk(I_capture_clk),.D_rst_n(capture_rst_n),.D_valid(command_valid),.D_data(command_data));
     wire capture_result,ddr_result,result_ready;
     wire [639:0] capture_meta,ddr_meta;
@@ -179,7 +186,7 @@ video_in u_video_in(
         else begin vs_last<=S_hdmi_vsync;if(S_hdmi_vsync&&!vs_last) begin mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;rotate_at_vs<=I_rotate;diag_at_vs<=I_diag;end end
     wire snap_request_ready,snap_request;wire [9:0] snapshot_command;
     target_mailbox #(.WIDTH(10)) u_snapshot_request(
-        .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
+        .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(snap_request),.D_data(snapshot_command));
     wire snapshot_ready,store_snapshot,pixel_snapshot;
     wire [674:0] store_data,pixel_data;
@@ -189,16 +196,18 @@ video_in u_video_in(
         .I_snapshot(snap_request && snapshot_ready),.I_command(snapshot_command),.O_snapshot(store_snapshot),.O_data(store_data),.O_selected_good(selected_good));
     target_mailbox #(.WIDTH(675)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
-        .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
+        .D_clk(I_pixel_clk),.D_rst_n(stream_pixel_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
     stable_display u_viewport(
         .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
-        .I_clk(I_pixel_clk),.I_rst_n(I_process_rst_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
+        .I_clk(I_pixel_clk),.I_rst_n(stream_pixel_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
         .I_pair(I_pair),.O_pair(active_pair),.I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
         .I_live(video_ok),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
         .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status));
     stable_line_reader u_scaler (
+        .I_stream_n(stream_async_n),.O_fault_toggle(read_fault_toggle),.O_ddr_diag(ddr_diagnostics),.O_pixel_diag(pixel_diagnostics),
+        .I_accepted_reads(accepted_reads),.I_unexpected_return(unexpected_return),
         .I_rotate(active_rotate),
         .I_frame_commit(frame_commit),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
@@ -215,8 +224,9 @@ video_in u_video_in(
     refined_mc_to_user_interface u_mc_to_user_interface(
         .O_write_commit(committed_write),.O_write_addr(committed_address),
         .O_outstanding_reads(outstanding_reads),.O_unexpected_return(unexpected_return),
+        .O_accepted_reads(accepted_reads),
         .I_clk                   ( S_ddr_clk               ),
-        .I_rst_n                 ( S_rst_n                 ),
+        .I_rst_n                 ( ddr_rst_n               ),
 
         .I_ddr_user_wr_en        ( S_ddr_user_wr_en        ),
         .I_ddr_user_rd_en        ( S_ddr_user_rd_en        ),
@@ -242,7 +252,7 @@ video_in u_video_in(
 
     refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper(
         .I_sys_clk              ( I_sys_clk              ),
-        .I_sys_rst_n            ( S_rst_n                ),
+        .I_sys_rst_n            ( controller_reset_n     ),
 
         .O_ddr_clk              ( S_ddr_clk              ),
         .O_init_calib_complete  ( S_init_calib_complete  ),
@@ -294,7 +304,7 @@ video_in u_video_in(
         .O_vtc_last    ( S_hdmi_last      )
     );
 
-    wire process_vs, process_hs, process_de;wire [1:0] source_mask;
+    wire process_vs, process_hs, process_de;
     wire [23:0] process_rgb;
     wire [1:0] actual_mode;
     // Display-side RGB processing leaves the camera/DDR packed stream unchanged.

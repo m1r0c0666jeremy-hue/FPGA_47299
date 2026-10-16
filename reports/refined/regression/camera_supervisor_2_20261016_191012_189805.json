@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_camera_config.v": "c7781bde56288a92176ceec29e722ab52182db8fe4c63b8d6c927e2212028a1a",
+    "user_source\\hdl_source\\uics500_cfg\\uics500reg_720p60.v": "f4b9551ffc8629172acf61dc5731336bdf51ac3c4b53cddbb2e28bb8140287de",
+    "user_source\\hdl_source\\uics500_cfg\\uics500regAE.v": "5b648228ca9fcd1cdb8084f2bc93134fb9af22060d5ca92faa588dc6174ed055",
+    "user_source\\hdl_source\\uics500_cfg\\SC500GainTbl.v": "bbdb34c8a8cf7d22a23fa0facd05d365320a49060271560af4d68dcb6bd7cb1c"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\camera_supervisor_2_20261016_191012_189805"
+}

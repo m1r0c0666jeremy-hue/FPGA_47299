@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_video_in.v": "5b0b58d19a1c6e988cc278c1da29d66ba7f26e801f317677d23c2f17ba79a13b",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\stable_awb.v": "23d822472a1d49b27dddaac02a5e1ed5ca2d7bfb8190f2e7a7752c88565087bf",
+    "rtl\\color_regions\\stable_packer.v": "d321fd9740e28608f7082337af1050a6b0999f404bce9b0f89be8880a34b7908"
+  },
+  "passed": true
+}

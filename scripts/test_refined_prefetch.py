@@ -14,7 +14,7 @@ integer rotate=0,cycles=0,head=0,tail=0,rowcycles=0,rows=0,pixels=0,masks=0;
 integer queue[0:2047],due[0:2047];wire [23:0] rgb;wire [1:0] mask;wire vs,hs,de,ok;
 function [63:0] model(input integer lo,hi);model=64'h8000000000000000|(64'(lo)<<54)|(64'(hi)<<45)|(64'd32<<37)|(64'd16<<29)|(64'd1<<27);endfunction
 wire [127:0] models={model(195,255),model(345,30)};
-stable_line_reader dut(commit,1'b1,rst,dc,1'b0,1'b0,2'd2,32'd55,models,ready,valid,data,busy,rd,addr,pc,1'b0,1'b0,1'b0,11'd0,10'd48,2'd0,vs,hs,de,rgb,mask,ok,1'(rotate));
+stable_line_reader dut(commit,1'b1,rst,dc,1'b0,1'b0,2'd2,32'd55,models,ready,valid,data,busy,rd,addr,pc,1'b0,1'b0,1'b0,11'd0,10'd48,2'd0,vs,hs,de,rgb,mask,ok,1'(rotate)EXTRA_PORTS);
 function [23:0] pixel(input integer xx,yy);pixel={8'(xx),8'(yy),8'(((xx>>8)*64)+((yy>>8)*16)+((xx^yy)&15))};endfunction
 function [1:0] classify(input integer xx,yy);
  integer r,g,b,m,d,n;reg [23:0] p;begin
@@ -57,6 +57,6 @@ initial begin if(!$value$plusargs("ROTATE=%d",rotate))rotate=0;if(!$value$plusar
  if(rows<3 || pixels<3840 || masks<1280)$fatal(1,"coverage rows%0d pixels%0d masks%0d",rows,pixels,masks);
  $display("REFINED_PREFETCH_PASS rotation%0d rows%0d RGB%0d masks%0d class/load cycles%0d",rotate,rows,pixels,masks,expected_cycles);$finish;end
 endmodule'''
-other=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_model_lane','stable_filter4')]+[R/'rtl/04_tracking/target_mailbox.v']
+other=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_model_lane','stable_filter4','refined_reset_bridge')]+[R/'rtl/04_tracking/target_mailbox.v']
 for before in (True,False):
- for rot in (0,1):run(f'prefetch_{"before" if before else "after"}_{rot}',src,[baseline if before else R/'rtl/color_regions/stable_line_reader.v',*other],args=[f'+ROTATE={rot}',f'+CYCLES={960 if before else 644}'])
+ for rot in (0,1):run(f'prefetch_{"before" if before else "after"}_{rot}',src.replace('EXTRA_PORTS','' if before else ",1'b1,,,,32'd0,1'b0"),[baseline if before else R/'rtl/color_regions/stable_line_reader.v',*other],args=[f'+ROTATE={rot}',f'+CYCLES={960 if before else 644}'])
