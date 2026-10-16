@@ -14,4 +14,4 @@ reset_all;press(4,2600);release_all;if(zoom!=4)$fatal(1,"upper zoom endpoint");p
 sw=0;waitms(12);press(4,2600);release_all;if(zoom!=0)$fatal(1,"reverse five-step endpoint");press(4,60);release_all;if(zoom!=0)$fatal(1,"lower zoom endpoint wrapped");
 $display("REFINED_CONTROLS_PAUSE_PASS immediate capture fault pause, new session and calibration cancellation");
 $display("RING_CONTROLS_PASS''')
-run('controls_with_camera_pause',src,[R/'rtl/color_regions/stable_controls.v'])
+run('controls_with_camera_pause',src.replace('stable_controls #','refined_controls #'),[R/'rtl/color_regions/refined_controls.v'])

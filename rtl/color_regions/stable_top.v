@@ -109,7 +109,7 @@ wire status_ready;reg [7:0] status_sent;wire status_send=status_ready && cal_sta
 always @(posedge S_csi_rx_clk or negedge cal_rst_n)if(!cal_rst_n)status_sent<=0;else if(status_send)status_sent<=cal_status;
 target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n),.S_send(status_send),.S_data(cal_status),.S_ready(status_ready),
 .D_clk(S_hdmi_pixel_clk),.D_rst_n(process_rst_n),.D_valid(),.D_data(ui_cal_status));
-stable_controls #(.LONG_PRESS_MS(1000)) u_controls (
+refined_controls #(.LONG_PRESS_MS(1000)) u_controls (
     .I_pause(camera_pause),
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),

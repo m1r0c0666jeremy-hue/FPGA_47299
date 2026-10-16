@@ -531,7 +531,7 @@
                     <Attr Name="CompileOrder" Val="63" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_ddr_recovery.v">
+            <File Path="../rtl/color_regions/refined_controls.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -539,7 +539,7 @@
                     <Attr Name="CompileOrder" Val="64" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_demosaic.v">
+            <File Path="../rtl/color_regions/refined_ddr_recovery.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -547,7 +547,7 @@
                     <Attr Name="CompileOrder" Val="65" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_footer_program_rom.v">
+            <File Path="../rtl/color_regions/refined_demosaic.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -555,7 +555,7 @@
                     <Attr Name="CompileOrder" Val="66" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_frame_store.v">
+            <File Path="../rtl/color_regions/refined_footer_program_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -563,7 +563,7 @@
                     <Attr Name="CompileOrder" Val="67" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_line_reader.v">
+            <File Path="../rtl/color_regions/refined_frame_store.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -571,7 +571,7 @@
                     <Attr Name="CompileOrder" Val="68" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_logo_rom.v">
+            <File Path="../rtl/color_regions/refined_line_reader.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -579,7 +579,7 @@
                     <Attr Name="CompileOrder" Val="69" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_osd.v">
+            <File Path="../rtl/color_regions/refined_logo_rom.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -587,7 +587,7 @@
                     <Attr Name="CompileOrder" Val="70" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_overlay_geometry.v">
+            <File Path="../rtl/color_regions/refined_osd.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -595,7 +595,7 @@
                     <Attr Name="CompileOrder" Val="71" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_performance.v">
+            <File Path="../rtl/color_regions/refined_overlay_geometry.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -603,7 +603,7 @@
                     <Attr Name="CompileOrder" Val="72" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_raw_matrix_3x3_buffer.v">
+            <File Path="../rtl/color_regions/refined_performance.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -611,7 +611,7 @@
                     <Attr Name="CompileOrder" Val="73" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_reset_bridge.v">
+            <File Path="../rtl/color_regions/refined_raw_matrix_3x3_buffer.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -619,7 +619,7 @@
                     <Attr Name="CompileOrder" Val="74" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_stamp_source.v">
+            <File Path="../rtl/color_regions/refined_reset_bridge.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -627,7 +627,7 @@
                     <Attr Name="CompileOrder" Val="75" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_timebase.v">
+            <File Path="../rtl/color_regions/refined_stamp_source.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -635,7 +635,7 @@
                     <Attr Name="CompileOrder" Val="76" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_zhenghe.v">
+            <File Path="../rtl/color_regions/refined_timebase.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
@@ -643,12 +643,20 @@
                     <Attr Name="CompileOrder" Val="77" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/refined_zoom_geometry.v">
+            <File Path="../rtl/color_regions/refined_zhenghe.v">
                 <FileInfo>
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
                     <Attr Name="CompileOrder" Val="78" />
+                </FileInfo>
+            </File>
+            <File Path="../rtl/color_regions/refined_zoom_geometry.v">
+                <FileInfo>
+                    <Attr Name="UsedInSyn" Val="true" />
+                    <Attr Name="UsedInP&R" Val="true" />
+                    <Attr Name="BelongTo" Val="design_1" />
+                    <Attr Name="CompileOrder" Val="79" />
                 </FileInfo>
             </File>
         </Verilog>
@@ -658,7 +666,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="79" />
+                    <Attr Name="CompileOrder" Val="80" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/ph1p_mipiio_rx_wrapper.v">
@@ -666,7 +674,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="80" />
+                    <Attr Name="CompileOrder" Val="81" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/byte_aligner.enc.v">
@@ -674,7 +682,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="81" />
+                    <Attr Name="CompileOrder" Val="82" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/byte_aligner_wrapper.enc.sv">
@@ -682,7 +690,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="82" />
+                    <Attr Name="CompileOrder" Val="83" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/channel_aligner.enc.v">
@@ -690,7 +698,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="83" />
+                    <Attr Name="CompileOrder" Val="84" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/channel_aligner_wrapper.enc.sv">
@@ -698,7 +706,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="84" />
+                    <Attr Name="CompileOrder" Val="85" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/hs_detect.enc.v">
@@ -706,7 +714,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="85" />
+                    <Attr Name="CompileOrder" Val="86" />
                 </FileInfo>
             </File>
         </System_Verilog>
@@ -716,7 +724,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="constraint_1" />
-                    <Attr Name="CompileOrder" Val="86" />
+                    <Attr Name="CompileOrder" Val="87" />
                 </FileInfo>
             </File>
         </ADC_FILE>
@@ -726,7 +734,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="constraint_1" />
-                    <Attr Name="CompileOrder" Val="87" />
+                    <Attr Name="CompileOrder" Val="88" />
                 </FileInfo>
             </File>
         </SDC_FILE>
@@ -736,7 +744,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="88" />
+                    <Attr Name="CompileOrder" Val="89" />
                 </FileInfo>
             </File>
             <File Path="../user_source/ip_source/w128_d512_fifo/w128_d512_fifo.xml">
@@ -744,7 +752,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="89" />
+                    <Attr Name="CompileOrder" Val="90" />
                 </FileInfo>
             </File>
             <File Path="../user_source/ip_source/w155_d512_fifo/w155_d512_fifo.xml">
@@ -752,7 +760,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="90" />
+                    <Attr Name="CompileOrder" Val="91" />
                 </FileInfo>
             </File>
             <File Path="../user_source/ip_source/blk_mem_gen_awb_delay_signal/blk_mem_gen_awb_delay_signal.xml">
@@ -761,7 +769,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="91" />
+                    <Attr Name="CompileOrder" Val="92" />
                 </FileInfo>
             </File>
             <File Path="../user_source/ip_source/divider/divider.ipc">
@@ -770,7 +778,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="92" />
+                    <Attr Name="CompileOrder" Val="93" />
                 </FileInfo>
             </File>
             <File Path="../ip/refined_ddr2/ddr2.xml">
@@ -778,7 +786,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="93" />
+                    <Attr Name="CompileOrder" Val="94" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/isp/demosaic_4x_2_0/blk_mem_gen_zhenghe/blk_mem_gen_zhenghe.xml">
@@ -786,7 +794,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="94" />
+                    <Attr Name="CompileOrder" Val="95" />
                 </FileInfo>
             </File>
             <File Path="../user_source/hdl_source/isp/demosaic_4x_2_0/blk_mem_gen_demosaic/blk_mem_gen_demosaic.xml">
@@ -794,7 +802,7 @@
                     <Attr Name="UsedInSyn" Val="true" />
                     <Attr Name="UsedInP&R" Val="true" />
                     <Attr Name="BelongTo" Val="design_1" />
-                    <Attr Name="CompileOrder" Val="95" />
+                    <Attr Name="CompileOrder" Val="96" />
                 </FileInfo>
             </File>
         </IP_FILE>
