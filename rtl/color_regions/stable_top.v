@@ -66,7 +66,7 @@ switch_mode_control u_switch_mode (
     .I_clk(S_hdmi_pixel_clk), .I_rst_n(process_rst_n),
     .I_switch(I_switch), .O_mode_pending(image_mode_pending)
 );
-wire [1:0] ui_zoom;
+wire [2:0] ui_zoom;
 wire ui_tracking,ui_show,ui_conflict,ui_pair;
 wire [7:0] ui_session;
 wire [95:0] detect_rgb;

@@ -1,0 +1,3 @@
+
+RING_DISTRIBUTION_PASS inseparable_background baseline=0 success=0 cycles=1694676 model=b0dfe40208000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\calibration_after_inseparable_background_20261016_194706_196649\tb.sv:11: $finish called at 16946800 (1s)

@@ -57,6 +57,6 @@ initial begin if(!$value$plusargs("ROTATE=%d",rotate))rotate=0;if(!$value$plusar
  if(rows<3 || pixels<3840 || masks<1280)$fatal(1,"coverage rows%0d pixels%0d masks%0d",rows,pixels,masks);
  $display("REFINED_PREFETCH_PASS rotation%0d rows%0d RGB%0d masks%0d class/load cycles%0d",rotate,rows,pixels,masks,expected_cycles);$finish;end
 endmodule'''
-other=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_model_lane','stable_filter4','refined_reset_bridge')]+[R/'rtl/04_tracking/target_mailbox.v']
+other=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_model_lane','stable_filter4','refined_reset_bridge','refined_zoom_geometry')]+[R/'rtl/04_tracking/target_mailbox.v']
 for before in (True,False):
  for rot in (0,1):run(f'prefetch_{"before" if before else "after"}_{rot}',src.replace('EXTRA_PORTS','' if before else ",1'b1,,,,32'd0,1'b0"),[baseline if before else R/'rtl/color_regions/stable_line_reader.v',*other],args=[f'+ROTATE={rot}',f'+CYCLES={960 if before else 644}'])

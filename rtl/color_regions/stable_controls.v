@@ -5,7 +5,7 @@
 module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS_MS=1000,CHORD_WINDOW_MS=100)(
  input wire I_clk,I_rst_n,input wire [2:0] I_keys_n,input wire [1:0] I_ui_switch,
  input wire I_gain_ack,input wire [7:0] I_cal_status,
- output reg O_gain_req,O_gain_up,output reg [1:0] O_zoom,
+ output reg O_gain_req,O_gain_up,output reg [2:0] O_zoom,
  output reg O_tracking,O_show,output reg [7:0] O_session,
  output wire O_conflict,output reg O_pair,
  output reg O_cal_enter,O_cal_sample,O_cal_cancel,output reg O_rotate,output reg [1:0] O_diag,input wire I_pause);
@@ -42,7 +42,7 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  if(cal_ui)begin O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end
  else if(O_gain_req==ack2)begin O_gain_up<=sw[0];O_gain_req<=~O_gain_req;O_tracking<=0;O_session<=O_session+1'b1;end end
  if(!did_action && gesture==4 && !cal_ui)begin
- if(sw[0])begin if(O_zoom<2)O_zoom<=O_zoom+1'b1;end else if(O_zoom>0)O_zoom<=O_zoom-1'b1;end
+ if(sw[0])begin if(O_zoom<4)O_zoom<=O_zoom+1'b1;end else if(O_zoom>0)O_zoom<=O_zoom-1'b1;end
  end
  gesture<=0;chord<=0;held<=0;window_age<=0;consumed<=0;did_action<=0;conflict<=0;
  end else if(gesture==0 && chord==0 && !consumed)begin
@@ -68,7 +68,7 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  if(cal_ui)begin O_cal_cancel<=~O_cal_cancel;consumed<=1;cal_ui<=0;cal_seen<=0;end
  else if(O_gain_req==ack2)begin O_gain_up<=sw[0];O_gain_req<=~O_gain_req;O_tracking<=0;O_session<=O_session+1'b1;end end
  if(chord==0 && pressed==4 && !consumed && !cal_ui && (held==CHORD_WINDOW_MS || (held>CHORD_WINDOW_MS && (held-CHORD_WINDOW_MS)%600==0)))begin
- did_action<=1;if(sw[0])begin if(O_zoom<2)O_zoom<=O_zoom+1'b1;end else if(O_zoom>0)O_zoom<=O_zoom-1'b1;end
+ did_action<=1;if(sw[0])begin if(O_zoom<4)O_zoom<=O_zoom+1'b1;end else if(O_zoom>0)O_zoom<=O_zoom-1'b1;end
  end
  if(I_pause)begin O_tracking<=0;O_session<=O_session+1'b1;
  if(cal_ui)O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end

@@ -1,0 +1,3 @@
+
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_0_0_0_1_f0_n1_20261016_195718_867523\tb.sv:117: scaled RGB x=          0 y=          0 zoom=          0 got=xxxxxx expected=ff9f20 ok=1
+       Time: 550214176  Scope: tb_stable_video

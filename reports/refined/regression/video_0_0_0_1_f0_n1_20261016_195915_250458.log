@@ -1,0 +1,4 @@
+
+VIDEO_DEBUG x0 sxx syx rgbxxxxxx qxxxxxxxxxxxxxxxxxxxxxxxx addrx goodx ok1 ready000 tag0 mem0xxxxxxxxxxxxxxxxxxxxxxxx
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_0_0_0_1_f0_n1_20261016_195915_250458\tb.sv:118: scaled RGB x=          0 y=          0 zoom=          0 got=xxxxxx expected=ff9f20 ok=1
+       Time: 550214176  Scope: tb_stable_video

@@ -39,7 +39,8 @@ def assets():
         ET.SubElement(info,'Attr',Name='CompileOrder',Val=str(index))
     ET.indent(root,space='    ')
     project='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n'
-    return {'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
+    from generate_refined_ui import ui_assets
+    return {**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
     for name,text in assets().items():

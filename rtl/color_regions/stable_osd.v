@@ -4,14 +4,14 @@
 module stable_osd(
  input wire I_clk,I_rst_n,I_vs,I_hs,I_de,input wire [23:0] I_rgb,
  input wire [639:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
- input wire [1:0] I_zoom,I_mode,input wire [2:0] I_state,
+ input wire [2:0] I_zoom,input wire [1:0] I_mode,input wire [2:0] I_state,
  input wire I_tracking,I_show,I_video_ok,I_pair,I_detection_valid,I_sample_valid,
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
- input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id
+ input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit
 );
  localparam FONT=24,COLS=46;
  reg [10:0] x;reg [9:0] y;reg vs_last;
- reg [639:0] fm;reg [31:0] fimage;reg [1:0] fmode,fzoom,fdiag;
+ reg [639:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
  reg [4:0] status_id;
  always @*begin
@@ -76,14 +76,16 @@ decoded_glyph=0;case(token_data[15:13])
 1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd150;
 2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd150;
 3:case(token_data[12:8])
-0:decoded_glyph=fzoom==0?8'd2:fzoom==1?8'd3:8'd5;
-1:decoded_glyph=fpair?8'd137:8'd135;
-2:decoded_glyph=fpair?8'd138:8'd136;
-3:decoded_glyph=frotate?8'd2:8'd1;
-4:decoded_glyph=frotate?8'd9:8'd1;
-5:decoded_glyph=frotate?8'd1:8'd1;
-6:decoded_glyph=fm[444:443]==0?8'd4:fm[444:443]==1?8'd5:fm[444:443]==2?8'd7:8'd9;
-7:decoded_glyph=fm[508:507]==0?8'd4:fm[508:507]==1?8'd5:fm[508:507]==2?8'd7:8'd9;
+0:decoded_glyph=fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:fzoom==4?8'd5:8'd2;
+1:decoded_glyph=fzoom==1?8'd149:8'd0;
+2:decoded_glyph=fzoom==1?8'd6:8'd0;
+3:decoded_glyph=fpair?8'd137:8'd135;
+4:decoded_glyph=fpair?8'd138:8'd136;
+5:decoded_glyph=frotate?8'd2:8'd1;
+6:decoded_glyph=frotate?8'd9:8'd1;
+7:decoded_glyph=frotate?8'd1:8'd1;
+8:decoded_glyph=fm[444:443]==0?8'd4:fm[444:443]==1?8'd5:fm[444:443]==2?8'd7:8'd9;
+9:decoded_glyph=fm[508:507]==0?8'd4:fm[508:507]==1?8'd5:fm[508:507]==2?8'd7:8'd9;
 endcase
 4:begin if(!token_valid)decoded_glyph=8'd150;else case(token_data[12:8])
 0:decoded_glyph=8'd1+fm[338:336];
@@ -122,12 +124,8 @@ endcase end
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  field_index<=0;footer_ready<=0;format_state<=1;
  end end end
- function signed [13:0] mapx;input [10:0] v;reg signed [13:0] d;begin
- d=$signed({3'd0,v})-$signed({3'd0,I_x0});
- mapx=(I_rotate?($signed(14'd1280>>>I_zoom)-1-d):d)<<<I_zoom;end endfunction
- function signed [13:0] mapy;input [9:0] v;reg signed [13:0] d;begin
- d=$signed({4'd0,v})-$signed({4'd0,I_y0});
- mapy=(I_rotate?($signed(14'd624>>>I_zoom)-1-d):d)<<<I_zoom;end endfunction
+ wire geometry_ready;wire [251:0] geometry;
+ refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
  function border;input signed [13:0] xx,yy,x0,x1,y0,y1;reg signed [13:0] l,r,t,b;begin
  l=xx-x0;r=x1-xx;t=yy-y0;b=y1-yy;
  border=!(l[13] || r[13] || t[13] || b[13]) && (l[13:1]==0 || r[13:1]==0 || t[13:1]==0 || b[13:1]==0);end endfunction
@@ -156,11 +154,11 @@ endcase end
  if(footer_current)footer_glyph=characters[(footer_row?COLS:0)+footer_col];
  else if(footer_ready && !footer_row && footer_col<4)footer_glyph=WAIT_WORD>>((3-footer_col)*8);
  end
- end else if(I_video_ok)begin
+ end else if(I_video_ok && geometry_ready)begin
  if(I_show && I_detection_valid)for(j=0;j<2;j=j+1)begin
  box=j==0?I_meta[141:100]:I_meta[183:142];valid_box=j==0?I_meta[245]:I_meta[246];
- bx0=mapx(I_rotate?box[21:11]:box[10:0]);bx1=mapx(I_rotate?box[10:0]:box[21:11])+(14'sd1<<<I_zoom)-1;
- by0=mapy(I_rotate?box[41:32]:box[31:22]);by1=mapy(I_rotate?box[31:22]:box[41:32])+(14'sd1<<<I_zoom)-1;
+ bx0=$signed(geometry[j*56+:14]);bx1=$signed(geometry[j*56+14+:14]);
+ by0=$signed(geometry[j*56+28+:14]);by1=$signed(geometry[j*56+42+:14]);
  if(valid_box && bx1>=0 && bx0<1280 && by1>=0 && by0<624)begin
  if(border(xx,yy,bx0,bx1,by0,by1))begin back_on=1;back=j==0?color_a:color_b;end
  lx=bx0<0?0:bx0>1216?1216:bx0;ly=by0>=18?by0-18:by1+3;
@@ -170,13 +168,11 @@ endcase end
  case(lc)0:label_glyph=j==0?(I_pair?3:1):(I_pair?4:2);1:label_glyph=5;2:label_glyph=j==0?6:7;3:label_glyph=8;endcase
  end end end
  if(I_show && I_detection_valid && I_meta[32])begin
- lx=mapx(I_meta[89:79]);ly=mapy(I_meta[99:90]);ldx=xx-lx;ldy=yy-ly;
+ lx=$signed(geometry[224+:14]);ly=$signed(geometry[238+:14]);ldx=xx-lx;ldy=yy-ly;
  if((ldx>=-6 && ldx<=6 && ldy>=-1 && ldy<=1)||(ldy>=-6 && ldy<=6 && ldx>=-1 && ldx<=1))begin back_on=1;back=24'h40ff90;end end
- if(I_meta[567:565]!=0 && I_meta[567:565]!=2 && border(xx,yy,mapx(I_rotate?647:632),mapx(I_rotate?632:647)+(14'sd1<<<I_zoom)-1,
- mapy(I_rotate?367:352),mapy(I_rotate?352:367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
- if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,mapx(I_rotate?959:320),mapx(I_rotate?320:959),mapy(I_rotate?539:180),mapy(I_rotate?180:539)))begin back_on=1;back=24'h40c080;end
- if(I_show && I_mode==1 && border(xx,yy,mapx(I_rotate?643:636),mapx(I_rotate?636:643)+(14'sd1<<<I_zoom)-1,
- mapy(I_rotate?363:356),mapy(I_rotate?356:363)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
+ if(I_meta[567:565]!=0 && border(xx,yy,$signed(geometry[168+:14]),$signed(geometry[182+:14]),$signed(geometry[196+:14]),$signed(geometry[210+:14])))begin back_on=1;back=24'h80ff80;end
+ if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,$signed(geometry[112+:14]),$signed(geometry[126+:14]),$signed(geometry[140+:14]),$signed(geometry[154+:14])))begin back_on=1;back=24'h40c080;end
+ if(I_show && I_mode==1 && border(xx,yy,$signed(geometry[168+:14]),$signed(geometry[182+:14]),$signed(geometry[196+:14]),$signed(geometry[210+:14])))begin back_on=1;back=24'h80ff80;end
  end end
  wire [11:0] footer_addr=(footer_glyph<<4)+(footer_glyph<<3)+footer_gy;
  wire [FONT-1:0] footer_font_row;wire [15:0] label_font_row;wire [1:0] logo_pixel;

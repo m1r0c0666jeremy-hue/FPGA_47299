@@ -1,0 +1,3 @@
+
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_0_0_0_0_f0_n1_20261016_195718_866525\tb.sv:134: page mismatch mode0 xy0/0 got000000
+       Time: 550254178  Scope: tb_stable_video

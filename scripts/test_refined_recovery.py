@@ -50,7 +50,7 @@ initial begin if(!$value$plusargs("MODE=%d",mode))mode=0;
  $display("REFINED_RECOVERY_PASS permanent missing return, coordinated FIFO/controller reset, old queue discarded, fresh 240 words and continuous HDMI sync");end
  $finish;end
 endmodule'''
-mods=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_line_reader','stable_model_lane','stable_filter4','refined_reset_bridge','refined_ddr_recovery','refined_mc_to_user_interface')]+[R/'rtl/04_tracking/target_mailbox.v',R/'user_source/ip_source/w155_d512_fifo/w155_d512_fifo.v',R/'user_source/ip_source/w155_d512_fifo/soft_fifo_al_f58e8b3e1f3d.v']
+mods=[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_line_reader','stable_model_lane','stable_filter4','refined_reset_bridge','refined_zoom_geometry','refined_ddr_recovery','refined_mc_to_user_interface')]+[R/'rtl/04_tracking/target_mailbox.v',R/'user_source/ip_source/w155_d512_fifo/w155_d512_fifo.v',R/'user_source/ip_source/w155_d512_fifo/soft_fifo_al_f58e8b3e1f3d.v']
 for mode in (0,1):run(f'video_recovery_{mode}',src,mods,args=[f'+MODE={mode}'])
 budget=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,init=0,fault=0;wire ctrl,stream,dead;wire [15:0] epoch,count;wire [1:0] retry;wire [3:0] why;

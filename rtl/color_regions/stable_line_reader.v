@@ -7,7 +7,7 @@ module stable_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TI
  input wire I_ddr_ready,I_ddr_valid,input wire [127:0] I_ddr_data,
  output wire O_read_busy,O_read_en,output wire [24:0] O_read_addr,
  input wire I_pixel_clk,I_vs,I_hs,I_de,input wire [10:0] I_x0,input wire [9:0] I_y0,
- input wire [1:0] I_zoom,output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
+ input wire [2:0] I_zoom,output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
  output reg [1:0] O_mask,output reg O_video_ok,input wire I_rotate,
  input wire I_stream_n,output reg O_fault_toggle,output reg [127:0] O_ddr_diag,output reg [127:0] O_pixel_diag,
  input wire [31:0] I_accepted_reads,input wire I_unexpected_return);
@@ -156,11 +156,16 @@ module stable_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TI
  (* async_reg="true" *) reg ack1,ack2;(* async_reg="true" *) reg live1,live2;
  reg pending,frame_live,abort_frame,first;reg [2:0] ready;
  reg [9:0] tags[0:2];reg [10:0] x,x0;reg [9:0] y,y0,last_y,prefetch;
- reg pixel_rotate;reg [1:0] zoom,image_bank;reg [31:0] frame_id;reg [127:0] pixel_models;
+ reg pixel_rotate;reg [2:0] zoom;reg [1:0] image_bank;reg [31:0] frame_id;reg [127:0] pixel_models;
+ wire [10:0] view_width;wire [9:0] view_height;wire [2:0] view_p,view_q,view_phase_x,view_phase_y;
+ refined_zoom_geometry viewport(I_zoom,I_rotate,view_width,view_height,view_p,view_q,view_phase_x,view_phase_y);
+ reg [2:0] scale_p,scale_q,x_phase,x_remainder,y_remainder;
+ reg [10:0] source_x;reg [9:0] source_y;
+ wire [3:0] x_step={1'b0,x_remainder}+scale_q,y_step={1'b0,y_remainder}+scale_q;
  reg [31:0] epoch;reg vs_old;reg [3:0] offset_d;reg [1:0] moffset_d;reg good_d,vs_d,hs_d,de_d;
- wire [10:0] view_x0=I_rotate?1280-(1280>>I_zoom)-I_x0:I_x0;
- wire [9:0] view_y0=I_rotate?720-(624>>I_zoom)-I_y0:I_y0;
- wire [10:0] sx=x0+(x>>zoom);wire [9:0] sy=y0+(y>>zoom);wire [1:0] pb=sy%3;
+ wire [10:0] view_x0=I_rotate?1280-view_width-I_x0:I_x0;
+ wire [9:0] view_y0=I_rotate?720-view_height-I_y0:I_y0;
+ wire [10:0] sx=x0+source_x;wire [9:0] sy=y0+source_y;wire [1:0] pb=sy%3;
  wire [1:0] next_slot=prefetch%3;wire good=frame_live && !abort_frame && live2 && ready[pb] && tags[pb]==sy;
  reg fault_recorded;reg [17:0] pixel_clock,ready_time[0:2];reg [2:0] used_line;
  always @(posedge I_pixel_clk or negedge p_global)begin
@@ -195,15 +200,20 @@ module stable_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TI
  if(!p_rst)begin ack1<=0;ack2<=0;live1<=0;live2<=0;pending<=0;frame_live<=0;abort_frame<=1;first<=1;ready<=0;
  req<=0;req_first<=0;req_rotate<=1;req_slot<=0;req_image<=0;req_id<=0;req_y<=0;req_epoch<=0;req_models<=0;
  pixel_rotate<=1;x<=0;x0<=0;y<=0;y0<=48;last_y<=671;prefetch<=47;zoom<=0;image_bank<=0;frame_id<=0;pixel_models<=0;epoch<=0;vs_old<=0;
+ scale_p<=1;scale_q<=1;x_phase<=0;x_remainder<=0;y_remainder<=0;source_x<=0;source_y<=0;
  for(j=0;j<3;j=j+1)tags[j]<=0;end
  else begin
  ack1<=ack;ack2<=ack1;live1<=I_selected_good;live2<=live1;vs_old<=I_vs;
  if(I_vs && !vs_old)begin frame_live<=0;abort_frame<=1;end
  if(frame_live && !live2)abort_frame<=1;
  if(I_de)begin
- if(x==1279)begin x<=0;y<=y+1'b1;end else x<=x+1'b1;
+ if(x==1279)begin x<=0;y<=y+1'b1;source_x<=0;x_remainder<=x_phase;
+  if(y_step>=scale_p)begin y_remainder<=y_step-scale_p;source_y<=source_y+1'b1;end else y_remainder<=y_step;
+ end else begin x<=x+1'b1;
+  if(x_step>=scale_p)begin x_remainder<=x_step-scale_p;source_x<=source_x+1'b1;end else x_remainder<=x_step;
+ end
  if(y<624 && !good)abort_frame<=1;
- if(x==1279 && y<624 && ((y & ((1<<zoom)-1))==((1<<zoom)-1)) && good)ready[pb]<=0;
+ if(x==1279 && y<624 && y_step>=scale_p && good)ready[pb]<=0;
  end
  if(pending && ack2==req)pending<=0;
  if(notify && notice[77:46]==epoch && notice[45:14]==frame_id && notice[13:12]==image_bank &&
@@ -214,8 +224,9 @@ module stable_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TI
  end
  if(I_frame_commit)begin
  x<=0;y<=0;pixel_rotate<=I_rotate;x0<=view_x0;y0<=view_y0;zoom<=I_zoom;image_bank<=I_read_buffer;frame_id<=I_frame_id;pixel_models<=I_models;
+ scale_p<=view_p;scale_q<=view_q;x_phase<=view_phase_x;x_remainder<=view_phase_x;y_remainder<=view_phase_y;source_x<=0;source_y<=0;
  epoch<=epoch+1'b1;ready<=0;frame_live<=1;abort_frame<=0;first<=1;
- prefetch<=view_y0==0?0:view_y0-1;last_y<=view_y0+(624>>I_zoom)-1;
+ prefetch<=view_y0==0?0:view_y0-1;last_y<=view_y0+view_height-1;
  end end end
 endmodule
 `default_nettype wire
