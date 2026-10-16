@@ -1,0 +1,3 @@
+
+REFINED_V4_STORE_PASS 768/852 bits, epoch mismatch/v3 rejection, standby independent timestamp, camera event invalidation
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_frame_store_and_display_20261016_202511_289675\tb.sv:17: $finish called at 460 (1s)

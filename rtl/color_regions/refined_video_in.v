@@ -11,14 +11,17 @@ module refined_video_in (
  input wire I_mipi_rx_error,I_ddr_clk,I_display_pause,I_video_out_rd_busy,
  output wire O_video_in_wr_busy,output reg [1:0] O_video_out_rp,
  output reg O_ddr_user_wr_en,output reg [24:0] O_ddr_user_addr,
- output wire [127:0] O_ddr_user_wr_data,input wire I_ddr_user_ready
+ output wire [127:0] O_ddr_user_wr_data,input wire I_ddr_user_ready,
+ input wire [31:0] I_frame_us,input wire [15:0] I_epoch,input wire I_time_valid,
+ output wire [31:0] O_frame_us,output wire [15:0] O_epoch,output wire O_time_valid
 );
  wire camera_reset_n,ddr_reset_n;
  refined_reset_bridge cr(I_camera_clk,I_rst_n,camera_reset_n);
  refined_reset_bridge dr(I_ddr_clk,I_rst_n,ddr_reset_n);
  reg request,ack;
  (* async_reg="true" *) reg ack_c1,ack_c2,req_d1,req_d2;
- reg [31:0] camera_id_hold;
+ reg [31:0] camera_id_hold,stamp_hold;reg [15:0] epoch_hold;reg time_hold;
+ assign O_frame_us=stamp_hold;assign O_epoch=epoch_hold;assign O_time_valid=time_hold;
  reg camera_error_hold,accept_frame,overflow,sof_d;
  wire sof=I_camera_frame_start&&!sof_d;
  wire transaction_free=request==ack_c2;
@@ -43,7 +46,7 @@ module refined_video_in (
  end
  always @(posedge I_camera_clk or negedge camera_reset_n) begin
   if(!camera_reset_n) begin
-   ack_c1<=0;ack_c2<=0;request<=0;camera_id_hold<=0;camera_error_hold<=0;
+   ack_c1<=0;ack_c2<=0;request<=0;camera_id_hold<=0;stamp_hold<=0;epoch_hold<=0;time_hold<=0;camera_error_hold<=0;
    accept_frame<=0;overflow<=0;sof_d<=0;wp<=0;rp<=0;used<=0;staged_valid<=0;
   end else begin
    ack_c1<=ack;ack_c2<=ack_c1;sof_d<=I_camera_frame_start;
@@ -53,7 +56,7 @@ module refined_video_in (
     accept_frame<=transaction_free;overflow<=!transaction_free || I_mipi_rx_error;
     wp<=first_push?1:0;rp<=0;used<=first_push?1:0;staged_valid<=0;
     if(transaction_free) begin
-     request<=!request;camera_id_hold<=I_camera_frame_id;camera_error_hold<=I_mipi_rx_error;
+     request<=!request;camera_id_hold<=I_camera_frame_id;stamp_hold<=I_frame_us;epoch_hold<=I_epoch;time_hold<=I_time_valid;camera_error_hold<=I_mipi_rx_error;
     end
    end else begin
     if(push) wp<=wp+1'b1;

@@ -3,17 +3,20 @@
 `default_nettype none
 module stable_osd(
  input wire I_clk,I_rst_n,I_vs,I_hs,I_de,input wire [23:0] I_rgb,
- input wire [639:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
+ input wire [767:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
  input wire [2:0] I_zoom,input wire [1:0] I_mode,input wire [2:0] I_state,
  input wire I_tracking,I_show,I_video_ok,I_pair,I_detection_valid,I_sample_valid,
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
- input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit
+ input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
+ input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera
 );
  localparam FONT=@FONT@,COLS=@COLUMNS@;
  reg [10:0] x;reg [9:0] y;reg vs_last;
- reg [639:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
+ reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
- reg [4:0] status_id;
+ reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
+ reg flat_valid;reg [31:0] flatency,fage;reg [127:0] fddr,fpixel;reg [38:0] frecovery;reg [17:0] fcamera;
  always @*begin
  status_id=!ftracking?0:{1'b0,fm[36:33]};
  if(fm[568])status_id=15;
@@ -24,7 +27,7 @@ module stable_osd(
  if(fm[255] && !fm[247])status_id=8;
  if(fstate==7)status_id=18;if(fstate==5)status_id=17;if(!fvideo || fstate==6)status_id=16;
  end
- function [19:0] field_value;input [4:0] id;begin
+ function [23:0] field_value;input [4:0] id;begin
  case(id)
  0:field_value=fm[203:184];1:field_value=fm[223:204];
  2:field_value=fm[275:256];3:field_value=fm[315:296];4:field_value=fm[295:276];5:field_value=fm[335:316];
@@ -33,25 +36,34 @@ module stable_osd(
  12:field_value=fm[542:534];13:field_value=fm[533:525];14:field_value=fm[524:517];15:field_value=fm[516:509];
  16:field_value=fm[592:581];17:field_value=fm[580:569];
  18:field_value=fm[407:400];19:field_value=fm[399:392];20:field_value=fm[391:384];
- 21:field_value=fm[383:380];22:field_value=fm[624:607];23:field_value=fm[639:625];default:field_value=0;
+ 21:field_value=fm[383:380];22:field_value=fm[624:607];23:field_value=fm[639:625];
+ 24:field_value=flatency>9999999?9999999:flatency;25:field_value=fage>999?999:fage;
+ 26:field_value=fm[734:723];27:field_value=fm[743:735];28:field_value=fm[755:744];29:field_value=fm[764:756];
+ 30:field_value=frecovery[31:16];31:field_value=fddr[17:0];default:field_value=0;
+ endcase
+ if(fdiag==1)case(id)8:field_value=fm[47:37];9:field_value=fm[57:48];10:field_value=fm[68:58];11:field_value=fm[78:69];endcase
+ if(fdiag==3)case(id)
+ 0:field_value=fddr[35:18];1:field_value=fddr[53:36];2:field_value=fddr[62:54];3:field_value=fddr[71:63];
+ 5:field_value=fcamera[6:0];7:field_value=fcamera[8:7];8:field_value=fpixel[30:20];9:field_value=fpixel[40:31];10:field_value=fpixel[50:41];
  endcase end endfunction
- reg [23:0] numbers[0:23];reg [7:0] characters[0:127];
+ reg [31:0] numbers[0:31];reg [7:0] characters[0:127];
  reg [2:0] format_state;reg [4:0] field_index,bit_index;
- reg [19:0] binary;reg [23:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
+ reg [23:0] binary;reg [31:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
  integer nibble;
- always @*begin adjusted=decimal;for(nibble=0;nibble<6;nibble=nibble+1)
+ always @*begin adjusted=decimal;for(nibble=0;nibble<8;nibble=nibble+1)
  if(decimal[nibble*4+:4]>=5)adjusted[nibble*4+:4]=decimal[nibble*4+:4]+3;end
 @FUNCTIONS@
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
+ flat_valid<=0;flatency<=0;fage<=0;fddr<=0;fpixel<=0;frecovery<=0;fcamera<=0;
  fm<=0;fimage<=0;fmode<=0;fzoom<=0;fdiag<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
  format_state<=0;field_index<=0;bit_index<=0;binary<=0;decimal<=0;format_col<=0;format_row<=0;footer_ready<=0;
  end else begin
  case(format_state)
  1:begin binary<=field_value(field_index);decimal<=0;bit_index<=0;format_state<=2;end
- 2:begin binary<=binary<<1;decimal<={adjusted[22:0],binary[19]};
- if(bit_index==19)begin numbers[field_index]<={adjusted[22:0],binary[19]};
- if(field_index==23)begin format_col<=0;format_row<=0;format_state<=3;end
+ 2:begin binary<=binary<<1;decimal<={adjusted[30:0],binary[23]};
+ if(bit_index==23)begin numbers[field_index]<={adjusted[30:0],binary[23]};
+ if(field_index==31)begin format_col<=0;format_row<=0;format_state<=3;end
  else begin field_index<=field_index+1'b1;format_state<=1;end end
  else bit_index<=bit_index+1'b1;end
  3:format_state<=4;
@@ -64,12 +76,13 @@ module stable_osd(
  else format_col<=format_col+1'b1;end
  endcase
  if(I_de && y==620 && x==0)begin
+ flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;fddr<=I_ddr_diag;fpixel<=I_pixel_diag;frecovery<=I_recovery;fcamera<=I_camera;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fdiag<=I_diag;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  field_index<=0;footer_ready<=0;format_state<=1;
  end end end
  wire geometry_ready;wire [251:0] geometry;
- refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
+ refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta[639:0],I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
  function border;input signed [13:0] xx,yy,x0,x1,y0,y1;reg signed [13:0] l,r,t,b;begin
  l=xx-x0;r=x1-xx;t=yy-y0;b=y1-yy;
  border=!(l[13] || r[13] || t[13] || b[13]) && (l[13:1]==0 || r[13:1]==0 || t[13:1]==0 || b[13:1]==0);end endfunction

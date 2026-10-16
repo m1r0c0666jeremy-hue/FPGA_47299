@@ -1,0 +1,5 @@
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\prefetch_after_0_20261016_202712_190205\tb.sv:9: warning: Port 22 (I_zoom) of module stable_line_reader expects 3 bit(s), given 2.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\prefetch_after_0_20261016_202712_190205\tb.sv:9:        : Padding 1 high bits of the port.
+
+REFINED_PREFETCH_PASS rotation0 rows4 RGB5120 masks2560 class/load cycles644
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\prefetch_after_0_20261016_202712_190205\tb.sv:50: $finish called at 120225000 (1ps)

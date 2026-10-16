@@ -3,17 +3,20 @@
 `default_nettype none
 module stable_osd(
  input wire I_clk,I_rst_n,I_vs,I_hs,I_de,input wire [23:0] I_rgb,
- input wire [639:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
+ input wire [767:0] I_meta,input wire [10:0] I_x0,input wire [9:0] I_y0,
  input wire [2:0] I_zoom,input wire [1:0] I_mode,input wire [2:0] I_state,
  input wire I_tracking,I_show,I_video_ok,I_pair,I_detection_valid,I_sample_valid,
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
- input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit
+ input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
+ input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera
 );
- localparam FONT=24,COLS=46;
+ localparam FONT=16,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
- reg [639:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
+ reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
- reg [4:0] status_id;
+ reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
+ reg flat_valid;reg [31:0] flatency,fage;reg [127:0] fddr,fpixel;reg [38:0] frecovery;reg [17:0] fcamera;
  always @*begin
  status_id=!ftracking?0:{1'b0,fm[36:33]};
  if(fm[568])status_id=15;
@@ -24,7 +27,7 @@ module stable_osd(
  if(fm[255] && !fm[247])status_id=8;
  if(fstate==7)status_id=18;if(fstate==5)status_id=17;if(!fvideo || fstate==6)status_id=16;
  end
- function [19:0] field_value;input [4:0] id;begin
+ function [23:0] field_value;input [4:0] id;begin
  case(id)
  0:field_value=fm[203:184];1:field_value=fm[223:204];
  2:field_value=fm[275:256];3:field_value=fm[315:296];4:field_value=fm[295:276];5:field_value=fm[335:316];
@@ -33,61 +36,77 @@ module stable_osd(
  12:field_value=fm[542:534];13:field_value=fm[533:525];14:field_value=fm[524:517];15:field_value=fm[516:509];
  16:field_value=fm[592:581];17:field_value=fm[580:569];
  18:field_value=fm[407:400];19:field_value=fm[399:392];20:field_value=fm[391:384];
- 21:field_value=fm[383:380];22:field_value=fm[624:607];23:field_value=fm[639:625];default:field_value=0;
+ 21:field_value=fm[383:380];22:field_value=fm[624:607];23:field_value=fm[639:625];
+ 24:field_value=flatency>9999999?9999999:flatency;25:field_value=fage>999?999:fage;
+ 26:field_value=fm[734:723];27:field_value=fm[743:735];28:field_value=fm[755:744];29:field_value=fm[764:756];
+ 30:field_value=frecovery[31:16];31:field_value=fddr[17:0];default:field_value=0;
+ endcase
+ if(fdiag==1)case(id)8:field_value=fm[47:37];9:field_value=fm[57:48];10:field_value=fm[68:58];11:field_value=fm[78:69];endcase
+ if(fdiag==3)case(id)
+ 0:field_value=fddr[35:18];1:field_value=fddr[53:36];2:field_value=fddr[62:54];3:field_value=fddr[71:63];
+ 5:field_value=fcamera[6:0];7:field_value=fcamera[8:7];8:field_value=fpixel[30:20];9:field_value=fpixel[40:31];10:field_value=fpixel[50:41];
  endcase end endfunction
- reg [23:0] numbers[0:23];reg [7:0] characters[0:127];
+ reg [31:0] numbers[0:31];reg [7:0] characters[0:127];
  reg [2:0] format_state;reg [4:0] field_index,bit_index;
- reg [19:0] binary;reg [23:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
+ reg [23:0] binary;reg [31:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
  integer nibble;
- always @*begin adjusted=decimal;for(nibble=0;nibble<6;nibble=nibble+1)
+ always @*begin adjusted=decimal;for(nibble=0;nibble<8;nibble=nibble+1)
  if(decimal[nibble*4+:4]>=5)adjusted[nibble*4+:4]=decimal[nibble*4+:4]+3;end
 reg [4:0] template_index;reg token_valid;reg [31:0] hex_value;reg [7:0] decoded_glyph;
 wire [15:0] token_data;wire [7:0] dynamic_glyph;
 wire [10:0] program_addr={template_index,format_col};
 wire [8:0] dynamic_addr=token_data[12:8]==0?({7'd0,fmode}<<2)+{5'd0,token_data[3:0]}:
-9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]};
+token_data[12:8]==1?9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]}:
+9'd384+({7'd0,model_id}<<3)+{5'd0,token_data[2:0]};
 stable_footer_program_rom program_rom(I_clk,program_addr,token_data);
 stable_footer_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
 always @*begin
 template_index=({3'd0,fdiag}<<1)+format_row;
 if(fm[567:565]!=0)begin
-if(!format_row)template_index=6;
-else if(fm[563:560]!=0)template_index=12+{1'b0,fm[563:560]};
-else if(fm[564])template_index=11;
-else template_index=6+{2'd0,fm[567:565]};end
+if(!format_row)template_index=8;
+else if(fm[563:560]!=0)template_index=14+{1'b0,fm[563:560]};
+else if(fm[564])template_index=13;
+else template_index=8+{2'd0,fm[567:565]};end
 token_valid=1;case(token_data[7:4])
 0:token_valid=1'b1;
-1:token_valid=fsample && fmode==1 && fshow;
-2:token_valid=fm[255] && fm[415:413]==3;
-3:token_valid=fdetection && fm[245];
-4:token_valid=fdetection && fm[246];
-5:token_valid=fm[604];
+1:token_valid=flat_valid && flatency<10000000;
+2:token_valid=flat_valid && fage<1000;
+3:token_valid=fm[255] && fm[415:413]==4;
+4:token_valid=fm[604];
+5:token_valid=fdetection && fm[245];
+6:token_valid=fsample && fmode==1 && fshow;
+7:token_valid=fdetection && fm[246];
 default:token_valid=0;endcase
 hex_value=0;case(token_data[12:8])
 0:hex_value=fimage;
 1:hex_value=fm[559:544];
-2:hex_value=fm[345:342];
-3:hex_value=fm[349:346];
-4:hex_value=fm[377:370];
-5:hex_value=fm[563:560];
+2:hex_value=fm[377:370];
+3:hex_value=fm[412:409];
+4:hex_value=fddr[75:72];
+5:hex_value=fpixel[3:0];
+6:hex_value=fpixel[92:61];
+7:hex_value=fcamera[12:9];
+8:hex_value=frecovery[38:34];
+9:hex_value=fm[563:560];
 endcase
 decoded_glyph=0;case(token_data[15:13])
 0:decoded_glyph=token_data[7:0];
-1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd150;
-2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd150;
+1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd173;
+2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd173;
 3:case(token_data[12:8])
 0:decoded_glyph=fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:fzoom==4?8'd5:8'd2;
-1:decoded_glyph=fzoom==1?8'd149:8'd0;
+1:decoded_glyph=fzoom==1?8'd172:8'd34;
 2:decoded_glyph=fzoom==1?8'd6:8'd0;
-3:decoded_glyph=fpair?8'd137:8'd135;
-4:decoded_glyph=fpair?8'd138:8'd136;
-5:decoded_glyph=frotate?8'd2:8'd1;
-6:decoded_glyph=frotate?8'd9:8'd1;
-7:decoded_glyph=frotate?8'd1:8'd1;
-8:decoded_glyph=fm[444:443]==0?8'd4:fm[444:443]==1?8'd5:fm[444:443]==2?8'd7:8'd9;
-9:decoded_glyph=fm[508:507]==0?8'd4:fm[508:507]==1?8'd5:fm[508:507]==2?8'd7:8'd9;
+3:decoded_glyph=fzoom==1?8'd34:8'd0;
+4:decoded_glyph=fpair?8'd160:8'd158;
+5:decoded_glyph=fpair?8'd161:8'd159;
+6:decoded_glyph=frotate?8'd2:8'd1;
+7:decoded_glyph=frotate?8'd9:8'd1;
+8:decoded_glyph=frotate?8'd1:8'd1;
+9:decoded_glyph=fm[444:443]==0?8'd4:fm[444:443]==1?8'd5:fm[444:443]==2?8'd7:8'd9;
+10:decoded_glyph=fm[508:507]==0?8'd4:fm[508:507]==1?8'd5:fm[508:507]==2?8'd7:8'd9;
 endcase
-4:begin if(!token_valid)decoded_glyph=8'd150;else case(token_data[12:8])
+4:begin if(!token_valid)decoded_glyph=8'd173;else case(token_data[12:8])
 0:decoded_glyph=8'd1+fm[338:336];
 1:decoded_glyph=8'd1+fm[365:364];
 2:decoded_glyph=8'd1+fm[341:339];
@@ -100,14 +119,15 @@ endcase end
 
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
+ flat_valid<=0;flatency<=0;fage<=0;fddr<=0;fpixel<=0;frecovery<=0;fcamera<=0;
  fm<=0;fimage<=0;fmode<=0;fzoom<=0;fdiag<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
  format_state<=0;field_index<=0;bit_index<=0;binary<=0;decimal<=0;format_col<=0;format_row<=0;footer_ready<=0;
  end else begin
  case(format_state)
  1:begin binary<=field_value(field_index);decimal<=0;bit_index<=0;format_state<=2;end
- 2:begin binary<=binary<<1;decimal<={adjusted[22:0],binary[19]};
- if(bit_index==19)begin numbers[field_index]<={adjusted[22:0],binary[19]};
- if(field_index==23)begin format_col<=0;format_row<=0;format_state<=3;end
+ 2:begin binary<=binary<<1;decimal<={adjusted[30:0],binary[23]};
+ if(bit_index==23)begin numbers[field_index]<={adjusted[30:0],binary[23]};
+ if(field_index==31)begin format_col<=0;format_row<=0;format_state<=3;end
  else begin field_index<=field_index+1'b1;format_state<=1;end end
  else bit_index<=bit_index+1'b1;end
  3:format_state<=4;
@@ -120,12 +140,13 @@ endcase end
  else format_col<=format_col+1'b1;end
  endcase
  if(I_de && y==620 && x==0)begin
+ flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;fddr<=I_ddr_diag;fpixel<=I_pixel_diag;frecovery<=I_recovery;fcamera<=I_camera;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fdiag<=I_diag;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  field_index<=0;footer_ready<=0;format_state<=1;
  end end end
  wire geometry_ready;wire [251:0] geometry;
- refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
+ refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta[639:0],I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
  function border;input signed [13:0] xx,yy,x0,x1,y0,y1;reg signed [13:0] l,r,t,b;begin
  l=xx-x0;r=x1-xx;t=yy-y0;b=y1-yy;
  border=!(l[13] || r[13] || t[13] || b[13]) && (l[13:1]==0 || r[13:1]==0 || t[13:1]==0 || b[13:1]==0);end endfunction
@@ -136,7 +157,7 @@ endcase end
  reg [23:0] ink,back;reg [12:0] logo_addr;reg [41:0] box;reg valid_box;
  reg signed [13:0] xx,yy,bx0,bx1,by0,by1,lx,ly,ldx,ldy;
  integer j,lc;reg [9:0] logo_y;reg [10:0] logo_x;
- localparam [31:0] WAIT_WORD={8'd84,8'd37,8'd85,8'd86};
+ localparam [31:0] WAIT_WORD={8'd86,8'd39,8'd87,8'd88};
  wire footer_current=footer_ready && I_tracking==ftracking && I_video_ok==fvideo && I_detection_valid==fdetection && I_state==fstate;
  always @*begin
  footer_glyph=0;footer_gy=0;footer_text=0;footer_row=0;label_glyph=0;label_gx=0;label_gy=0;label_text=0;
@@ -173,7 +194,7 @@ endcase end
  if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,$signed(geometry[112+:14]),$signed(geometry[126+:14]),$signed(geometry[140+:14]),$signed(geometry[154+:14])))begin back_on=1;back=24'h40c080;end
  if(I_show && I_mode==1 && border(xx,yy,$signed(geometry[168+:14]),$signed(geometry[182+:14]),$signed(geometry[196+:14]),$signed(geometry[210+:14])))begin back_on=1;back=24'h80ff80;end
  end end
- wire [11:0] footer_addr=(footer_glyph<<4)+(footer_glyph<<3)+footer_gy;
+ wire [11:0] footer_addr=(footer_glyph<<4)+footer_gy;
  wire [FONT-1:0] footer_font_row;wire [15:0] label_font_row;wire [1:0] logo_pixel;
  stable_footer_glyph_rom footer_font(I_clk,footer_addr,footer_font_row);
  stable_glyph_rom label_font(I_clk,{label_glyph,label_gy},label_font_row);

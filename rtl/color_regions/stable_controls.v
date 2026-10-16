@@ -60,7 +60,7 @@ module stable_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  case(chord)
  5:if(!O_tracking && !cal_ui && O_gain_req==ack2)begin O_cal_enter<=~O_cal_enter;cal_ui<=1;cal_seen<=0;O_session<=O_session+1'b1;end else conflict<=1;
  6:O_rotate<=~O_rotate;
- 3:if(!cal_ui)O_diag<=O_diag==2?0:O_diag+1'b1;
+ 3:if(!cal_ui)O_diag<=O_diag+1'b1;
  endcase end
  if(chord==0 && pressed==2 && !consumed && held>=LONG_PRESS_MS-1)begin consumed<=1;if(!cal_ui)O_show<=~O_show;end
  if(chord==0 && pressed==1 && !consumed && (held==CHORD_WINDOW_MS || (held>CHORD_WINDOW_MS && (held-CHORD_WINDOW_MS)%150==0)))begin

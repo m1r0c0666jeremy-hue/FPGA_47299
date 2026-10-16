@@ -1,0 +1,5 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:144: warning: Port 13 (O_raw_tready) of module mipi_to_raw_converter expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:144:        : Pruning (signed) 31 high bits of the expression.
+
+STABLE_ISP_PASS two complete RAW/demosaic frames, ready, frame-frozen gain, 460800 groups and 345600 packed words
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\actual_isp_sof_tags_20261016_202152_659916\tb.sv:34: $finish called at 5958450000000000000 (1ps)

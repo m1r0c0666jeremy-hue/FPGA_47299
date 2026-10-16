@@ -77,6 +77,12 @@ wire [95:0] raw_rgb;wire raw_sof,raw_valid;wire [11:0] wb_r,wb_b;
 wire [127:0] color_models;wire [15:0] color_revision;wire [23:0] frame_gains;wire cal_active,needs_cal,frame_pair;
 wire [1:0] frame_model_state;wire [41:0] frame_quality;
 wire camera_parameter_event,camera_ready;wire [3:0] camera_fault,camera_phase;wire [1:0] camera_retries;wire [6:0] camera_gain;
+wire [31:0] board_us,time_gray,source_id,source_us,capture_us,latest_id_gray;wire source_time_valid;
+wire [17:0] camera_ui_status;wire camera_ui_ready;
+refined_timebase clock_us(S_hdmi_pixel_clk,S_rst_n,board_us,time_gray);
+target_mailbox #(.WIDTH(18)) camera_ui(.S_clk(S_24m_clk),.S_rst_n(S_rst_n),.S_send(camera_ui_ready),
+ .S_data({camera_ready,camera_phase,camera_fault,camera_retries,camera_gain}),.S_ready(camera_ui_ready),
+ .D_clk(S_hdmi_pixel_clk),.D_rst_n(process_rst_n),.D_valid(),.D_data(camera_ui_status));
 (* async_reg="true" *) reg [1:0] camera_event_sync;
 (* async_reg="true" *) reg [1:0] camera_ready_sync;reg camera_event_previous;
 wire camera_pause=camera_event_sync[1]!=camera_event_previous;
@@ -147,7 +153,8 @@ always @(posedge S_100m_clk or negedge S_rst_n) begin
 end
 
 assign O_screen_pwm = S_heart_cnt[25];   // 100 MHz / 2^26 ~= 0.75 s toggle
-stable_camera_capture u_camera (
+stable_camera_capture #(.TIMING(1)) u_camera (
+    .I_time_gray(time_gray),.O_source_id(source_id),.O_source_us(source_us),.O_now_us(capture_us),.O_latest_gray(latest_id_gray),.O_time_valid(source_time_valid),
     .O_parameter_event(camera_parameter_event),.O_camera_ready(camera_ready),.O_camera_fault(camera_fault),
     .O_camera_retries(camera_retries),.O_camera_phase(camera_phase),.O_camera_gain(camera_gain),
     .I_gain_r(wb_r),.I_gain_b(wb_b),.O_raw_rgb(raw_rgb),.O_raw_sof(raw_sof),.O_raw_valid(raw_valid),
@@ -168,6 +175,9 @@ status_sync u_status_sync (
     .I_status_async(camera_status_async), .O_status(S_hdmi_debug_status)
 );
 stable_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
+    .I_source_id(source_id),.I_source_us(source_us),.I_capture_us(capture_us),.I_source_time_valid(source_time_valid),
+    .I_board_us(board_us),.I_latest_gray(latest_id_gray),.I_model_state(frame_model_state),.I_quality(frame_quality),
+    .I_camera_event(camera_event_sync[1]),.I_camera_ready(camera_ready_sync[1]),.I_camera_status(camera_ui_status),
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
     .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking && camera_ready_sync[1]),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),

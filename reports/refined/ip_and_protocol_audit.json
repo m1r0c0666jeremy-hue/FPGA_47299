@@ -1,0 +1,19 @@
+{
+  "cloned_files": 51,
+  "only_changed_ip_file": "ddr2.v",
+  "change": "MC_REORDER NORMAL -> STRICT",
+  "original_and_cloned_constraints_identical": true,
+  "production_result_bits": 768,
+  "production_snapshot_bits": 852,
+  "reader": "refined_line_reader",
+  "no_invalid_snapshot_read": true,
+  "official_reference": {
+    "path": "D:/26_software/TangDynasty/doc/IPUG/IPUG034_PH1P_MIS_IP_Guide.pdf",
+    "sha256": "340f0705979e2c8467171efbf586497be60adf71236dc99dc2c1fee7271a18ca",
+    "pages": [
+      17,
+      23,
+      29
+    ]
+  }
+}

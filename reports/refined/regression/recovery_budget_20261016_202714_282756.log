@@ -1,0 +1,3 @@
+
+REFINED_RECOVERY_BUDGET_PASS initial timeout, three restarts then latched failure; reference clock stays alive
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\recovery_budget_20261016_202714_282756\tb.sv:12: $finish called at 930 (1s)

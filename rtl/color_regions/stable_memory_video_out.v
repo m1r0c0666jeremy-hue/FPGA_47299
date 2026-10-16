@@ -4,6 +4,9 @@
 // Pin compatibility and physical camera/display operation remain unverified.
 `default_nettype none
 module stable_memory_video_out #(parameter integer DEBUG_MODE = 0) (
+    input wire [31:0] I_source_id,I_source_us,I_capture_us,I_board_us,I_latest_gray,
+    input wire I_source_time_valid,input wire [1:0] I_model_state,input wire [41:0] I_quality,
+    input wire I_camera_event,I_camera_ready,input wire [17:0] I_camera_status,
     input wire I_sys_clk, input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
     input wire [2:0] I_zoom,
@@ -106,7 +109,10 @@ assign S_video_out_vsync = ~S_hdmi_vsync;
 wire write_frame_begin,capture_overflow;
 wire [1:0] write_frame_bank;
 wire [31:0] write_frame_id,capture_frame_id;
+wire [31:0] capture_frame_us,write_frame_us;wire [15:0] capture_epoch,write_epoch;wire capture_time_valid,write_time_valid;
 refined_video_in u_video_in(
+        .I_frame_us(capture_frame_us),.I_epoch(capture_epoch),.I_time_valid(capture_time_valid),
+        .O_frame_us(write_frame_us),.O_epoch(write_epoch),.O_time_valid(write_time_valid),
         .I_rst_n              (  stream_async_n      ),
 
         .I_camera_clk         ( S_csi_rx_clk          ),
@@ -145,7 +151,10 @@ refined_video_in u_video_in(
     wire active_rotate;wire [2:0] active_zoom;wire [1:0] frame_mode,selected_bank;
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
-    wire [639:0] active_meta;
+    wire [767:0] active_meta;
+    wire [31:0] image_us,latest_image_id;wire [15:0] image_epoch;wire image_time_valid;
+    wire latency_valid;wire [31:0] latency_us,frame_age;
+    refined_gray_sync latest_source(I_pixel_clk,I_process_rst_n,I_latest_gray,latest_image_id);
     wire detection_valid,sample_valid;
     wire active_pair,active_show,tip_valid,video_ok,frame_commit,selected_good;
     (* async_reg="true", syn_preserve=1 *) reg [1:0] capture_reset,ddr_reset;
@@ -169,13 +178,16 @@ refined_video_in u_video_in(
         .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
         .D_clk(I_capture_clk),.D_rst_n(capture_rst_n),.D_valid(command_valid),.D_data(command_data));
     wire capture_result,ddr_result,result_ready;
-    wire [639:0] capture_meta,ddr_meta;
-    stable_capture u_detection(
+    wire [767:0] capture_meta,ddr_meta;
+    stable_capture #(.V4(1)) u_detection(
+        .I_source_id(I_source_id),.I_source_us(I_source_us),.I_now_us(I_capture_us),.I_epoch(stream_epoch),
+        .I_time_valid(I_source_time_valid),.I_model_state(I_model_state),.I_quality(I_quality),
+        .O_frame_us(capture_frame_us),.O_epoch(capture_epoch),.O_time_valid(capture_time_valid),
         .I_models(I_models),.I_revision(I_revision),.I_gains(I_gains),.I_cal_status(I_cal_status),.I_cal_active(I_cal_active),.I_needs_cal(I_needs_cal),
         .I_clk(I_capture_clk),.I_rst_n(capture_rst_n),.I_sof(I_detect_sof),.I_valid(I_detect_valid),
         .I_fault(capture_overflow),.I_rgb(I_detect_rgb),.I_pair(I_frame_pair),.I_enable(command_active[0]),.I_session(command_active[8:1]),
         .I_result_ready(result_ready),.O_dropped(),.O_frame_id(capture_frame_id),.O_valid(capture_result),.O_meta(capture_meta));
-    target_mailbox #(.WIDTH(640)) u_results(
+    target_mailbox #(.WIDTH(768)) u_results(
         .S_clk(I_capture_clk),.S_rst_n(capture_rst_n),.S_send(capture_result),.S_data(capture_meta),.S_ready(result_ready),
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(ddr_result),.D_data(ddr_meta));
     // At every display VS request an atomic bank/generation/result snapshot.
@@ -189,27 +201,34 @@ refined_video_in u_video_in(
         .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(snap_request),.D_data(snapshot_command));
     wire snapshot_ready,store_snapshot,pixel_snapshot;
-    wire [674:0] store_data,pixel_data;
-    stable_frame_store u_frame_store(
+    wire [851:0] store_data,pixel_data;
+    (* async_reg="true" *) reg [1:0] camera_event_d;reg camera_event_last;
+    always @(posedge S_ddr_clk or negedge ddr_rst_n)
+    if(!ddr_rst_n)begin camera_event_d<=0;camera_event_last<=0;end
+    else begin camera_event_d<={camera_event_d[0],I_camera_event};camera_event_last<=camera_event_d[1];end
+    wire invalidate_camera=camera_event_d[1]!=camera_event_last;
+    stable_frame_store #(.V4(1)) u_frame_store(
+        .I_frame_us(write_frame_us),.I_epoch(write_epoch),.I_time_valid(write_time_valid),.I_invalidate(invalidate_camera),
         .I_clk(S_ddr_clk),.I_rst_n(ddr_rst_n),.I_begin(write_frame_begin),.I_bank(write_frame_bank),.I_frame_id(write_frame_id),
         .I_write(committed_write),.I_addr(committed_address),.I_result(ddr_result),.I_meta(ddr_meta),
         .I_snapshot(snap_request && snapshot_ready),.I_command(snapshot_command),.O_snapshot(store_snapshot),.O_data(store_data),.O_selected_good(selected_good));
-    target_mailbox #(.WIDTH(675)) u_snapshot_response(
+    target_mailbox #(.WIDTH(852)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
         .D_clk(I_pixel_clk),.D_rst_n(stream_pixel_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
-    stable_display u_viewport(
+    stable_display #(.V4(1)) u_viewport(
+        .O_image_us(image_us),.O_epoch(image_epoch),.O_time_valid(image_time_valid),
         .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
         .I_clk(I_pixel_clk),.I_rst_n(stream_pixel_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
         .I_pair(I_pair),.O_pair(active_pair),.I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
-        .I_live(video_ok),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
+        .I_live(video_ok && I_camera_ready && stream_pixel_n),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
         .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status));
-    stable_line_reader u_scaler (
+    refined_line_reader u_scaler (
         .I_stream_n(stream_async_n),.O_fault_toggle(read_fault_toggle),.O_ddr_diag(ddr_diagnostics),.O_pixel_diag(pixel_diagnostics),
         .I_accepted_reads(accepted_reads),.I_unexpected_return(unexpected_return),
         .I_rotate(active_rotate),
-        .I_frame_commit(frame_commit),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
+        .I_frame_commit(frame_commit && image_time_valid),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
         .I_write_busy(S_video_in_wr_busy), .I_write_en(S_vi_ddr_wr_en), .I_read_buffer(selected_bank),.I_frame_id(selected_frame_id),
         .I_ddr_ready(S_ddr_user_ready && S_init_calib_complete), .I_ddr_valid(S_ddr_user_rd_valid),
@@ -319,13 +338,23 @@ refined_video_in u_video_in(
 
     wire osd_vs, osd_hs, osd_de;
     wire [23:0] osd_rgb;
-    stable_osd u_osd (
+    wire telemetry_ready;wire [127:0] ddr_ui;wire recovery_ui_ready;wire [38:0] recovery_ui;
+    target_mailbox #(.WIDTH(128)) telemetry(.S_clk(S_ddr_clk),.S_rst_n(I_rst_n),.S_send(snap_request && telemetry_ready),.S_data(ddr_diagnostics),.S_ready(telemetry_ready),
+     .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(),.D_data(ddr_ui));
+    target_mailbox #(.WIDTH(39)) recovery_telemetry(.S_clk(I_sys_clk),.S_rst_n(I_rst_n),.S_send(recovery_ui_ready),
+     .S_data({recovery_failed,recovery_reason,recovery_retries,recovery_count,stream_epoch}),.S_ready(recovery_ui_ready),
+     .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(),.D_data(recovery_ui));
+    refined_performance performance(I_pixel_clk,I_process_rst_n,osd_vs,osd_de,video_ok && I_camera_ready && stream_pixel_n,
+     I_board_us,image_us,selected_frame_id,latest_image_id,image_time_valid,latency_valid,latency_us,frame_age);
+    refined_osd u_osd (
+        .I_latency_valid(latency_valid),.I_latency_us(latency_us),.I_frame_age(frame_age),
+        .I_ddr_diag(ddr_ui),.I_pixel_diag(pixel_diagnostics),.I_recovery(recovery_ui),.I_camera(I_camera_status),
         .I_geometry_commit(frame_commit),
         .I_rotate(active_rotate),.I_diag(diag_at_vs),.I_image_id(selected_frame_id),
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
         .I_vs(process_vs),.I_hs(process_hs),.I_de(process_de),.I_rgb(process_rgb),
         .I_tracking(I_tracking),.I_meta(active_meta),.I_x0(roi_x),.I_y0(roi_y),.I_zoom(active_zoom),.I_mode(actual_mode),
-        .I_detection_valid(detection_valid),.I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_sample_valid(sample_valid),.I_video_ok(video_ok),
+        .I_detection_valid(detection_valid),.I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_sample_valid(sample_valid),.I_video_ok(video_ok && I_camera_ready && stream_pixel_n),
         .O_vs(osd_vs),.O_hs(osd_hs),.O_de(osd_de),.O_rgb(osd_rgb)
     );
     hdmi_tx u_hdmi_tx(

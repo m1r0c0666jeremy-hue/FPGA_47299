@@ -2,18 +2,23 @@
 // 640-bit protocol v3 includes bank-owned colour/candidate/decision diagnostics.
 // immutable colour models/revision/calibration status belonging to this frame.
 `default_nettype none
-module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
+module stable_capture #(parameter V4=0)(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  input wire [95:0] I_rgb,input wire I_pair,I_enable,input wire [7:0] I_session,
  input wire [127:0] I_models,input wire [15:0] I_revision,
  input wire [23:0] I_gains,input wire [7:0] I_cal_status,input wire I_cal_active,I_needs_cal,
  input wire I_result_ready,output reg [31:0] O_frame_id,
- output reg O_valid,output wire [639:0] O_meta,output reg [31:0] O_dropped);
+ output reg O_valid,output wire [(V4?768:640)-1:0] O_meta,output reg [31:0] O_dropped,
+ input wire [31:0] I_source_id,I_source_us,I_now_us,input wire [15:0] I_epoch,
+ input wire I_time_valid,input wire [1:0] I_model_state,input wire [41:0] I_quality,
+ output reg [31:0] O_frame_us,output reg [15:0] O_epoch,output reg O_time_valid);
  wire clk=I_clk,rst_n=I_rst_n;reg last_sof,have,cb,accepted;
  wire sof=I_sof && !last_sof;wire nb=have?!cb:1'b0;
  reg [1:0] owned,pending,complete,closed;reg [3:0] invalid_drain[0:1];
  wire take=!owned[nb];reg [19:0] pixels;reg fault;reg [10:0] x;reg [9:0] y;
  wire [10:0] rx=sof?0:x;wire [9:0] ry=sof?0:y;
  reg [31:0] ids[0:1];reg [9:0] cmds[0:1];reg [127:0] models[0:1];
+ reg [31:0] source_us[0:1];reg [15:0] epochs[0:1];reg [1:0] time_valid;
+ reg [1:0] model_states[0:1];reg [41:0] qualities[0:1];
  reg [15:0] revs[0:1];reg [23:0] gains[0:1],mean[0:1];reg [7:0] status[0:1];reg [1:0] needs,sample_ok;
  reg [19:0] raw_a[0:1],raw_b[0:1],filtered_a[0:1],filtered_b[0:1];
  function [2:0] population;input [3:0] v;begin population={2'd0,v[0]}+v[1]+v[2]+v[3];end endfunction
@@ -46,12 +51,12 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  wire work_complete=complete[wb] && !gfailed;
  stable_tracker tracker(clk,rst_n,ts,ids[wb],{cmds[wb][9:1],detect_allowed},revs[wb],work_complete,
  candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state,hist_command,hist_revision,hist_frame,hist_loss,tip_bounds);
- reg [2:0] state;reg [639:0] packet,waiting_packet;reg waiting_result;
+ reg [2:0] state;reg [767:0] packet,waiting_packet;reg waiting_result;
  // The mailbox samples only on O_valid. This independent pending bank is
  // already immutable until its next complete result copy; a second 640-bit
  // output register adds no protection. Do not issue a pulse on a copy cycle:
  // the following source edge must sample the packet identified by that pulse.
- assign O_meta=waiting_packet;
+ assign O_meta=waiting_packet[(V4?768:640)-1:0];
  function [3:0] failure_stage;input c;reg [19:0] raw,filtered;reg [2:0] n,gr;begin
  raw=c?raw_b[wb]:raw_a[wb];filtered=c?filtered_b[wb]:filtered_a[wb];
  n=c?candidates[635:633]:candidates[123:121];gr=c?candidates[639:637]:candidates[127:125];
@@ -65,7 +70,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  packet[232:231]=work_complete?0:2;packet[234:233]=work_complete?0:2;
  packet[242:235]=cmds[wb][8:1];packet[243]=cmds[wb][9];packet[244]=cmds[wb][0];
  packet[245]=a[120] && work_complete && detect_allowed;packet[246]=b[120] && work_complete && detect_allowed;
- packet[247]=complete[wb];packet[255]=1;packet[407:384]=mean[wb];packet[408]=sample_ok[wb];packet[415:413]=3;
+ packet[247]=complete[wb];packet[255]=1;packet[407:384]=mean[wb];packet[408]=sample_ok[wb];packet[415:413]=V4?4:3;
  packet[412:409]=tip_bounds;
  packet[543:416]=models[wb];packet[559:544]=revs[wb];packet[567:560]=status[wb];
  packet[568]=needs[wb];packet[592:569]=gains[wb];
@@ -79,12 +84,14 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  packet[369:368]=a[97:96];packet[377:370]=a[111:104];packet[379:378]=a[99:98];packet[383:380]=a[103:100];
  packet[604]=complete[wb];packet[605]=work_complete && candidates[124];packet[606]=work_complete && candidates[636];
  packet[624:607]=complete[wb]?work_cycles:0;packet[639:625]=O_dropped>32767?15'd32767:O_dropped[14:0];
+ packet[671:640]=source_us[wb];packet[703:672]=I_now_us;packet[719:704]=epochs[wb];
+ packet[720]=time_valid[wb];packet[722:721]=model_states[wb];packet[764:723]=qualities[wb];
  end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin
  last_sof<=0;have<=0;cb<=0;accepted<=0;owned<=0;pending<=0;complete<=0;closed<=0;pixels<=0;fault<=0;x<=0;y<=0;
  sr<=0;sg<=0;sb<=0;sn<=0;needs<=0;sample_ok<=0;vp<=0;gs<=0;ts<=0;wb<=0;state<=0;
- waiting_packet<=0;waiting_result<=0;O_frame_id<=0;O_valid<=0;O_dropped<=0;
+ waiting_packet<=0;waiting_result<=0;O_frame_id<=0;O_valid<=0;O_dropped<=0;O_frame_us<=0;O_epoch<=0;O_time_valid<=0;time_valid<=0;
  for(i=0;i<2;i=i+1)begin ids[i]<=0;cmds[i]<=0;models[i]<=0;revs[i]<=0;gains[i]<=0;mean[i]<=0;status[i]<=0;invalid_drain[i]<=0;
  raw_a[i]<=0;raw_b[i]<=0;filtered_a[i]<=0;filtered_b[i]<=0;end
  for(i=0;i<4;i=i+1)begin xp[i]<=0;yp[i]<=0;tags[i]<=0;end end
@@ -101,11 +108,13 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  if(sof)begin
  if(have && accepted)begin closed[cb]<=1;complete[cb]<=pixels==921600 && !fault && !I_fault;end
  if(have && accepted && pixels!=921600)begin complete[cb]<=0;invalid_drain[cb]<=8;end
- have<=1;cb<=nb;accepted<=take;O_frame_id<=O_frame_id+1'b1;
+ have<=1;cb<=nb;accepted<=take;O_frame_id<=V4?I_source_id:O_frame_id+1'b1;
+ O_frame_us<=I_source_us;O_epoch<=I_epoch;O_time_valid<=I_time_valid;
  pixels<=I_valid?4:0;x<=I_valid?4:0;y<=0;fault<=0;sr<=0;sg<=0;sb<=0;sn<=0;
  if(take)begin
  raw_a[nb]<=0;raw_b[nb]<=0;filtered_a[nb]<=0;filtered_b[nb]<=0;
- owned[nb]<=1;closed[nb]<=0;complete[nb]<=0;ids[nb]<=O_frame_id+1'b1;cmds[nb]<={I_pair,I_session,I_enable};
+ owned[nb]<=1;closed[nb]<=0;complete[nb]<=0;ids[nb]<=V4?I_source_id:O_frame_id+1'b1;cmds[nb]<={I_pair,I_session,I_enable};
+ source_us[nb]<=I_source_us;epochs[nb]<=I_epoch;time_valid[nb]<=I_time_valid;model_states[nb]<=I_model_state;qualities[nb]<=I_quality;
  models[nb]<=I_models;revs[nb]<=I_revision;gains[nb]<=I_gains;status[nb]<=I_cal_status;needs[nb]<=I_needs_cal;
  end else O_dropped<=O_dropped+1'b1;
  end else begin

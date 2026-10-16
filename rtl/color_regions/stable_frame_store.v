@@ -1,13 +1,14 @@
 // Select the ACTUAL image bank together with matching functional metadata.
 // A completed empty result wins over an older non-empty result.
 `default_nettype none
-module stable_frame_store #(parameter WORDS=172800)(
+module stable_frame_store #(parameter WORDS=172800,V4=0,MW=V4?768:640,SW=V4?852:675)(
  input wire I_clk,I_rst_n,I_begin,input wire [1:0] I_bank,input wire [31:0] I_frame_id,
- input wire I_write,input wire [24:0] I_addr,input wire I_result,input wire [639:0] I_meta,
+ input wire I_write,input wire [24:0] I_addr,input wire I_result,input wire [MW-1:0] I_meta,
  input wire I_snapshot,input wire [9:0] I_command,
- output reg O_snapshot,output reg [674:0] O_data,output wire O_selected_good
+ output reg O_snapshot,output reg [SW-1:0] O_data,output wire O_selected_good,
+ input wire [31:0] I_frame_us,input wire [15:0] I_epoch,input wire I_time_valid,I_invalidate
 );
- reg [31:0] ids[0:3];reg [639:0] metadata[0:3];
+ reg [31:0] ids[0:3],stamps[0:3];reg [15:0] epochs[0:3];reg [3:0] timed;reg [MW-1:0] metadata[0:3];
  reg [3:0] known,complete,has_meta;
  reg selected_once;reg [1:0] selected;reg [31:0] selected_id;
  reg [3:0] write_bad;reg [18:0] count[0:3];reg [24:0] expected[0:3];
@@ -16,16 +17,17 @@ module stable_frame_store #(parameter WORDS=172800)(
  wire [1:0] committing=I_addr>=21000000?3:I_addr>=14000000?2:I_addr>=7000000?1:0;
  reg [3:0] co,hit,eligible;reg [9:0] tags[0:3];
  reg found,new_result_found;reg [1:0] newest,chosen,write_slot,lo,hi;integer i;
- wire result_ok=I_result && I_meta[255] && I_meta[415:413]==3;
+ wire result_ok=I_result && I_meta[255] && I_meta[415:413]==(V4?4:3) && !(V4 && I_invalidate);
  wire [9:0] result_tag={I_meta[243],I_meta[242:235],I_meta[244]};
  function [24:0] base_for;input [1:0] b;begin
   case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase
  end endfunction
- assign O_selected_good=selected_once && known[selected] && complete[selected] && ids[selected]==selected_id && !(I_begin && I_bank==selected);
+ assign O_selected_good=selected_once && known[selected] && complete[selected] && ids[selected]==selected_id && !(I_begin && I_bank==selected) && !(V4 && I_invalidate);
  always @*begin
   co=complete;hit=0;eligible=0;write_slot=0;
   for(i=0;i<4;i=i+1)begin
    hit[i]=result_ok && known[i] && ids[i]==I_meta[31:0] && !(I_begin && I_bank==i);
+   if(V4)hit[i]=hit[i] && epochs[i]==I_meta[719:704] && timed[i] && I_meta[720] && stamps[i]==I_meta[671:640];
    if(hit[i])write_slot=i;
   end
   if(I_write && known[committing])begin
@@ -33,6 +35,7 @@ module stable_frame_store #(parameter WORDS=172800)(
    else if(count[committing]==WORDS-1 && !write_bad[committing])co[committing]=1;
   end
   if(I_begin)co[I_bank]=0;
+  if(V4 && I_invalidate)co=0;
   for(i=0;i<4;i=i+1)eligible[i]=co[i] && known[i] &&
     (hit[i]?result_tag==I_command:has_meta[i] && tags[i]==I_command);
   // Three fixed comparisons replace nested variable-index comparison trees.
@@ -49,7 +52,7 @@ module stable_frame_store #(parameter WORDS=172800)(
  integer j;
  always @(posedge I_clk or negedge I_rst_n)begin
   if(!I_rst_n)begin
-   known<=0;complete<=0;has_meta<=0;write_bad<=0;selected_once<=0;
+   known<=0;complete<=0;has_meta<=0;write_bad<=0;selected_once<=0;timed<=0;
    selected<=0;selected_id<=0;O_snapshot<=0;O_data<=0;
    for(j=0;j<4;j=j+1)begin ids[j]<=0;tags[j]<=0;count[j]<=0;expected[j]<=0;end
   end else begin
@@ -63,12 +66,15 @@ module stable_frame_store #(parameter WORDS=172800)(
    if(I_begin)begin
      count[I_bank]<=0;expected[I_bank]<=base_for(I_bank);write_bad[I_bank]<=I_write && committing==I_bank;
      known[I_bank]<=1;has_meta[I_bank]<=0;ids[I_bank]<=I_frame_id;
+     stamps[I_bank]<=I_frame_us;epochs[I_bank]<=I_epoch;timed[I_bank]<=I_time_valid;
    end
    if(I_snapshot)begin
     selected<=chosen;selected_id<=ids[chosen];selected_once<=found;O_snapshot<=1;
-    O_data<={found,chosen,ids[chosen],640'd0};
-    if(found && new_result_found)O_data[639:0]<=hit[chosen]?I_meta:metadata[chosen];
+    O_data<=0;O_data[MW+:35]<={found,chosen,ids[chosen]};
+    if(V4)O_data[SW-1-:49]<={found && timed[chosen],epochs[chosen],stamps[chosen]};
+    if(found && new_result_found)O_data[MW-1:0]<=hit[chosen]?I_meta:metadata[chosen];
    end
+   if(V4 && I_invalidate)begin known<=0;complete<=0;has_meta<=0;selected_once<=0;timed<=0;end
   end
  end
 endmodule
