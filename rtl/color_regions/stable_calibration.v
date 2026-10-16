@@ -8,7 +8,7 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  output wire [11:0] gain_r,gain_b,output wire [127:0] models,
  output reg [15:0] revision,output wire cal_active,needs_cal,
  output wire [7:0] status,output reg frame_pair,output wire [23:0] frame_gains,
- output reg [7:0] frame_status);
+ output reg [7:0] frame_status,output reg [1:0] frame_model_state,output reg [41:0] frame_quality);
  function [63:0] model;input [8:0] lo,hi;input [7:0] mv,dc;input [1:0] sc;begin
  model={1'b1,lo,hi,mv,dc,sc,27'd0};end endfunction
  function [127:0] defaults;input p;begin defaults=p?
@@ -17,6 +17,7 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  reg [127:0] profiles[0:1];reg [11:0] gr[0:1],gb[0:1];reg [1:0] calibrated,required;
  reg [2:0] phase;reg cp;reg [3:0] error;reg [11:0] staged_r,staged_b;reg [63:0] staged_a,staged_model;
  reg [11:0] active_r,active_b;reg [127:0] active_models;reg active_need;
+ reg active_calibrated;reg [41:0] profile_quality[0:1],staged_quality;
  assign cal_active=phase!=0;assign needs_cal=active_need;
  wire use_staged=phase>=2 && pair==cp && !cancel && !gain_changed;
  assign gain_r=use_staged?staged_r:gr[pair];assign gain_b=use_staged?staged_b:gb[pair];
@@ -28,9 +29,9 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  reg [8:0] sample_addr;reg sample_write;reg [8:0] sample_wraddr;
  (* ram_style="block" *) reg [95:0] background[0:511];reg [95:0] background_q;
  reg background_valid;
- // Eight stratified positions per axis. Four adjacent pixels at each position;
- // frame-dependent offsets stay inside their 160x90 source cells.
- reg [10:0] background_x;reg [9:0] background_y;
+ // 48 full-field groups (8x6) plus sixteen central directed-negative groups.
+ // Their rows do not overlap; all group starts align to the four-pixel lanes.
+ reg [10:0] background_x;reg [9:0] background_y;reg [5:0] background_groups;
  (* ram_style="block" *) reg [11:0] hist[0:2047];reg [11:0] hq;
  reg [10:0] hist_addr;reg hist_write;reg [11:0] hist_data;
  always @(posedge clk)begin sample_q<=samples[sample_addr];background_q<=background[sample_addr];
@@ -41,7 +42,9 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  wire [10:0] rx=sof?0:x;wire [9:0] ry=sof?0:y;
  wire [5:0] jitter_x={frames[2:0],3'b000};
  wire [2:0] jitter_index=frames[2:0]+(frames[2:0]<<1);
- wire background_hit=valid && rx==background_x && ry==background_y;
+ wire global_background_hit=valid && background_groups<48 && rx==background_x && ry==background_y;
+ wire central_background_hit=valid && rx>=636 && rx<644 && ry>=356 && ry<364;
+ wire background_hit=global_background_hit || central_background_hit;
  wire window_hit=valid && rx>=632 && rx<648 && ry>=352 && ry<368;
  reg [19:0] sr,sg,sb;reg [11:0] bad_white;
  reg [10:0] ar,ag,ab;reg [2:0] bad_group;integer i;
@@ -79,7 +82,7 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  function [8:0] wrap;input signed [11:0] n;begin wrap=n<0?n+360:n>=360?n-360:n;end endfunction
  function hue_in;input [8:0] h,lo,hi;begin hue_in=lo>hi?(h>=lo || h<hi):(h>=lo && h<hi);end endfunction
  wire [11:0] q05=(cluster+19)/20,q95=cluster-cluster/20,q10=(cluster+9)/10;
- reg [7:0] min_m,min_d;reg [1:0] sat_code;reg all_frames;
+ reg [7:0] min_m,min_d;reg [1:0] sat_code;reg all_frames,enough_frames;reg [8:0] smallest_frame;
  function [7:0] m_option;input [1:0] n;input [7:0] low,base;reg [7:0] a;begin
  case(n)0:a=base;1:a=low>16?low-16:0;2:a=low>8?low-8:0;default:a=low;endcase
  m_option=a<base?base:a;end endfunction
@@ -123,8 +126,12 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  sat_code=(slow*3)>=32?3:(slow*3)>=24?2:(slow*3)>=16?1:0;
  staged_model=model(wrap($signed({3'd0,peak})+$signed({6'd0,hlo})-38),
  wrap($signed({3'd0,peak})+$signed({6'd0,hhi})-21),min_m,min_d,sat_code);
- all_frames=1;for(i=0;i<8;i=i+1)
+ all_frames=1;enough_frames=1;smallest_frame=511;
+ for(i=0;i<8;i=i+1)begin
+ if(frame_samples[i]<smallest_frame)smallest_frame=frame_samples[i];
+ if(frame_samples[i]<16)enough_frames=0;
  if(frame_samples[i]<16 || ({3'd0,frame_samples[i]}*5)<({3'd0,frame_eligible[i]}*3))all_frames=0;
+ end
  om=m_option(option_m,mlow,min_m);od=d_option(option_d,dlow,min_d);
  olo=wrap($signed({3'd0,peak})+$signed({6'd0,hlo})-(option_narrow?34:38));
  ohi=wrap($signed({3'd0,peak})+$signed({6'd0,hhi})-(option_narrow?25:21));
@@ -146,11 +153,12 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  if(!rst_n)begin
  profiles[0]<=defaults(0);profiles[1]<=defaults(1);gr[0]<=1024;gr[1]<=1024;gb[0]<=1024;gb[1]<=1024;calibrated<=0;required<=0;
  phase<=0;cp<=0;error<=0;staged_r<=1024;staged_b<=1024;staged_a<=0;active_r<=1024;active_b<=1024;active_models<=defaults(0);active_need<=0;
+ active_calibrated<=0;profile_quality[0]<=0;profile_quality[1]<=0;staged_quality<=0;frame_model_state<=0;frame_quality<=0;
  revision<=0;frame_pair<=0;frame_status<=0;state<=0;collecting<=0;waiting<=0;frame_open<=0;frames<=0;groups<=0;pixels<=0;x<=0;y<=0;
  sr<=0;sg<=0;sb<=0;bad_white<=0;ds<=0;numerator<=0;denominator<=0;clear_index<=0;pi<=0;channel<=0;pass<=0;
  r<=0;g<=0;b<=0;m<=0;d<=0;product<=0;hue<=0;peak<=0;sat<=0;eligible<=0;cluster<=0;peak_count<=0;scan<=0;dark_count<=0;weak_count<=0;
  quant<=0;cumulative<=0;hlo<=0;hhi<=0;got_lo<=0;got_hi<=0;mlow<=0;dlow<=0;slow<=0;
- background_valid<=0;background_x<=52;background_y<=17;
+ background_valid<=0;background_x<=52;background_y<=27;background_groups<=0;
  window_sum<=0;peak_slot<=0;peak_step<=0;replaying<=0;negative<=0;best_valid<=0;retention_seen<=0;
  option_index<=0;option_m<=0;option_d<=0;option_s<=0;option_narrow<=0;select_slot<=0;retain_frame<=0;
  positive_sum<=0;negative_sum<=0;best_negative<=0;best_positive<=0;negative_ok<=0;
@@ -159,29 +167,32 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  end else begin
  ds<=0;
  if(sof)begin
- if(frame_pair!=pair || active_r!=gain_r || active_b!=gain_b || active_models!=profiles[pair] || active_need!=(gain_changed?1'b1:required[pair]))revision<=revision+1'b1;
+ if(frame_pair!=pair || active_r!=gain_r || active_b!=gain_b || active_models!=profiles[pair] || active_need!=(gain_changed?1'b1:required[pair]) || active_calibrated!=calibrated[pair])revision<=revision+1'b1;
  frame_pair<=pair;active_r<=gain_r;active_b<=gain_b;active_models<=profiles[pair];active_need<=gain_changed?1'b1:required[pair];
+ active_calibrated<=calibrated[pair];frame_model_state<=gain_changed || required[pair]?2:calibrated[pair]?1:0;
+ frame_quality<=phase!=0 && pair==cp?staged_quality:profile_quality[pair];
  // UI feedback is live; image metadata describes the immutable RAW-SOF state.
  // A successful publication at this edge first applies to the following SOF.
  frame_status<=gain_changed?8'h09:(cancel || (phase!=0 && pair!=cp))?8'd0:status;
  pixels<=valid?4:0;x<=valid?4:0;y<=0;
- if(waiting)begin waiting<=0;collecting<=1;frame_open<=1;frames<=0;groups<=0;background_x<=52;background_y<=17;end
+ if(waiting)begin waiting<=0;collecting<=1;frame_open<=1;frames<=0;groups<=0;background_x<=52;background_y<=27;background_groups<=0;end
  else if(collecting)begin
- if(pixels!=921600 || groups!=64)begin collecting<=0;frame_open<=0;error<=1;end
+ if(pixels!=921600 || groups!=64 || (phase==2 && background_groups!=48))begin collecting<=0;frame_open<=0;error<=1;end
  else if(frames==7)begin collecting<=0;frame_open<=0;
  if(phase==2)begin background_valid<=1;phase<=3;state<=IDLE;end
  else state<=phase==1?WHITE_R:CLEAR;
  clear_index<=0;pass<=0;eligible<=0;cluster<=0;peak_count<=0;peak<=0;dark_count<=0;weak_count<=0;
  replaying<=0;negative<=0;window_sum<=0;peak_slot<=0;peak_step<=0;
  for(i=0;i<8;i=i+1)begin frame_samples[i]<=0;frame_eligible[i]<=0;end end
- else begin frames<=frames+1'b1;groups<=0;
+ else begin frames<=frames+1'b1;groups<=0;background_groups<=0;
  background_x<=52+{(frames[2:0]+3'd1),3'b000};
- background_y<=17+{(jitter_index+3'd3),3'b000};end end
+ background_y<=27+{(jitter_index+3'd3),3'b000};end end
  end else if(valid)begin
  if(pixels<921600)begin pixels<=pixels+4;if(x==1276)begin x<=0;y<=y+1'b1;end else x<=x+4;end
  else pixels<=921601;end
  if(sample_write)begin groups<=groups+1'b1;
- if(phase==2)begin if(groups[2:0]==7)begin background_x<=52+jitter_x;background_y<=background_y+90;end
+ if(phase==2 && global_background_hit)begin background_groups<=background_groups+1'b1;
+ if(background_groups[2:0]==7)begin background_x<=52+jitter_x;background_y<=background_y+120;end
  else background_x<=background_x+160;end
  if(phase==1)begin sr<=sr+ar;sg<=sg+ag;sb<=sb+ab;bad_white<=bad_white+bad_group;end end
  case(state)
@@ -219,13 +230,16 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  H_ADDR:state<=H_READ;H_READ:state<=H_WRITE;
  H_WRITE:if(!pass || channel==3)state<=PIX_NEXT;else begin channel<=channel+1'b1;state<=H_ADDR;end
  PIX_NEXT:if(pi==2047)begin
+ if(pass && !replaying)begin
+ if(phase==3)staged_quality[20:0]<={smallest_frame,cluster};
+ else if(phase==4)staged_quality[41:21]<={smallest_frame,cluster};end
  scan<=0;
  if(replaying)begin
  if(!negative)begin negative<=1;pi<=0;state<=PIX_ADDR;end
  else begin option_index<=0;option_m<=0;option_d<=0;option_s<=0;option_narrow<=0;state<=SELECT_INIT;end end
  else if(!pass)state<=PEAK_ADDR;
  else if(cluster<256 || cluster*5<eligible*3 || !all_frames)begin
- error<=cluster<256?(dark_count>=1024?8:weak_count>=1024?10:4):4;state<=IDLE;end
+ error<=cluster<256?(dark_count>=1024?8:weak_count>=1024?10:eligible>=256?11:12):!enough_frames?12:4;state<=IDLE;end
  else begin quant<=0;cumulative<=0;got_lo<=0;got_hi<=0;state<=QUANT_ADDR;end
  end else begin pi<=pi+1'b1;state<=PIX_ADDR;end
  PEAK_ADDR:state<=PEAK_READ;
@@ -290,9 +304,9 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  else if(hue_in(staged_a[62:54],best_model[62:54],best_model[53:45]) ||
  hue_in(best_model[62:54],staged_a[62:54],staged_a[53:45]))begin error<=5;state<=IDLE;end
  else begin profiles[cp]<={best_model,staged_a};gr[cp]<=staged_r;gb[cp]<=staged_b;calibrated[cp]<=1;
- required[cp]<=0;phase<=0;error<=0;state<=IDLE;end end end
+ required[cp]<=0;profile_quality[cp]<=staged_quality;phase<=0;error<=0;state<=IDLE;end end end
  endcase
- if(enter && phase==0)begin background_valid<=0;cp<=pair;phase<=1;error<=0;state<=IDLE;collecting<=0;waiting<=0;frame_open<=0;end
+ if(enter && phase==0)begin background_valid<=0;staged_quality<=0;cp<=pair;phase<=1;error<=0;state<=IDLE;collecting<=0;waiting<=0;frame_open<=0;end
  if(sample && phase!=0 && state==IDLE && !dbusy && !collecting && !waiting)begin waiting<=1;error<=0;sr<=0;sg<=0;sb<=0;bad_white<=0;end
  if(cancel || (phase!=0 && pair!=cp))begin phase<=0;state<=IDLE;collecting<=0;waiting<=0;frame_open<=0;error<=0;end
  if(gain_changed)begin phase<=0;state<=IDLE;collecting<=0;waiting<=0;frame_open<=0;

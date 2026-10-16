@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_baseline_20261016_190016\\stable_calibration_before.v": "fc31250f9665124b2af1bc3bdce95f6d6e4d51d363318e091ee204de7ac46364",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\sampling_before_0_1_20261016_193623_719012"
+}

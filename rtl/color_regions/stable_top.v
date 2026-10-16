@@ -75,6 +75,7 @@ wire ui_rotate;wire [1:0] ui_diag;wire gain_req, gain_up, gain_ack;
 wire cal_enter,cal_sample,cal_cancel;wire [7:0] cal_status,ui_cal_status,capture_cal_status;
 wire [95:0] raw_rgb;wire raw_sof,raw_valid;wire [11:0] wb_r,wb_b;
 wire [127:0] color_models;wire [15:0] color_revision;wire [23:0] frame_gains;wire cal_active,needs_cal,frame_pair;
+wire [1:0] frame_model_state;wire [41:0] frame_quality;
 wire camera_parameter_event,camera_ready;wire [3:0] camera_fault,camera_phase;wire [1:0] camera_retries;wire [6:0] camera_gain;
 (* async_reg="true" *) reg [1:0] camera_event_sync;
 (* async_reg="true" *) reg [1:0] camera_ready_sync;reg camera_event_previous;
@@ -96,7 +97,8 @@ target_mailbox #(.WIDTH(5)) cal_events(.S_clk(S_hdmi_pixel_clk),.S_rst_n(process
 stable_calibration calibration(.clk(S_csi_rx_clk),.rst_n(cal_rst_n),.sof(raw_sof),.valid(raw_valid),.rgb(raw_rgb),.pair(event_valid?event_data[4]:event_previous[4]),
 .enter(event_valid && event_data[0]!=event_previous[0]),.sample(event_valid && event_data[1]!=event_previous[1]),
 .cancel(event_valid && event_data[2]!=event_previous[2]),.gain_changed(event_valid && event_data[3]!=event_previous[3]),
-.gain_r(wb_r),.gain_b(wb_b),.models(color_models),.revision(color_revision),.cal_active(cal_active),.needs_cal(needs_cal),.status(cal_status),.frame_pair(frame_pair),.frame_gains(frame_gains),.frame_status(capture_cal_status));
+.gain_r(wb_r),.gain_b(wb_b),.models(color_models),.revision(color_revision),.cal_active(cal_active),.needs_cal(needs_cal),.status(cal_status),.frame_pair(frame_pair),.frame_gains(frame_gains),.frame_status(capture_cal_status),
+.frame_model_state(frame_model_state),.frame_quality(frame_quality));
 wire status_ready;reg [7:0] status_sent;wire status_send=status_ready && cal_status!=status_sent;
 always @(posedge S_csi_rx_clk or negedge cal_rst_n)if(!cal_rst_n)status_sent<=0;else if(status_send)status_sent<=cal_status;
 target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n),.S_send(status_send),.S_data(cal_status),.S_ready(status_ready),

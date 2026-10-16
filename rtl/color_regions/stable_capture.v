@@ -34,14 +34,18 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  stable_filter4 filter(clk,rst_n,vp[3],xp[3],yp[3],tags[3],mask,fv,ft,fx,fy,fa,fb);
  reg gs,ts,wb;wire gb,gd,gfailed;wire [1023:0] candidates;wire [17:0] work_cycles;
  wire hist_valid;wire [83:0] hist_boxes;
- stable_grid grid(clk,rst_n,fv && ft[1],ft[0],fx,fy,fa,fb,gs,wb,
- hist_valid,hist_boxes,hist_valid,gb,gd,gfailed,candidates,work_cycles);
- wire td,tv;wire [127:0] a,b;wire [10:0] tx;wire [9:0] ty;wire [3:0] reason;
- wire [1:0] selected_state;
- wire work_complete=complete[wb] && !gfailed;
+ wire [9:0] hist_command;wire [15:0] hist_revision;wire [31:0] hist_frame;wire [4:0] hist_loss;wire [3:0] tip_bounds;
  wire detect_allowed=cmds[wb][0] && !needs[wb] && status[wb][7:5]==0;
+ wire [1:0] selected_state;wire [31:0] history_gap=ids[wb]-hist_frame;
+ wire history_for_bank=hist_valid && hist_command=={cmds[wb][9:1],detect_allowed} && hist_revision==revs[wb] &&
+ history_gap!=0 && !history_gap[31] && history_gap<=15 && ({27'd0,hist_loss}+history_gap)<=15 &&
+ (selected_state==2 || history_gap==1);
+ stable_grid grid(clk,rst_n,fv && ft[1],ft[0],fx,fy,fa,fb,gs,wb,
+ history_for_bank,hist_boxes,history_for_bank,gb,gd,gfailed,candidates,work_cycles);
+ wire td,tv;wire [127:0] a,b;wire [10:0] tx;wire [9:0] ty;wire [3:0] reason;
+ wire work_complete=complete[wb] && !gfailed;
  stable_tracker tracker(clk,rst_n,ts,ids[wb],{cmds[wb][9:1],detect_allowed},revs[wb],work_complete,
- candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state);
+ candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state,hist_command,hist_revision,hist_frame,hist_loss,tip_bounds);
  reg [2:0] state;reg [639:0] packet,waiting_packet;reg waiting_result;
  // The mailbox samples only on O_valid. This independent pending bank is
  // already immutable until its next complete result copy; a second 640-bit
@@ -62,6 +66,7 @@ module stable_capture(input wire I_clk,I_rst_n,I_sof,I_valid,I_fault,
  packet[242:235]=cmds[wb][8:1];packet[243]=cmds[wb][9];packet[244]=cmds[wb][0];
  packet[245]=a[120] && work_complete && detect_allowed;packet[246]=b[120] && work_complete && detect_allowed;
  packet[247]=complete[wb];packet[255]=1;packet[407:384]=mean[wb];packet[408]=sample_ok[wb];packet[415:413]=3;
+ packet[412:409]=tip_bounds;
  packet[543:416]=models[wb];packet[559:544]=revs[wb];packet[567:560]=status[wb];
  packet[568]=needs[wb];packet[592:569]=gains[wb];
  packet[594:593]=selected_state;

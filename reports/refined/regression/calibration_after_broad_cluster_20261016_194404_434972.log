@@ -1,0 +1,2 @@
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\calibration_after_broad_cluster_20261016_194404_434972\tb.sv:10: error: Unable to bind wire/reg/memory `kind' in `tb'
+1 error(s) during elaboration.
