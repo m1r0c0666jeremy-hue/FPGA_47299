@@ -12,7 +12,7 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  (* ram_style="block" *) reg [95:0] lines[0:1023];
  (* ram_style="block" *) reg [127:0] source[0:255];
  (* ram_style="block" *) reg [7:0] masks[0:1023];
- reg [95:0] pixel_q;reg [127:0] source_q;reg [383:0] linegroup;reg [7:0] mask_q;
+ reg [95:0] pixel_q;reg [127:0] source_q;reg [383:0] linegroup,next_linegroup;reg [7:0] mask_q;
  (* async_reg="true" *) reg [1:0] dr,pr;wire d_rst=dr[1],p_rst=pr[1];
  always @(posedge I_ddr_clk or negedge I_rst_n)if(!I_rst_n)dr<=0;else dr<={dr[0],1'b1};
  always @(posedge I_pixel_clk or negedge I_rst_n)if(!I_rst_n)pr<=0;else pr<={pr[0],1'b1};
@@ -27,7 +27,10 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  reg [9:0] class_y;reg [8:0] close_wait;
  function [24:0] base_for;input [1:0] b;begin case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase end endfunction
  wire [9:0] rgb_write_addr=(slot<<8)+(slot<<6)+pair_index[9:1];
- wire [7:0] source_addr=((job_rotate?7'd79-group_index:group_index)<<1)+(job_rotate?7'd79-group_index:group_index)+(state==LOAD1?1:state==LOAD2?2:0);
+ wire [6:0] fetch_group=group_index+(state==CLASS && group_index<79?7'd1:7'd0);
+ wire [6:0] fetch_block=job_rotate?7'd79-fetch_group:fetch_group;
+ wire [1:0] fetch_word=state==CLASS?(pair_index[2:0]==1?1:pair_index[2:0]==2?2:0):(state==LOAD1?1:state==LOAD2?2:0);
+ wire [7:0] source_addr=({1'b0,fetch_block}<<1)+fetch_block+fetch_word;
  wire source_we=(state==SEND || state==RECEIVE) && I_ddr_valid;
  wire [7:0] source_port=source_we?received:source_addr;
  wire [47:0] ordered_pair=linegroup >> ((job_rotate?pair_index[2:0]:7-pair_index[2:0])*48);
@@ -58,7 +61,7 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  integer j;
  always @(posedge I_ddr_clk or negedge d_rst)begin
  if(!d_rst)begin req1<=0;req2<=0;ack<=0;job_rotate<=1;frame_rotate<=1;state<=IDLE;slot<=0;image<=0;image_id<=0;job_epoch<=0;job_y<=0;models<=0;
- frame_base<=0;line_base<=0;sent<=0;received<=0;part<=0;group_index<=0;assembly<=0;linegroup<=0;pair_index<=0;pos<=0;
+ frame_base<=0;line_base<=0;sent<=0;received<=0;part<=0;group_index<=0;assembly<=0;linegroup<=0;next_linegroup<=0;pair_index<=0;pos<=0;
  class_valid<=0;class_x<=0;class_y<=0;close_wait<=0;vp<=0;half_mask<=0;filter_valid<=0;filter_x<=0;filter_y<=0;filter_mask<=0;
  for(j=0;j<4;j=j+1)begin xp[j]<=0;yp[j]<=0;end end
  else begin
@@ -82,8 +85,13 @@ module stable_line_reader(input wire I_frame_commit,I_selected_good,I_rst_n,
  LOAD1:begin linegroup[383:256]<=source_q;state<=LOAD2;end
  LOAD2:begin linegroup[255:128]<=source_q;state<=LOAD3;end
  LOAD3:begin linegroup[127:0]<=source_q;state<=CLASS;end
- CLASS:if(pair_index==639)begin state<=CLOSE;close_wait<=0;end
- else begin pair_index<=pair_index+1'b1;if(pair_index[2:0]==7)begin group_index<=group_index+1'b1;state<=LOAD0;end end
+ CLASS:begin
+ if(pair_index[2:0]==1)next_linegroup[383:256]<=source_q;
+ if(pair_index[2:0]==2)next_linegroup[255:128]<=source_q;
+ if(pair_index[2:0]==3)next_linegroup[127:0]<=source_q;
+ if(pair_index==639)begin state<=CLOSE;close_wait<=0;end
+ else begin pair_index<=pair_index+1'b1;if(pair_index[2:0]==7)begin group_index<=group_index+1'b1;linegroup<=next_linegroup;end end
+ end
  CLOSE:begin close_wait<=close_wait+1'b1;
  if((job_y==0 && close_wait>=12) || (mask_finish && fy==(job_y==719?719:job_y-1)))begin ack<=req2;state<=IDLE;end end
  endcase

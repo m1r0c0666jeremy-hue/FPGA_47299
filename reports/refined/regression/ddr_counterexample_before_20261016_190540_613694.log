@@ -1,0 +1,13 @@
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 3 (cea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 4 (ocea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 11 (ceb) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 13 (web) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 15 (addrb) of module ram_infer_f58e8b3e1f3d expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 23 high bits of the expression.
+
+COUNTEREXAMPLE_PASS baseline_loses_read accepted0 with AWREADY=1 ARREADY=0 then released
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\ddr_counterexample_before_20261016_190540_613694\tb.sv:12: $finish called at 540000000000000 (1ps)

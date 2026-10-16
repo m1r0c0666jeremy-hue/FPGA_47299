@@ -9,8 +9,11 @@ module stable_frame_store #(parameter WORDS=172800)(
 );
  reg [31:0] ids[0:3];reg [639:0] metadata[0:3];
  reg [3:0] known,complete,has_meta;
- reg active,write_bad,selected_once;reg [1:0] writing,selected;reg [31:0] selected_id;
- reg [18:0] count;reg [24:0] expected;
+ reg selected_once;reg [1:0] selected;reg [31:0] selected_id;
+ reg [3:0] write_bad;reg [18:0] count[0:3];reg [24:0] expected[0:3];
+ // Accepted FIFO commands can outlive a camera bank switch. Commit each actual
+ // PAXI write against its address bank, never against the latest camera bank.
+ wire [1:0] committing=I_addr>=21000000?3:I_addr>=14000000?2:I_addr>=7000000?1:0;
  reg [3:0] co,hit,eligible;reg [9:0] tags[0:3];
  reg found,new_result_found;reg [1:0] newest,chosen,write_slot,lo,hi;integer i;
  wire result_ok=I_result && I_meta[255] && I_meta[415:413]==3;
@@ -25,9 +28,9 @@ module stable_frame_store #(parameter WORDS=172800)(
    hit[i]=result_ok && known[i] && ids[i]==I_meta[31:0] && !(I_begin && I_bank==i);
    if(hit[i])write_slot=i;
   end
-  if(I_write && active)begin
-   if(I_addr!=expected || count>=WORDS)co[writing]=0;
-   else if(count==WORDS-1 && !write_bad)co[writing]=1;
+  if(I_write && known[committing])begin
+   if(I_addr!=expected[committing] || count[committing]>=WORDS)co[committing]=0;
+   else if(count[committing]==WORDS-1 && !write_bad[committing])co[committing]=1;
   end
   if(I_begin)co[I_bank]=0;
   for(i=0;i<4;i=i+1)eligible[i]=co[i] && known[i] &&
@@ -46,19 +49,19 @@ module stable_frame_store #(parameter WORDS=172800)(
  integer j;
  always @(posedge I_clk or negedge I_rst_n)begin
   if(!I_rst_n)begin
-   known<=0;complete<=0;has_meta<=0;active<=0;write_bad<=0;selected_once<=0;
-   writing<=0;selected<=0;selected_id<=0;count<=0;expected<=0;O_snapshot<=0;O_data<=0;
-   for(j=0;j<4;j=j+1)begin ids[j]<=0;tags[j]<=0;end
+   known<=0;complete<=0;has_meta<=0;write_bad<=0;selected_once<=0;
+   selected<=0;selected_id<=0;O_snapshot<=0;O_data<=0;
+   for(j=0;j<4;j=j+1)begin ids[j]<=0;tags[j]<=0;count[j]<=0;expected[j]<=0;end
   end else begin
    complete<=co;
    if(|hit)begin has_meta[write_slot]<=1;tags[write_slot]<=result_tag;end
    O_snapshot<=0;
-   if(I_write && active)begin
-    if(I_addr!=expected || count>=WORDS)write_bad<=1;
-    else begin expected<=expected+8;count<=count+1'b1;end
+   if(I_write && known[committing])begin
+    if(I_addr!=expected[committing] || count[committing]>=WORDS)write_bad[committing]<=1;
+    else begin expected[committing]<=expected[committing]+8;count[committing]<=count[committing]+1'b1;end
    end
    if(I_begin)begin
-     writing<=I_bank;count<=0;expected<=base_for(I_bank);active<=1;write_bad<=I_write;
+     count[I_bank]<=0;expected[I_bank]<=base_for(I_bank);write_bad[I_bank]<=I_write && committing==I_bank;
      known[I_bank]<=1;has_meta[I_bank]<=0;ids[I_bank]<=I_frame_id;
    end
    if(I_snapshot)begin

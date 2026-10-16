@@ -45,6 +45,7 @@ wire        S_ddr_user_rd_valid;
 wire        S_ddr_user_ready;
 wire[127:0] S_ddr_user_wr_data;
 wire        S_ddr_user_wr_en;
+wire committed_write;wire [24:0] committed_address;wire [9:0] outstanding_reads;wire unexpected_return;
 wire        S_hdmi_de;
 wire[3:0]   S_hdmi_debug_status;
 wire        S_hdmi_hsync;
@@ -184,7 +185,7 @@ video_in u_video_in(
     wire [674:0] store_data,pixel_data;
     stable_frame_store u_frame_store(
         .I_clk(S_ddr_clk),.I_rst_n(ddr_rst_n),.I_begin(write_frame_begin),.I_bank(write_frame_bank),.I_frame_id(write_frame_id),
-        .I_write(S_vi_ddr_wr_en),.I_addr(S_vi_ddr_wr_addr),.I_result(ddr_result),.I_meta(ddr_meta),
+        .I_write(committed_write),.I_addr(committed_address),.I_result(ddr_result),.I_meta(ddr_meta),
         .I_snapshot(snap_request && snapshot_ready),.I_command(snapshot_command),.O_snapshot(store_snapshot),.O_data(store_data),.O_selected_good(selected_good));
     target_mailbox #(.WIDTH(675)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
@@ -211,7 +212,9 @@ video_in u_video_in(
         .O_rgb(S_hdmi_out_data), .O_mask(source_mask),.O_video_ok(video_ok)
     );
 
-    mc_to_user_interface u_mc_to_user_interface(
+    refined_mc_to_user_interface u_mc_to_user_interface(
+        .O_write_commit(committed_write),.O_write_addr(committed_address),
+        .O_outstanding_reads(outstanding_reads),.O_unexpected_return(unexpected_return),
         .I_clk                   ( S_ddr_clk               ),
         .I_rst_n                 ( S_rst_n                 ),
 
@@ -237,7 +240,7 @@ video_in u_video_in(
         .I_mc_app_rd_data_valid  ( S_mc_app_rd_data_valid  )
     );
 
-    ph1p35_324_ddr_wrapper u_ph1p35_324_ddr_wrapper(
+    refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper(
         .I_sys_clk              ( I_sys_clk              ),
         .I_sys_rst_n            ( S_rst_n                ),
 

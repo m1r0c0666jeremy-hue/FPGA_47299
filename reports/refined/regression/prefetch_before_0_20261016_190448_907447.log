@@ -1,0 +1,3 @@
+
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\prefetch_before_0_20261016_190448_907447\tb.sv:43: mask row46 x0 gotxx expected00
+       Time: 5407500  Scope: tb
