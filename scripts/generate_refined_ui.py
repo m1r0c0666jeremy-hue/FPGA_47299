@@ -105,6 +105,19 @@ endcase end
                       '@WAIT_GLYPHS@':','.join(f"8'd{ids[c]}" for c in '等待结果'),
                       '@FADDR@':f'(footer_glyph<<{int(math.log2(size))})+footer_gy' if size in (16,32) else '(footer_glyph<<4)+(footer_glyph<<3)+footer_gy'}.items():s=s.replace(key,value)
     out={'rtl/color_regions/stable_osd.v':s}
+    # Keep the historical ROM intact. Palette 0 is transparent; palette 3 is
+    # an exterior one-pixel outline, never substituted for original colours.
+    original=[0]*8192
+    for addr,value in re.findall(r"mem\[(\d+)\]=2'h([0-9a-f]);",(R/'rtl/09_osd_ui/scaling_logo_rom.v').read_text()):
+        original[int(addr)]=int(value,16)
+    pixels=[0]*8192
+    for yy in range(64):
+        for xx in range(98):
+            def colour(x,y):return original[y*96+x] if 0<=x<96 and 0<=y<62 else 0
+            value=colour(xx-1,yy-1)
+            if not value and any(colour(xx-1+dx,yy-1+dy) for dx in (-1,0,1) for dy in (-1,0,1)):value=3
+            pixels[yy*98+xx]=value
+    out['rtl/color_regions/refined_logo_rom.v']='module refined_logo_rom(input wire clk,input wire [12:0] addr,output reg [1:0] q);\n(* ram_style="block" *) reg [1:0] mem[0:8191];\ninitial begin\n'+''.join(f"mem[{i}]=2'h{v:x};\n" for i,v in enumerate(pixels))+'end\nalways @(posedge clk)q<=mem[addr];\nendmodule\n'
     def data_rom(name,width,rows):
         depth=len(rows);addr=(depth-1).bit_length()
         return f'module {name}(input wire clk,input wire [{addr-1}:0] addr,output reg [{width-1}:0] q);\n(* syn_preserve=1 *) reg [{addr-1}:0] registered_addr;\n(* rom_style="bram" *) reg [{width-1}:0] mem[0:{depth-1}];\ninitial begin\n'+''.join(f"mem[{i}]={width}'h{v:x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)begin registered_addr<=addr;q<=mem[registered_addr];end\nendmodule\n'

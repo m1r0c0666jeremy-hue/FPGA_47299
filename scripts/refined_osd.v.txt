@@ -88,9 +88,8 @@ module stable_osd(
  box=0;valid_box=0;xx=$signed({3'd0,x});yy=$signed({4'd0,y});bx0=0;bx1=0;by0=0;by1=0;lx=0;ly=0;ldx=0;ldy=0;lc=0;
  if(y>=624)begin
  back_on=1;
- if(x>=1152)back=24'hffffff;
- if(x>=1168 && x<1264 && y>=641 && y<703)begin
- logo_on=1;logo_y=y-641;logo_x=x-1168;logo_addr=(logo_y<<6)+(logo_y<<5)+logo_x;end
+ if(x>=1167 && x<1265 && y>=640 && y<704)begin
+ logo_on=1;logo_y=y-640;logo_x=x-1167;logo_addr=(logo_y<<6)+(logo_y<<5)+(logo_y<<1)+logo_x;end
  if(x>=16 && x<16+COLS*FONT && ((y>=632+(32-FONT)/2 && y<632+(32-FONT)/2+FONT) ||
  (y>=676+(32-FONT)/2 && y<676+(32-FONT)/2+FONT)))begin
  footer_row=y>=676;footer_gy=footer_row?y-(676+(32-FONT)/2):y-(632+(32-FONT)/2);
@@ -122,7 +121,7 @@ module stable_osd(
  wire [FONT-1:0] footer_font_row;wire [15:0] label_font_row;wire [1:0] logo_pixel;
  stable_footer_glyph_rom footer_font(I_clk,footer_addr,footer_font_row);
  stable_glyph_rom label_font(I_clk,{label_glyph,label_gy},label_font_row);
- scaling_logo_rom logo(I_clk,logo_addr,logo_pixel);
+ refined_logo_rom logo(I_clk,logo_addr,logo_pixel);
  reg [4:0] footer_px_d;reg [3:0] label_gx_d;reg footer_d,label_d,logo_d,back_d,vs_d,hs_d,de_d;
  reg [23:0] ink_d,bg_d,rgb_d;
  always @(posedge I_clk or negedge I_rst_n)begin
@@ -137,7 +136,7 @@ module stable_osd(
  footer_px_d<=footer_px;label_gx_d<=label_gx;footer_d<=footer_text;label_d<=label_text;logo_d<=logo_on;back_d<=back_on;
  ink_d<=ink;bg_d<=back;rgb_d<=I_rgb;vs_d<=I_vs;hs_d<=I_hs;de_d<=I_de;
  O_vs<=vs_d;O_hs<=hs_d;O_de<=de_d;
- O_rgb<=logo_d?(logo_pixel==1?24'h1c2c4e:logo_pixel==2?24'hed1b23:24'hffffff):
+ O_rgb<=logo_d && logo_pixel!=0?(logo_pixel==1?24'h1c2c4e:logo_pixel==2?24'hed1b23:24'he0e8f4):
  footer_d && footer_font_row[FONT-1-footer_px_d]?ink_d:
  label_d && label_font_row[15-label_gx_d]?ink_d:back_d?bg_d:rgb_d;
  end end

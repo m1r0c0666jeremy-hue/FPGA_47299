@@ -1,0 +1,12 @@
+
+RING_UI_CASE_PASS overview
+RING_UI_CASE_PASS counts
+RING_UI_CASE_PASS model
+RING_UI_CASE_PASS cal1
+RING_UI_CASE_PASS cal2
+RING_UI_CASE_PASS cal3
+RING_UI_CASE_PASS cal4
+RING_UI_CASE_PASS busy
+RING_UI_CASE_PASS inseparable
+RING_UI_PASS all 96 footer rows: manual pages, 4 calibration steps, busy/error text, official symbol colours/transparency, decimal/hex and 2-clock sync
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\transparent_ui_pixels_20261016_201018_357008\tb.sv:26: $finish called at 11520900 (1s)
