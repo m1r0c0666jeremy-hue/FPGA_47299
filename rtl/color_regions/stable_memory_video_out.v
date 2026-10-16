@@ -207,7 +207,7 @@ refined_video_in u_video_in(
     if(!ddr_rst_n)begin camera_event_d<=0;camera_event_last<=0;end
     else begin camera_event_d<={camera_event_d[0],I_camera_event};camera_event_last<=camera_event_d[1];end
     wire invalidate_camera=camera_event_d[1]!=camera_event_last;
-    stable_frame_store #(.V4(1)) u_frame_store(
+    refined_frame_store #(.V4(1)) u_frame_store(
         .I_frame_us(write_frame_us),.I_epoch(write_epoch),.I_time_valid(write_time_valid),.I_invalidate(invalidate_camera),
         .I_clk(S_ddr_clk),.I_rst_n(ddr_rst_n),.I_begin(write_frame_begin),.I_bank(write_frame_bank),.I_frame_id(write_frame_id),
         .I_write(committed_write),.I_addr(committed_address),.I_result(ddr_result),.I_meta(ddr_meta),

@@ -39,7 +39,8 @@ frozen_project=out/'target_color_regions_refined.al'
 frozen_project.write_text('<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n',encoding='utf-8')
 t=t.replace('set project [file join $root td_project target_color_regions_refined.al]',f'set project {{{frozen_project.as_posix()}}}')
 t=re.sub(r'# PRODUCTION_OUTPUT_BEGIN.*?# PRODUCTION_OUTPUT_END',f'set out {{{out.as_posix()}}}',t,flags=re.S)
-if a.stage=='synth':t=t[:t.index('    legalize_phy_inst')]+'''    puts "REFINED_SYNTH_COMPLETED"
+if a.stage=='synth':t=t[:t.index('    legalize_phy_inst')]+'''    report_timing_summary -file target_color_regions_gate.timing
+    puts "REFINED_SYNTH_COMPLETED"
 } message]} {puts stderr "BUILD_FAILED: $message";puts stderr $::errorInfo;exit 1}
 exit
 '''

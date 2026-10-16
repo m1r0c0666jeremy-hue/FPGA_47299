@@ -130,8 +130,9 @@ endcase end
         depth=len(rows);addr=(depth-1).bit_length()
         return f'module {name}(input wire clk,input wire [{addr-1}:0] addr,output reg [{width-1}:0] q);\n(* syn_preserve=1 *) reg [{addr-1}:0] registered_addr;\n(* rom_style="bram" *) reg [{width-1}:0] mem[0:{depth-1}];\ninitial begin\n'+''.join(f"mem[{i}]={width}'h{v:x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)begin registered_addr<=addr;q<=mem[registered_addr];end\nendmodule\n'
     out['rtl/color_regions/stable_footer_program_rom.v']=data_rom('stable_footer_program_rom',16,program)
-    # The sparse program ROM otherwise maps to a 274-LUT decode tree in TD.
-    # Use the vendor-supported RAM attribute in the independent refined UI.
+    # Historical resource experiment: "block" falls back to AUTO in TD.
+    # SWUG106 section 4.2.6 specifies "bram"; verify actual mapping before
+    # claiming a memory saving. Keep the current compiled candidate frozen.
     out['rtl/color_regions/refined_footer_program_rom.v']=data_rom('refined_footer_program_rom',16,program).replace('rom_style="bram"','ram_style="block"')
     out['rtl/color_regions/refined_osd.v']=s.replace('module stable_osd(', 'module refined_osd(').replace('stable_footer_program_rom program_rom','refined_footer_program_rom program_rom')
     out['rtl/color_regions/stable_footer_text_rom.v']=data_rom('stable_footer_text_rom',8,dynamic_text)
