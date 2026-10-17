@@ -1,0 +1,10 @@
+{
+  "stage": "full",
+  "head": "e363b588e3a0131a9b4c3f9f43dac75f498345c0",
+  "head_after": "e363b588e3a0131a9b4c3f9f43dac75f498345c0",
+  "route_effort": "routability",
+  "placement_strategy": 2,
+  "exit_code": 4294967295,
+  "inputs_unchanged": true,
+  "working_tree_matches": true
+}

@@ -1,0 +1,8 @@
+{
+  "status": "STOPPED_SUPERSEDED_NOT_DELIVERABLE",
+  "source_commit": "e363b588e3a0131a9b4c3f9f43dac75f498345c0",
+  "reason": "98.97% placed utilization, routing plateau 15806 to 15765 violations in iterations 9/10; same-source area_prior/high placement uses 20049 Slice (94.50%). Preserve this attempt and concentrate on full_171814.",
+  "stopped_owned_pid": 7684,
+  "verified_start": "2026-10-17 16:55:50",
+  "recorded": "2026-10-17T17:18:49.994971"
+}
