@@ -144,7 +144,10 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
   O_ddr_diag[17:0]<=job_cycles;
   if(bus_wait>O_ddr_diag[35:18])O_ddr_diag[35:18]<=bus_wait;
   if(return_wait>O_ddr_diag[53:36])O_ddr_diag[53:36]<=return_wait;
-  O_ddr_diag[62:54]<=accepted_delta[8:0];O_ddr_diag[71:63]<={1'b0,received};
+  // Once a fault is recorded, its beat counts stay paired with that cause
+  // until another fault or KEY1. Good rows must not replace the fault snapshot.
+  if(O_ddr_diag[75:72]==0)begin
+   O_ddr_diag[62:54]<=accepted_delta[8:0];O_ddr_diag[71:63]<={1'b0,received};end
  end
  if(d_rst && mask_finish && !notify_ready && O_ddr_diag[103:88]!=65535)O_ddr_diag[103:88]<=O_ddr_diag[103:88]+1'b1;
  if(timeout_event && d_rst)begin

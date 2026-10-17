@@ -46,6 +46,8 @@ def audit(attempt=None,regression=False):
   assert 'V4_UI_CASE_PASS last_pixel_abort' in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
   for mode in range(3):
    assert 'FAILED_JOB_PEAK_PASS' in (R/result['regression'][f'final_video_drain_{mode}']['record']).with_suffix('.log').read_text(encoding='utf-8')
+   if mode:
+    assert 'FAULT_COUNTS_STICKY_PASS' in (R/result['regression'][f'final_video_drain_{mode}']['record']).with_suffix('.log').read_text(encoding='utf-8')
   result['display_combinations']=80;result['live_frames']=20;result['hardware_status']='pending'
  if attempt:
   out=(R/attempt).resolve();assert out.is_relative_to(R/'build')

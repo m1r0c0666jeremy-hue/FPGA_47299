@@ -1,7 +1,7 @@
 """Final reader: every timeout drains; missing snapshots record once per frame."""
 from refined_testlib import R,run,literal_fixture
 import argparse
-ap=argparse.ArgumentParser();ap.add_argument('--before',action='store_true');a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--before',action='store_true');ap.add_argument('--before-counts',action='store_true');a=ap.parse_args()
 src=literal_fixture(R/'scripts/test_refined_recovery.py').replace('stable_line_reader','refined_line_reader')
 src=src.replace('repeat(8)@(negedge pc);newframe;','''repeat(8)@(negedge pc);newframe;
 if(mode==2)begin wait(dut.state==3);@(negedge dc);dut.failed_jobs=2;wait(dut.state==10);repeat(900)@(negedge dc);
@@ -19,11 +19,17 @@ always @(posedge dc)if(dut.d_rst && dut.timeout_event)begin
 end
 '''
 src=src.replace('endmodule',peak_check+'\nendmodule')
+src=src.replace('if(dd[87:76]<2 || checks<1000)', '''if(dd[75:72]!=4 || dd[62:54]!=240 || dd[71:63]!=239)$fatal(1,"fault beat snapshot overwritten after good row %h",dd);
+$display("FAULT_COUNTS_STICKY_PASS cause4 accepted240 returned239 after successful fresh row");
+if(dd[87:76]<2 || checks<1000)''')
 if a.before:
  mods=[R/'build/refined_full_20261017_224454/compiled_source/rtl/color_regions/refined_line_reader.v' if p.name=='refined_line_reader.v' else p for p in mods]
-for mode in ((0,) if a.before else (0,1,2)):
- run(f'before_failed_peak_drain_{mode}' if a.before else f'final_video_drain_{mode}',src,mods,args=[f'+MODE={mode}'],expected_failure=a.before)
-if a.before:raise SystemExit(0)
+if a.before_counts:
+ mods=[R/'build/refined_full_20261017_231328/compiled_source/rtl/color_regions/refined_line_reader.v' if p.name=='refined_line_reader.v' else p for p in mods]
+for mode in ((0,) if a.before else (1,) if a.before_counts else (0,1,2)):
+ name=f'before_failed_peak_drain_{mode}' if a.before else f'before_fault_counts_drain_{mode}' if a.before_counts else f'final_video_drain_{mode}'
+ run(name,src,mods,args=[f'+MODE={mode}'],expected_failure=a.before or a.before_counts)
+if a.before or a.before_counts:raise SystemExit(0)
 missing=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,vs=0,de=0,stream=1;wire rd;wire [127:0] pd;
 refined_line_reader dut(.I_frame_commit(1'b0),.I_selected_good(1'b0),.I_rst_n(rst),.I_ddr_clk(clk),.I_write_busy(1'b0),.I_write_en(1'b0),.I_read_buffer(2'd0),.I_frame_id(32'd0),.I_models(128'd0),.I_ddr_ready(1'b1),.I_ddr_valid(1'b0),.I_ddr_data(128'd0),.O_read_en(rd),.I_pixel_clk(clk),.I_vs(vs),.I_hs(1'b0),.I_de(de),.I_x0(11'd0),.I_y0(10'd48),.I_zoom(3'd0),.I_rotate(1'b1),.I_stream_n(stream),.O_pixel_diag(pd),.I_accepted_reads(32'd0),.I_unexpected_return(1'b0));
