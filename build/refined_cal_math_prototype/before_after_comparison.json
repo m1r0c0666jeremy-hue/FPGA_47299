@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "adopted": false,
+  "distribution_cases": [
+    {
+      "case": "calibration_after_blue_metal_reflection",
+      "before": "reports\\refined\\regression\\calibration_after_blue_metal_reflection_20261016_194058_550959.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_blue_metal_reflection_20261018_003922_811815.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS blue_metal_reflection baseline=0 success=1 cycles=1701396 model=b29b6783c8000000"
+    },
+    {
+      "case": "calibration_after_broad_cluster",
+      "before": "reports\\refined\\regression\\calibration_after_broad_cluster_20261016_194518_761180.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_broad_cluster_20261018_004236_470708.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS broad_cluster baseline=0 success=1 cycles=907300 model=ab1c2a6bb8000000"
+    },
+    {
+      "case": "calibration_after_dark_blue_background",
+      "before": "reports\\refined\\regression\\calibration_after_dark_blue_background_20261016_194552_420841.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_dark_blue_background_20261018_004305_924902.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS dark_blue_background baseline=0 success=1 cycles=1706996 model=b29b678990000000"
+    },
+    {
+      "case": "calibration_after_inseparable_background",
+      "before": "reports\\refined\\regression\\calibration_after_inseparable_background_20261016_194706_196649.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_inseparable_background_20261018_004400_420807.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS inseparable_background baseline=0 success=0 cycles=1694676 model=b0dfe40208000000"
+    },
+    {
+      "case": "calibration_after_polluted_frames",
+      "before": "reports\\refined\\regression\\calibration_after_polluted_frames_20261016_194549_491361.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_polluted_frames_20261018_004302_591011.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS polluted_frames baseline=0 success=0 cycles=283414 model=b0dfe40208000000"
+    },
+    {
+      "case": "calibration_after_purple_dark_bias",
+      "before": "reports\\refined\\regression\\calibration_after_purple_dark_bias_20261016_193832_480571.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_purple_dark_bias_20261018_003727_273776.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS purple_dark_bias baseline=0 success=1 cycles=1707556 model=cce8878990000000"
+    },
+    {
+      "case": "calibration_after_purple_neutral_background",
+      "before": "reports\\refined\\regression\\calibration_after_purple_neutral_background_20261016_194215_859497.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_purple_neutral_background_20261018_004021_887251.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS purple_neutral_background baseline=0 success=1 cycles=1048660 model=c926a643c8000000"
+    },
+    {
+      "case": "calibration_after_yellow_bright_neutral",
+      "before": "reports\\refined\\regression\\calibration_after_yellow_bright_neutral_20261016_194254_355849.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_yellow_bright_neutral_20261018_004054_115982.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS yellow_bright_neutral baseline=0 success=1 cycles=1048660 model=8d08a785b0000000"
+    },
+    {
+      "case": "calibration_after_yellow_dark_bias",
+      "before": "reports\\refined\\regression\\calibration_after_yellow_dark_bias_20261016_193947_825966.log",
+      "after": "reports\\refined\\regression\\cal_math_calibration_after_yellow_dark_bias_20261018_003824_477014.log",
+      "model_and_cycles_identical": true,
+      "result": "RING_DISTRIBUTION_PASS yellow_dark_bias baseline=0 success=1 cycles=1706996 model=8d08a78990000000"
+    }
+  ],
+  "acquisition_statuses_and_finish_tick_identical": true,
+  "before_source_sha256": "c1742e77355a7a3d1dd4fddf640258037770be5ce4eec9b5d28c511141cb6ce7",
+  "candidate_sha256": "3ba8b2a9a3ebe9169835375c2b01b03795f3d3a88bc5315a783a037123fae735"
+}

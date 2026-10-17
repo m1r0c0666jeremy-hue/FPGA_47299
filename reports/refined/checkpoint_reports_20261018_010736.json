@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "parent": "build/refined_place_20261018_005818",
+  "child": "build/refined_route_20261018_010650_797911",
+  "checks": [
+    {
+      "report": "placed_clocks.txt",
+      "roundtrip_equal": true,
+      "added_exception_rejected": true,
+      "parent_sha256": "c5b186d244b72e05261f9271e3c2e1147cbc66648f81160cc94cebe4a5c5fb50",
+      "restored_sha256": "6bbcd68ac1d2d1421b0c6de6592e38edefa4ed01f23ebbe3598bdba409816e47"
+    },
+    {
+      "report": "placed_exceptions.timing",
+      "roundtrip_equal": true,
+      "added_exception_rejected": true,
+      "parent_sha256": "341ebcecdb18713fb4e50c7b5b70239c44b6da1866c9dee561dd7b2fde625751",
+      "restored_sha256": "bc991dfc0cb32d6a67e31984d070cfa7f3de90a6f9bd83b3448ba558356eb129"
+    }
+  ],
+  "inputs": {
+    "scripts/audit_refined.py": "42315ea93160564c88b6407cabf78dd593ade8752e417d07d4b517da94ced464",
+    "scripts/run_refined_route.py": "469d38237c7a487c6db787a15a25bd0e8d21a43a0db3c4499d7497fd7cc7da51",
+    "scripts/test_refined_checkpoint_reports.py": "2f9d99461c1e5835a61ee7ff371215bcf037c42142533bbbdfd2febd22389395"
+  }
+}

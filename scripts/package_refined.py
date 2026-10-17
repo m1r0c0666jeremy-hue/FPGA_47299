@@ -19,10 +19,17 @@ for name in ('target_color_regions_phy.area','target_color_regions_phy.ts','targ
     shutil.copy2(attempt/name,dest/name)
 for name in ('official_strategy_ph1.json','official_strategy_context.json'):
     if (attempt/name).is_file():shutil.copy2(attempt/name,dest/name)
+checkpoint=obj['build']['summary'].get('checkpoint_provenance')
+if checkpoint:
+    for name in ('checkpoint_provenance.json','placed_clocks.txt','placed_exceptions.timing'):
+        shutil.copy2(attempt/name,dest/name)
 shutil.copy2(attempt/'td.log',dest/'td_build.log')
 shutil.copy2(attempt/'compiled_inputs.zip',dest/'compiled_source_snapshot.zip')
 obj.update(status='TEST_SOFTWARE_AND_BUILD_PASSED_HARDWARE_PENDING',archive_name='颜色识别、视频稳定性与显示功能改进',delivery_directory=dest.relative_to(R).as_posix(),bit=bit.relative_to(R).as_posix(),bit_sha256=sha(bit),hardware='PENDING; no board download or Flash write',guide='docs/颜色视频显示改进_上板一页.md',validation='reports/refined/最终验证报告.md')
 report=R/obj['validation'];originals={report:report.read_bytes()};updates={};text=originals[report].decode('utf-8')
+pending_status='**当前状态：139项软件验证已通过，TD完整构建仍在进行，暂无新bit/同源ZIP，实物全部待验。**'
+assert pending_status in text,'Review the current report status before publication'
+text=text.replace(pending_status,f'**当前状态：{len(obj["regression"])}项软件验证及完整TD构建通过，实物待验。**')
 assert '<!-- BUILD_RESULT -->' in text,'Report already published; preserve it and use a new reviewed report'
 assert '<!-- STORE_RESULT -->' not in text,'Complete the actual new-selector live verification report first'
 assert '<!-- FINAL_SOFTWARE_RESULT -->' in text
@@ -36,6 +43,10 @@ if s.get('official_strategy'):
         flow_args += ['--official-syn' if definition['is_syn']=='syn' else '--official-phy',name]
     flow_args += ['--official-strategy-file',b['attempt']+'/official_strategy_ph1.json']
 recipe='scripts/run_refined_build.py '+' '.join(flow_args)
+checkpoint_note=''
+if checkpoint:
+    recipe=f'scripts/run_refined_route.py --parent {checkpoint["parent"]} --route-effort {s["route_effort"]}'
+    checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n'
 block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐项一致。
 
 | 项目 | 最终实际结果 |
@@ -51,6 +62,7 @@ block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐
 独立尝试：`{b['attempt']}`。原ADC/SDC未放宽；原时钟和例外限制保留，不能解释为完整物理验证。实物全部待验。
 
 编译源码提交：`{b['compiled_source_commit']}`，{b['git_blob_inputs_verified']}项编译输入与该提交的Git原始文件逐字节相同。
+{checkpoint_note}
 
 复现需使用实际通过的工具设置：`{recipe}`。脚本调用TD并创建新的时间戳目录；不要直接重跑历史目录的run.tcl，以免覆盖已交付证据。新.al为功能工程入口，完整工具参数以本次run.tcl及summary.json为准。
 '''
@@ -68,6 +80,12 @@ record(dest/'audit.json',obj)
 # the tests reviewable without packing historical bits or arbitrary caches.
 compiled=json.loads((attempt/'inputs.json').read_text(encoding='utf-8'))
 paths={R/name for name in compiled}
+if checkpoint:
+    parent=R/checkpoint['parent'];paths.add(attempt/checkpoint['checkpoint_name'])
+    paths.add(attempt/'checkpoint_provenance.json')
+    for name in ('summary.json','source_context.json','inputs.json','inputs_after.json','flow_options.json','run.tcl','td.log','target_color_regions_gate.area','target_color_regions_phy.area','placed_clocks.txt','placed_exceptions.timing','official_strategy_ph1.json','official_strategy_context.json',checkpoint['checkpoint_name']):
+        if (parent/name).is_file():paths.add(parent/name)
+    paths|={parent/'compiled_source'/name for name in compiled}
 for name in ('official_strategy_ph1.json','official_strategy_context.json'):
     if (attempt/name).is_file():paths.add(attempt/name)
 # Preserve the generator's implementation-start project and the later UI save.

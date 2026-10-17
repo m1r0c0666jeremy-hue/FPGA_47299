@@ -15,6 +15,7 @@ ap.add_argument('--place-effort',choices=['medium','high'])
 ap.add_argument('--official-syn',choices=['AreaOptimizeMedium','AreaOptimizeHigh'])
 ap.add_argument('--official-phy',choices=['CongestionMedium','CongestionHigh','TimingHigh','TimingUltra'])
 ap.add_argument('--official-strategy-file',default='D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json')
+ap.add_argument('--checkpoint',action='store_true')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
@@ -38,6 +39,7 @@ if a.official_syn or a.official_phy:
  (out/'official_strategy_ph1.json').write_bytes(strategy_bytes)
  (out/'official_strategy_context.json').write_text(json.dumps(official,indent=2),encoding='utf-8')
 project=R/'td_project/target_color_regions_refined.al'
+(out/'flow_options.json').write_text(json.dumps(dict(options=vars(a),official_strategy=official),indent=2),encoding='utf-8')
 paths={project,R/'td_project/target_lock.adc',R/'td_project/target_lock.sdc',R/'rtl/03_tool_detection/target_config.json'}
 for s in re.findall(r'<File Path="([^"]+)"',project.read_text(encoding='utf-8')):
  p=(project.parent/s).resolve()
@@ -87,6 +89,14 @@ if official:
  if gate_lines:t=t.replace('    set_param gate map_mode',gate_lines+'\n    set_param gate map_mode',1)
  if phy_lines:t=t.replace('    set_param place pr_strategy',phy_lines+'\n    set_param place pr_strategy',1)
 t=t.replace('    route\n','    report_area -io_info -file target_color_regions_place.area\n    route\n')
+if a.checkpoint:
+ t=t.replace('    place\n','    export_db target_color_regions_gate.db\n    place\n')
+ t=t.replace('    route\n','''    report_clock_utilization -file placed_clocks.txt
+    report_timing_exception -file placed_exceptions.timing
+    export_db target_color_regions_placed.db
+    puts "REFINED_PLACED_CHECKPOINT_READY"
+    route
+''')
 t=re.sub(r'# PRODUCTION_OUTPUT_BEGIN.*?# PRODUCTION_OUTPUT_END',f'set out {{{out.as_posix()}}}',t,flags=re.S)
 if a.stage=='synth':t=t[:t.index('    legalize_phy_inst')]+'''    report_timing_summary -file target_color_regions_gate.timing
     puts "REFINED_SYNTH_COMPLETED"
@@ -107,6 +117,7 @@ after={name:sha(frozen/name) for name in before}
 (out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
 summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
 summary['official_strategy']=official
+summary['checkpoints']={name:sha(out/name) for name in ('target_color_regions_gate.db','target_color_regions_placed.db') if (out/name).is_file()}
 if p.returncode==0:
  from refined_build_report import assess
  summary.update(assess(out,a.stage))

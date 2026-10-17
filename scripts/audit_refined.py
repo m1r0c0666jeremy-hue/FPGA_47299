@@ -24,6 +24,10 @@ def required_inputs(prefix):
  if prefix=='controls_with_camera_pause':required.append('rtl/color_regions/refined_controls.v')
  if prefix=='footer_late_abort_after':required.append('rtl/color_regions/refined_osd.v')
  return tuple(required)
+def checkpoint_report_signature(path,parent,out):
+ text=path.read_text(encoding='utf-8').replace('\r','')
+ for p in (parent,out):text=text.replace(p.as_posix(),'<ATTEMPT>')
+ return '\n'.join(line.rstrip() for line in text.split('\n') if not re.match(r'^(Generated[ \t]+:|[|][ \t]+Date[ \t]+:|Generated (on|at)|Date:|Time:)',line.strip())).strip()
 def audit(attempt=None,regression=False):
  branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
  assert branch=='release/transparent-ring-stability-20261015',branch
@@ -67,6 +71,10 @@ def audit(attempt=None,regression=False):
    assert json.loads((out/'official_strategy_context.json').read_text(encoding='utf-8'))==strategy
    definitions=json.loads((out/'official_strategy_ph1.json').read_text(encoding='utf-8'))
    tcl=(out/'run.tcl').read_text(encoding='utf-8')
+   if s.get('checkpoint_provenance'):
+    strategy_parent=(R/s['checkpoint_provenance']['parent']).resolve()
+    assert strategy_parent.is_relative_to(R/'build')
+    tcl+='\n'+(strategy_parent/'run.tcl').read_text(encoding='utf-8')
    for name,definition in strategy['selected'].items():
     assert definitions[name]==definition
     for setting in definition['params']:
@@ -76,6 +84,23 @@ def audit(attempt=None,regression=False):
   assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'
   assert (out/'target_color_regions.bit').is_file()
   context=json.loads((out/'source_context.json').read_text(encoding='utf-8'))
+  if s.get('checkpoint_provenance'):
+   proof=s['checkpoint_provenance'];parent=(R/proof['parent']).resolve();assert parent.is_relative_to(R/'build')
+   assert s['checkpoint_unchanged'] and context['placed_checkpoint']==proof
+   assert sha(parent/'summary.json')==proof['parent_summary_sha256']
+   assert sha(parent/'source_context.json')==proof['parent_context_sha256']
+   assert sha(parent/'inputs.json')==proof['parent_inputs_sha256']==sha(out/'inputs.json')
+   ps=json.loads((parent/'summary.json').read_text(encoding='utf-8'))
+   assert ps['stage']=='place' and ps['exit_code']==0 and ps['resource_pass'] and ps['inputs_unchanged']
+   db=proof['checkpoint_name'];assert db=='target_color_regions_placed.db'
+   assert sha(parent/db)==sha(out/db)==proof['checkpoint_sha256']==ps['checkpoints'][db]
+   assert before==json.loads((parent/'inputs.json').read_text(encoding='utf-8'))==json.loads((parent/'inputs_after.json').read_text(encoding='utf-8'))
+   assert all(sha(parent/'compiled_source'/n)==v for n,v in before.items())
+   assert context['compiled_source_commit']==json.loads((parent/'source_context.json').read_text(encoding='utf-8'))['compiled_source_commit']
+   assert 'REFINED_PLACED_CHECKPOINT_READY' in (parent/'td.log').read_text(encoding='utf-8')
+   assert 'CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS' in (out/'td.log').read_text(encoding='utf-8')
+   for name in ('placed_clocks.txt','placed_exceptions.timing'):
+    assert checkpoint_report_signature(parent/name,parent,out)==checkpoint_report_signature(out/name,parent,out),name
   commit=context['compiled_source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
   assert context['inputs_sha256']==sha(out/'inputs.json') and context['input_count']==len(before)
   subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=R,check=True)
