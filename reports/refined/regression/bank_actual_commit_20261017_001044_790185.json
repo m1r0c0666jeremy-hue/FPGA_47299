@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_frame_store.v": "807a2cee25d364dec14fbf05f69ab40f729f2d90bc2f3b8d517755e98c795cab"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\bank_actual_commit_20261017_001044_790185"
+}

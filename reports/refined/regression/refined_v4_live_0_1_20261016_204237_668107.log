@@ -1,0 +1,17 @@
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 3 (cea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 4 (ocea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 11 (ceb) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 13 (web) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 15 (addrb) of module ram_infer_f58e8b3e1f3d expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 23 high bits of the expression.
+
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\refined_v4_live_0_1_20261016_204237_668107\tb.sv:86: live video underrun frame5 xy0/37
+       Time: 91891114326  Scope: tb_stable_live

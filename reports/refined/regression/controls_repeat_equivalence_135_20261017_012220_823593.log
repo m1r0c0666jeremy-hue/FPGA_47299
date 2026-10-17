@@ -1,0 +1,2 @@
+REFINED_CONTROL_EQUIVALENCE_PASS window135 171892 clocks gain924 zoom8; repeat, 65535 saturation, chords, calibration and pause
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\controls_repeat_equivalence_135_20261017_012220_823593\tb.sv:23: $finish called at 1718956 (1s)

@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_display.v": "c7201c361cc2d42659e0cbc7b89b39bde8332c25900ef7df887cb304b51c2805",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\five_zoom_viewport_20261017_003042_791149"
+}

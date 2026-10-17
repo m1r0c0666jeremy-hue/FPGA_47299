@@ -1,0 +1,77 @@
+"""Read-only audit of the refined branch, regression evidence and frozen build."""
+from pathlib import Path
+import argparse,hashlib,json,re,subprocess
+R=Path(__file__).resolve().parents[1]
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def evidence(prefix,required=()):
+ records=[]
+ for p in (R/'reports/refined/regression').glob(prefix+'_*.json'):
+  d=json.loads(p.read_text(encoding='utf-8-sig'))
+  if not set(required).issubset({n.replace('\\','/') for n in d.get('inputs',{})}):continue
+  if (d.get('exit_code')!=0 and not d.get('passed')) or d.get('expected_failure'):continue
+  if not all((R/name).is_file() and sha(R/name)==v for name,v in d.get('inputs',{}).items()):continue
+  log=p.with_suffix('.log')
+  if log.is_file() and 'PASS' in log.read_text(encoding='utf-8'):records.append((p,d))
+ if not records:raise AssertionError('Missing current-source passing evidence: '+prefix)
+ p,d=max(records,key=lambda v:v[0].name)
+ return dict(record=p.relative_to(R).as_posix(),record_sha256=sha(p),log_sha256=sha(p.with_suffix('.log')),inputs=d['inputs'])
+def audit(attempt=None,regression=False):
+ branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
+ assert branch=='release/transparent-ring-stability-20261015',branch
+ subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
+ subprocess.run([__import__('sys').executable,'-X','utf8',str(R/'scripts/refined_protection_current.py')],cwd=R,check=True)
+ from generate_refined_regions import assets
+ for name,value in assets().items():
+  data=value if isinstance(value,bytes) else value.replace('\r\n','\n').encode('utf-8')
+  assert (R/name).read_bytes()==data,'generated: '+name
+ # Image/overlay rendering is identical. Footer diagnostic capture moves from
+ # row 620 to 625; the separate late-abort pixel regression covers that change.
+ a=(R/'rtl/color_regions/refined_osd.v').read_text(encoding='utf-8').replace('module refined_osd(', 'module stable_osd(').replace('refined_footer_program_rom program_rom','stable_footer_program_rom program_rom').replace('I_de && y==625 && x==0','I_de && y==620 && x==0')
+ assert a==(R/'rtl/color_regions/stable_osd.v').read_text(encoding='utf-8')
+ b=(R/'rtl/color_regions/refined_footer_program_rom.v').read_text(encoding='utf-8').replace('refined_footer_program_rom','stable_footer_program_rom').replace('ram_style="block"','rom_style="bram"')
+ assert b==(R/'rtl/color_regions/stable_footer_program_rom.v').read_text(encoding='utf-8')
+ result=dict(branch=branch,head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),protection_pass=True,generator_pass=True,image_renderer_identical=True,footer_capture_row=625)
+ if regression:
+  writer=(R/'rtl/color_regions/refined_video_in.v').read_text(encoding='utf-8').replace('module refined_video_in (','module arbitration_video_in #(parameter BW=240)(').replace('burst_count==239','burst_count==BW-1').replace('fifo_count>=240','fifo_count>=BW')
+  assert (R/'build/sim/refined_arbitration/writer.v').read_text(encoding='utf-8')==writer,'arbitration fixture differs from current writer'
+  prefixes=['source_time_and_endpoint','v4_frame_store_and_display','actual_isp_sof_tags','refined_v4_ui_pixels','controls_with_camera_pause','camera_frame_admission','camera_real_i2c','ddr_handshake','bank_actual_commit','final_missing_snapshot','ingress','calibration_calibration_acquisition','model_state_quality','history_full_rgb_after','tracker_identity_adversarial','tracker_quality_and_diagnostics','five_zoom_viewport','rational_overlay_geometry','recovery_budget','arbitration_bw240_recover']
+  prefixes += ['footer_late_abort_after','capture_diagnostics_v4','store_cached_id_comparison','refined_v4_frame_store_and_display','controls_repeat_equivalence_100','controls_repeat_equivalence_135']+[f'camera_supervisor_{m}' for m in range(6)]+[f'final_video_drain_{m}' for m in range(3)]
+  prefixes += [f'refined_video_{pair}_{z}_{page}_{rot}_f0_n1' for pair in (0,1) for z in range(5) for page in range(4) for rot in (0,1)]
+  prefixes += [f'refined_v4_live_{pair}_{rot}' for pair in (0,1) for rot in (0,1)]
+  prefixes += [f'refined_video_0_0_0_{rot}_f1_n2' for rot in (0,1)]+[f'refined_video_0_1_0_{rot}_f0_n2' for rot in (0,1)]
+  prefixes += [f'sampling_after_{pair}_{case}' for pair,case in ((0,0),(0,1),(1,0),(1,1))]
+  prefixes += ['calibration_after_'+n for n in ('blue_metal_reflection','broad_cluster','dark_blue_background','inseparable_background','polluted_frames','purple_dark_bias','purple_neutral_background','yellow_bright_neutral','yellow_dark_bias')]
+  result['regression']={prefix:evidence(prefix,('rtl/color_regions/refined_frame_store.v',) if prefix.startswith('refined_v4_live_') else ('rtl/color_regions/refined_controls.v',) if prefix=='controls_with_camera_pause' else ('rtl/color_regions/refined_osd.v',) if prefix=='footer_late_abort_after' else ()) for prefix in prefixes}
+  late=result['regression']['footer_late_abort_after']
+  assert 'V4_UI_CASE_PASS last_pixel_abort' in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
+  result['display_combinations']=80;result['live_frames']=20;result['hardware_status']='pending'
+ if attempt:
+  out=(R/attempt).resolve();assert out.is_relative_to(R/'build')
+  s=json.loads((out/'summary.json').read_text(encoding='utf-8'))
+  assert s['stage']=='full' and s['exit_code']==0 and s['resource_pass'] and s['timing_pass'] and s['inputs_unchanged'],s
+  before=json.loads((out/'inputs.json').read_text(encoding='utf-8'));after=json.loads((out/'inputs_after.json').read_text(encoding='utf-8'))
+  assert before==after and all(sha(out/'compiled_source'/n)==v for n,v in before.items())
+  assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'
+  assert (out/'target_color_regions.bit').is_file()
+  context=json.loads((out/'source_context.json').read_text(encoding='utf-8'))
+  commit=context['compiled_source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
+  assert context['inputs_sha256']==sha(out/'inputs.json') and context['input_count']==len(before)
+  subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=R,check=True)
+  names=list(before);assert all('\n' not in n and '\r' not in n for n in names)
+  blob=subprocess.run(['git','cat-file','--batch'],cwd=R,input=('\n'.join(commit+':'+n for n in names)+'\n').encode(),capture_output=True,check=True).stdout
+  pos=0
+  for name in names:
+   end=blob.index(b'\n',pos);header=blob[pos:end];pos=end+1
+   assert not header.endswith(b' missing'),name
+   size=int(header.split()[-1]);data=blob[pos:pos+size];pos+=size+1
+   assert hashlib.sha256(data).hexdigest()==before[name],'compiled input differs from committed bytes: '+name
+  timing=(out/'target_color_regions_pr.timing').read_text(encoding='utf-8')
+  exceptions=(out/'target_color_regions_exception.timing').read_text(encoding='utf-8')
+  result['build']=dict(attempt=out.relative_to(R).as_posix(),summary=s,compiled_source_commit=commit,git_blob_inputs_verified=len(before),bit_sha256=sha(out/'target_color_regions.bit'),frozen_inputs=len(before),sta_coverage_percent=float(re.search(r'STA coverage\s*:\s*([\d.]+)%',timing)[1]),ignored_max_delay_constraints=int(re.search(r'Ignored\s*:\s*(\d+)',exceptions)[1]))
+ return result
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--attempt');ap.add_argument('--regression',action='store_true');ap.add_argument('--record');args=ap.parse_args()
+ data=audit(args.attempt,args.regression)
+ if args.record:
+  p=R/args.record;assert not p.exists(),p;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode('utf-8'))
+ print('REFINED_AUDIT_PASS',len(data.get('regression',{})),'current-source simulations',data.get('build',{}).get('attempt','no full build requested'))

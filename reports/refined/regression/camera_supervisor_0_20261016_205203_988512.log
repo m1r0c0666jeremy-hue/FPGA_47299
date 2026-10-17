@@ -1,0 +1,3 @@
+
+REFINED_CAMERA_PASS startup, ACK-complete gain, bad-frame confirmation reset, reapply and real framing
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_supervisor_0_20261016_205203_988512\tb.sv:29: $finish called at 18950000 (1ps)

@@ -32,5 +32,14 @@ for before in (True,False):
  check='if(meta[203:184]==48)$fatal(1,"baseline eviction fixture changed");' if before else 'if(meta[203:184]!=48 || meta[47:37]!=641 || meta[379:378]!=1)$fatal(1,"stale history still evicted new tool %h",meta);'
  mods=[base/'stable_capture_before.v',base/'stable_tracker_before.v'] if before else [R/'rtl/color_regions/stable_capture.v',R/'rtl/color_regions/stable_tracker.v']
  run('history_full_rgb_before' if before else 'history_full_rgb_after',src.replace('CHECK',check).replace('LABEL','before' if before else 'after'),[*mods,*others])
-# Existing eight-frame real classification/candidate/model/mailbox test.
-run('capture_diagnostics',literal_fixture(R/'scripts/test_ring_diagnostics.py'),[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_capture','stable_tracker','stable_model_lane','stable_filter4','stable_grid','regions_divide')])
+# Migrate the eight-frame bank-reuse fixture to the actual 768-bit pending
+# register. A 640-bit saved value compared to that register falsely reports a
+# change solely because the new timestamp/status fields were omitted.
+diag=literal_fixture(R/'scripts/test_ring_diagnostics.py')
+diag=diag.replace('[639:0]','[767:0]').replace('stable_capture dut(', 'stable_capture #(.V4(1)) dut(')
+diag=diag.replace('ov,meta,drop);',"ov,meta,drop,32'(f),32'(f*1000),32'd32000,16'd7,1'b1,2'd1,42'h123456789ab,,,);")
+diag=diag.replace('meta[415:413]!=3','meta[415:413]!=4')
+diag=diag.replace('received=received+1;n=meta[31:0];', '''received=received+1;n=meta[31:0];
+if(meta[671:640]!=n*1000 || meta[703:672]!=32000 || meta[719:704]!=7 || !meta[720] || meta[722:721]!=1 || meta[764:723]!=42'h123456789ab)$fatal(1,"v4 frozen diagnostics identity");''')
+diag=diag.replace("sof=1;v=1;rgb={4{24'hb41414}};", "f=10;sof=1;v=1;rgb={4{24'hb41414}};")
+run('capture_diagnostics_v4',diag,[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_capture','stable_tracker','stable_model_lane','stable_filter4','stable_grid','regions_divide')])
