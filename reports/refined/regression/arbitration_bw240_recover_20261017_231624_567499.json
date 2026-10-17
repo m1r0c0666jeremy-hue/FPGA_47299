@@ -1,0 +1,19 @@
+{
+  "inputs": {
+    "build\\sim\\refined_arbitration\\writer.v": "236b33afc3a97ed91228b62d851e912a06aad02a2732e1b57250d82a98acff2e",
+    "rtl\\color_regions\\refined_line_reader.v": "6359e2a2bc68e4c5f1c274569522f2fc154b1659e7295769664d24a137f1b9fd",
+    "rtl\\color_regions\\stable_model_lane.v": "f6f2e2dbe1880af14a6b1aae033f94e6bfa341b2ac1d9bba9576e6813565db84",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca",
+    "rtl\\color_regions\\refined_mc_to_user_interface.v": "b6fb805d42898ba1bf6bf0c44de7a38d20fe740ce8f7070dbf4c94fbe6469ff5",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "user_source\\ip_source\\w128_d512_fifo\\w128_d512_fifo.v": "5cd5f8e2216dd8989dc1e54d42b4da348dbb09f130bbe92deaa205db53a96bb4",
+    "user_source\\ip_source\\w128_d512_fifo\\soft_fifo_al_4057d6b76aa6.v": "75e5785ae0733b4ef7ce9a80d09f68419ceb0a6a5143baf866c5442ca310cb5e",
+    "user_source\\ip_source\\w155_d512_fifo\\w155_d512_fifo.v": "d600bcd8e876691d6cf3a512650e7e69118fc8016e9fdf892ac85e4c63851e37",
+    "user_source\\ip_source\\w155_d512_fifo\\soft_fifo_al_f58e8b3e1f3d.v": "cffdae59273ca6d7a4ab6473baa8cf94e81ab1900c4b9e358adca6e4b196114d"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\arbitration_bw240_recover_20261017_231624_567499"
+}
