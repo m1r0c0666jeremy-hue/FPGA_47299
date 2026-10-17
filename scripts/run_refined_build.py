@@ -6,7 +6,14 @@ ap=argparse.ArgumentParser();ap.add_argument('--stage',choices=['synth','place',
 ap.add_argument('--route-effort',choices=['normal','routability'],default='normal')
 ap.add_argument('--strategy',type=int,choices=range(1,12),default=1)
 ap.add_argument('--map-mode',choices=['auto','area_prior','logic_level_prior','balance_explore'],default='auto')
-ap.add_argument('--pack-effort',choices=['medium','high','low'],default='medium');a=ap.parse_args()
+ap.add_argument('--pack-effort',choices=['medium','high','low'],default='medium')
+ap.add_argument('--infer-fsm',choices=['project','off','auto','one_hot','sequential','manual'],default='project')
+ap.add_argument('--map-strategy',type=int,choices=range(1,6))
+ap.add_argument('--macro-performance',choices=['auto','dsp_wirelength','dsp_crit_path','ram_wirelength','ram_crit_path','dsp_ram_wirelength','dsp_ram_crit_path','macro_congestion'])
+ap.add_argument('--pack-mode',choices=['auto','lower_pin_density','adaptive_pin_density','more_lut_pair'])
+ap.add_argument('--place-effort',choices=['medium','high'])
+ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
+if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
 assert branch=='release/transparent-ring-stability-20261015'
 created_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
@@ -46,6 +53,12 @@ frozen_project.write_text('<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring
 t=t.replace('set project [file join $root td_project target_color_regions_refined.al]',f'set project {{{frozen_project.as_posix()}}}')
 t=t.replace('    legalize_phy_inst',f'    set_param place pr_strategy {a.strategy}\n    set_param route effort {a.route_effort}\n    legalize_phy_inst')
 t=t.replace('    optimize_gate -packarea',f'    set_param gate map_mode {a.map_mode}\n    set_param gate pack_effort {a.pack_effort}\n    optimize_gate -packarea')
+if a.infer_fsm!='project':t=t.replace('    optimize_rtl',f'    set_param rtl infer_fsm {a.infer_fsm}\n    optimize_rtl')
+if a.map_strategy is not None:t=t.replace('    optimize_gate -packarea',f'    set_param gate map_strategy {a.map_strategy}\n    optimize_gate -packarea')
+if a.macro_performance is not None:t=t.replace('    legalize_phy_inst',f'    set_param place macro_performance {a.macro_performance}\n    legalize_phy_inst')
+if a.pack_mode is not None:t=t.replace('    legalize_phy_inst',f'    set_param place pack_mode {a.pack_mode}\n    legalize_phy_inst')
+if a.place_effort is not None:t=t.replace('    legalize_phy_inst',f'    set_param place effort {a.place_effort}\n    legalize_phy_inst')
+if a.max_fanout is not None:t=t.replace('    legalize_phy_inst',f'    set_param place max_fanout {a.max_fanout}\n    legalize_phy_inst')
 t=t.replace('    route\n','    report_area -io_info -file target_color_regions_place.area\n    route\n')
 t=re.sub(r'# PRODUCTION_OUTPUT_BEGIN.*?# PRODUCTION_OUTPUT_END',f'set out {{{out.as_posix()}}}',t,flags=re.S)
 if a.stage=='synth':t=t[:t.index('    legalize_phy_inst')]+'''    report_timing_summary -file target_color_regions_gate.timing
@@ -65,7 +78,7 @@ log=out/'td.log';print('REFINED_TD_ATTEMPT',out,flush=True)
 with log.open('w',encoding='utf-8') as f:p=subprocess.run([str(td),script.as_posix()],cwd=out,env=env,stdout=f,stderr=subprocess.STDOUT)
 after={name:sha(frozen/name) for name in before}
 (out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
-summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
+summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
 if p.returncode==0:
  from refined_build_report import assess
  summary.update(assess(out,a.stage))

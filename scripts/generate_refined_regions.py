@@ -6,6 +6,7 @@ def assets():
     from generate_refined_isp import isp_assets
     from refined_store_logic import store_asset
     from refined_controls_logic import control_asset
+    from refined_shared_hue import shared_hue_asset
     isp=isp_assets()
     # A separate IP instance preserves the historical controller and constraints.
     # STRICT keeps an accepted read behind all previously accepted write commands;
@@ -41,6 +42,7 @@ def assets():
     protection=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
     with zipfile.ZipFile(R/protection['backup']/'sources_before.zip') as z:
         original_project=z.read('td_project/target_color_regions.al')
+        original_lane=z.read('rtl/color_regions/stable_model_lane.v').decode('utf-8').replace('\r\n','\n')
     assert hashlib.sha256(original_project).hexdigest()==protection['files'][str(R/'td_project/target_color_regions.al')]
     root=ET.fromstring(original_project.decode('utf-8').replace('&','&amp;').replace('::','__TD_COLON__'))
     root.set('Path',(R/'td_project').as_posix())
@@ -68,7 +70,7 @@ def assets():
     ET.indent(root,space='    ')
     project='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n'
     from generate_refined_ui import ui_assets
-    return {'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
+    return {'rtl/color_regions/stable_model_lane.v':shared_hue_asset(original_lane),'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
     for name,text in assets().items():

@@ -1,0 +1,9 @@
+{
+  "status": "incomplete_process_no_longer_present",
+  "observed_at": "2026-10-17T22:43:35+08:00",
+  "last_log_time": "2026-10-17T20:11:07+08:00",
+  "last_route_iteration": 28,
+  "last_violations": 10585,
+  "deliverable": false,
+  "reason": "No TD process, final summary or bit found on continuation; termination cause is not confirmed. All attempt files retained."
+}
