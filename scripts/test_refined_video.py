@@ -1,8 +1,8 @@
 """Full source-pixel/mask/page reference with rational zoom and true reflection."""
 from refined_testlib import R,run
-import argparse,sys
+import argparse,sys,json,hashlib
 from concurrent.futures import ThreadPoolExecutor
-ap=argparse.ArgumentParser();ap.add_argument('--full',action='store_true');ap.add_argument('--faults',action='store_true');ap.add_argument('--debug',type=int,choices=[0,1]);ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--workers',type=int,default=3);a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--full',action='store_true');ap.add_argument('--faults',action='store_true');ap.add_argument('--debug',type=int,choices=[0,1]);ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--workers',type=int,default=3);ap.add_argument('--reuse-current',action='store_true');a=ap.parse_args()
 # Reuse the independent colour/support oracle and timing fixture, with new output
 # paths. Its power-of-two coordinate oracle below is replaced by rational maths.
 legacy=R/'scripts/test_stable_video.py'
@@ -39,8 +39,17 @@ if a.debug is not None:
             if(sde) begin''')
 def execute(job):
  pair,z,page,rot,fault,frames=job;x,y=origins[z]
+ name=f'{a.reader}_video_{pair}_{z}_{page}_{rot}_f{fault}_n{frames}'
+ if a.reuse_current and a.debug is None:
+  hashes={p.relative_to(R).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in mods}
+  for record in sorted((R/'reports/refined/regression').glob(name+'_*.json'),reverse=True):
+   d=json.loads(record.read_text(encoding='utf-8'))
+   recorded={n.replace('\\','/'):v for n,v in d.get('inputs',{}).items()}
+   bench=__import__('pathlib').Path(d.get('output',''))/'tb.sv'
+   if d.get('exit_code')==0 and not d.get('expected_failure') and hashes==recorded and bench.is_file() and bench.read_text(encoding='utf-8')==s and 'STABLE_VIDEO_PASS:' in record.with_suffix('.log').read_text(encoding='utf-8'):
+    print('REFINED_VIDEO_REUSE_CURRENT',name,record.name,flush=True);return
  args=[f'+PAIR={pair}',f'+ZOOM={z}',f'+MODE={page}',f'+ROTATE={rot}',f'+X={x}',f'+Y={y}',f'+FAULT={fault}',f'+FRAMES={frames}',f'+MASK={(oracle_dir/f"masks_{pair}.hex").as_posix()}']
  if fault==0 and frames==2:args.append('+DYNAMIC=1')
- return run(f'{a.reader}_video_{pair}_{z}_{page}_{rot}_f{fault}_n{frames}',s,mods,top='tb_stable_video',args=args,timeout=1800)
+ return run(name,s,mods,top='tb_stable_video',args=args,timeout=1800)
 with ThreadPoolExecutor(max_workers=a.workers) as pool:list(pool.map(execute,jobs))
 print('REFINED_VIDEO_ALL_PASS',len(jobs),'jobs',sum(j[-1] for j in jobs)*1280*624,'image pixels')

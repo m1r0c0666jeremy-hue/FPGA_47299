@@ -148,6 +148,10 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
  end
  if(d_rst && mask_finish && !notify_ready && O_ddr_diag[103:88]!=65535)O_ddr_diag[103:88]<=O_ddr_diag[103:88]+1'b1;
  if(timeout_event && d_rst)begin
+  // Preserve failed-job peaks before the coordinated stream reset clears
+  // the working counters. Successful rows alone underreport black-flash waits.
+  if(bus_wait>O_ddr_diag[35:18])O_ddr_diag[35:18]<=bus_wait;
+  if(return_wait>O_ddr_diag[53:36])O_ddr_diag[53:36]<=return_wait;
   O_ddr_diag[75:72]<=timeout_cause;
   if(O_ddr_diag[87:76]!=4095)O_ddr_diag[87:76]<=O_ddr_diag[87:76]+1'b1;
   O_ddr_diag[62:54]<=accepted_delta[8:0];O_ddr_diag[71:63]<={1'b0,received};

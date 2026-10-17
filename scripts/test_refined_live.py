@@ -2,7 +2,7 @@
 from refined_testlib import R,run
 from concurrent.futures import ThreadPoolExecutor
 import argparse
-ap=argparse.ArgumentParser();ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--store',choices=['stable','refined'],default='refined');ap.add_argument('--case',nargs=2,type=int);ap.add_argument('--line-gap',type=int,default=160);a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--store',choices=['stable','refined'],default='refined');ap.add_argument('--case',nargs=2,type=int);ap.add_argument('--line-gap',type=int,default=160);ap.add_argument('--workers',type=int,default=2);a=ap.parse_args()
 s=(R/'sim/tb_stable_live.sv').read_text(encoding='utf-8')
 s=s.replace('wire [639:0] cm,dm','wire [767:0] cm,dm').replace('wire [674:0] sd,pd','wire [851:0] sd,pd').replace('wire [639:0] active','wire [767:0] active')
 s=s.replace('wire [1:0] selected,zoom,mode;','wire [1:0] selected,mode;wire [2:0] zoom;').replace('reg [1:0] requested_zoom=1,requested_mode=0;','reg [2:0] requested_zoom=0;reg [1:0] requested_mode=0;')
@@ -74,6 +74,6 @@ mods += [R/'user_source/ip_source'/n for n in ('w128_d512_fifo/w128_d512_fifo.v'
 def execute(job):
  pair,rot=job
  return run(f'{a.reader}_v4_live_{pair}_{rot}_{a.store}_g{a.line_gap}',s,mods,top='tb_stable_live',compile_args=[f'-Ptb_stable_live.PAIR_MODE={pair}',f'-Ptb_stable_live.ROTATE={rot}'],timeout=3600)
-with ThreadPoolExecutor(max_workers=2) as pool:list(pool.map(execute,[tuple(a.case)] if a.case else [(p,r) for p in (0,1) for r in (0,1)]))
+with ThreadPoolExecutor(max_workers=a.workers) as pool:list(pool.map(execute,[tuple(a.case)] if a.case else [(p,r) for p in (0,1) for r in (0,1)]))
 jobs=1 if a.case else 4
 print('REFINED_LIVE_ALL_PASS',jobs,'jobs',5*jobs,'frames',3993600*jobs,'image pixels, actual command/native FIFOs and v4 source-time banks; synthetic line gap',a.line_gap,'camera clocks')

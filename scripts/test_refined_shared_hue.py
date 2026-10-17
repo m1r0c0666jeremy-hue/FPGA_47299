@@ -2,7 +2,7 @@
 from refined_testlib import R,run
 from refined_shared_hue import shared_hue_asset
 import argparse,sys,xml.etree.ElementTree as ET,json,zipfile
-ap=argparse.ArgumentParser();ap.add_argument('--build',choices=['synth','place']);ap.add_argument('--production',action='store_true');a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--build',choices=['synth','place']);ap.add_argument('--production',action='store_true');ap.add_argument('--exhaustive-rtl',action='store_true');a=ap.parse_args()
 out=R/'build/refined_shared_hue_prototype';out.mkdir(exist_ok=True)
 base=R/'rtl/color_regions/stable_model_lane.v';candidate=out/base.name
 protection=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
@@ -48,6 +48,22 @@ if not a.build:
  repeat(8)@(negedge clk);$display("SHARED_HUE_RTL_PASS 150000 dynamic RGB/model cycles, unchanged four-clock masks, numerator/max/min exact; dual%0d",dual);$finish;
  end endmodule'''
  run('shared_hue_math',tb,[ref,candidate])
+ if a.exhaustive_rtl:
+  exhaustive='''module tb;
+ wire [1:0] a,b;
+ reference_model_lane gold(1'b0,1'b1,24'd0,128'd0,a);
+ stable_model_lane dut(1'b0,1'b1,24'd0,128'd0,b);
+ integer i;
+ initial begin
+ for(i=0;i<16777216;i=i+1)begin
+ gold.r=i[23:16];gold.g=i[15:8];gold.b=i[7:0];
+ dut.r=i[23:16];dut.g=i[15:8];dut.b=i[7:0];#1;
+ if(gold.n!==dut.n || gold.mx!==dut.mx || gold.mn!==dut.mn)
+ $fatal(1,"hue exhaustive mismatch rgb%h old%0d new%0d",i,gold.n,dut.n);
+ end
+ $display("SHARED_HUE_EXHAUSTIVE_RTL_PASS all16777216 RGB numerator/max/min exact");$finish;
+ end endmodule'''
+  run('shared_hue_exhaustive_rtl',exhaustive,[ref,candidate],timeout=1800)
  (out/'exhaustive.json').write_text(__import__('json').dumps(dict(rgb_vectors=count,numerator_max=peak,passed=True),indent=2),encoding='utf-8')
 else:
  original=R/'td_project/target_color_regions_refined.al'
