@@ -1,0 +1,2 @@
+SHARED_HUE_EXHAUSTIVE_RTL_PASS all16777216 RGB numerator/max/min exact
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\shared_hue_exhaustive_rtl_20261017_224611_442396\tb.sv:13: $finish called at 16777216 (1s)

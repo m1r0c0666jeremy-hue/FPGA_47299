@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_reciprocal_prototype\\reference.v": "001c0ba674afd0b815e14d6834a6cff1a9102c7159b4fc3cef5da1bc67f2cbe1",
+    "build\\refined_reciprocal_prototype\\stable_model_lane.v": "edc4545a9fdba2f96a035be9021f7238e43473e14404b8e27faf0e6ba74f0397"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\reciprocal_private_math_20261017_232101_725515"
+}

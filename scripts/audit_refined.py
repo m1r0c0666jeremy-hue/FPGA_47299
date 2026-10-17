@@ -15,6 +15,15 @@ def evidence(prefix,required=()):
  if not records:raise AssertionError('Missing current-source passing evidence: '+prefix)
  p,d=max(records,key=lambda v:v[0].name)
  return dict(record=p.relative_to(R).as_posix(),record_sha256=sha(p),log_sha256=sha(p.with_suffix('.log')),inputs=d['inputs'])
+def required_inputs(prefix):
+ required=[]
+ if prefix.startswith('shared_hue_'):required.append('rtl/color_regions/stable_model_lane.v')
+ if prefix.startswith('refined_v4_live_'):required.append('rtl/color_regions/refined_frame_store.v')
+ if prefix.startswith(('refined_v4_live_','refined_video_','final_video_drain_')) or prefix in ('final_missing_snapshot','arbitration_bw240_recover','failed_bus_wait_peak'):
+  required.append('rtl/color_regions/refined_line_reader.v')
+ if prefix=='controls_with_camera_pause':required.append('rtl/color_regions/refined_controls.v')
+ if prefix=='footer_late_abort_after':required.append('rtl/color_regions/refined_osd.v')
+ return tuple(required)
 def audit(attempt=None,regression=False):
  branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
  assert branch=='release/transparent-ring-stability-20261015',branch
@@ -41,7 +50,7 @@ def audit(attempt=None,regression=False):
   prefixes += [f'refined_video_0_0_0_{rot}_f1_n2' for rot in (0,1)]+[f'refined_video_0_1_0_{rot}_f0_n2' for rot in (0,1)]
   prefixes += [f'sampling_after_{pair}_{case}' for pair,case in ((0,0),(0,1),(1,0),(1,1))]
   prefixes += ['calibration_after_'+n for n in ('blue_metal_reflection','broad_cluster','dark_blue_background','inseparable_background','polluted_frames','purple_dark_bias','purple_neutral_background','yellow_bright_neutral','yellow_dark_bias')]
-  result['regression']={prefix:evidence(prefix,('rtl/color_regions/stable_model_lane.v',) if prefix.startswith('shared_hue_') else ('rtl/color_regions/refined_frame_store.v',) if prefix.startswith('refined_v4_live_') else ('rtl/color_regions/refined_controls.v',) if prefix=='controls_with_camera_pause' else ('rtl/color_regions/refined_osd.v',) if prefix=='footer_late_abort_after' else ()) for prefix in prefixes}
+  result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
   late=result['regression']['footer_late_abort_after']
   assert 'V4_UI_CASE_PASS last_pixel_abort' in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
   for mode in range(3):
@@ -53,6 +62,15 @@ def audit(attempt=None,regression=False):
   out=(R/attempt).resolve();assert out.is_relative_to(R/'build')
   s=json.loads((out/'summary.json').read_text(encoding='utf-8'))
   assert s['stage']=='full' and s['exit_code']==0 and s['resource_pass'] and s['timing_pass'] and s['inputs_unchanged'],s
+  if s.get('official_strategy'):
+   strategy=s['official_strategy'];assert sha(out/'official_strategy_ph1.json')==strategy['sha256']
+   assert json.loads((out/'official_strategy_context.json').read_text(encoding='utf-8'))==strategy
+   definitions=json.loads((out/'official_strategy_ph1.json').read_text(encoding='utf-8'))
+   tcl=(out/'run.tcl').read_text(encoding='utf-8')
+   for name,definition in strategy['selected'].items():
+    assert definitions[name]==definition
+    for setting in definition['params']:
+     assert f'set_param {setting["step"]} {setting["param"]} {setting["val"]}' in tcl
   before=json.loads((out/'inputs.json').read_text(encoding='utf-8'));after=json.loads((out/'inputs_after.json').read_text(encoding='utf-8'))
   assert before==after and all(sha(out/'compiled_source'/n)==v for n,v in before.items())
   assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'

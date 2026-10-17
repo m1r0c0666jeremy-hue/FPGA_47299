@@ -1,6 +1,6 @@
 """Frozen, non-overwriting TD builds of the independent refined project."""
 from pathlib import Path
-import argparse,datetime,hashlib,json,os,re,subprocess,zipfile,xml.etree.ElementTree as ET
+import argparse,datetime,hashlib,json,os,re,subprocess,sys,zipfile,xml.etree.ElementTree as ET
 R=Path(__file__).resolve().parents[1]
 ap=argparse.ArgumentParser();ap.add_argument('--stage',choices=['synth','place','full'],default='synth')
 ap.add_argument('--route-effort',choices=['normal','routability'],default='normal')
@@ -12,6 +12,9 @@ ap.add_argument('--map-strategy',type=int,choices=range(1,6))
 ap.add_argument('--macro-performance',choices=['auto','dsp_wirelength','dsp_crit_path','ram_wirelength','ram_crit_path','dsp_ram_wirelength','dsp_ram_crit_path','macro_congestion'])
 ap.add_argument('--pack-mode',choices=['auto','lower_pin_density','adaptive_pin_density','more_lut_pair'])
 ap.add_argument('--place-effort',choices=['medium','high'])
+ap.add_argument('--official-syn',choices=['AreaOptimizeMedium','AreaOptimizeHigh'])
+ap.add_argument('--official-phy',choices=['CongestionMedium','CongestionHigh','TimingHigh','TimingUltra'])
+ap.add_argument('--official-strategy-file',default='D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
@@ -20,6 +23,20 @@ created_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True)
 subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
 stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
 out=R/'build'/f'refined_{a.stage}_{stamp}';out.mkdir(exist_ok=False)
+official=None;official_commands={step:[] for step in ('rtl','gate','place','route')}
+if a.official_syn or a.official_phy:
+ strategy_path=Path(a.official_strategy_file);strategy_bytes=strategy_path.read_bytes();strategies=json.loads(strategy_bytes)
+ chosen=[name for name in (a.official_syn,a.official_phy) if name]
+ selected={name:strategies[name] for name in chosen}
+ for strategy in selected.values():
+  for setting in strategy['params']:
+   step,key,value=setting['step'],setting['param'],str(setting['val'])
+   assert step in official_commands and re.fullmatch(r'[A-Za-z0-9_]+',key) and re.fullmatch(r'[A-Za-z0-9_.-]+',value)
+   official_commands[step].append(f'    set_param {step} {key} {value}')
+   if step=='gate' and key=='map_mode' and '--map-mode' not in sys.argv:a.map_mode=value
+ official=dict(source_path=strategy_path.as_posix(),sha256=hashlib.sha256(strategy_bytes).hexdigest(),selected=selected)
+ (out/'official_strategy_ph1.json').write_bytes(strategy_bytes)
+ (out/'official_strategy_context.json').write_text(json.dumps(official,indent=2),encoding='utf-8')
 project=R/'td_project/target_color_regions_refined.al'
 paths={project,R/'td_project/target_lock.adc',R/'td_project/target_lock.sdc',R/'rtl/03_tool_detection/target_config.json'}
 for s in re.findall(r'<File Path="([^"]+)"',project.read_text(encoding='utf-8')):
@@ -59,6 +76,16 @@ if a.macro_performance is not None:t=t.replace('    legalize_phy_inst',f'    set
 if a.pack_mode is not None:t=t.replace('    legalize_phy_inst',f'    set_param place pack_mode {a.pack_mode}\n    legalize_phy_inst')
 if a.place_effort is not None:t=t.replace('    legalize_phy_inst',f'    set_param place effort {a.place_effort}\n    legalize_phy_inst')
 if a.max_fanout is not None:t=t.replace('    legalize_phy_inst',f'    set_param place max_fanout {a.max_fanout}\n    legalize_phy_inst')
+# Apply the installed vendor strategy before the explicit command-line options.
+# None of these tool settings modifies clocks, ADC or SDC exceptions.
+if official:
+ rtl_lines='\n'.join(official_commands['rtl'])
+ gate_lines='\n'.join(official_commands['gate'])
+ phy_lines='\n'.join(official_commands['place']+official_commands['route'])
+ if rtl_lines:t=t.replace('    optimize_rtl',rtl_lines+'\n    optimize_rtl')
+ # Insert gate presets before the explicit map-mode block already generated.
+ if gate_lines:t=t.replace('    set_param gate map_mode',gate_lines+'\n    set_param gate map_mode',1)
+ if phy_lines:t=t.replace('    set_param place pr_strategy',phy_lines+'\n    set_param place pr_strategy',1)
 t=t.replace('    route\n','    report_area -io_info -file target_color_regions_place.area\n    route\n')
 t=re.sub(r'# PRODUCTION_OUTPUT_BEGIN.*?# PRODUCTION_OUTPUT_END',f'set out {{{out.as_posix()}}}',t,flags=re.S)
 if a.stage=='synth':t=t[:t.index('    legalize_phy_inst')]+'''    report_timing_summary -file target_color_regions_gate.timing
@@ -79,6 +106,7 @@ with log.open('w',encoding='utf-8') as f:p=subprocess.run([str(td),script.as_pos
 after={name:sha(frozen/name) for name in before}
 (out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
 summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
+summary['official_strategy']=official
 if p.returncode==0:
  from refined_build_report import assess
  summary.update(assess(out,a.stage))
