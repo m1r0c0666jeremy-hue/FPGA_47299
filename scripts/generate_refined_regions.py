@@ -1,6 +1,6 @@
 """Independent refined project generation; never writes the user's original .al."""
 from pathlib import Path
-import argparse, xml.etree.ElementTree as ET
+import argparse,hashlib,json,zipfile,xml.etree.ElementTree as ET
 R=Path(__file__).resolve().parents[1]
 def assets():
     from generate_refined_isp import isp_assets
@@ -36,7 +36,13 @@ def assets():
                           'assign O_mc_app_wdf_rdy        = paxi_wready')
     source=source.replace('assign O_mc_app_rd_data        = paxi_rdata',
                           'assign O_mc_app_rd_data_end    = paxi_rlast;\n    assign O_mc_app_rd_data        = paxi_rdata')
-    root=ET.fromstring((R/'td_project/target_color_regions.al').read_text(encoding='utf-8').replace('&','&amp;').replace('::','__TD_COLON__'))
+    # The original .al remains user-owned and can be re-saved in TD. Generate
+    # from the exact implementation-start snapshot, never from later UI saves.
+    protection=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
+    with zipfile.ZipFile(R/protection['backup']/'sources_before.zip') as z:
+        original_project=z.read('td_project/target_color_regions.al')
+    assert hashlib.sha256(original_project).hexdigest()==protection['files'][str(R/'td_project/target_color_regions.al')]
+    root=ET.fromstring(original_project.decode('utf-8').replace('&','&amp;').replace('::','__TD_COLON__'))
     root.set('Path',(R/'td_project').as_posix())
     root.find('Name').text='target_color_regions_refined'
     files=root.find('Source_Files/Verilog')

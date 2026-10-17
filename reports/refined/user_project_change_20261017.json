@@ -1,0 +1,10 @@
+{
+  "path": "D:\\aaa_FPGA\\transparent-ring-stability\\td_project\\target_color_regions.al",
+  "baseline_sha256": "7c6cc78705ff0557a5cc38b3502165a590551766e49605c23a18c32a290b9969",
+  "observed_sha256": "4467601011e2e6df3603c786579b175bcc71a537469bfc75c6b533ffee05de64",
+  "observed_mtime": "2026-10-17T12:55:25.566694",
+  "preserved_copy": "build/refined_user_project_20261017_1644/target_color_regions.al",
+  "baseline_archive": "build/refined_baseline_20261016_190016/sources_before.zip",
+  "baseline_member": "td_project/target_color_regions.al",
+  "reason": "Changed during execution gap; preserved without restoring, committing or using as the refined build source."
+}

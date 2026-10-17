@@ -134,7 +134,9 @@ endcase end
     # SWUG106 section 4.2.6 specifies "bram"; verify actual mapping before
     # claiming a memory saving. Keep the current compiled candidate frozen.
     out['rtl/color_regions/refined_footer_program_rom.v']=data_rom('refined_footer_program_rom',16,program).replace('rom_style="bram"','ram_style="block"')
-    out['rtl/color_regions/refined_osd.v']=s.replace('module stable_osd(', 'module refined_osd(').replace('stable_footer_program_rom program_rom','refined_footer_program_rom program_rom')
+    # Leave one complete row after the image for the HDMI/performance pipeline.
+    # The formatter still finishes well before the first text row (640).
+    out['rtl/color_regions/refined_osd.v']=s.replace('module stable_osd(', 'module refined_osd(').replace('stable_footer_program_rom program_rom','refined_footer_program_rom program_rom').replace('I_de && y==620 && x==0','I_de && y==625 && x==0')
     out['rtl/color_regions/stable_footer_text_rom.v']=data_rom('stable_footer_text_rom',8,dynamic_text)
     fontfile=Path('C:/Windows/Fonts/simhei.ttf')
     def rom(module,chars,size,depth,addrwidth):

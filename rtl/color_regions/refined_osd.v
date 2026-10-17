@@ -139,7 +139,7 @@ endcase end
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
  endcase
- if(I_de && y==620 && x==0)begin
+ if(I_de && y==625 && x==0)begin
  flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;fddr<=I_ddr_diag;fpixel<=I_pixel_diag;frecovery<=I_recovery;fcamera<=I_camera;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fdiag<=I_diag;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;

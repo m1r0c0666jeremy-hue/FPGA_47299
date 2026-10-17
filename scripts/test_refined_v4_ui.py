@@ -44,7 +44,7 @@ refined_osd dut(clk,rst,1'b0,1'b0,de,24'h123456,meta,11'd320,10'd204,3'd2,2'd1,3
 1'b1,32'd12345,32'd2,128'h{ddr:032x},128'h{pixel:032x},39'h{(4<<34|3<<16):010x},18'h{(2<<9|1<<7|90):05x});
 reg [23:0] expected[0:122879];integer c,x,y,n,outn;
 always @(posedge clk)begin #1;if(ode && dut.y>=624 && !(dut.y==624 && dut.x<2))begin
-if(rgb!==expected[outn])begin for(n=0;n<128;n=n+1)$display("CHAR %0d %0d",n,dut.characters[n]);
+if(rgb!==expected[outn])begin $display("FORMAT state%0d ready%b",dut.format_state,dut.footer_ready);
 $fatal(1,"footer case%0d xy%0d/%0d got%h expected%h",c,outn%1280,624+outn/1280,rgb,expected[outn]);end outn=outn+1;end end
 task frame(input integer d,cal);begin
 @(negedge clk);de=0;rst=0;repeat(3)@(negedge clk);rst=1;diag=d;meta[567:560]=cal;
