@@ -1,0 +1,8 @@
+{
+  "private_not_adopted": true,
+  "source": "rtl/color_regions/stable_top.v",
+  "source_sha256": "532662644e23d347bbb74f286d1ab0a76e24ab7158e2186c0bb4eccd616cd0a4",
+  "candidate_sha256": "091c1a2f0af0518a903f6fc0e89a707b54d4fa575f2f3bd1d2d4c8d5c50c8064",
+  "constraints_changed": false,
+  "purpose": "Retimed low-rate control only; adds latency, requires CDC and full integration verification before adoption"
+}
