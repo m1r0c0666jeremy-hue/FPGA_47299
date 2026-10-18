@@ -22,6 +22,7 @@ def required_inputs(prefix):
  if prefix.startswith('camera_relay_production_'):required.append('rtl/color_regions/refined_camera_config.v')
  if prefix.startswith('shared_hue_'):required.append('rtl/color_regions/stable_model_lane.v')
  if prefix=='hue_retime_equivalence':required.append('rtl/color_regions/stable_model_lane.v')
+ if prefix.startswith('recovery_mailbox_equivalence_'):required.append('rtl/color_regions/stable_memory_video_out.v')
  if prefix.startswith('refined_v4_live_'):required.append('rtl/color_regions/refined_frame_store.v')
  if prefix.startswith(('refined_v4_live_','refined_video_','final_video_drain_')) or prefix in ('final_missing_snapshot','arbitration_bw240_recover','failed_bus_wait_peak'):
   required.append('rtl/color_regions/refined_line_reader.v')
@@ -69,6 +70,7 @@ def audit(attempt=None,regression=False):
   prefixes += ['calibration_after_'+n for n in ('blue_metal_reflection','broad_cluster','dark_blue_background','inseparable_background','polluted_frames','purple_dark_bias','purple_neutral_background','yellow_bright_neutral','yellow_dark_bias')]
   prefixes += ['camera_relay_equivalence','camera_relay_production_real_i2c']+[f'camera_relay_production_{m}' for m in range(6)]
   prefixes += ['hue_retime_equivalence']
+  prefixes += [f'recovery_mailbox_equivalence_{p}' for p in (0,1,4,9)]
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
   late=result['regression']['footer_late_abort_after']
   for name in ('history_full_rgb_after','capture_diagnostics_v4'):

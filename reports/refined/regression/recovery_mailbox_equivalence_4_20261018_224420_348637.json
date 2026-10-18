@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "rtl\\color_regions\\stable_memory_video_out.v": "58a06cfc52462c158c611a3ea85bb2ebde90d5362659338e577e0361aea9abee"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\recovery_mailbox_equivalence_4_20261018_224420_348637"
+}
