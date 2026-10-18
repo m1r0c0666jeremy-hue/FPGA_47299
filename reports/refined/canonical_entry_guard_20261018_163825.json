@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "formal_inputs": 295,
+  "private_rejections": 4,
+  "inputs": {
+    "build/refined_route_20261018_115500_912935/inputs.json": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+    "build/refined_tracker_storage_place_20261018_131012/inputs.json": "505887cc4c4d198e88a4ee24cbacfb855c0f82cbd6928a68b711d692017caa24",
+    "scripts/audit_refined.py": "93a8b4499a6ccb13adfa5a7663e94e715fd93fdd29d054f420ae8bce40898e7b",
+    "scripts/test_refined_canonical_entry.py": "fc432b9e6583780855c1482a200732264f97c544c7fea6bb4bf85ae9bc24a04f"
+  }
+}

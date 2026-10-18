@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "parent": "build/refined_place_20261018_005818",
+  "child": "build/refined_route_20261018_010650_797911",
+  "checks": [
+    {
+      "report": "placed_clocks.txt",
+      "roundtrip_equal": true,
+      "added_exception_rejected": true,
+      "parent_sha256": "c5b186d244b72e05261f9271e3c2e1147cbc66648f81160cc94cebe4a5c5fb50",
+      "restored_sha256": "6bbcd68ac1d2d1421b0c6de6592e38edefa4ed01f23ebbe3598bdba409816e47"
+    },
+    {
+      "report": "placed_exceptions.timing",
+      "roundtrip_equal": true,
+      "added_exception_rejected": true,
+      "parent_sha256": "341ebcecdb18713fb4e50c7b5b70239c44b6da1866c9dee561dd7b2fde625751",
+      "restored_sha256": "bc991dfc0cb32d6a67e31984d070cfa7f3de90a6f9bd83b3448ba558356eb129"
+    }
+  ],
+  "inputs": {
+    "scripts/audit_refined.py": "93a8b4499a6ccb13adfa5a7663e94e715fd93fdd29d054f420ae8bce40898e7b",
+    "scripts/run_refined_route.py": "ee7f8b9d7ebcf02f44e2f41571ec158335c0236d963a98f0f84d32c3548eea96",
+    "scripts/test_refined_checkpoint_reports.py": "1f5d6a316a9468b76b07e5e24dfceafaa2a2dc3265e33b18ab51b33e64d99165",
+    "build/refined_checkpoint_reports_20261018_163825_624357/placed_clocks.txt": "4c2c3a5e41c8238bb3b4447448f842319b6164199f797856e86d035f6dd97915",
+    "build/refined_checkpoint_reports_20261018_163825_624357/placed_exceptions.timing": "8c0fbacd8b796d69c8ff817c3b17e172a203ded5b4202c3af49bc7b131b17ea6",
+    "build/refined_checkpoint_reports_20261018_163825_624357/semantic_0.txt": "ba7804ae542991af3e7d3fe20fd0cc4e29fdfc740c559aace2ca19237f57dc16",
+    "build/refined_checkpoint_reports_20261018_163825_624357/semantic_1.txt": "6456e3a3963c3df9edd225ca55aae6143a00e33046a08ba13bb917cc739f70c7",
+    "build/refined_checkpoint_reports_20261018_163825_624357/semantic_2.txt": "83855cab4327f3c5434491cbc32207642ee2c271fb0599cd4c3891f794ee4244"
+  }
+}

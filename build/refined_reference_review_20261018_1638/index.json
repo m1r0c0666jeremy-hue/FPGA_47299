@@ -1,0 +1,208 @@
+[
+  {
+    "path": "D:/26_software/TangDynasty/doc/SWUG/SWUG105_TCL_Command_User_Guide.pdf",
+    "sha256": "c6d97356cb930eab5b5613e4e9cf670a9a0cfec11dc04b678367f0e7d2431380",
+    "pages": 90,
+    "cache": "build/refined_reference_review_20261018_1638/SWUG105_TCL_Command_User_Guide.txt",
+    "hits": [
+      {
+        "page": 10,
+        "keywords": [
+          "pr_strategy"
+        ]
+      },
+      {
+        "page": 11,
+        "keywords": [
+          "pr_strategy"
+        ]
+      },
+      {
+        "page": 13,
+        "keywords": [
+          "pr_strategy"
+        ]
+      },
+      {
+        "page": 14,
+        "keywords": [
+          "pr_strategy"
+        ]
+      },
+      {
+        "page": 15,
+        "keywords": [
+          "pr_strategy"
+        ]
+      },
+      {
+        "page": 25,
+        "keywords": [
+          "congestion"
+        ]
+      },
+      {
+        "page": 26,
+        "keywords": [
+          "congestion"
+        ]
+      },
+      {
+        "page": 29,
+        "keywords": [
+          "congestion",
+          "pr_strategy",
+          "max_fanout",
+          "routability",
+          "fanout"
+        ]
+      },
+      {
+        "page": 75,
+        "keywords": [
+          "fanout"
+        ]
+      },
+      {
+        "page": 76,
+        "keywords": [
+          "congestion",
+          "拥塞"
+        ]
+      },
+      {
+        "page": 77,
+        "keywords": [
+          "congestion"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "D:/26_software/TangDynasty/doc/SWUG/SWUG106_HDL_Coding_Synthesis_User_Guide.pdf",
+    "sha256": "79cd0c21bea7db0d2a39338f0ecb5d0e798a7026352ba95214f1c9c6032bb8ba",
+    "pages": 149,
+    "cache": "build/refined_reference_review_20261018_1638/SWUG106_HDL_Coding_Synthesis_User_Guide.txt",
+    "hits": [
+      {
+        "page": 3,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 24,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 30,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 40,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 41,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 42,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 60,
+        "keywords": [
+          "区域约束"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "D:/26_software/TangDynasty/doc/SWUG/SWUG201_Timing_Tools_User_Guide.pdf",
+    "sha256": "e3f6c5c03dafbefc6585e41e3b6ea23763a4c4ec44478720350d1b60dbbc38c4",
+    "pages": 115,
+    "cache": "build/refined_reference_review_20261018_1638/SWUG201_Timing_Tools_User_Guide.txt",
+    "hits": [
+      {
+        "page": 77,
+        "keywords": [
+          "fanout"
+        ]
+      },
+      {
+        "page": 80,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      },
+      {
+        "page": 93,
+        "keywords": [
+          "max_fanout",
+          "fanout"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/6_PH1P35数据手册/DS1300_PH1P_Datasheet.pdf",
+    "sha256": "5ee95577c6f943ae7ccb1faf8d3412d7e2f5dd8535fb2da279ed3676681111cd",
+    "pages": 186,
+    "cache": "build/refined_reference_review_20261018_1638/DS1300_PH1P_Datasheet.txt",
+    "hits": []
+  },
+  {
+    "path": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/6_PH1P35数据手册/DS1301_PH1P_FamilyOverview.pdf",
+    "sha256": "f41d134fefd55444f01156b7a0afe9561b862109177a2ee882761761b38b8258",
+    "pages": 14,
+    "cache": "build/refined_reference_review_20261018_1638/DS1301_PH1P_FamilyOverview.txt",
+    "hits": []
+  },
+  {
+    "path": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/6_PH1P35数据手册/UG1316_安路科技PH1P系列FPGA MIPI用户手册.pdf",
+    "sha256": "019579090e4abd200b1fc11af38c4acdb75d78cbb05ae2849eb6d71699e9f44f",
+    "pages": 40,
+    "cache": "build/refined_reference_review_20261018_1638/UG1316_安路科技PH1P系列FPGA MIPI用户手册.txt",
+    "hits": []
+  },
+  {
+    "path": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/6_PH1P35数据手册/安路公司介绍_202411.pdf",
+    "sha256": "5abeab86ae263bb2026d55c38bf410220c269040f0c25e5fdb37b688521c1cc8",
+    "pages": 46,
+    "cache": "build/refined_reference_review_20261018_1638/安路公司介绍_202411.txt",
+    "hits": []
+  },
+  {
+    "path": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/6_PH1P35数据手册/安路选型手册_202503.pdf",
+    "sha256": "5c1b8d575f8fb3db21aca5f1572a2f81e0c511f89fbca8cddab205c7f2ba75fc",
+    "pages": 14,
+    "cache": "build/refined_reference_review_20261018_1638/安路选型手册_202503.txt",
+    "hits": [
+      {
+        "page": 13,
+        "keywords": [
+          "区域约束",
+          "物理约束"
+        ]
+      }
+    ]
+  }
+]
