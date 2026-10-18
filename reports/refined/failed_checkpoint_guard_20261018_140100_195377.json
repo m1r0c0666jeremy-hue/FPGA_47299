@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "physical_routing": false,
+  "clock_pairs": 8,
+  "frozen_inputs": 295,
+  "proof": {
+    "source_attempt": "build/refined_route_20261018_115500_912935",
+    "probe": "build/refined_failed_checkpoint_probe_20261018_133626",
+    "checkpoint_sha256": "dda348d2b24b43a53f021b0129bc02063b893fc74f39234da3aa895c42a1a337",
+    "source_context_sha256": "3ab42dcaca14b8eecb7a8bc9e1f24018f2db5b51d9065a50f1e22f23864a1dfd",
+    "source_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+    "source_saved_proof_sha256": "ccd28f7cf5794bc7ebe1e2e48f8f0a08a958a5e33130217aaa803224b50aa4a8",
+    "source_prefix_sha256": "a5f1ba30f31a90ed23729bd577a462dae43a1384221469aeafa2a480928bed38",
+    "initial_provenance_sha256": "7730b0ad5857f379b332f0f1b79b96ea4a01218a13e27284fbc092f992e190ba",
+    "probe_summary_sha256": "e5a330a9f8511606a9e3d99e4c536f480aa4c0b8f59f12dc097d4065586e1406",
+    "probe_clocks_sha256": "090c1115c3dec56110f3d3e1c0161932178f96ca802f2409a761806a72abb7ef",
+    "probe_exceptions_sha256": "47b15f40d003001b11dd412f9d68523ee0b0acf2d44dae62cc6c31b5257f47f9",
+    "clock_periods": [
+      [
+        "HDMI_PIXEL_CLK",
+        "13.333"
+      ],
+      [
+        "HDMI_SERIAL_CLK",
+        "2.666"
+      ],
+      [
+        "MIPI_RX_BYTE_CLK",
+        "16.668"
+      ],
+      [
+        "pll_clk_100m",
+        "10.000"
+      ],
+      [
+        "pll_clk_24m",
+        "42.000"
+      ],
+      [
+        "sys_clk_50m",
+        "20.000"
+      ],
+      [
+        "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk",
+        "39.374"
+      ],
+      [
+        "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk",
+        "15.000"
+      ]
+    ]
+  },
+  "changed_clock_rejected": true,
+  "added_exception_rejected": true,
+  "changed_checkpoint_hash_rejected": true,
+  "fixtures": "build/refined_failed_checkpoint_guard_20261018_140100_195377",
+  "inputs": {
+    "scripts/audit_refined.py": "2d608eae81b98ba61573906af9b5539b954763a0ceea91b2b1ad10fe3ffa72aa",
+    "scripts/refined_failed_checkpoint.py": "969fb5e3c6ae578c130921a18a7a8e447105f855139f4764b5e4d432fdd143ed",
+    "scripts/test_refined_failed_checkpoint.py": "e41ba6b8372e11f0e8eb178ffc895d3d69b56f0a352e3a60c784e53e6eb31e66",
+    "build/refined_failed_checkpoint_guard_20261018_140100_195377/changed_clock.txt": "374ba3aa7a7b2a14f0606806ce7fee23ced8399649757d64da3d0f7d0cc8283c",
+    "build/refined_failed_checkpoint_guard_20261018_140100_195377/extra_exception.timing": "e7eb8b1c5d7920bf54592ecbd837af84f80d0318f2d88bff9aafe5c721dbee78"
+  }
+}

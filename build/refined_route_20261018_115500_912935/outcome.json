@@ -1,0 +1,11 @@
+{
+  "status": "STOPPED_STATEFUL_RETRY_HIGHER_CONGESTION",
+  "time": "2026-10-18T13:43:40.113130",
+  "normal_result": "Actual PHY-8080 at42, saved failed checkpoint",
+  "retry_result": "No final result; minimum4513 at16 then4840/5290 at17/18",
+  "reason": "Stateful retry initial estimated congestion183.80% versus95.05% for fresh-process restore of same SHA checkpoint. Preserve files; prioritize fresh-process comparison with strict source/clock/exception verification.",
+  "verified_pid": 21456,
+  "verified_parent_pid": 12564,
+  "verified_start": "2026-10-18T11:55:02",
+  "deliverable": false
+}

@@ -1,0 +1,51 @@
+module tb;
+reg clk=0;always #5 clk=~clk;reg rst=0,sof=0,v=0,ready=1;reg [95:0] rgb=0;reg [15:0] rev=1;
+wire [31:0] id,drop;wire ov;wire [767:0] meta;reg [127:0] models;integer f,x,y,i,n,received=0;reg [23:0] px;reg [767:0] saved;
+function [63:0] model;input integer lo,hi;begin model=64'h8000000000000000|(64'(lo)<<54)|(64'(hi)<<45)|(64'd32<<37)|(64'd16<<29)|(64'd1<<27);end endfunction
+stable_capture #(.V4(1)) dut(clk,rst,sof,v,1'b0,rgb,1'b0,1'b1,8'd7,models,rev,24'h400400,8'd0,1'b0,1'b0,ready,id,ov,meta,drop,32'(f),32'(f*1000),32'd32000,16'd7,1'b1,2'd1,42'h123456789ab,,,);
+always @(negedge clk)if(ov && meta[31:0]<=8)begin
+received=received+1;n=meta[31:0];
+if(meta[671:640]!=n*1000 || meta[703:672]!=32000 || meta[719:704]!=7 || !meta[720] || meta[722:721]!=1 || meta[764:723]!=42'h123456789ab)$fatal(1,"v4 frozen diagnostics identity");
+if(meta[415:413]!=4 || !meta[604] || !meta[247] || meta[543:416]!==models || meta[559:544]!=(n>=6?2:1))$fatal(1,"frame/protocol provenance %0d",n);
+if(meta[275:256]!=(n==5?n:48+n) || meta[315:296]!=(n==5?0:48) || meta[295:276]!=((n==4 || n==5)?0:256) || meta[335:316]!=((n==4 || n==5)?0:256))$fatal(1,"raw/filtered counts frame%0d %0d/%0d %0d/%0d",n,meta[275:256],meta[315:296],meta[295:276],meta[335:316]);
+if(n!=5 && (meta[338:336]!=1 || meta[356:350]!=100 || meta[203:184]!=48))$fatal(1,"candidate/support frame%0d",n);
+if(n==5 && (meta[338:336]!=0 || meta[345:342]!=2 || meta[349:346]!=1))$fatal(1,"failure stages");
+if(n==3 && (!meta[32] || meta[379:378]!=3 || meta[369:368]!=2))$fatal(1,"confirmation diagnostics");
+if(n==8 && (!meta[32] || meta[379:378]!=3 || meta[377:370]!=0))$fatal(1,"recovery/latest diagnostics");
+end
+initial begin models={model(195,255),model(345,30)};repeat(3)@(negedge clk);rst=1;
+for(f=1;f<=8;f=f+1)begin
+if(f==5)ready=0;rev=f>=6?2:1;
+for(y=0;y<720;y=y+1)for(x=0;x<1280;x=x+4)begin @(negedge clk);v=1;sof=x==0 && y==0;
+for(i=0;i<4;i=i+1)begin px=24'h282828;
+if(f!=5 && x+i>=640 && x+i<643 && y>=320 && y<336)px=24'hb41414;
+if(f!=4 && f!=5 && x+i>=520 && x+i<536 && y>=320 && y<336)px=24'h1428b4;
+if(y==16 && x+i>=16 && x+i<16+32*f && (x+i-16)%32==0)px=24'hb41414;
+rgb[95-i*24-:24]=px;end end end
+@(negedge clk);sof=1;v=0;@(negedge clk);sof=0;repeat(213000)@(negedge clk);
+if(!dut.waiting_result || dut.waiting_packet[31:0]!=8 || dut.owned[1])$fatal(1,"mailbox retained acquisition bank");saved=dut.waiting_packet;
+// Frame10 reuses frame8's bank while the independently copied frame8 result is
+// still pending. Check before the subsequent invalid-frame packet can replace it.
+f=10;sof=1;v=1;rgb={4{24'hb41414}};@(negedge clk);sof=0;repeat(6)@(negedge clk);v=0;
+if(dut.waiting_packet!==saved || dut.raw_a[1]==56)$fatal(1,"pending diagnostics changed on bank reuse");
+ready=1;repeat(100)@(negedge clk);
+if(received!=4 || drop<3)$fatal(1,"blocked mailbox/latest packet %0d %0d",received,drop);
+$display("RING_DIAGNOSTICS_PASS eight full RGB frames, raw/filter/candidate/support/decision counts, frozen model versions, mailbox blockage and bank reuse");$finish;end 
+reg candidate_hold_active=0;reg [1023:0] candidate_hold_value=0;integer candidate_hold_checks=0;
+always @(posedge dut.clk)begin
+ if(!dut.rst_n)candidate_hold_active<=0;
+ else begin
+  if(candidate_hold_active)begin
+   if(dut.candidates!==candidate_hold_value || dut.gs)$fatal(1,"capture changed candidate bus before tracker done");
+   candidate_hold_checks=candidate_hold_checks+1;
+  end
+  if(dut.ts)begin candidate_hold_active<=1;candidate_hold_value<=dut.candidates;end
+  if(dut.td)candidate_hold_active<=0;
+ end
+end
+final begin
+ if(candidate_hold_checks==0)$fatal(1,"candidate hold contract not exercised");
+ $display("CAPTURE_CANDIDATE_HOLD_PASS checked%0d source clocks",candidate_hold_checks);
+end
+
+endmodule

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "expected_build_rejection": true,
+  "cases": [
+    {
+      "attempt": "build/refined_full_20261017_224454",
+      "build_exit_code": 4294967295,
+      "guard_exit_code": 1,
+      "checkpoint": false
+    },
+    {
+      "attempt": "build/refined_route_20261018_010650_797911",
+      "build_exit_code": 1,
+      "guard_exit_code": 1,
+      "checkpoint": true
+    }
+  ],
+  "inputs": {
+    "scripts/package_refined.py": "617deee32ef443b94ce2f8700c5859d0fe62c146a19b2b42e7581048cfb3ccf1",
+    "scripts/audit_refined.py": "2d608eae81b98ba61573906af9b5539b954763a0ceea91b2b1ad10fe3ffa72aa",
+    "scripts/test_refined_packaging_guard.py": "fa1a87892ec92eca0d7784044a444d0b88f23749ac22627d41a950a24787b69c",
+    "build/refined_full_20261017_224454/summary.json": "f0966b33398fc28c9a63c381ddf493d96cea99291aefdb12503b41f8375af331",
+    "build/refined_route_20261018_010650_797911/summary.json": "d9f9a405cbe313038cc92ef67a376de5fa25f6525ce3dbf49c56a069c84cdd26"
+  },
+  "protected_document_hashes": {
+    "README.md": "6fff66416edad69b1a1b46b0e23ecd0c33f172afa5b79fa19966e7d3eb866aa0",
+    "reports/refined/最终验证报告.md": "4dc991ff421227c35585b34dbdf7b045781aae6807a82197c6bf0616c0ac0753",
+    "docs/颜色视频显示改进_上板一页.md": "a2596dceac3fd618860767cd251a40eca6e7420f4bc04a7ebd27237cfe350cfc"
+  }
+}

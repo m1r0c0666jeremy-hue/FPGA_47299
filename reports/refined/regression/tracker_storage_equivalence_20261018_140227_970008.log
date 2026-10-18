@@ -1,0 +1,2 @@
+TRACKER_STORAGE_EQUIVALENCE_PASS 3000 held-input transactions, 176902 cycles all437 external bits equal, tips296 reasons017f; canonical production with held candidate input
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\tracker_storage_equivalence_20261018_140227_970008\tb.sv:36: $finish called at 1769020 (1s)

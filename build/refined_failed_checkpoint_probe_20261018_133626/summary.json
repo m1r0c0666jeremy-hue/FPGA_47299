@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "checkpoint_sha256": "dda348d2b24b43a53f021b0129bc02063b893fc74f39234da3aa895c42a1a337",
+  "checkpoint_unchanged": true,
+  "source_attempt": "build/refined_route_20261018_115500_912935",
+  "probe_only": true
+}
