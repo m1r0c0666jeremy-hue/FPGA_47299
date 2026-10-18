@@ -1,0 +1,2 @@
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\shared_hue_exhaustive_rtl_20261018_223926_331441\tb.sv:13: hue exhaustive mismatch rgb00000000 old0 newx
+       Time: 2  Scope: tb

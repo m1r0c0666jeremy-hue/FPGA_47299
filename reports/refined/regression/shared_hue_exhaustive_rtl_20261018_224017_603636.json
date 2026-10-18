@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_shared_hue_production_retimed\\reference.v": "5b467db909726c50232c699b1316f73827d40d1cebcb072492e259b9d76ed5e8",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\shared_hue_exhaustive_rtl_20261018_224017_603636"
+}

@@ -3,12 +3,15 @@ from refined_testlib import R,run
 from refined_shared_hue import shared_hue_asset
 import argparse,sys,xml.etree.ElementTree as ET,json,zipfile
 ap=argparse.ArgumentParser();ap.add_argument('--build',choices=['synth','place']);ap.add_argument('--production',action='store_true');ap.add_argument('--exhaustive-rtl',action='store_true');a=ap.parse_args()
-out=R/'build/refined_shared_hue_prototype';out.mkdir(exist_ok=True)
+out=R/('build/refined_shared_hue_production_retimed' if a.production else 'build/refined_shared_hue_prototype');out.mkdir(exist_ok=True)
 base=R/'rtl/color_regions/stable_model_lane.v';candidate=out/base.name
 protection=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
 with zipfile.ZipFile(R/protection['backup']/'sources_before.zip') as z:
  original=z.read('rtl/color_regions/stable_model_lane.v').decode('utf-8').replace('\r\n','\n')
 data=shared_hue_asset(original).encode()
+if a.production:
+ from refined_hue_retime_logic import retime_hue_asset
+ data=retime_hue_asset(data.decode('utf-8')).encode('utf-8')
 if candidate.exists():assert candidate.read_bytes()==data
 else:candidate.write_bytes(data)
 if a.production:
@@ -63,6 +66,16 @@ if not a.build:
  end
  $display("SHARED_HUE_EXHAUSTIVE_RTL_PASS all16777216 RGB numerator/max/min exact");$finish;
  end endmodule'''
+  if a.production:
+   exhaustive=exhaustive.replace("stable_model_lane dut(1'b0,1'b1,24'd0,128'd0,b);", "reg [23:0] raw_rgb=24'hffffff;stable_model_lane dut(1'b0,1'b1,raw_rgb,128'd0,b);")
+   # This fixture deliberately has no clock/reset. Trigger its combinational
+   # input before depositing pipeline registers, including the first RGB zero.
+   exhaustive=exhaustive.replace('initial begin\n for(i=0;', 'initial begin\n #1;\n for(i=0;',1)
+   needle='dut.r=i[23:16];dut.g=i[15:8];dut.b=i[7:0];#1;'
+   assert exhaustive.count(needle)==1
+   exhaustive=exhaustive.replace(needle,'''dut.r=i[23:16];dut.g=i[15:8];dut.b=i[7:0];raw_rgb=i[23:0];#1;
+dut.maximum1=dut.raw_maximum;dut.minimum1=dut.raw_minimum;
+dut.chroma1=dut.raw_maximum-dut.raw_minimum;dut.difference1=dut.raw_difference;dut.sector1=dut.raw_sector;#1;''')
   run('shared_hue_exhaustive_rtl',exhaustive,[ref,candidate],timeout=1800)
  (out/'exhaustive.json').write_text(__import__('json').dumps(dict(rgb_vectors=count,numerator_max=peak,passed=True),indent=2),encoding='utf-8')
 else:

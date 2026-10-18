@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_hue_retime_prototype\\reference.v": "001c0ba674afd0b815e14d6834a6cff1a9102c7159b4fc3cef5da1bc67f2cbe1",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\hue_retime_equivalence_20261018_223858_179338"
+}

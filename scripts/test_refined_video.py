@@ -32,7 +32,9 @@ mods=[R/f'rtl/color_regions/{a.reader}_line_reader.v' if p.name=='stable_line_re
 origins=[(0,48),(101,99),(320,204),(787,400),(959,563)]
 jobs=[(0,z,0,rot,0,1) for z in (0,1,3) for rot in (0,1)]
 if a.full:jobs=[(pair,z,page,rot,0,1) for pair in (0,1) for z in range(5) for page in range(4) for rot in (0,1)]
-if a.faults:jobs=[(0,0,0,rot,1,2) for rot in (0,1)]+[(0,1,0,rot,0,2) for rot in (0,1)]
+if a.faults:
+ fault_jobs=[(0,0,0,rot,1,2) for rot in (0,1)]+[(0,1,0,rot,0,2) for rot in (0,1)]
+ jobs=jobs+fault_jobs if a.full else fault_jobs
 if a.debug is not None:
  jobs=[(0,0,0,a.debug,0,1)]
  s=s.replace('            if(sde) begin', '''            if(sde && sycount==0 && sxcount<8)$display("VIDEO_DEBUG x%0d sx%0d sy%0d rgb%h q%h addr%0d good%0d ok%0d ready%b tag%0d mem0%h",sxcount,dut.sx,dut.sy,rgb,dut.pixel_q,dut.rgb_read_addr,dut.good,ok,dut.ready,dut.tags[0],dut.lines[0]);
