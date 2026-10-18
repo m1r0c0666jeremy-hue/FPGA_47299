@@ -1,0 +1,9 @@
+{
+  "private_not_adopted": true,
+  "only_documented_attribute_added": true,
+  "synchronizer_preserve_attributes_retained": true,
+  "original_sha256": "4ed6bf6af8580ab78fa7bd8653663ea87a8b7aec783fe9ef5f63ef2435d9475a",
+  "candidate_sha256": "0a452d5073485293740a70f04facb38da19a1f5b903354ebf3f14e083d721ec1",
+  "original": "rtl/color_regions/stable_memory_video_out.v",
+  "candidate": "build/refined_reset_wire_fanout_prototype/stable_memory_video_out.v"
+}

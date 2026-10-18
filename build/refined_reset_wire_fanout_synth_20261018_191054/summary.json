@@ -1,0 +1,30 @@
+{
+  "stage": "synth",
+  "head": "72dc8d934989ea87642e434d571f7d32c468318d",
+  "head_after": "9ea9425069d899d08317359aca7a6a1d2d0f86c8",
+  "route_effort": "normal",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "checkpoints": {},
+  "resources": {
+    "slice": 22113,
+    "lut6": 10666,
+    "reg": 23507,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": true,
+  "resource_pass": true,
+  "placement_required": true
+}
