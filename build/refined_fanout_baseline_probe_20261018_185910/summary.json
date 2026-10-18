@@ -1,0 +1,7 @@
+{
+  "probe_only": true,
+  "source": "build/refined_full_20261018_170526/target_color_regions_placed.db",
+  "sha256": "b7bc338f84b199f8634e32beb6f595d7db079f2b8e2f763e015de57f7eca216a",
+  "checkpoint_unchanged": true,
+  "exit_code": 0
+}

@@ -1,0 +1,15 @@
+{
+  "status": "STOPPED_STAGNATING_PHASE2_NOT_DELIVERABLE",
+  "time": "2026-10-18T18:56:31.915791",
+  "phase1_zero": true,
+  "phase2_best": [
+    54,
+    17
+  ],
+  "phase2_last": [
+    64,
+    27
+  ],
+  "reason": "At least ten consecutive rounds failed to improve the phase2 minimum17; preserve all evidence and focus on measured fanout comparison",
+  "constraints_relaxed": false
+}

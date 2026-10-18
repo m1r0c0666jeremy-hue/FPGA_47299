@@ -1,0 +1,23 @@
+{
+  "stage": "full",
+  "head": "f507d261300e097024c236b7ce672f77f0693acf",
+  "head_after": "191278b4185d21a9fe7ea2283fc5c8742d0b8134",
+  "route_effort": "normal",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 4294967295,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "checkpoints": {
+    "target_color_regions_gate.db": "304a5dfb7a62bb56a6f214b9371241958ea5fccc6f93b408fd37f2364476b074",
+    "target_color_regions_placed.db": "b7bc338f84b199f8634e32beb6f595d7db079f2b8e2f763e015de57f7eca216a"
+  }
+}
