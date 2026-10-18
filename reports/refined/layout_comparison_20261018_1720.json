@@ -1,0 +1,35 @@
+{
+  "time": "2026-10-18T17:20:29.885920",
+  "comparisons": [
+    {
+      "attempt": "build/refined_full_20261018_163624",
+      "resource": {
+        "slice": 19375,
+        "lut6": 18794,
+        "reg": 23171,
+        "eram": 99,
+        "dsp": 40
+      },
+      "place_area_sha256": "cddc959eb40cf109ad26dcc357b82e8774b8f12be51f9de93cc10560eafac876",
+      "inputs_sha256": "1f4e652d592287e762308c80533cd62f28572e708b453586f000ac707fe12fcd",
+      "checkpoint_sha256": "d86240d18c460ec5e7aa0cf75323890c8bdcdcef4f13e935959dce177d5f036d",
+      "final_timing_passed": false,
+      "not_deliverable_yet": true
+    },
+    {
+      "attempt": "build/refined_full_20261018_170526",
+      "resource": {
+        "slice": 19507,
+        "lut6": 19048,
+        "reg": 23196,
+        "eram": 99,
+        "dsp": 40
+      },
+      "place_area_sha256": "ea19ec4234543b2d6c400c0bb427957871606d59614a06bb0c57e5a1fa789337",
+      "inputs_sha256": "1f4e652d592287e762308c80533cd62f28572e708b453586f000ac707fe12fcd",
+      "checkpoint_sha256": "b7bc338f84b199f8634e32beb6f595d7db079f2b8e2f763e015de57f7eca216a",
+      "final_timing_passed": false,
+      "not_deliverable_yet": true
+    }
+  ]
+}
