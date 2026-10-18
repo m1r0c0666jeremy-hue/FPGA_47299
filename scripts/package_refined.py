@@ -54,6 +54,9 @@ if checkpoint:
     if s.get('replaced_strategy') is not None:
         recipe+=f' --replace-strategy {s["replaced_strategy"]}'
         replacement_note=f'导入及约束核验后，以pr_strategy={s["replaced_strategy"]}重新完成布局，再进行布线；原父布局DB未修改。'
+    if s.get('retry_routability'):
+        recipe+=' --retry-routability'
+        replacement_note+=f' 本流程允许normal报错后只在同一内存设计上再尝试一次routability；本次实际重试={s["route_retry_performed"]}，最终模式={s["final_route_effort"]}。首轮失败日志原样保留，失败状态检查点的保存结果见完整日志；交付仅依据最后完成的实际资源和final时序。'
     checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n\n在不同路径复现时，先运行`{parent_recipe}`重新生成冻结布局，再将新目录传给run_refined_route.py；历史DB内含原绝对约束路径，不能假定直接导入可在任意目录复用。不要覆盖历史尝试。\n'
     checkpoint_note+='\n'+replacement_note+'\n'
 block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐项一致。
@@ -91,6 +94,7 @@ compiled=json.loads((attempt/'inputs.json').read_text(encoding='utf-8'))
 paths={R/name for name in compiled}
 if checkpoint:
     parent=R/checkpoint['parent'];paths.add(attempt/checkpoint['checkpoint_name'])
+    paths|={attempt/name for name in s.get('route_checkpoints',{})}
     paths.add(attempt/'checkpoint_provenance.json')
     for name in ('summary.json','source_context.json','inputs.json','inputs_after.json','flow_options.json','run.tcl','td.log','target_color_regions_gate.area','target_color_regions_phy.area','placed_clocks.txt','placed_exceptions.timing','official_strategy_ph1.json','official_strategy_context.json',checkpoint['checkpoint_name']):
         if (parent/name).is_file():paths.add(parent/name)
@@ -106,6 +110,11 @@ paths.add(R/observed['preserved_copy'])
 for folder,exts in [('scripts',{'.py','.tcl','.txt'}),('sim',{'.sv','.v','.json'}),('rtl',{'.v','.json'})]:
     paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in exts}
 paths|={p for p in (R/'reports/refined').rglob('*') if p.is_file() and p.suffix in {'.md','.log','.json','.csv','.png'} and not p.name.startswith('delivery_') and not (p.parent.name=='regression' and p.suffix=='.log' and not p.with_suffix('.json').is_file())}
+for pattern in ('route_retry_control_*.json','checkpoint_reports_*.json','packaging_guard_*.json'):
+    for auxiliary in (R/'reports/refined').glob(pattern):
+        entry=json.loads(auxiliary.read_text(encoding='utf-8'))
+        if entry.get('passed') and all((R/name).is_file() and sha(R/name)==value for name,value in entry.get('inputs',{}).items()):
+            paths|={R/name for name in entry.get('inputs',{})}
 paths|={p for p in (R/'docs').glob('颜色视频显示改进*.md')}
 paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
 paths.add(readme)

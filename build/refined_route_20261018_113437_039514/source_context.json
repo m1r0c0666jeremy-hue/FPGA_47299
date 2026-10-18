@@ -1,0 +1,15 @@
+{
+  "compiled_source_commit": "e97317b11cae6edb30f992e3ada78a2d74ab61f9",
+  "creation_time": "20261018_113437_039514",
+  "input_count": 295,
+  "inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+  "placed_checkpoint": {
+    "parent": "build/refined_place_20261018_012202",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "1c7009512c757ec64b0c9126a4661e7e048a9ab549350952c522564e388660ec",
+    "parent_summary_sha256": "8e7242b2313fe3699f5e6bba1e710c90c1eec1c2ec1e48c6f97af14d3a1557c2",
+    "parent_context_sha256": "b6032e18ff5e22f2067388d021dd2c72f08af0e93d517be10dea376113ca7746",
+    "parent_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856"
+  },
+  "replaced_strategy": 5
+}

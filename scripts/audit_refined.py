@@ -106,6 +106,15 @@ def audit(attempt=None,regression=False):
     child_tcl=(out/'run.tcl').read_text(encoding='utf-8')
     assert f'set_param place pr_strategy {n}\n place\n' in child_tcl
     assert 'REFINED_REPLACEMENT_PLACE_COMPLETED' in (out/'td.log').read_text(encoding='utf-8')
+   if s.get('retry_routability'):
+    assert context['retry_routability'] and s['route_effort']=='normal'
+    child_tcl=(out/'run.tcl').read_text(encoding='utf-8')
+    assert 'catch {route} normal_error' in child_tcl and 'set_param route effort routability' in child_tcl
+    retried='ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY' in (out/'td.log').read_text(encoding='utf-8')
+    assert s['route_retry_performed']==retried
+    assert s['final_route_effort']==('routability' if retried else 'normal')
+   for name,value in s.get('route_checkpoints',{}).items():
+    assert name in ('failed_normal_route.db','target_color_regions_routed.db') and sha(out/name)==value
   commit=context['compiled_source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
   assert context['inputs_sha256']==sha(out/'inputs.json') and context['input_count']==len(before)
   subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=R,check=True)
