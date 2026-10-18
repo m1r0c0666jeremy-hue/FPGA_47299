@@ -23,6 +23,7 @@ checkpoint=obj['build']['summary'].get('checkpoint_provenance')
 if checkpoint:
     for name in ('checkpoint_provenance.json','placed_clocks.txt','placed_exceptions.timing'):
         shutil.copy2(attempt/name,dest/name)
+    if (attempt/'effective_flow.txt').is_file():shutil.copy2(attempt/'effective_flow.txt',dest/'effective_flow.txt')
 shutil.copy2(attempt/'td.log',dest/'td_build.log')
 shutil.copy2(attempt/'compiled_inputs.zip',dest/'compiled_source_snapshot.zip')
 obj.update(status='TEST_SOFTWARE_AND_BUILD_PASSED_HARDWARE_PENDING',archive_name='颜色识别、视频稳定性与显示功能改进',delivery_directory=dest.relative_to(R).as_posix(),bit=bit.relative_to(R).as_posix(),bit_sha256=sha(bit),hardware='PENDING; no board download or Flash write',guide='docs/颜色视频显示改进_上板一页.md',validation='reports/refined/最终验证报告.md')
@@ -57,6 +58,9 @@ if checkpoint:
     if s.get('retry_routability'):
         recipe+=' --retry-routability'
         replacement_note+=f' 本流程允许normal报错后只在同一内存设计上再尝试一次routability；本次实际重试={s["route_retry_performed"]}，最终模式={s["final_route_effort"]}。首轮失败日志原样保留，失败状态检查点的保存结果见完整日志；交付仅依据最后完成的实际资源和final时序。'
+    if s.get('flow_threads') is not None:
+        recipe+=f' --threads {s["flow_threads"]}'
+        replacement_note+=f' TD flow线程数显式设为{s["flow_threads"]}，实际参数报告为effective_flow.txt。'
     checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n\n在不同路径复现时，先运行`{parent_recipe}`重新生成冻结布局，再将新目录传给run_refined_route.py；历史DB内含原绝对约束路径，不能假定直接导入可在任意目录复用。不要覆盖历史尝试。\n'
     checkpoint_note+='\n'+replacement_note+'\n'
 block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐项一致。
@@ -95,6 +99,7 @@ paths={R/name for name in compiled}
 if checkpoint:
     parent=R/checkpoint['parent'];paths.add(attempt/checkpoint['checkpoint_name'])
     paths|={attempt/name for name in s.get('route_checkpoints',{})}
+    if (attempt/'effective_flow.txt').is_file():paths.add(attempt/'effective_flow.txt')
     paths.add(attempt/'checkpoint_provenance.json')
     for name in ('summary.json','source_context.json','inputs.json','inputs_after.json','flow_options.json','run.tcl','td.log','target_color_regions_gate.area','target_color_regions_phy.area','placed_clocks.txt','placed_exceptions.timing','official_strategy_ph1.json','official_strategy_context.json',checkpoint['checkpoint_name']):
         if (parent/name).is_file():paths.add(parent/name)

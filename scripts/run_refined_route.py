@@ -11,6 +11,7 @@ R=Path(__file__).resolve().parents[1]
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 ap=argparse.ArgumentParser();ap.add_argument('--parent',required=True);ap.add_argument('--route-effort',choices=['normal','routability'],default='normal')
 ap.add_argument('--replace-strategy',type=int,choices=range(1,12))
+ap.add_argument('--threads',type=int,choices=(2,4,8,16,32))
 ap.add_argument('--retry-routability',action='store_true');a=ap.parse_args()
 if a.retry_routability:assert a.route_effort=='normal'
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
@@ -37,7 +38,7 @@ for name,v in before.items():
 shutil.copy2(checkpoint,out/checkpoint.name)
 proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_name=checkpoint.name,checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'))
 (out/'checkpoint_provenance.json').write_text(json.dumps(proof,indent=2),encoding='utf-8')
-context.update(creation_time=stamp,placed_checkpoint=proof,replaced_strategy=a.replace_strategy,retry_routability=a.retry_routability)
+context.update(creation_time=stamp,placed_checkpoint=proof,replaced_strategy=a.replace_strategy,retry_routability=a.retry_routability,flow_threads=a.threads)
 (out/'source_context.json').write_text(json.dumps(context,indent=2),encoding='utf-8')
 t=f'''set out {{{out.as_posix()}}}
 set parent {{{parent.as_posix()}}}
@@ -64,6 +65,8 @@ if {{[catch {{
  puts "CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS"
  set_param route effort {a.route_effort}
 '''
+if a.threads is not None:
+ t+=f' set_param flow thread {a.threads}\n report_param -stage flow -file effective_flow.txt\n'
 if s.get('official_strategy'):
  for definition in s['official_strategy']['selected'].values():
   for item in definition['params']:
@@ -105,6 +108,7 @@ after={name:sha(frozen/name) for name in before};(out/'inputs_after.json').write
 summary={k:v for k,v in s.items() if k not in ('resources','resource_pass','placement_required','gate_estimate','checkpoints')}
 summary.update(stage='full',head=context['compiled_source_commit'],head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all(sha(R/name)==v for name,v in before.items()),checkpoint_provenance=proof,checkpoint_unchanged=sha(checkpoint)==proof['checkpoint_sha256']==sha(out/checkpoint.name))
 summary['replaced_strategy']=a.replace_strategy
+summary['flow_threads']=a.threads
 summary['retry_routability']=a.retry_routability
 summary['route_retry_performed']='ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY' in (out/'td.log').read_text(encoding='utf-8')
 summary['final_route_effort']='routability' if summary['route_retry_performed'] else a.route_effort

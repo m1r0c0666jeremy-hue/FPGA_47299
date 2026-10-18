@@ -113,6 +113,10 @@ def audit(attempt=None,regression=False):
     retried='ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY' in (out/'td.log').read_text(encoding='utf-8')
     assert s['route_retry_performed']==retried
     assert s['final_route_effort']==('routability' if retried else 'normal')
+   if s.get('flow_threads') is not None:
+    n=s['flow_threads'];assert n in (2,4,8,16,32) and context['flow_threads']==n
+    assert f'set_param flow thread {n}\n' in (out/'run.tcl').read_text(encoding='utf-8')
+    assert re.search(r'^\s*thread\s*\|\s*'+str(n)+r'\s*\|',(out/'effective_flow.txt').read_text(encoding='utf-8'),re.M)
    for name,value in s.get('route_checkpoints',{}).items():
     assert name in ('failed_normal_route.db','target_color_regions_routed.db') and sha(out/name)==value
   commit=context['compiled_source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)

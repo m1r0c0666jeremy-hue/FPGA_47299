@@ -1,0 +1,91 @@
+{
+  "status": "STOPPED_NO_EARLY_THREAD_SPEED_BENEFIT",
+  "time": "2026-10-18T12:51:27.005386",
+  "reason": "Explicit2-thread probe reproduces same first7 conflict trajectory; 90.39s vs83.40s default. Stop exploratory scheduling test to prioritize ongoing near-clean route/retry. Not a final routing/timing result; not a universal thread-performance claim.",
+  "measurements": {
+    "refined_route_20261018_115500_912935": {
+      "iterations": [
+        {
+          "iteration": 1,
+          "conflicts": 37294,
+          "seconds": 16.09
+        },
+        {
+          "iteration": 2,
+          "conflicts": 29604,
+          "seconds": 11.93
+        },
+        {
+          "iteration": 3,
+          "conflicts": 26009,
+          "seconds": 10.38
+        },
+        {
+          "iteration": 4,
+          "conflicts": 19370,
+          "seconds": 16.05
+        },
+        {
+          "iteration": 5,
+          "conflicts": 16826,
+          "seconds": 11.74
+        },
+        {
+          "iteration": 6,
+          "conflicts": 15364,
+          "seconds": 8.85
+        },
+        {
+          "iteration": 7,
+          "conflicts": 14352,
+          "seconds": 8.36
+        }
+      ],
+      "total_seconds": 83.4
+    },
+    "refined_route_20261018_124800_473864": {
+      "iterations": [
+        {
+          "iteration": 1,
+          "conflicts": 37294,
+          "seconds": 21.77
+        },
+        {
+          "iteration": 2,
+          "conflicts": 29604,
+          "seconds": 14.13
+        },
+        {
+          "iteration": 3,
+          "conflicts": 26009,
+          "seconds": 11.93
+        },
+        {
+          "iteration": 4,
+          "conflicts": 19370,
+          "seconds": 14.73
+        },
+        {
+          "iteration": 5,
+          "conflicts": 16826,
+          "seconds": 11.23
+        },
+        {
+          "iteration": 6,
+          "conflicts": 15364,
+          "seconds": 8.72
+        },
+        {
+          "iteration": 7,
+          "conflicts": 14352,
+          "seconds": 7.88
+        }
+      ],
+      "total_seconds": 90.39
+    }
+  },
+  "verified_pid": 31820,
+  "verified_parent_pid": 33780,
+  "verified_start": "2026-10-18T12:48:02",
+  "deliverable": false
+}
