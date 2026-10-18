@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "inputs": {
+    "scripts/finish_refined_build.py": "b725d8d8eaf4a8d92ea2d8bfb0a92542c43b09b0968f24856bf1844e298c9193"
+  },
+  "expected_exit": 2
+}
