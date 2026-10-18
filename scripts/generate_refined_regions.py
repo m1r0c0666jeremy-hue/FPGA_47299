@@ -7,6 +7,7 @@ def assets():
     from refined_store_logic import store_asset
     from refined_controls_logic import control_asset
     from refined_shared_hue import shared_hue_asset
+    from refined_tracker_storage import tracker_asset
     isp=isp_assets()
     # A separate IP instance preserves the historical controller and constraints.
     # STRICT keeps an accepted read behind all previously accepted write commands;
@@ -70,7 +71,7 @@ def assets():
     ET.indent(root,space='    ')
     project='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n'
     from generate_refined_ui import ui_assets
-    return {'rtl/color_regions/stable_model_lane.v':shared_hue_asset(original_lane),'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
+    return {'rtl/color_regions/stable_tracker.v':tracker_asset((R/'scripts/refined_tracker_storage_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_model_lane.v':shared_hue_asset(original_lane),'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
     for name,text in assets().items():

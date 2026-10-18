@@ -20,15 +20,19 @@ for name in ('target_color_regions_phy.area','target_color_regions_phy.ts','targ
 for name in ('official_strategy_ph1.json','official_strategy_context.json'):
     if (attempt/name).is_file():shutil.copy2(attempt/name,dest/name)
 checkpoint=obj['build']['summary'].get('checkpoint_provenance')
+failed_checkpoint=obj['build']['summary'].get('failed_checkpoint_provenance')
 if checkpoint:
     for name in ('checkpoint_provenance.json','placed_clocks.txt','placed_exceptions.timing'):
         shutil.copy2(attempt/name,dest/name)
     if (attempt/'effective_flow.txt').is_file():shutil.copy2(attempt/'effective_flow.txt',dest/'effective_flow.txt')
+if failed_checkpoint:
+    for name in ('failed_checkpoint_provenance.json','restored_clocks.txt','restored_exceptions.timing'):
+        shutil.copy2(attempt/name,dest/name)
 shutil.copy2(attempt/'td.log',dest/'td_build.log')
 shutil.copy2(attempt/'compiled_inputs.zip',dest/'compiled_source_snapshot.zip')
 obj.update(status='TEST_SOFTWARE_AND_BUILD_PASSED_HARDWARE_PENDING',archive_name='颜色识别、视频稳定性与显示功能改进',delivery_directory=dest.relative_to(R).as_posix(),bit=bit.relative_to(R).as_posix(),bit_sha256=sha(bit),hardware='PENDING; no board download or Flash write',guide='docs/颜色视频显示改进_上板一页.md',validation='reports/refined/最终验证报告.md')
 report=R/obj['validation'];originals={report:report.read_bytes()};updates={};text=originals[report].decode('utf-8')
-pending_status='**当前状态：139项软件验证已通过，TD完整构建仍在进行，暂无新bit/同源ZIP，实物全部待验。**'
+pending_status='**当前状态：140项软件验证已通过，TD完整构建仍在进行，暂无新bit/同源ZIP，实物全部待验。**'
 assert pending_status in text,'Review the current report status before publication'
 text=text.replace(pending_status,f'**当前状态：{len(obj["regression"])}项软件验证及完整TD构建通过，实物待验。**')
 assert '<!-- BUILD_RESULT -->' in text,'Report already published; preserve it and use a new reviewed report'
@@ -63,6 +67,9 @@ if checkpoint:
         replacement_note+=f' TD flow线程数显式设为{s["flow_threads"]}，实际参数报告为effective_flow.txt。'
     checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n\n在不同路径复现时，先运行`{parent_recipe}`重新生成冻结布局，再将新目录传给run_refined_route.py；历史DB内含原绝对约束路径，不能假定直接导入可在任意目录复用。不要覆盖历史尝试。\n'
     checkpoint_note+='\n'+replacement_note+'\n'
+if failed_checkpoint:
+    recipe=f'scripts/run_refined_failed_route.py --source-attempt {failed_checkpoint["source_attempt"]} --probe {failed_checkpoint["probe"]} --route-effort {s["route_effort"]}'
+    checkpoint_note=f'\n本次从正式源首次normal布线失败后保存的DB，在全新TD进程继续布线。原综合/布局、首轮失败、DB导出、8组时钟周期及完整例外报告、恢复前后报告、295项源输入/原提交均经审计追溯；没有重新定义或放宽时序约束。失败DB SHA256 `{failed_checkpoint["checkpoint_sha256"]}`，源尝试`{failed_checkpoint["source_attempt"]}`，只读恢复探针`{failed_checkpoint["probe"]}`。原失败不是交付结果，最终仅依据新进程完成的资源、final时序及bitgen。\n\n归档DB含原绝对约束路径；不同位置复现须先依源尝试及父目录保存的run.tcl参数重新生成正式布局与失败检查点，再运行上述继续脚本，不覆盖历史尝试。原失败阶段只归档已冻结前缀日志，避免把仍在运行的源日志混入源码ZIP。\n'
 block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐项一致。
 
 | 项目 | 最终实际结果 |
@@ -96,6 +103,19 @@ record(dest/'audit.json',obj)
 # the tests reviewable without packing historical bits or arbitrary caches.
 compiled=json.loads((attempt/'inputs.json').read_text(encoding='utf-8'))
 paths={R/name for name in compiled}
+if failed_checkpoint:
+    source=R/failed_checkpoint['source_attempt'];probe=R/failed_checkpoint['probe']
+    initial=json.loads((source/'checkpoint_provenance.json').read_text(encoding='utf-8'));parent=R/initial['parent']
+    for name in ('failed_normal_route.db','failed_checkpoint_provenance.json','restored_clocks.txt','restored_exceptions.timing'):
+        paths.add(attempt/name)
+    paths|={attempt/name for name in s['route_checkpoints']}
+    for name in ('inputs.json','compiled_inputs.zip','source_context.json','checkpoint_provenance.json','run.tcl','normal_failure_checkpoint.json','normal_failure_prefix.log','failed_normal_route.db','placed_clocks.txt','placed_exceptions.timing'):
+        paths.add(source/name)
+    for name in ('summary.json','run.tcl','td.log','restored_clocks.txt','restored_exceptions.timing','restored.area'):
+        paths.add(probe/name)
+    for name in ('summary.json','source_context.json','inputs.json','inputs_after.json','flow_options.json','run.tcl','td.log','target_color_regions_gate.area','target_color_regions_phy.area','placed_clocks.txt','placed_exceptions.timing',initial['checkpoint_name']):
+        if (parent/name).is_file():paths.add(parent/name)
+    paths|={parent/'compiled_source'/name for name in compiled}
 if checkpoint:
     parent=R/checkpoint['parent'];paths.add(attempt/checkpoint['checkpoint_name'])
     paths|={attempt/name for name in s.get('route_checkpoints',{})}
@@ -115,7 +135,7 @@ paths.add(R/observed['preserved_copy'])
 for folder,exts in [('scripts',{'.py','.tcl','.txt'}),('sim',{'.sv','.v','.json'}),('rtl',{'.v','.json'})]:
     paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in exts}
 paths|={p for p in (R/'reports/refined').rglob('*') if p.is_file() and p.suffix in {'.md','.log','.json','.csv','.png'} and not p.name.startswith('delivery_') and not (p.parent.name=='regression' and p.suffix=='.log' and not p.with_suffix('.json').is_file())}
-for pattern in ('route_retry_control_*.json','checkpoint_reports_*.json','packaging_guard_*.json','canonical_entry_guard_*.json','completion_guard_*.json'):
+for pattern in ('route_retry_control_*.json','checkpoint_reports_*.json','failed_checkpoint_guard_*.json','packaging_guard_*.json','canonical_entry_guard_*.json','completion_guard_*.json'):
     for auxiliary in (R/'reports/refined').glob(pattern):
         entry=json.loads(auxiliary.read_text(encoding='utf-8'))
         if entry.get('passed') and all((R/name).is_file() and sha(R/name)==value for name,value in entry.get('inputs',{}).items()):

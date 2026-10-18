@@ -23,6 +23,8 @@ def required_inputs(prefix):
   required.append('rtl/color_regions/refined_line_reader.v')
  if prefix=='controls_with_camera_pause':required.append('rtl/color_regions/refined_controls.v')
  if prefix=='footer_late_abort_after':required.append('rtl/color_regions/refined_osd.v')
+ if prefix=='tracker_storage_equivalence' or prefix in ('history_full_rgb_after','capture_diagnostics_v4','tracker_identity_adversarial','tracker_quality_and_diagnostics') or prefix.startswith('refined_v4_live_'):
+  required.append('rtl/color_regions/stable_tracker.v')
  return tuple(required)
 def checkpoint_report_signature(path,parent,out):
  text=path.read_text(encoding='utf-8').replace('\r','')
@@ -55,7 +57,7 @@ def audit(attempt=None,regression=False):
   writer=(R/'rtl/color_regions/refined_video_in.v').read_text(encoding='utf-8').replace('module refined_video_in (','module arbitration_video_in #(parameter BW=240)(').replace('burst_count==239','burst_count==BW-1').replace('fifo_count>=240','fifo_count>=BW')
   assert (R/'build/sim/refined_arbitration/writer.v').read_text(encoding='utf-8')==writer,'arbitration fixture differs from current writer'
   prefixes=['source_time_and_endpoint','v4_frame_store_and_display','actual_isp_sof_tags','refined_v4_ui_pixels','controls_with_camera_pause','camera_frame_admission','camera_real_i2c','ddr_handshake','bank_actual_commit','final_missing_snapshot','ingress','calibration_calibration_acquisition','model_state_quality','history_full_rgb_after','tracker_identity_adversarial','tracker_quality_and_diagnostics','five_zoom_viewport','rational_overlay_geometry','recovery_budget','arbitration_bw240_recover']
-  prefixes += ['failed_bus_wait_peak','shared_hue_math','shared_hue_exhaustive_rtl','footer_late_abort_after','capture_diagnostics_v4','store_cached_id_comparison','refined_v4_frame_store_and_display','controls_repeat_equivalence_100','controls_repeat_equivalence_135']+[f'camera_supervisor_{m}' for m in range(6)]+[f'final_video_drain_{m}' for m in range(3)]
+  prefixes += ['tracker_storage_equivalence','failed_bus_wait_peak','shared_hue_math','shared_hue_exhaustive_rtl','footer_late_abort_after','capture_diagnostics_v4','store_cached_id_comparison','refined_v4_frame_store_and_display','controls_repeat_equivalence_100','controls_repeat_equivalence_135']+[f'camera_supervisor_{m}' for m in range(6)]+[f'final_video_drain_{m}' for m in range(3)]
   prefixes += [f'refined_video_{pair}_{z}_{page}_{rot}_f0_n1' for pair in (0,1) for z in range(5) for page in range(4) for rot in (0,1)]
   prefixes += [f'refined_v4_live_{pair}_{rot}' for pair in (0,1) for rot in (0,1)]
   prefixes += [f'refined_video_0_0_0_{rot}_f1_n2' for rot in (0,1)]+[f'refined_video_0_1_0_{rot}_f0_n2' for rot in (0,1)]
@@ -63,6 +65,8 @@ def audit(attempt=None,regression=False):
   prefixes += ['calibration_after_'+n for n in ('blue_metal_reflection','broad_cluster','dark_blue_background','inseparable_background','polluted_frames','purple_dark_bias','purple_neutral_background','yellow_bright_neutral','yellow_dark_bias')]
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
   late=result['regression']['footer_late_abort_after']
+  for name in ('history_full_rgb_after','capture_diagnostics_v4'):
+   assert 'CAPTURE_CANDIDATE_HOLD_PASS' in (R/result['regression'][name]['record']).with_suffix('.log').read_text(encoding='utf-8')
   assert 'V4_UI_CASE_PASS last_pixel_abort' in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
   for mode in range(3):
    assert 'FAILED_JOB_PEAK_PASS' in (R/result['regression'][f'final_video_drain_{mode}']['record']).with_suffix('.log').read_text(encoding='utf-8')
@@ -92,6 +96,23 @@ def audit(attempt=None,regression=False):
   assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'
   assert (out/'target_color_regions.bit').is_file()
   context=json.loads((out/'source_context.json').read_text(encoding='utf-8'))
+  if s.get('failed_checkpoint_provenance'):
+   from refined_failed_checkpoint import verify_source
+   fp=s['failed_checkpoint_provenance']
+   proof,source_inputs,source_context,source_parent,parent=verify_source(R,R/fp['source_attempt'],R/fp['probe'],canonical_build_inputs,checkpoint_report_signature)
+   assert proof==fp==context['failed_checkpoint_provenance'] and source_inputs==before
+   assert context['compiled_source_commit']==source_context['compiled_source_commit']
+   assert s['failed_checkpoint_unchanged'] and sha(out/'failed_normal_route.db')==proof['checkpoint_sha256']
+   assert s['recovery_method']=='fresh_process_from_failed_normal_route'
+   child_tcl=(out/'run.tcl').read_text(encoding='utf-8')
+   assert 'import_db failed_normal_route.db' in child_tcl and f'set_param route effort {s["route_effort"]}' in child_tcl
+   assert 'FAILED_CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS' in (out/'td.log').read_text(encoding='utf-8')
+   probe=R/proof['probe']
+   for name in ('restored_clocks.txt','restored_exceptions.timing'):
+    assert checkpoint_report_signature(out/name,probe,out)==checkpoint_report_signature(probe/name,probe,out),name
+   assert 'target_color_regions_routed.db' in s['route_checkpoints']
+   for name,value in s['route_checkpoints'].items():
+    assert name=='target_color_regions_routed.db' and sha(out/name)==value
   if s.get('checkpoint_provenance'):
    proof=s['checkpoint_provenance'];parent=(R/proof['parent']).resolve();assert parent.is_relative_to(R/'build')
    assert s['checkpoint_unchanged'] and context['placed_checkpoint']==proof

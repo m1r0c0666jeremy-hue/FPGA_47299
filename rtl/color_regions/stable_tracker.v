@@ -15,10 +15,10 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  reg frame_ok,advance;
  wire [31:0] gap=frame_id-last_id;
  wire [5:0] skipped_loss={1'b0,lost}+{1'b0,gap[4:0]}-1'b1;
- reg [127:0] olda,oldb,besta,bestb;reg [31:0] bestscore;
+ reg [127:0] olda,oldb;reg [31:0] bestscore;
  reg [7:0] best_quality,rejected;reg [3:0] chosen_indices;reg [1:0] chosen_reason;
  reg [7:0] reject_bits;
- reg diagnostic_found;reg [127:0] diagnostic_a,diagnostic_b;reg [31:0] diagnostic_score;
+ reg diagnostic_found;reg [31:0] diagnostic_score;
  reg [7:0] diagnostic_quality,diagnostic_reject;reg [3:0] diagnostic_indices;
  reg have_a,have_b;reg [1:0] first_a,first_b;reg [127:0] single_a,single_b;integer ci;
  reg found;reg [10:0] fax,fbx;reg [9:0] fay,fby;
@@ -88,11 +88,11 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  if(!rst_n)begin
  state<=0;done<=0;a<=0;b<=0;tip_valid<=0;tip_x<=0;tip_y<=0;reason<=0;pair_index<=0;last_id<=0;
  last_command<=0;last_revision<=0;have_id<=0;locked<=0;expired<=0;streak<=0;lost<=0;olda<=0;oldb<=0;
- besta<=0;bestb<=0;bestscore<=32'hffffffff;found<=0;fax<=0;fbx<=0;fay<=0;fby<=0;
+ bestscore<=32'hffffffff;found<=0;fax<=0;fbx<=0;fay<=0;fby<=0;
  product0<=0;product1<=0;distance<=0;old_distance<=0;
  frame_ok<=0;advance<=0;
  best_quality<=0;rejected<=0;chosen_indices<=0;chosen_reason<=0;
- diagnostic_found<=0;diagnostic_a<=0;diagnostic_b<=0;diagnostic_score<=32'hffffffff;diagnostic_quality<=0;diagnostic_reject<=0;diagnostic_indices<=0;tip_bounds<=0;
+ diagnostic_found<=0;diagnostic_score<=32'hffffffff;diagnostic_quality<=0;diagnostic_reject<=0;diagnostic_indices<=0;tip_bounds<=0;
  end else begin
  done<=0;
  case(state)
@@ -131,23 +131,31 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  6:begin product0<=mx0*my0;product1<=mx1*my1;state<=9;end
  9:begin
  if(ca[120] && cb[120] && (!diagnostic_found || score<diagnostic_score || (score==diagnostic_score && pair_quality>diagnostic_quality)))begin
- diagnostic_found<=1;diagnostic_a<=ca;diagnostic_b<=cb;diagnostic_score<=score;diagnostic_quality<=pair_quality;diagnostic_reject<=reject_bits;diagnostic_indices<=pair_index;end
+ diagnostic_found<=1;diagnostic_score<=score;diagnostic_quality<=pair_quality;diagnostic_reject<=reject_bits;diagnostic_indices<=pair_index;end
  if(match && (!found || score<bestscore || (score==bestscore && pair_quality>best_quality)))begin
- found<=1;bestscore<=score;best_quality<=pair_quality;besta<=ca;bestb<=cb;
+ found<=1;bestscore<=score;best_quality<=pair_quality;
  chosen_indices<=pair_index;chosen_reason<=history_valid?2:1;end
- if(pair_index==15)state<=3;else begin pair_index<=pair_index+1'b1;state<=2;end
+ if(pair_index==15)begin
+ // stable_capture holds the published candidate bus through tracker done.
+ // Select the existing read port instead of retaining four 128-bit copies.
+ if(match && (!found || score<bestscore || (score==bestscore && pair_quality>best_quality)))pair_index<=15;
+ else if(found)pair_index<=chosen_indices;
+ else if(ca[120] && cb[120] && (!diagnostic_found || score<diagnostic_score || (score==diagnostic_score && pair_quality>diagnostic_quality)))pair_index<=15;
+ else pair_index<=diagnostic_indices;
+ state<=3;
+ end else begin pair_index<=pair_index+1'b1;state<=2;end
  end
  3:begin
  if(found)begin
- a<=besta;b<=bestb;olda<=besta;oldb<=bestb;lost<=0;
+ a<=ca;b<=cb;olda<=ca;oldb<=cb;lost<=0;
  if(streak<3)streak<=streak+1'b1;
- if(streak==0 || !locked)begin fax<=besta[72:62];fay<=besta[82:73];fbx<=bestb[72:62];fby<=bestb[82:73];end
- else begin fax<=({1'b0,fax}+besta[72:62]+1)>>1;fay<=({1'b0,fay}+besta[82:73]+1)>>1;
- fbx<=({1'b0,fbx}+bestb[72:62]+1)>>1;fby<=({1'b0,fby}+bestb[82:73]+1)>>1;end
+ if(streak==0 || !locked)begin fax<=ca[72:62];fay<=ca[82:73];fbx<=cb[72:62];fby<=cb[82:73];end
+ else begin fax<=({1'b0,fax}+ca[72:62]+1)>>1;fay<=({1'b0,fay}+ca[82:73]+1)>>1;
+ fbx<=({1'b0,fbx}+cb[72:62]+1)>>1;fby<=({1'b0,fby}+cb[82:73]+1)>>1;end
  if(streak>=2)begin locked<=1;reason<=3;end else reason<=2;
  state<=5;
  end else begin
- a<=diagnostic_found?diagnostic_a:single_a;b<=diagnostic_found?diagnostic_b:single_b;
+ a<=diagnostic_found?ca:single_a;b<=diagnostic_found?cb:single_b;
  chosen_indices<=diagnostic_indices;rejected<=diagnostic_found?diagnostic_reject:(!have_a || !have_b)?8'd1:8'd0;
  streak<=0;reason<=expired?6:locked?5:(have_a^have_b)?4:1;
  if(locked)begin if(lost>=14)begin locked<=0;expired<=1;reason<=6;end else lost<=lost+1'b1;end
@@ -160,7 +168,7 @@ module stable_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  4:begin
  // Output candidate A rank is no longer needed by consumers. Its 28 bits carry
  // an atomic decision diagnostic; geometry, count, quality and validity retain
- // their original offsets. Stored identity still uses untouched besta/bestb.
+ // their original offsets. Stored identity still uses untouched ca/cb.
  a[119:92]<={4'd0,tip_bounds,(found?8'd0:rejected),(expired?4'd15:lost[3:0]),streak,
  (found?chosen_reason:((a[120] || b[120])?2'd3:2'd0)),chosen_indices[3:2],chosen_indices[1:0]};
  done<=1;state<=0;end

@@ -1,4 +1,4 @@
-"""Private cycle-preserving candidate-storage experiment, not production RTL."""
+"""Cycle-preserving candidate storage; caller holds candidates until done."""
 def tracker_asset(s):
     substitutions={
       'reg [127:0] olda,oldb,besta,bestb;':'reg [127:0] olda,oldb;',
