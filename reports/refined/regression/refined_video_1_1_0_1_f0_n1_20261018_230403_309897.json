@@ -1,0 +1,22 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_line_reader.v": "6359e2a2bc68e4c5f1c274569522f2fc154b1659e7295769664d24a137f1b9fd",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\stable_preprocess.v": "022a23602c48cf28644f15e7d72e50ca46b77d7f172310c951cb4bc99fff4d4b",
+    "rtl\\color_regions\\stable_osd.v": "c00e6e6f58007dbb99374d046f838859c27d723a110fc301ac89b76e41c3cfe6",
+    "rtl\\color_regions\\stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+    "rtl\\color_regions\\stable_footer_glyph_rom.v": "7c7da05c622cafc58cb2f646f8af15f518e6f7486add622c2005eaafc5e4b615",
+    "rtl\\color_regions\\stable_footer_program_rom.v": "6dc9fcd88de34446f8cda8e590fe978b31d294ac86b14e4852a45a5f207f4d3b",
+    "rtl\\color_regions\\stable_footer_text_rom.v": "740bede43a2cd79173dcfff21365e95981089824d928b5e710e532e9c5489be9",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "rtl\\09_osd_ui\\scaling_logo_rom.v": "4efbb9d3f18cf7d8c9d63fd45e75615765c1581826689baa3fca3e7aa8d573a0"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\refined_video_1_1_0_1_f0_n1_20261018_230403_309897"
+}
