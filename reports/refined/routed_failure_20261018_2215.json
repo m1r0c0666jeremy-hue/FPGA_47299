@@ -1,0 +1,75 @@
+{
+  "status": "TIMING_FAILED_NOT_DELIVERABLE",
+  "stage": "full",
+  "process_exit_code": 0,
+  "resources": {
+    "slice": 19666,
+    "lut6": 19142,
+    "reg": 23247,
+    "eram": 99,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": -8.292,
+    "HWNS": -0.698
+  },
+  "inputs_unchanged": true,
+  "working_tree_matches_at_end": true,
+  "worst_paths": {
+    "setup": [
+      {
+        "slack_ns": -8.292,
+        "check": "setup",
+        "begin": "u_video/u_scaler/c0/b_reg[6]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_scaler/c0/hn_reg[14]_syn_2.ie (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "15.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@15.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "22.931ns (cell 4.112ns (17%), net 18.819ns (83%))"
+      },
+      {
+        "slack_ns": -8.245,
+        "check": "setup",
+        "begin": "u_video/u_scaler/c0/b_reg[6]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_scaler/c0/hn_reg[11]_syn_2.ib (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "15.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@15.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "22.884ns (cell 3.952ns (17%), net 18.932ns (83%))"
+      },
+      {
+        "slack_ns": -8.208,
+        "check": "setup",
+        "begin": "u_video/u_detection/ids_reg[7]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+        "end": "u_video/u_detection/grid/best_reg[541]_syn_2.imb (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+        "budget": "16.668ns { MIPI_RX_BYTE_CLK rising@16.668ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+        "delay": "24.706ns (cell 3.976ns (16%), net 20.730ns (84%))"
+      }
+    ],
+    "hold": [
+      {
+        "slack_ns": -0.698,
+        "check": "hold",
+        "begin": "u_video/recovery_telemetry/ack_reg_syn_3.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+        "end": "u_video/recovery_telemetry/ack1_reg_syn_3.ima (rising edge triggered by clock sys_clk_50m  { rise@0.000000ns  fall@10.000000ns  period=20.000000 })",
+        "budget": "0.000ns { HDMI_PIXEL_CLK rising@0.000ns - sys_clk_50m rising@0.000ns }",
+        "delay": "0.676ns (cell 0.190ns (28%), net 0.486ns (72%))"
+      },
+      {
+        "slack_ns": 0.011,
+        "check": "hold",
+        "begin": "u_camera/u_isp_top/wb_tag0_reg[7]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+        "end": "u_camera/u_isp_top/wb_tag1_reg[7]_syn_2.ima (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+        "budget": "0.000ns { MIPI_RX_BYTE_CLK rising@0.000ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+        "delay": "0.148ns (cell 0.091ns (61%), net 0.057ns (39%))"
+      },
+      {
+        "slack_ns": 0.02,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/wphase[0]$u_ddrphy_wphase_ctl/woe_load_reg[6]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[0]$dx_byte_used$u_ddrphy_dx_byte_wrapper/u_ddrphy_byte.ctl_oe[6] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "0.114ns (cell -0.022ns (-19%), net 0.136ns (119%))"
+      }
+    ]
+  },
+  "bit_sha256": "ede70d87c6d2e0fc605187b3b614b3946540de35b6c54d5806cda3619e6e4d28",
+  "bit": "FAILED BUILD ONLY; do not use for board acceptance or release",
+  "time": "2026-10-18T22:22:11.566411"
+}

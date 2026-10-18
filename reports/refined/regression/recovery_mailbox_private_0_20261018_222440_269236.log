@@ -1,0 +1,2 @@
+RECOVERY_MAILBOX_PRIVATE_PASS phase0 1024 ordered39-bit messages, burst gaps and 8 in-flight resets; extra ACK settling preserved
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\recovery_mailbox_private_0_20261018_222440_269236\tb.sv:39: $finish called at 124139540 (1ps)

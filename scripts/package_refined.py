@@ -32,9 +32,9 @@ shutil.copy2(attempt/'td.log',dest/'td_build.log')
 shutil.copy2(attempt/'compiled_inputs.zip',dest/'compiled_source_snapshot.zip')
 obj.update(status='TEST_SOFTWARE_AND_BUILD_PASSED_HARDWARE_PENDING',archive_name='颜色识别、视频稳定性与显示功能改进',delivery_directory=dest.relative_to(R).as_posix(),bit=bit.relative_to(R).as_posix(),bit_sha256=sha(bit),hardware='PENDING; no board download or Flash write',guide='docs/颜色视频显示改进_上板一页.md',validation='reports/refined/最终验证报告.md')
 report=R/obj['validation'];originals={report:report.read_bytes()};updates={};text=originals[report].decode('utf-8')
-pending_status='**当前状态：140项软件验证已通过，TD完整构建仍在进行，暂无新bit/同源ZIP，实物全部待验。**'
-assert pending_status in text,'Review the current report status before publication'
-text=text.replace(pending_status,f'**当前状态：{len(obj["regression"])}项软件验证及完整TD构建通过，实物待验。**')
+pending_status=re.compile(r'^\*\*当前状态：\d+项软件验证已通过，TD完整构建(?:仍在进行|未通过，正在定位修复)，暂无新bit/同源ZIP，实物全部待验。\*\*$',re.M)
+assert len(pending_status.findall(text))==1,'Review the current report status before publication'
+text=pending_status.sub(f'**当前状态：{len(obj["regression"])}项软件验证及完整TD构建通过，实物待验。**',text,count=1)
 assert '<!-- BUILD_RESULT -->' in text,'Report already published; preserve it and use a new reviewed report'
 assert '<!-- STORE_RESULT -->' not in text,'Complete the actual new-selector live verification report first'
 assert '<!-- FINAL_SOFTWARE_RESULT -->' in text
