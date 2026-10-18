@@ -80,15 +80,19 @@ wire camera_parameter_event,camera_ready;wire [3:0] camera_fault,camera_phase;wi
 wire [31:0] board_us,time_gray,source_id,source_us,capture_us,latest_id_gray;wire source_time_valid;
 wire [17:0] camera_ui_status;wire camera_ui_ready;
 refined_timebase clock_us(S_hdmi_pixel_clk,S_rst_n,board_us,time_gray);
-target_mailbox #(.WIDTH(18)) camera_ui(.S_clk(S_24m_clk),.S_rst_n(S_rst_n),.S_send(camera_ui_ready),
- .S_data({camera_ready,camera_phase,camera_fault,camera_retries,camera_gain}),.S_ready(camera_ui_ready),
- .D_clk(S_hdmi_pixel_clk),.D_rst_n(process_rst_n),.D_valid(),.D_data(camera_ui_status));
+wire camera_event_relay,camera_ready_relay,camera_gain_req_relay,camera_gain_up_relay,camera_gain_ack_raw;
+refined_camera_control_relay camera_relay(.ref_clk(S_100m_clk),.cam_clk(S_24m_clk),.display_clk(S_hdmi_pixel_clk),
+ .rst_n(S_rst_n),.display_rst_n(process_rst_n),.gain_req(gain_req),.gain_up(gain_up),.cam_gain_ack(camera_gain_ack_raw),
+ .cam_event(camera_parameter_event),.cam_ready(camera_ready),
+ .cam_status({camera_ready,camera_phase,camera_fault,camera_retries,camera_gain}),
+ .cam_req(camera_gain_req_relay),.cam_up(camera_gain_up_relay),.gain_ack(gain_ack),
+ .event_relay(camera_event_relay),.ready_relay(camera_ready_relay),.ui_status(camera_ui_status));
 (* async_reg="true" *) reg [1:0] camera_event_sync;
 (* async_reg="true" *) reg [1:0] camera_ready_sync;reg camera_event_previous;
 wire camera_pause=camera_event_sync[1]!=camera_event_previous;
 always @(posedge S_hdmi_pixel_clk or negedge process_rst_n)begin
  if(!process_rst_n)begin camera_event_sync<=0;camera_event_previous<=0;camera_ready_sync<=0;end
- else begin camera_event_sync<={camera_event_sync[0],camera_parameter_event};camera_event_previous<=camera_event_sync[1];camera_ready_sync<={camera_ready_sync[0],camera_ready};end
+ else begin camera_event_sync<={camera_event_sync[0],camera_event_relay};camera_event_previous<=camera_event_sync[1];camera_ready_sync<={camera_ready_sync[0],camera_ready_relay};end
 end
 (* async_reg="true" *) reg [1:0] cal_reset_bridge;
 wire cal_rst_n=cal_reset_bridge[1];
@@ -159,7 +163,7 @@ stable_camera_capture #(.TIMING(1)) u_camera (
     .O_camera_retries(camera_retries),.O_camera_phase(camera_phase),.O_camera_gain(camera_gain),
     .I_gain_r(wb_r),.I_gain_b(wb_b),.O_raw_rgb(raw_rgb),.O_raw_sof(raw_sof),.O_raw_valid(raw_valid),
     .I_control_clk(S_100m_clk), .I_camera_ref_clk(S_24m_clk),
-    .I_rst_n(S_rst_n), .I_gain_req(gain_req), .I_gain_up(gain_up), .O_gain_ack(gain_ack),
+    .I_rst_n(S_rst_n), .I_gain_req(camera_gain_req_relay), .I_gain_up(camera_gain_up_relay), .O_gain_ack(camera_gain_ack_raw),
     .O_cam_scl(O_cam_scl), .IO_cam_sda(IO_cam_sda),
     .O_cam_24m(O_cam_24m), .O_cam_rst(O_cam_rst),
     .IO_rx_clk_pad_n(IO_rx_clk_pad_n), .IO_rx_clk_pad_p(IO_rx_clk_pad_p),
@@ -205,5 +209,33 @@ stable_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .ddr_dqs_n(ddr_dqs_n)
 );
 
+endmodule
+`default_nettype wire
+
+`default_nettype none
+module refined_camera_control_relay(
+ input wire ref_clk,cam_clk,display_clk,rst_n,display_rst_n,
+ input wire gain_req,gain_up,cam_gain_ack,cam_event,cam_ready,
+ input wire [17:0] cam_status,
+ output wire cam_req,cam_up,gain_ack,event_relay,ready_relay,
+ output wire [17:0] ui_status);
+ (* async_reg="true",syn_preserve=1 *) reg [1:0] reset_sync;
+ wire ref_rst_n=reset_sync[1];
+ always @(posedge ref_clk or negedge rst_n)
+  if(!rst_n)reset_sync<=0;else reset_sync<={reset_sync[0],1'b1};
+ (* async_reg="true",syn_preserve=1 *) reg [2:0] req_sync;
+ (* async_reg="true",syn_preserve=1 *) reg [1:0] up_sync,ack_sync,event_sync,ready_sync;
+ always @(posedge ref_clk or negedge ref_rst_n)begin
+  if(!ref_rst_n)begin req_sync<=0;up_sync<=0;ack_sync<=0;event_sync<=0;ready_sync<=0;end
+  else begin req_sync<={req_sync[1:0],gain_req};up_sync<={up_sync[0],gain_up};
+   ack_sync<={ack_sync[0],cam_gain_ack};event_sync<={event_sync[0],cam_event};ready_sync<={ready_sync[0],cam_ready};end
+ end
+ assign cam_req=req_sync[2];assign cam_up=up_sync[1];assign gain_ack=ack_sync[1];
+ assign event_relay=event_sync[1];assign ready_relay=ready_sync[1];
+ wire [17:0] ref_status;wire cam_send_ready,ref_send_ready;
+ target_mailbox #(.WIDTH(18)) cam_to_ref(.S_clk(cam_clk),.S_rst_n(rst_n),.S_send(cam_send_ready),
+  .S_data(cam_status),.S_ready(cam_send_ready),.D_clk(ref_clk),.D_rst_n(ref_rst_n),.D_valid(),.D_data(ref_status));
+ target_mailbox #(.WIDTH(18)) ref_to_display(.S_clk(ref_clk),.S_rst_n(ref_rst_n),.S_send(ref_send_ready),
+  .S_data(ref_status),.S_ready(ref_send_ready),.D_clk(display_clk),.D_rst_n(display_rst_n),.D_valid(),.D_data(ui_status));
 endmodule
 `default_nettype wire

@@ -17,6 +17,9 @@ def evidence(prefix,required=()):
  return dict(record=p.relative_to(R).as_posix(),record_sha256=sha(p),log_sha256=sha(p.with_suffix('.log')),inputs=d['inputs'])
 def required_inputs(prefix):
  required=[]
+ if prefix=='camera_relay_equivalence' or prefix.startswith('camera_relay_production_'):
+  required.append('rtl/color_regions/stable_top.v')
+ if prefix.startswith('camera_relay_production_'):required.append('rtl/color_regions/refined_camera_config.v')
  if prefix.startswith('shared_hue_'):required.append('rtl/color_regions/stable_model_lane.v')
  if prefix.startswith('refined_v4_live_'):required.append('rtl/color_regions/refined_frame_store.v')
  if prefix.startswith(('refined_v4_live_','refined_video_','final_video_drain_')) or prefix in ('final_missing_snapshot','arbitration_bw240_recover','failed_bus_wait_peak'):
@@ -63,6 +66,7 @@ def audit(attempt=None,regression=False):
   prefixes += [f'refined_video_0_0_0_{rot}_f1_n2' for rot in (0,1)]+[f'refined_video_0_1_0_{rot}_f0_n2' for rot in (0,1)]
   prefixes += [f'sampling_after_{pair}_{case}' for pair,case in ((0,0),(0,1),(1,0),(1,1))]
   prefixes += ['calibration_after_'+n for n in ('blue_metal_reflection','broad_cluster','dark_blue_background','inseparable_background','polluted_frames','purple_dark_bias','purple_neutral_background','yellow_bright_neutral','yellow_dark_bias')]
+  prefixes += ['camera_relay_equivalence','camera_relay_production_real_i2c']+[f'camera_relay_production_{m}' for m in range(6)]
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
   late=result['regression']['footer_late_abort_after']
   for name in ('history_full_rgb_after','capture_diagnostics_v4'):
