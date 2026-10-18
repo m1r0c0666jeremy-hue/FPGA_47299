@@ -1,0 +1,20 @@
+{
+  "options": {
+    "stage": "full",
+    "route_effort": "normal",
+    "strategy": 5,
+    "map_mode": "area_prior",
+    "pack_effort": "high",
+    "infer_fsm": "project",
+    "map_strategy": null,
+    "macro_performance": null,
+    "pack_mode": null,
+    "place_effort": null,
+    "official_syn": null,
+    "official_phy": null,
+    "official_strategy_file": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+    "checkpoint": true,
+    "max_fanout": 128
+  },
+  "official_strategy": null
+}

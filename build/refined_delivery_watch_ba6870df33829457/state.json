@@ -1,0 +1,16 @@
+{
+  "status": "STOPPED_FOR_TARGETED_FANOUT_COMPARISON",
+  "started": "2026-10-18T17:06:03.203392",
+  "pid": 35876,
+  "attempts": [
+    "build/refined_full_20261018_163624",
+    "build/refined_full_20261018_170526"
+  ],
+  "documents": {
+    "README.md": "6fff66416edad69b1a1b46b0e23ecd0c33f172afa5b79fa19966e7d3eb866aa0",
+    "reports/refined/最终验证报告.md": "ed2b725c5b4d6a57705ce0d0e8f9729b5892dbfcd1922cc0192bb370e7ec5e51",
+    "docs/颜色视频显示改进_上板一页.md": "a2596dceac3fd618860767cd251a40eca6e7420f4bc04a7ebd27237cfe350cfc"
+  },
+  "updated": "2026-10-18T18:37:59.082735",
+  "reason": "Retain progressing strategy5; replace slower high-area backup with same-source strategy5 max_fanout128 based on measured reset fanout3278/1353; no audit/package was active"
+}
