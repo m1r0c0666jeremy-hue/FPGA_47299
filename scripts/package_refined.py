@@ -115,7 +115,7 @@ paths.add(R/observed['preserved_copy'])
 for folder,exts in [('scripts',{'.py','.tcl','.txt'}),('sim',{'.sv','.v','.json'}),('rtl',{'.v','.json'})]:
     paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in exts}
 paths|={p for p in (R/'reports/refined').rglob('*') if p.is_file() and p.suffix in {'.md','.log','.json','.csv','.png'} and not p.name.startswith('delivery_') and not (p.parent.name=='regression' and p.suffix=='.log' and not p.with_suffix('.json').is_file())}
-for pattern in ('route_retry_control_*.json','checkpoint_reports_*.json','packaging_guard_*.json'):
+for pattern in ('route_retry_control_*.json','checkpoint_reports_*.json','packaging_guard_*.json','canonical_entry_guard_*.json','completion_guard_*.json'):
     for auxiliary in (R/'reports/refined').glob(pattern):
         entry=json.loads(auxiliary.read_text(encoding='utf-8'))
         if entry.get('passed') and all((R/name).is_file() and sha(R/name)==value for name,value in entry.get('inputs',{}).items()):

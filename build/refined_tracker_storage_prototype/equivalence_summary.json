@@ -1,0 +1,16 @@
+{
+  "adopted": false,
+  "held_input_contract": true,
+  "baseline_sha256": "0ea5243571316d577187d473f932fc2cb656d7aead970ab7221692bfe40efc9a",
+  "candidate_sha256": "b24398a276aecdda3f452f6bfe562551f8d20ecc0ca0a6a797834ec98a27954c",
+  "reference_sha256": "5102ca016e764e4d2426ad3456284e5c72c4ef27afd38588bfe2fa1f3df59781",
+  "capture_contract_source_sha256": "7b211badf4ee5bd18e69c528e2a266c102411ca19afc51c50a0257baeae0337c",
+  "records": [
+    "reports/refined/regression/tracker_storage_private_20261018_130952_932207.json",
+    "reports/refined/regression/tracker_storage_tracker_comparison_after_20261018_131001_577019.json",
+    "reports/refined/regression/tracker_storage_tracker_comparison_before_20261018_131001_461313.json",
+    "reports/refined/regression/tracker_storage_tracker_identity_adversarial_20261018_131001_803368.json",
+    "reports/refined/regression/tracker_storage_tracker_quality_and_diagnostics_20261018_131001_678202.json"
+  ],
+  "contract": "stable_capture states1/2 run grid; states3/4 start/wait tracker; no new grid start until state5 copies result then state0/1. Candidate bus held through done."
+}

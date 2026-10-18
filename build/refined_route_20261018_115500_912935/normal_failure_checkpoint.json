@@ -1,0 +1,15 @@
+{
+  "stage": "NORMAL_ROUTE_FAILED_CHECKPOINT_NOT_A_DELIVERABLE",
+  "time": "2026-10-18T13:20:14.750574",
+  "compiled_source_commit": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "frozen_input_count": 295,
+  "inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+  "source_context_sha256": "3ab42dcaca14b8eecb7a8bc9e1f24018f2db5b51d9065a50f1e22f23864a1dfd",
+  "parent_provenance_sha256": "7730b0ad5857f379b332f0f1b79b96ea4a01218a13e27284fbc092f992e190ba",
+  "checkpoint": "failed_normal_route.db",
+  "checkpoint_sha256": "dda348d2b24b43a53f021b0129bc02063b893fc74f39234da3aa895c42a1a337",
+  "checkpoint_bytes": 30861070,
+  "prefix_sha256": "a5f1ba30f31a90ed23729bd577a462dae43a1384221469aeafa2a480928bed38",
+  "current_and_frozen_inputs_match": true,
+  "physical_routing_pass": false
+}

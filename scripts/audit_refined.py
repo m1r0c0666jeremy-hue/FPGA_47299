@@ -28,6 +28,13 @@ def checkpoint_report_signature(path,parent,out):
  text=path.read_text(encoding='utf-8').replace('\r','')
  for p in (parent,out):text=text.replace(p.as_posix(),'<ATTEMPT>')
  return '\n'.join(line.rstrip() for line in text.split('\n') if not re.match(r'^(Generated[ \t]+:|[|][ \t]+Date[ \t]+:|Generated (on|at)|Date:|Time:)',line.strip())).strip()
+
+def canonical_build_inputs(inputs):
+ names=set(inputs)
+ assert {n for n in names if n.endswith('.al')}=={'td_project/target_color_regions_refined.al'},'Noncanonical project entry'
+ assert all(not Path(n).is_absolute() and not Path(n).drive and '..' not in Path(n).parts and not n.replace('\\','/').startswith('build/') for n in names),'Private/escaped compiler input'
+ required={'rtl/color_regions/'+n for n in ('stable_tracker.v','stable_capture.v','stable_grid.v','refined_line_reader.v','refined_frame_store.v')}
+ assert required.issubset(names),'Noncanonical core module paths'
 def audit(attempt=None,regression=False):
  branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
  assert branch=='release/transparent-ring-stability-20261015',branch
@@ -80,6 +87,7 @@ def audit(attempt=None,regression=False):
     for setting in definition['params']:
      assert f'set_param {setting["step"]} {setting["param"]} {setting["val"]}' in tcl
   before=json.loads((out/'inputs.json').read_text(encoding='utf-8'));after=json.loads((out/'inputs_after.json').read_text(encoding='utf-8'))
+  canonical_build_inputs(before)
   assert before==after and all(sha(out/'compiled_source'/n)==v for n,v in before.items())
   assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'
   assert (out/'target_color_regions.bit').is_file()
