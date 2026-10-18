@@ -9,7 +9,8 @@ import argparse,datetime,hashlib,json,os,re,shutil,subprocess
 from refined_build_report import assess
 R=Path(__file__).resolve().parents[1]
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-ap=argparse.ArgumentParser();ap.add_argument('--parent',required=True);ap.add_argument('--route-effort',choices=['normal','routability'],default='normal');a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--parent',required=True);ap.add_argument('--route-effort',choices=['normal','routability'],default='normal')
+ap.add_argument('--replace-strategy',type=int,choices=range(1,12));a=ap.parse_args()
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
 assert branch=='release/transparent-ring-stability-20261015'
 subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
@@ -34,7 +35,7 @@ for name,v in before.items():
 shutil.copy2(checkpoint,out/checkpoint.name)
 proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_name=checkpoint.name,checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'))
 (out/'checkpoint_provenance.json').write_text(json.dumps(proof,indent=2),encoding='utf-8')
-context.update(creation_time=stamp,placed_checkpoint=proof)
+context.update(creation_time=stamp,placed_checkpoint=proof,replaced_strategy=a.replace_strategy)
 (out/'source_context.json').write_text(json.dumps(context,indent=2),encoding='utf-8')
 t=f'''set out {{{out.as_posix()}}}
 set parent {{{parent.as_posix()}}}
@@ -67,6 +68,14 @@ if s.get('official_strategy'):
    if item['step']=='route':
     key,value=item['param'],str(item['val']);assert re.fullmatch(r'[A-Za-z0-9_]+',key) and re.fullmatch(r'[A-Za-z0-9_.-]+',value)
     t+=f' set_param route {key} {value}\n'
+if a.replace_strategy is not None:
+ if s.get('official_strategy'):
+  for definition in s['official_strategy']['selected'].values():
+   for item in definition['params']:
+    if item['step']=='place':
+     key,value=item['param'],str(item['val']);assert re.fullmatch(r'[A-Za-z0-9_]+',key) and re.fullmatch(r'[A-Za-z0-9_.-]+',value)
+     t+=f' set_param place {key} {value}\n'
+ t+=f' set_param place pr_strategy {a.replace_strategy}\n place\n report_area -io_info -file replacement_place.area\n puts "REFINED_REPLACEMENT_PLACE_COMPLETED"\n'
 t+=''' route
  report_area -io_info -file target_color_regions_phy.area
  update_timing -mode final
@@ -86,6 +95,8 @@ with (out/'td.log').open('w',encoding='utf-8') as log:p=subprocess.run([str(td),
 after={name:sha(frozen/name) for name in before};(out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
 summary={k:v for k,v in s.items() if k not in ('resources','resource_pass','placement_required','gate_estimate','checkpoints')}
 summary.update(stage='full',head=context['compiled_source_commit'],head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all(sha(R/name)==v for name,v in before.items()),checkpoint_provenance=proof,checkpoint_unchanged=sha(checkpoint)==proof['checkpoint_sha256']==sha(out/checkpoint.name))
+summary['replaced_strategy']=a.replace_strategy
+if a.replace_strategy is not None:summary['placement_strategy']=a.replace_strategy
 if p.returncode==0:summary.update(assess(out,'full'))
 (out/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
 print('REFINED_ROUTE_RESULT',json.dumps(summary),flush=True)

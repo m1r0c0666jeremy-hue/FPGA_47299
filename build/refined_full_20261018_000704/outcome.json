@@ -1,0 +1,10 @@
+{
+  "status": "STOPPED_NO_FINAL_ROUTING_RESULT",
+  "time": "2026-10-18T01:13:40.911787",
+  "reason": "No new conflict minimum for seven completed global-routing iterations; best3805 at16, latest5509 at23; two subsequent hotspot passes did not restore progress. Preserve attempt; compare same-source normal routing and strategy5.",
+  "verified_pid": 34076,
+  "verified_parent_pid": 33868,
+  "verified_start": "2026-10-18T00:07:06",
+  "final_timing_pass": false,
+  "deliverable": false
+}

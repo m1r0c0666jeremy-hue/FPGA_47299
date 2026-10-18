@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "expected_build_rejection": true,
+  "exit_code": 1,
+  "inputs": {
+    "scripts/package_refined.py": "785f60f85676957653a3a2ff4b9f80a0092635300a249b80ab46d6db408abbbe",
+    "scripts/audit_refined.py": "b60b0a0c1cade55b06e997b3adef6c0efc4caece1deff97d0349e24a7fdd81e4",
+    "build/refined_full_20261017_224454/summary.json": "f0966b33398fc28c9a63c381ddf493d96cea99291aefdb12503b41f8375af331"
+  },
+  "protected_document_hashes": {
+    "README.md": "6fff66416edad69b1a1b46b0e23ecd0c33f172afa5b79fa19966e7d3eb866aa0",
+    "reports/refined/最终验证报告.md": "4dc991ff421227c35585b34dbdf7b045781aae6807a82197c6bf0616c0ac0753",
+    "docs/颜色视频显示改进_上板一页.md": "a2596dceac3fd618860767cd251a40eca6e7420f4bc04a7ebd27237cfe350cfc"
+  }
+}

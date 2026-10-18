@@ -2,7 +2,10 @@
 from refined_testlib import R,run
 from refined_calibration_arithmetic import calibration_asset
 import argparse,sys,xml.etree.ElementTree as ET
-ap=argparse.ArgumentParser();ap.add_argument('--build',choices=['synth','place']);ap.add_argument('--flow',choices=['acquisition','distributions','extended']);a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--build',choices=['synth','place']);ap.add_argument('--flow',choices=['acquisition','distributions','extended'])
+ap.add_argument('--official-syn',choices=['AreaOptimizeMedium','AreaOptimizeHigh'])
+ap.add_argument('--official-phy',choices=['CongestionMedium','CongestionHigh','TimingHigh','TimingUltra'])
+ap.add_argument('--checkpoint',action='store_true');a=ap.parse_args()
 out=R/'build/refined_cal_math_prototype';out.mkdir(exist_ok=True)
 candidate=out/'stable_calibration.v';base=R/'rtl/color_regions/stable_calibration.v'
 data=calibration_asset(base.read_text(encoding='utf-8')).encode()
@@ -48,4 +51,7 @@ else:
  project=out/'prototype.al';project.write_text('<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(tree,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n',encoding='utf-8')
  path=R/'scripts/run_refined_build.py';s=path.read_text(encoding='utf-8').replace("project=R/'td_project/target_color_regions_refined.al'","project=prototype_project").replace("f'refined_{a.stage}_{stamp}'","f'refined_cal_math_{a.stage}_{stamp}'")
  sys.argv=[str(path),'--stage',a.build,'--map-mode','area_prior','--pack-effort','high']
+ for key,flag in (('official_syn','--official-syn'),('official_phy','--official-phy')):
+  if getattr(a,key):sys.argv += [flag,getattr(a,key)]
+ if a.checkpoint:sys.argv += ['--checkpoint']
  exec(compile(s,str(path),'exec'),dict(__file__=str(path),__name__='__main__',prototype_project=project))

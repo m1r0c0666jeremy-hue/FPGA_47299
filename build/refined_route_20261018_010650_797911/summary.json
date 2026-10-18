@@ -1,0 +1,28 @@
+{
+  "stage": "full",
+  "head": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "head_after": "e97317b11cae6edb30f992e3ada78a2d74ab61f9",
+  "route_effort": "normal",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 1,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "checkpoint_provenance": {
+    "parent": "build/refined_place_20261018_005818",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "2cc9e38bc9fcb815d98f0916580060e580c00ee681f5459844f0de3df9c85ab9",
+    "parent_summary_sha256": "dd8ecb8e87949753191e1ec1454b4033884d468a99bca8883b776b9f3e7dee29",
+    "parent_context_sha256": "3e2df2e0328790b4c8c8994064265b60b8fe910d1133b1e088146814791a366b",
+    "parent_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856"
+  },
+  "checkpoint_unchanged": true
+}

@@ -45,8 +45,17 @@ if s.get('official_strategy'):
 recipe='scripts/run_refined_build.py '+' '.join(flow_args)
 checkpoint_note=''
 if checkpoint:
+    parent_args=flow_args.copy();parent_args[1]='place';parent_args+=['--checkpoint']
+    parent_summary=json.loads((R/checkpoint['parent']/'summary.json').read_text(encoding='utf-8'))
+    parent_args[parent_args.index('--strategy')+1]=str(parent_summary['placement_strategy'])
+    parent_recipe='scripts/run_refined_build.py '+' '.join(parent_args)
     recipe=f'scripts/run_refined_route.py --parent {checkpoint["parent"]} --route-effort {s["route_effort"]}'
-    checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n'
+    replacement_note=''
+    if s.get('replaced_strategy') is not None:
+        recipe+=f' --replace-strategy {s["replaced_strategy"]}'
+        replacement_note=f'导入及约束核验后，以pr_strategy={s["replaced_strategy"]}重新完成布局，再进行布线；原父布局DB未修改。'
+    checkpoint_note=f'\n本次完整流程分为：`{checkpoint["parent"]}`完成综合/布局，本目录从其SHA256验证的布局检查点继续布线/时序/bitgen。导入前后时钟及例外报告一致，全部冻结源文件与原提交一致；不是跳过综合或放宽约束。检查点SHA256 `{checkpoint["checkpoint_sha256"]}`。\n\n在不同路径复现时，先运行`{parent_recipe}`重新生成冻结布局，再将新目录传给run_refined_route.py；历史DB内含原绝对约束路径，不能假定直接导入可在任意目录复用。不要覆盖历史尝试。\n'
+    checkpoint_note+='\n'+replacement_note+'\n'
 block=f'''完整TD构建通过，{b['frozen_inputs']}项编译输入冻结后逐项一致。
 
 | 项目 | 最终实际结果 |

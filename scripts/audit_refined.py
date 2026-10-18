@@ -101,6 +101,11 @@ def audit(attempt=None,regression=False):
    assert 'CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS' in (out/'td.log').read_text(encoding='utf-8')
    for name in ('placed_clocks.txt','placed_exceptions.timing'):
     assert checkpoint_report_signature(parent/name,parent,out)==checkpoint_report_signature(out/name,parent,out),name
+   if s.get('replaced_strategy') is not None:
+    n=s['replaced_strategy'];assert n in range(1,12) and context['replaced_strategy']==n and s['placement_strategy']==n
+    child_tcl=(out/'run.tcl').read_text(encoding='utf-8')
+    assert f'set_param place pr_strategy {n}\n place\n' in child_tcl
+    assert 'REFINED_REPLACEMENT_PLACE_COMPLETED' in (out/'td.log').read_text(encoding='utf-8')
   commit=context['compiled_source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
   assert context['inputs_sha256']==sha(out/'inputs.json') and context['input_count']==len(before)
   subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=R,check=True)

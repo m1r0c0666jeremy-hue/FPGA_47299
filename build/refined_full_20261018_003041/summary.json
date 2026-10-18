@@ -1,0 +1,19 @@
+{
+  "stage": "full",
+  "head": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "head_after": "e97317b11cae6edb30f992e3ada78a2d74ab61f9",
+  "route_effort": "routability",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 4294967295,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null
+}
