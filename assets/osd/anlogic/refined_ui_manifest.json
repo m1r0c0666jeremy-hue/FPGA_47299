@@ -1,9 +1,12 @@
 {
   "font_size": 16,
   "footer_columns": 64,
-  "longest_line": 53,
+  "longest_line": 39,
   "glyphs": 191,
   "characters": " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZms待命中央选取确认跟踪缺色失锁保持重尖端越界无效帧白纸校准空背景采样处理败请新视频未就绪按键冲突等结果集质量不足增益超范围混或模型叠可分材料留窗暗部过多亮度改变性弱差主相匹配有本消移走双标记绿框对误检物近后方原图彩高灰二值默参数已学习需要更红蓝黄紫串行回放画面状态:/.-%>()板内延迟落恢复故障源坐拍收",
+  "diagnostic_pages": 1,
+  "decimal_fields": 2,
+  "diagnostic_toggle": false,
   "source_font_sha256": "aa4560dd8fe5645745fed3ffa301c3ca4d6c03cbd738145b613303961ba733b8",
   "official_symbol_sha256": "63f1452a54e7e392496e0a72a92a9ff1ce960976b41314acc335d1aa02fadd12"
 }

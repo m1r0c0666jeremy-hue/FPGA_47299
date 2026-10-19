@@ -10,9 +10,9 @@ for a,v in re.findall(r"mem\[(\d+)\]=2'h([0-9a-f]);",(R/'rtl/09_osd_ui/scaling_l
 meta=0
 for lo,w,v in [(32,1,1),(33,4,3),(184,20,345),(204,20,678),(245,1,1),(246,1,1),(247,1,1),(255,1,1),(256,20,12345),(276,20,23456),(296,20,10000),(316,20,20000),(336,3,4),(339,3,3),(342,4,5),(346,4,5),(350,7,80),(357,7,95),(364,2,1),(366,2,2),(368,2,2),(378,2,3),(380,4,2),(384,8,67),(392,8,45),(400,8,123),(413,3,4),(443,2,1),(445,8,16),(453,8,32),(461,9,30),(470,9,345),(507,2,1),(509,8,16),(517,8,32),(525,9,255),(534,9,195),(544,16,0xaf),(569,12,1024),(581,12,1024),(604,1,1),(607,18,173893),(625,15,7),(721,2,1),(723,12,2048),(735,9,256),(744,12,1800),(756,9,216)]:meta|=v<<lo
 cases=[('overview',0,0,['色彩高亮 2X   红蓝 180 状态:跟踪中      材料已学习','板内延迟 0012.3ms 落后 002帧 F:12345678 V:00AF']),
-('colour',1,0,['A012345>010000 N4 Q080 S1 (0000/000) RGB123/045/067','B023456>020000 N3 Q095 S2 (0000/000) P2 R00 C3 L02 O0']),
-('models',2,0,['A H345/030 M032 D016 S4/16 R1024 N2048/256','B H195/255 M032 D016 S4/16 B1024 N1800/216']),
-('performance',3,0,['行000644拍 等待000032/000045 收240/240 故障4/2 恢复00003','XY1279/623 源行719 F:89ABCDEF CAM2/1 G090 E04 T173893'])]
+('overview_diag1_ignored',1,0,['色彩高亮 2X   红蓝 180 状态:跟踪中      材料已学习','板内延迟 0012.3ms 落后 002帧 F:12345678 V:00AF']),
+('overview_diag2_ignored',2,0,['色彩高亮 2X   红蓝 180 状态:跟踪中      材料已学习','板内延迟 0012.3ms 落后 002帧 F:12345678 V:00AF']),
+('overview_diag3_ignored',3,0,['色彩高亮 2X   红蓝 180 状态:跟踪中      材料已学习','板内延迟 0012.3ms 落后 002帧 F:12345678 V:00AF'])]
 helptext=['','中央白纸 KEY3采样 KEY2取消','移走双色标记 绿框对准误检物 KEY3采样 KEY2取消','A近尖端色对准中央 KEY3采样 KEY2取消','B后方色对准中央 KEY3采样 KEY2取消']
 for p,label in enumerate(['','白纸校准','空背景校准','A色校准','B色校准']):
  if p:cases.append((f'cal{p}',2,p<<5,[f'校准:{label:<9} E00 F:12345678 V:00AF',helptext[p]]))
@@ -54,5 +54,5 @@ for(y=620;y<720;y=y+1)for(x=0;x<1280;x=x+1)begin @(negedge clk);de=1;end
 initial begin
 '''
 for n,(name,diag,cal,lines) in enumerate(cases):src+=f'c={n};$readmemh("{(O/f"{n}.hex").as_posix()}",expected);frame({diag},{cal});$display("V4_UI_CASE_PASS {name}");\n'
-src+='$display("REFINED_V4_UI_PASS 11 states complete footer rows, latency/fault/model/quality, transparent original colours and outline");$finish;end endmodule'
+src+='$display("REFINED_V4_UI_PASS 11 states complete footer rows, sole overview ignores diagnostic selector, latency/model/calibration, transparent original colours and outline");$finish;end endmodule'
 run('refined_v4_ui_pixels',src,[R/'rtl/color_regions'/f'{n}.v' for n in ('refined_osd','stable_glyph_rom','stable_footer_glyph_rom','refined_footer_program_rom','stable_footer_text_rom','refined_logo_rom','refined_overlay_geometry')])

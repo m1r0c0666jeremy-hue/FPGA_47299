@@ -15,11 +15,13 @@ LABELS=' 红蓝黄紫色AB1'
 BUSY='8帧采样或串行回放 请保持画面 KEY2取消'
 RETRY=' KEY3重采 KEY2取消'
 def ui_assets():
+    from refined_compact_osd_logic import compact_osd_asset
     chars=' 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZms'+''.join(dict.fromkeys(''.join(STATES+ERRORS+HELP+MODES+MODEL_STATES)+LABELS+BUSY+RETRY+'校准状态:RGB/.-%>() 板内延迟落后帧恢复行等待故障源坐标拍收'))
     chars=''.join(dict.fromkeys(chars));assert len(chars)<=256,('footer glyphs',len(chars))
     ids={c:i for i,c in enumerate(chars)}
     def literal(t):return [f"8'd{ids[c]}" for c in t]
     def number(i,n,valid='fm[604]'):
+        if i in (24,25):i-=24
         return [f"({valid})?(8'd1+numbers[{i}][{4*(n-1-k)}+:4]):8'd{ids['-']}" for k in range(n)]
     def hx(expr,n,valid="1'b1"):
         return [f"({valid})?(8'd1+({expr}>>{4*(n-1-k)} & 4'hf)):8'd{ids['-']}" for k in range(n)]
@@ -31,23 +33,19 @@ def ui_assets():
             out+=f'{i}:case(pos)\n'+''.join(f"{j}:{name}=8'd{ids[c]};\n" for j,c in enumerate(t))+ 'endcase\n'
         return out+'endcase end endfunction\n'
     valid='fm[255] && fm[415:413]==4'
-    selected_a='fdetection && fm[245]';selected_b='fdetection && fm[246]'
-    sample='fsample && fmode==1 && fshow'
     overview0=[f'mode_char(fmode,{i})' for i in range(4)]+literal(' ')+["fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:fzoom==4?8'd5:8'd2",f"fzoom==1?8'd{ids['.']}:8'd{ids['X']}","fzoom==1?8'd6:8'd0",f"fzoom==1?8'd{ids['X']}:8'd0"]+literal(' ')+[f"fpair?8'd{ids['黄']}:8'd{ids['红']}",f"fpair?8'd{ids['紫']}:8'd{ids['蓝']}"]+literal(' ')+[f"frotate?8'd{ids[c]}:8'd{ids[d]}" for c,d in zip('180','000')]+literal(' 状态:')+[f'status_char(status_id,{i})' for i in range(8)]+literal(' ')+[f'model_char(model_id,{i})' for i in range(5)]
     latency_ok='flat_valid && flatency<10000000'
     ms=number(24,7,latency_ok)
     overview1=literal('板内延迟 ')+ms[:4]+literal('.')+ms[4:5]+literal('ms 落后 ')+number(25,3,'flat_valid && fage<1000')+literal('帧 F:')+hx('fimage',8)+literal(' V:')+hx('fm[559:544]',4,valid)
-    detail0=literal('A')+number(2,6)+literal('>')+number(3,6)+literal(' N')+field('fm[338:336]')+literal(' Q')+number(6,3,selected_a)+literal(' S')+field('fm[365:364]',selected_a)+literal(' (')+number(8,4,selected_a)+literal('/')+number(9,3,selected_a)+literal(') RGB')+number(18,3,sample)+literal('/')+number(19,3,sample)+literal('/')+number(20,3,sample)
-    detail1=literal('B')+number(4,6)+literal('>')+number(5,6)+literal(' N')+field('fm[341:339]')+literal(' Q')+number(7,3,selected_b)+literal(' S')+field('fm[367:366]',selected_b)+literal(' (')+number(10,4,selected_b)+literal('/')+number(11,3,selected_b)+literal(') P')+field('fm[369:368]',valid)+literal(' R')+hx('fm[377:370]',2,valid)+literal(' C')+field('fm[379:378]',valid)+literal(' L')+number(21,2,valid)+literal(' O')+hx('fm[412:409]',1,valid)
-    def saturation(expr):return [f"{expr}==0?8'd4:{expr}==1?8'd5:{expr}==2?8'd7:8'd9"]
-    model0=literal('A H')+number(8,3,valid)+literal('/')+number(9,3,valid)+literal(' M')+number(10,3,valid)+literal(' D')+number(11,3,valid)+literal(' S')+saturation('fm[444:443]')+literal('/16 R')+number(16,4,valid)+literal(' N')+number(26,4,valid)+literal('/')+number(27,3,valid)
-    model1=literal('B H')+number(12,3,valid)+literal('/')+number(13,3,valid)+literal(' M')+number(14,3,valid)+literal(' D')+number(15,3,valid)+literal(' S')+saturation('fm[508:507]')+literal('/16 B')+number(17,4,valid)+literal(' N')+number(28,4,valid)+literal('/')+number(29,3,valid)
-    perf0=literal('行')+number(31,6,"1'b1")+literal('拍 等待')+number(0,6,"1'b1")+literal('/')+number(1,6,"1'b1")+literal(' 收')+number(3,3,"1'b1")+literal('/')+number(2,3,"1'b1")+literal(' 故障')+hx('fddr[75:72]',1)+literal('/')+hx('fpixel[3:0]',1)+literal(' 恢复')+number(30,5,"1'b1")
-    perf1=literal('XY')+number(8,4,"1'b1")+literal('/')+number(9,3,"1'b1")+literal(' 源行')+number(10,3,"1'b1")+literal(' F:')+hx('fpixel[92:61]',8)+literal(' CAM')+hx('fcamera[12:9]',1)+literal('/')+number(7,1,"1'b1")+literal(' G')+number(5,3,"1'b1")+literal(' E')+hx('frecovery[38:34]',2)+literal(' T')+number(22,6,valid)
     cal0=literal('校准:')+[f'status_char(status_id,{i})' for i in range(9)]+literal(' E')+hx('fm[563:560]',2,valid)+literal(' F:')+hx('fimage',8)+literal(' V:')+hx('fm[559:544]',4,valid)
-    lines=[overview0,overview1,detail0,detail1,model0,model1,perf0,perf1,cal0]
+    # One visible view; retain the calibration overlay and detailed retry text.
+    # Numeric/parameter/performance pages no longer enter the display program.
+    lines=[overview0,overview1,cal0]
     longest=max(max(map(len,lines)),len(BUSY),max(len(e+RETRY) for e in ERRORS),max(map(len,HELP)))
-    size=next(n for n in (32,24,16) if longest*n<=1120);columns=min(64,1120//size)
+    # Preserve the initial overview's 16px appearance while reducing storage.
+    # Enlarging its glyph ROM would consume the memory saved by page removal.
+    size=16;columns=64
+    assert longest*size<=1120
     def cases(name,tokens):return 'case(col)\n'+''.join(f'{i}:{name}={expr};\n' for i,expr in enumerate(tokens))+'endcase\n'
     # A serial display program replaces a large combinational text/field mux.
     # One token addresses one glyph. It never runs in the per-pixel shader.
@@ -87,24 +85,24 @@ token_data[12:8]==1?9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]}:
 stable_footer_program_rom program_rom(I_clk,program_addr,token_data);
 stable_footer_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
 always @*begin
-template_index=({3'd0,fdiag}<<1)+format_row;
+template_index={4'd0,format_row};
 if(fm[567:565]!=0)begin
-if(!format_row)template_index=8;
-else if(fm[563:560]!=0)template_index=14+{1'b0,fm[563:560]};
-else if(fm[564])template_index=13;
-else template_index=8+{2'd0,fm[567:565]};end
+if(!format_row)template_index=2;
+else if(fm[563:560]!=0)template_index=8+{1'b0,fm[563:560]};
+else if(fm[564])template_index=7;
+else template_index=2+{2'd0,fm[567:565]};end
 token_valid=1;case(token_data[7:4])
 '''+''.join(f'{i}:token_valid={v};\n' for i,v in enumerate(validity))+'''default:token_valid=0;endcase
 hex_value=0;case(token_data[12:8])
 '''+''.join(f'{i}:hex_value={v};\n' for i,v in enumerate(hex_fields))+'''endcase
 decoded_glyph=0;case(token_data[15:13])
 0:decoded_glyph=token_data[7:0];
-1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd'''+str(ids['-'])+''';
-2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd'''+str(ids['-'])+''';
+1:decoded_glyph=token_valid?8'd1+number_digit_q:8'd'''+str(ids['-'])+''';
+2:decoded_glyph=token_valid?8'd1+hex_digit_q:8'd'''+str(ids['-'])+''';
 3:case(token_data[12:8])
 '''+''.join(f'{i}:decoded_glyph={v};\n' for i,v in enumerate(dynamic))+'''endcase
 4:begin if(!token_valid)decoded_glyph=8'd'''+str(ids['-'])+''';else case(token_data[12:8])
-'''+''.join(f"{i}:decoded_glyph=8'd1+{v};\n" for i,v in enumerate(small_fields))+'''endcase end
+'''+''.join(f"{i}:decoded_glyph=8'd1+{v};\n" for i,v in enumerate(small_fields))+'''default:decoded_glyph=0;endcase end
 5:decoded_glyph=dynamic_glyph;
 endcase end
 '''
@@ -112,6 +110,7 @@ endcase end
     for key,value in {'@FONT@':str(size),'@COLUMNS@':str(columns),'@FUNCTIONS@':functions,
                       '@WAIT_GLYPHS@':','.join(f"8'd{ids[c]}" for c in '等待结果'),
                       '@FADDR@':f'(footer_glyph<<{int(math.log2(size))})+footer_gy' if size in (16,32) else '(footer_glyph<<4)+(footer_glyph<<3)+footer_gy'}.items():s=s.replace(key,value)
+    s=compact_osd_asset(s)
     out={'rtl/color_regions/stable_osd.v':s}
     # Keep the historical ROM intact. Palette 0 is transparent; palette 3 is
     # an exterior one-pixel outline, never substituted for original colours.
@@ -151,7 +150,7 @@ endcase end
     depth=1<<(len(chars)*size-1).bit_length()
     out['rtl/color_regions/stable_footer_glyph_rom.v']=rom('stable_footer_glyph_rom',chars,size,depth,depth.bit_length()-1)
     out['rtl/color_regions/stable_glyph_rom.v']=rom('stable_glyph_rom',LABELS,16,256,8)
-    manifest=dict(font_size=size,footer_columns=columns,longest_line=longest,glyphs=len(chars),characters=chars,
+    manifest=dict(font_size=size,footer_columns=columns,longest_line=longest,glyphs=len(chars),characters=chars,diagnostic_pages=1,decimal_fields=2,diagnostic_toggle=False,
                   source_font_sha256=hashlib.sha256(fontfile.read_bytes()).hexdigest(),
                   official_symbol_sha256=hashlib.sha256((R/'assets/osd/anlogic/anlogic_logo_mobile_official.svg').read_bytes()).hexdigest())
     out['assets/osd/anlogic/refined_ui_manifest.json']=json.dumps(manifest,ensure_ascii=False,indent=2)+'\n'

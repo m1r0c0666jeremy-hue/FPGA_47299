@@ -1,0 +1,2 @@
+REFINED_CONTROL_EQUIVALENCE_PASS window100 171892 clocks gain437 zoom8; retained controls equal, diagnostic paging disabled; repeat, saturation, chords, calibration and pause
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\controls_repeat_equivalence_100_20261019_092008_945517\tb.sv:23: $finish called at 1718956 (1s)

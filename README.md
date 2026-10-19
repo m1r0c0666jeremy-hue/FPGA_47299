@@ -1,6 +1,19 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前实施：颜色识别、视频稳定性与显示功能改进
+
+分支 `release/transparent-ring-stability-20261015`，基线 `2f79847`。本轮入口为 **`td_project/target_color_regions_refined.al`**：独立DDR握手/恢复与相机应答监督、定向背景校准、五档倍率、透明官方Logo、默认底栏及校准提示和v4板内延迟。原工程、历史bit及源码包保留。
+
+10月19日按Jeremy要求取消三个诊断分页及KEY2+KEY3切页，保留四种图像模式、两配色和五档倍率。正在测量精简后的资源和时序；没有新的可交付bit。
+
+<!-- REFINED_DELIVERY -->
+完整构建和最终交付正在进行，目前不要将中间尝试作为上板版本。
+
+[一页校准与拍摄说明](docs/颜色视频显示改进_上板一页.md)、[诊断数字解释](docs/颜色视频显示改进_诊断字段.md)、[验证报告](reports/refined/最终验证报告.md)、[实物复测表](reports/refined/hardware_retest.csv)。实物尚未验证。
+
+新生成器：`scripts/generate_refined_regions.py [--check]`；构建：`scripts/run_refined_build.py --stage full`；审计：`scripts/audit_refined.py --regression --attempt <完整构建目录>`。每次构建使用独立冻结目录；旧生成和构建入口继续属于下方历史版本。
+
 ## 当前分支：透明色环稳定性优化（2026-10-15）
 
 `feature/transparent-ring-stability`，基线43564ee；在独立工作区实施四步材料/背景校准、候选质量、v3同帧诊断、官方图标、组合键和默认180°显示，保留双色工具/尖端/跟随。软件与TD通过，实物待验。

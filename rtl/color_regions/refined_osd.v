@@ -13,10 +13,10 @@ module refined_osd(
 );
  localparam FONT=16,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
- reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode,fdiag;reg [2:0] fzoom;
+ reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
  reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
- reg flat_valid;reg [31:0] flatency,fage;reg [127:0] fddr,fpixel;reg [38:0] frecovery;reg [17:0] fcamera;
+ reg flat_valid;reg [31:0] flatency,fage;
  always @*begin
  status_id=!ftracking?0:{1'b0,fm[36:33]};
  if(fm[568])status_id=15;
@@ -27,27 +27,15 @@ module refined_osd(
  if(fm[255] && !fm[247])status_id=8;
  if(fstate==7)status_id=18;if(fstate==5)status_id=17;if(!fvideo || fstate==6)status_id=16;
  end
- function [23:0] field_value;input [4:0] id;begin
- case(id)
- 0:field_value=fm[203:184];1:field_value=fm[223:204];
- 2:field_value=fm[275:256];3:field_value=fm[315:296];4:field_value=fm[295:276];5:field_value=fm[335:316];
- 6:field_value=fm[356:350];7:field_value=fm[363:357];
- 8:field_value=fm[478:470];9:field_value=fm[469:461];10:field_value=fm[460:453];11:field_value=fm[452:445];
- 12:field_value=fm[542:534];13:field_value=fm[533:525];14:field_value=fm[524:517];15:field_value=fm[516:509];
- 16:field_value=fm[592:581];17:field_value=fm[580:569];
- 18:field_value=fm[407:400];19:field_value=fm[399:392];20:field_value=fm[391:384];
- 21:field_value=fm[383:380];22:field_value=fm[624:607];23:field_value=fm[639:625];
- 24:field_value=flatency>9999999?9999999:flatency;25:field_value=fage>999?999:fage;
- 26:field_value=fm[734:723];27:field_value=fm[743:735];28:field_value=fm[755:744];29:field_value=fm[764:756];
- 30:field_value=frecovery[31:16];31:field_value=fddr[17:0];default:field_value=0;
- endcase
- if(fdiag==1)case(id)8:field_value=fm[47:37];9:field_value=fm[57:48];10:field_value=fm[68:58];11:field_value=fm[78:69];endcase
- if(fdiag==3)case(id)
- 0:field_value=fddr[35:18];1:field_value=fddr[53:36];2:field_value=fddr[62:54];3:field_value=fddr[71:63];
- 5:field_value=fcamera[6:0];7:field_value=fcamera[8:7];8:field_value=fpixel[30:20];9:field_value=fpixel[40:31];10:field_value=fpixel[50:41];
- endcase end endfunction
- reg [31:0] numbers[0:31];reg [7:0] characters[0:127];
- reg [2:0] format_state;reg [4:0] field_index,bit_index;
+ // Only latency and frame age need decimal conversion in the overview.
+ function [23:0] field_value;input id;begin
+ field_value=id?(fage>999?24'd999:fage):(flatency>9999999?24'd9999999:flatency);
+ end endfunction
+ reg [31:0] numbers[0:1];reg [7:0] characters[0:127];
+ reg [2:0] format_state;reg field_index;reg [4:0] bit_index;
+ // The existing token wait states separate RAM selection and digit mux.
+ // They add no footer/pixel latency and do not change character write cycles.
+ reg [31:0] number_word_q,hex_word_q;reg [3:0] number_digit_q,hex_digit_q;
  reg [23:0] binary;reg [31:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
  integer nibble;
  always @*begin adjusted=decimal;for(nibble=0;nibble<8;nibble=nibble+1)
@@ -61,38 +49,27 @@ token_data[12:8]==1?9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]}:
 refined_footer_program_rom program_rom(I_clk,program_addr,token_data);
 stable_footer_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
 always @*begin
-template_index=({3'd0,fdiag}<<1)+format_row;
+template_index={4'd0,format_row};
 if(fm[567:565]!=0)begin
-if(!format_row)template_index=8;
-else if(fm[563:560]!=0)template_index=14+{1'b0,fm[563:560]};
-else if(fm[564])template_index=13;
-else template_index=8+{2'd0,fm[567:565]};end
+if(!format_row)template_index=2;
+else if(fm[563:560]!=0)template_index=8+{1'b0,fm[563:560]};
+else if(fm[564])template_index=7;
+else template_index=2+{2'd0,fm[567:565]};end
 token_valid=1;case(token_data[7:4])
 0:token_valid=1'b1;
 1:token_valid=flat_valid && flatency<10000000;
 2:token_valid=flat_valid && fage<1000;
 3:token_valid=fm[255] && fm[415:413]==4;
-4:token_valid=fm[604];
-5:token_valid=fdetection && fm[245];
-6:token_valid=fsample && fmode==1 && fshow;
-7:token_valid=fdetection && fm[246];
 default:token_valid=0;endcase
 hex_value=0;case(token_data[12:8])
 0:hex_value=fimage;
 1:hex_value=fm[559:544];
-2:hex_value=fm[377:370];
-3:hex_value=fm[412:409];
-4:hex_value=fddr[75:72];
-5:hex_value=fpixel[3:0];
-6:hex_value=fpixel[92:61];
-7:hex_value=fcamera[12:9];
-8:hex_value=frecovery[38:34];
-9:hex_value=fm[563:560];
+2:hex_value=fm[563:560];
 endcase
 decoded_glyph=0;case(token_data[15:13])
 0:decoded_glyph=token_data[7:0];
-1:decoded_glyph=token_valid?8'd1+((numbers[token_data[12:8]]>>(token_data[3:0]*4)) & 4'hf):8'd173;
-2:decoded_glyph=token_valid?8'd1+((hex_value>>(token_data[3:0]*4)) & 4'hf):8'd173;
+1:decoded_glyph=token_valid?8'd1+number_digit_q:8'd173;
+2:decoded_glyph=token_valid?8'd1+hex_digit_q:8'd173;
 3:case(token_data[12:8])
 0:decoded_glyph=fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:fzoom==4?8'd5:8'd2;
 1:decoded_glyph=fzoom==1?8'd172:8'd34;
@@ -103,45 +80,37 @@ decoded_glyph=0;case(token_data[15:13])
 6:decoded_glyph=frotate?8'd2:8'd1;
 7:decoded_glyph=frotate?8'd9:8'd1;
 8:decoded_glyph=frotate?8'd1:8'd1;
-9:decoded_glyph=fm[444:443]==0?8'd4:fm[444:443]==1?8'd5:fm[444:443]==2?8'd7:8'd9;
-10:decoded_glyph=fm[508:507]==0?8'd4:fm[508:507]==1?8'd5:fm[508:507]==2?8'd7:8'd9;
 endcase
 4:begin if(!token_valid)decoded_glyph=8'd173;else case(token_data[12:8])
-0:decoded_glyph=8'd1+fm[338:336];
-1:decoded_glyph=8'd1+fm[365:364];
-2:decoded_glyph=8'd1+fm[341:339];
-3:decoded_glyph=8'd1+fm[367:366];
-4:decoded_glyph=8'd1+fm[369:368];
-5:decoded_glyph=8'd1+fm[379:378];
-endcase end
+default:decoded_glyph=0;endcase end
 5:decoded_glyph=dynamic_glyph;
 endcase end
 
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
- flat_valid<=0;flatency<=0;fage<=0;fddr<=0;fpixel<=0;frecovery<=0;fcamera<=0;
- fm<=0;fimage<=0;fmode<=0;fzoom<=0;fdiag<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
- format_state<=0;field_index<=0;bit_index<=0;binary<=0;decimal<=0;format_col<=0;format_row<=0;footer_ready<=0;
+ flat_valid<=0;flatency<=0;fage<=0;
+ fm<=0;fimage<=0;fmode<=0;fzoom<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
+ format_state<=0;field_index<=0;bit_index<=0;binary<=0;decimal<=0;format_col<=0;format_row<=0;footer_ready<=0;number_word_q<=0;hex_word_q<=0;number_digit_q<=0;hex_digit_q<=0;
  end else begin
  case(format_state)
  1:begin binary<=field_value(field_index);decimal<=0;bit_index<=0;format_state<=2;end
  2:begin binary<=binary<<1;decimal<={adjusted[30:0],binary[23]};
  if(bit_index==23)begin numbers[field_index]<={adjusted[30:0],binary[23]};
- if(field_index==31)begin format_col<=0;format_row<=0;format_state<=3;end
+ if(field_index)begin format_col<=0;format_row<=0;format_state<=3;end
  else begin field_index<=field_index+1'b1;format_state<=1;end end
  else bit_index<=bit_index+1'b1;end
  3:format_state<=4;
  4:format_state<=5;
- 5:format_state<=6;
- 6:format_state<=7;
+ 5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
+ 6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
  7:begin characters[(format_row?COLS:0)+format_col]<=decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
  endcase
  if(I_de && y==625 && x==0)begin
- flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;fddr<=I_ddr_diag;fpixel<=I_pixel_diag;frecovery<=I_recovery;fcamera<=I_camera;
- fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fdiag<=I_diag;fstate<=I_state;
+ flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
+ fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  field_index<=0;footer_ready<=0;format_state<=1;
  end end end

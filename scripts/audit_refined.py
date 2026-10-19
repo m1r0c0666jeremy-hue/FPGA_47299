@@ -29,6 +29,7 @@ def required_inputs(prefix):
   required.append('rtl/color_regions/refined_line_reader.v')
  if prefix=='controls_with_camera_pause':required.append('rtl/color_regions/refined_controls.v')
  if prefix=='footer_late_abort_after':required.append('rtl/color_regions/refined_osd.v')
+ if prefix=='compact_footer_equivalence':required.extend(('rtl/color_regions/refined_osd.v','rtl/color_regions/refined_footer_program_rom.v'))
  if prefix=='tracker_storage_equivalence' or prefix in ('history_full_rgb_after','capture_diagnostics_v4','tracker_identity_adversarial','tracker_quality_and_diagnostics') or prefix.startswith('refined_v4_live_'):
   required.append('rtl/color_regions/stable_tracker.v')
  return tuple(required)
@@ -73,6 +74,7 @@ def audit(attempt=None,regression=False):
   prefixes += ['hue_retime_equivalence']
   prefixes += [f'recovery_mailbox_equivalence_{p}' for p in (0,1,4,9)]
   prefixes += ['capture_history_pipeline_'+name for name in ('stale_context','matching_identity','expired_identity')]
+  prefixes += ['compact_footer_equivalence']
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
   late=result['regression']['footer_late_abort_after']
   for name in ('history_full_rgb_after','capture_diagnostics_v4'):

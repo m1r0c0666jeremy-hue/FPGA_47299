@@ -21,4 +21,9 @@ def control_asset(source):
     s=s.replace(old,'(held>CHORD_WINDOW_MS && (held==65535?GAIN_SAT_FIRE:repeat_age==149))')
     old='(held>CHORD_WINDOW_MS && (held-CHORD_WINDOW_MS)%600==0)'
     assert old in s
-    return s.replace(old,'(held>CHORD_WINDOW_MS && (held==65535?ZOOM_SAT_FIRE:repeat_age==599))')
+    s=s.replace(old,'(held>CHORD_WINDOW_MS && (held==65535?ZOOM_SAT_FIRE:repeat_age==599))')
+    old="3:if(!cal_ui)O_diag<=O_diag+1'b1;"
+    assert s.count(old)==1
+    # Continue consuming the complete chord so it cannot leak brightness,
+    # selection or annotation actions, but keep the sole overview selected.
+    return s.replace(old,'3:begin end // diagnostic paging removed; consume chord only')

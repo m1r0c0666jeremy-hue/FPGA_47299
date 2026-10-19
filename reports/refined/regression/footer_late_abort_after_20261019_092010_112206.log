@@ -1,0 +1,15 @@
+V4_UI_CASE_PASS overview
+V4_UI_CASE_PASS overview_diag1_ignored
+V4_UI_CASE_PASS overview_diag2_ignored
+V4_UI_CASE_PASS overview_diag3_ignored
+V4_UI_CASE_PASS cal1
+V4_UI_CASE_PASS cal2
+V4_UI_CASE_PASS cal3
+V4_UI_CASE_PASS cal4
+V4_UI_CASE_PASS busy
+V4_UI_CASE_PASS fail
+V4_UI_CASE_PASS insufficient
+V4_UI_CASE_PASS late_abort
+V4_UI_CASE_PASS last_pixel_abort
+REFINED_V4_UI_PASS 13 states complete footer rows, sole overview ignores diagnostic selector, latency/model/calibration, transparent original colours and outline
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\footer_late_abort_after_20261019_092010_112206\tb.sv:29: $finish called at 16641300 (1s)
