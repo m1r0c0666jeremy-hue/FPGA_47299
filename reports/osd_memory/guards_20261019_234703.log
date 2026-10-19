@@ -1,0 +1,29 @@
+build/refined_route_20261018_233608_631875
+REFINED_PROTECTION_PASS 91 baseline files plus preserved later project save
+Traceback (most recent call last):
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 88, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 13, in main
+    obj=audit(a.attempt,True);check_osd_only(R)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 106, in audit
+    assert s['stage']=='full' and s['exit_code']==0 and s['resource_pass'] and s['timing_pass'] and s['inputs_unchanged'],s
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'stage': 'full', 'head': 'd3955180bd550e18e5b788dc2058732ef902eabc', 'head_after': '86d9d13dc2949387567dc118749671136440aa5f', 'route_effort': 'normal', 'placement_strategy': 5, 'map_mode': 'area_prior', 'pack_effort': 'high', 'infer_fsm': 'project', 'map_strategy': None, 'macro_performance': None, 'pack_mode': None, 'place_effort': None, 'max_fanout': 128, 'exit_code': 0, 'inputs_unchanged': True, 'working_tree_matches': True, 'official_strategy': None, 'checkpoint_provenance': {'parent': 'build/refined_place_20261018_225243', 'checkpoint_name': 'target_color_regions_placed.db', 'checkpoint_sha256': '83c8e37a1c9cabcd6e6b674f6500d9a7ab07eb1f66cb28a4e771f7154d896f2a', 'parent_summary_sha256': 'db688ef01a730531b5be34b5ecea7ef8c0126c91b0592da0bd842377264ea446', 'parent_context_sha256': '61cd9fba71200d04ac6b57db6a8e7308c5b29d2003117fb29690aa4369168901', 'parent_inputs_sha256': 'd8acdea4acf9a11fbe8bda51a071d0f553d310132e5bf75fac5dfcaa19c0df9d'}, 'checkpoint_unchanged': True, 'replaced_strategy': None, 'flow_threads': None, 'retry_routability': False, 'route_retry_performed': False, 'final_route_effort': 'normal', 'route_checkpoints': {'target_color_regions_routed.db': '76a578e20fcd71c410d8ec83fabe329185bee42d1f9d69252d4d227c0a79b95d'}, 'resources': {'slice': 19799, 'lut6': 19160, 'reg': 23325, 'eram': 99, 'dsp': 40}, 'gate_estimate': False, 'resource_pass': True, 'placement_required': False, 'slack_ns': {'SWNS': -2.126, 'HWNS': -0.008}, 'timing_pass': False}
+
+build/refined_route_20261019_100156_645532
+REFINED_PROTECTION_PASS 91 baseline files plus preserved later project save
+Traceback (most recent call last):
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 88, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 13, in main
+    obj=audit(a.attempt,True);check_osd_only(R)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 123, in audit
+    assert all(sha(R/n)==v for n,v in before.items()),'current compilation inputs differ from candidate'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: current compilation inputs differ from candidate
+
+OSD_MEMORY_GUARDS_PASS

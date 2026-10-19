@@ -1,0 +1,15 @@
+{
+  "inputs": {
+    "build\\sim\\osd_memory_chinese\\chinese_original.v": "86896a6359b343dea235183569145c2d9b36c4d1ec10a2d3a51d6a172654e9b7",
+    "build\\sim\\osd_memory_chinese\\chinese_shared.v": "b8c9812a48d06fb9e45dd66456e5056a07e74b37d10abf78d5b07fcd6fd5bd3a",
+    "build\\sim\\osd_memory_chinese\\stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+    "build\\sim\\osd_memory_chinese\\stable_footer_glyph_rom.v": "7c7da05c622cafc58cb2f646f8af15f518e6f7486add622c2005eaafc5e4b615",
+    "build\\sim\\osd_memory_chinese\\stable_footer_text_rom.v": "740bede43a2cd79173dcfff21365e95981089824d928b5e710e532e9c5489be9",
+    "build\\sim\\osd_memory_chinese\\refined_footer_program_rom.v": "8756980a87eccee3c74087d5bc74fdaa7ff48a15886c85f8d9d60da1318623a2",
+    "build\\sim\\osd_memory_chinese\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "build\\sim\\osd_memory_chinese\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\osd_shared_chinese_equivalence_20261019_225707_753873"
+}

@@ -1,0 +1,3 @@
+ENGLISH_UI_CASE_PASS wait_transition
+OSD_ENGLISH_WAIT_PASS 1 cases 122880 pixels
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\osd_english_wait_20261019_232618_365956\tb.sv:20: $finish called at 1280100 (1s)

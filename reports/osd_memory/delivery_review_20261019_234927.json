@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "directory": "build/target_color_regions_osd_memory_20261019_234705",
+  "source_files": 1835,
+  "compiled_inputs": 297,
+  "regression_checks": 160,
+  "bit_sha256": "18fbffee70889073d44f3598029cce8bc5b0662d37f0911e138998315f83844a",
+  "source_zip_sha256": "9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3",
+  "original_chinese_delivery_preserved": true,
+  "user_project_preserved": true,
+  "hardware": "PENDING"
+}

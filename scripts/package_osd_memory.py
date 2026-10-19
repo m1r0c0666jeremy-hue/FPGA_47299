@@ -43,11 +43,20 @@ def main():
     paths|={R/protection['backup']/'sources_before.zip',R/observed['preserved_copy']}
     for e in obj['regression'].values():
         rp=R/e['record'];paths|={rp,rp.with_suffix('.log')};paths|={R/n for n in e['inputs']}
-        bench=Path(json.loads(rp.read_text(encoding='utf-8-sig'))['output'])/'tb.sv'
-        assert bench.is_relative_to(R) and bench.is_file();paths.add(bench)
-        for n in re.findall(r'\$readmem[hb]\s*\(\s*"([^"]+)"',bench.read_text(encoding='utf-8-sig')):
-            p=Path(n);p=p if p.is_absolute() else R/p
-            assert p.is_relative_to(R) and p.is_file(),p;paths.add(p)
+        entry=json.loads(rp.read_text(encoding='utf-8-sig'))
+        if entry.get('output'):
+            benches=[Path(entry['output'])/'tb.sv']
+        else:
+            # The original ingress wrapper predates refined_testlib and stores
+            # only inputs/passed. Its timestamp identifies three saved benches.
+            assert rp.stem.startswith('ingress_'),'Unknown legacy evidence schema: '+rp.name
+            benches=sorted((R/'build/sim'/('refined_'+rp.stem)).glob('*.sv'))
+            assert len(benches)==3,'Legacy ingress replay benches are incomplete'
+        for bench in benches:
+            assert bench.is_relative_to(R) and bench.is_file();paths.add(bench)
+            for n in re.findall(r'\$readmem[hb]\s*\(\s*"([^"]+)"',bench.read_text(encoding='utf-8-sig')):
+                p=Path(n);p=p if p.is_absolute() else R/p
+                assert p.is_relative_to(R) and p.is_file(),p;paths.add(p)
     for n in ('summary.json','inputs.json','inputs_after.json','source_context.json','run.tcl','td.log','compiled_inputs.zip','flow_options.json',
               'target_color_regions_phy.area','target_color_regions_pr.timing','target_color_regions_exception.timing','target_color_regions_clocks.txt','checkpoint_provenance.json','placed_clocks.txt','placed_exceptions.timing'):
         if (attempt/n).is_file():paths.add(attempt/n)

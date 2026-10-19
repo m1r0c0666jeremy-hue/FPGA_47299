@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_osd.v": "8044590e29d31ac4d6efbe50d954bdd16fd83084e179377f100c378dea093ae0",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\osd_english_wait_20261019_232618_365956"
+}
