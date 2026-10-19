@@ -1,0 +1,65 @@
+{
+  "probe_only": true,
+  "confidence": "Placed / Manhattan; NOT final routed timing",
+  "source": "build/refined_place_20261019_092321/target_color_regions_placed.db",
+  "sha256": "716985e71484cc1dba8adf39b606c795640b1a8c478574479d0fd0b905186cb1",
+  "checkpoint_unchanged": true,
+  "exit_code": 0,
+  "tool_script_executed": true,
+  "reported_paths": 941,
+  "worst_paths": {
+    "setup": [
+      {
+        "slack_ns": 1.098,
+        "check": "setup",
+        "begin": "camera_relay/up_sync_reg[0]_syn_2.clk (rising edge triggered by clock pll_clk_100m  { rise@0.000000ns  fall@5.000000ns  period=10.000000 })",
+        "end": "u_camera/u_config/up_sync_reg[0]_syn_2.ima (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })",
+        "budget": "2.000ns { pll_clk_24m rising@42.000ns - pll_clk_100m rising@40.000ns }",
+        "delay": "0.640ns (cell 0.224ns (34%), net 0.416ns (66%))"
+      },
+      {
+        "slack_ns": 1.131,
+        "check": "setup",
+        "begin": "u_video/u_scaler/mux212_syn_141.clk (rising edge triggered by clock pll_clk_100m  { rise@0.000000ns  fall@5.000000ns  period=10.000000 })",
+        "end": "u_camera/u_config/req_sync_reg[0]_syn_2.ima (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })",
+        "budget": "2.000ns { pll_clk_24m rising@42.000ns - pll_clk_100m rising@40.000ns }",
+        "delay": "0.607ns (cell 0.224ns (36%), net 0.383ns (64%))"
+      },
+      {
+        "slack_ns": 1.204,
+        "check": "setup",
+        "begin": "u_camera/u_config/ready_reg_syn_8.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })",
+        "end": "camera_relay/ready_sync_reg[0]_syn_2.ima (rising edge triggered by clock pll_clk_100m  { rise@0.000000ns  fall@5.000000ns  period=10.000000 })",
+        "budget": "2.000ns { pll_clk_100m rising@170.000ns - pll_clk_24m rising@168.000ns }",
+        "delay": "0.534ns (cell 0.213ns (39%), net 0.321ns (61%))"
+      }
+    ],
+    "hold": [
+      {
+        "slack_ns": -0.265,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/wphase[0]$u_ddrphy_wphase_ctl/wdq_load_r_reg[127]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[0]$dx_byte_used$u_ddrphy_dx_byte_wrapper/u_ddrphy_byte.ctl_wdata[6] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.205ns (cell -0.273ns (133%), net 0.068ns (-33%))"
+      },
+      {
+        "slack_ns": -0.264,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/wphase[0]$u_ddrphy_wphase_ctl/wdq_load_r_reg[74]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[0]$dx_byte_used$u_ddrphy_dx_byte_wrapper/u_ddrphy_byte.ctl_wdata[40] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.204ns (cell -0.272ns (133%), net 0.068ns (-33%))"
+      },
+      {
+        "slack_ns": -0.262,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/wphase[0]$u_ddrphy_wphase_ctl/wdq_load_r_reg[105]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[0]$dx_byte_used$u_ddrphy_dx_byte_wrapper/u_ddrphy_byte.ctl_wdata[83] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.202ns (cell -0.290ns (143%), net 0.088ns (-43%))"
+      }
+    ]
+  },
+  "status": "PASS"
+}

@@ -132,6 +132,10 @@ protection=json.loads((R/'reports/refined/protected_inputs.json').read_text(enco
 observed=json.loads((R/'reports/refined/user_project_change_20261017.json').read_text(encoding='utf-8'))
 paths.add(R/protection['backup']/'sources_before.zip')
 paths.add(R/observed['preserved_copy'])
+# The compact-footer test compares the preserved original overview, not a
+# regenerated copy of the current formatter. Include its immutable inputs.
+for name in ('before.zip','inputs.json'):
+    paths.add(R/'build/refined_compact_osd_baseline_20261019_091444'/name)
 for folder,exts in [('scripts',{'.py','.tcl','.txt'}),('sim',{'.sv','.v','.json'}),('rtl',{'.v','.json'})]:
     paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in exts}
 paths|={p for p in (R/'reports/refined').rglob('*') if p.is_file() and p.suffix in {'.md','.log','.json','.csv','.png'} and not p.name.startswith('delivery_') and not (p.parent.name=='regression' and p.suffix=='.log' and not p.with_suffix('.json').is_file())}
