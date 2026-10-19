@@ -1,0 +1,2 @@
+REFINED_STORE_EQUIVALENT_PASS 16000 clocks, 4000 snapshots/764 valid/354 empty; wrap, exact tail/extra writes, reuse, metadata and invalidation
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\store_cached_id_comparison_20261017_011502_921690\tb.sv:25: $finish called at 160050 (1s)

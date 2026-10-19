@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_line_reader.v": "6359e2a2bc68e4c5f1c274569522f2fc154b1659e7295769664d24a137f1b9fd",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\final_missing_snapshot_20261018_224540_563862"
+}

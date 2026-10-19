@@ -1,0 +1,51 @@
+set out {D:/aaa_FPGA/transparent-ring-stability/build/refined_route_20261018_113051_189370}
+set parent {D:/aaa_FPGA/transparent-ring-stability/build/refined_place_20261018_012202}
+cd $out
+proc report_signature {path parent out} {
+ set f [open $path r];set data [read $f];close $f
+ set data [string map [list "\r" "" $parent "<ATTEMPT>" $out "<ATTEMPT>"] $data]
+ set lines {}
+ foreach line [split $data "\n"] {
+  if {[regexp {^(Generated[ 	]+:|[|][ 	]+Date[ 	]+:|Generated (on|at)|Date:|Time:)} [string trim $line]]} {continue}
+  lappend lines [string trimright $line]
+ }
+ return [string trim [join $lines "\n"]]
+}
+if {[catch {
+ import_device ph1_35p.db -package PH1P35MDG324 -speed 3
+ import_db target_color_regions_placed.db
+ update_timing -mode manhattan
+ report_clock_utilization -file placed_clocks.txt
+ report_timing_exception -file placed_exceptions.timing
+ foreach name {placed_clocks.txt placed_exceptions.timing} {
+  if {[report_signature [file join $parent $name] $parent $out] ne [report_signature [file join $out $name] $parent $out]} {error "CHECKPOINT_CONSTRAINT_MISMATCH: $name"}
+ }
+ puts "CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS"
+ set_param route effort normal
+ set_param route post_route_opt high
+ set_param place opt_timing high
+ set_param place ofv 70
+ set_param place opt_max_density 50
+ set_param place target_density 0.6
+ set_param place target_density_pp 0.7
+ set_param place aggressive_opt 20
+ set_param place enhanced_beeline_opt 2
+ set_param place enhanced_gp on
+ set_param place non_crit_opt on
+ set_param place post_place_opt high
+ set_param place enable_congestion_recovery on
+ set_param place pr_strategy 3
+ place
+ report_area -io_info -file replacement_place.area
+ puts "REFINED_REPLACEMENT_PLACE_COMPLETED"
+ route
+ report_area -io_info -file target_color_regions_phy.area
+ update_timing -mode final
+ report_timing_status -file target_color_regions_phy.ts
+ report_timing_summary -file target_color_regions_pr.timing
+ report_timing_exception -file target_color_regions_exception.timing
+ report_clock_utilization -file target_color_regions_clocks.txt
+ bitgen -bit target_color_regions.bit
+ puts "REFINED_CHECKPOINT_FULL_COMPLETED"
+} message]} {puts stderr "BUILD_FAILED: $message";puts stderr $::errorInfo;exit 1}
+exit

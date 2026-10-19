@@ -1,0 +1,15 @@
+{
+  "status": "WAITING_FOR_FULL_BUILD",
+  "started": "2026-10-18T12:21:22.232604",
+  "pid": 2160,
+  "attempts": [
+    "build/refined_route_20261018_112750_467913",
+    "build/refined_route_20261018_115500_912935"
+  ],
+  "documents": {
+    "README.md": "6fff66416edad69b1a1b46b0e23ecd0c33f172afa5b79fa19966e7d3eb866aa0",
+    "reports/refined/最终验证报告.md": "4dc991ff421227c35585b34dbdf7b045781aae6807a82197c6bf0616c0ac0753",
+    "docs/颜色视频显示改进_上板一页.md": "a2596dceac3fd618860767cd251a40eca6e7420f4bc04a7ebd27237cfe350cfc"
+  },
+  "updated": "2026-10-18T12:21:22.232604"
+}

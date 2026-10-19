@@ -1,0 +1,8 @@
+{
+  "probe_only": true,
+  "private_layout_not_a_deliverable": true,
+  "source": "build/refined_tracker_storage_place_20261018_131844/target_color_regions_placed.db",
+  "sha256": "0f30ae481d74dd6bf8986f579e8ecf24e7224797d3447dffa3bace6800f27d89",
+  "checkpoint_unchanged": true,
+  "exit_code": 0
+}

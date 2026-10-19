@@ -1,0 +1,9 @@
+{
+  "probe_only": true,
+  "source": "build/refined_full_20261018_183727/target_color_regions_placed.db",
+  "sha256": "ea08c9bfbec72f512be9d556b9a12ccc47b9b35a7ee3de2c2c192813a313feb7",
+  "checkpoint_unchanged": true,
+  "exit_code": 0,
+  "tool_script_executed": false,
+  "status": "SCRIPT_PATH_BACKSLASH_REJECTED_DESPITE_PROCESS_EXIT_ZERO"
+}

@@ -1,0 +1,5 @@
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_1_1_3_0_f0_n1_20261016_205002_726594\tb.sv:34: warning: Port 7 (I_meta) of module stable_osd expects 768 bit(s), given 640.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_1_1_3_0_f0_n1_20261016_205002_726594\tb.sv:34:        : Padding 128 high bits of the port.
+
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\video_1_1_3_0_f0_n1_20261016_205002_726594\tb.sv:153: $finish called at 17050345808 (1ps)

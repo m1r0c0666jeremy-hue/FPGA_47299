@@ -1,0 +1,29 @@
+{
+  "stage": "place",
+  "head": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "head_after": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "route_effort": "normal",
+  "placement_strategy": 1,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "resources": {
+    "slice": 19809,
+    "lut6": 19141,
+    "reg": 23535,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

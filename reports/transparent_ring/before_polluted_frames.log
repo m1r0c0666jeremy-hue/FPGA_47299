@@ -1,0 +1,3 @@
+
+RING_DISTRIBUTION_PASS polluted_frames baseline=1 success=1 cycles=283757 model=b25b4a6bb8000000d643c40208000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\before_polluted_frames.sv:10: $finish called at 2837610 (1s)

@@ -1,0 +1,2 @@
+CAMERA_RELAY_EQUIVALENCE_PASS 512 completed gain transactions; direction, ACK, atomic 18-bit status, events, 8 idle and 8 in-flight resets; unrelated clocks
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_relay_equivalence_20261018_223615_741076\tb.sv:50: $finish called at 1050185840 (1ps)

@@ -1,0 +1,10 @@
+{
+  "status": "STOPPED_HIGHER_CONFLICT_LAYOUT",
+  "time": "2026-10-18T12:30:52.331160",
+  "reason": "Normal official layout minimum626 at35, rose726 at36; same-source alternative is475 at32 and can preserve failed routing state for a finite routability retry. Prioritize that path; preserve all evidence, no final timing result.",
+  "verified_pid": 8104,
+  "verified_parent_pid": 28632,
+  "verified_start": "2026-10-18T11:27:52",
+  "final_timing_pass": false,
+  "deliverable": false
+}

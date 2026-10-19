@@ -1,0 +1,30 @@
+{
+  "status": "DELIVERY_REVIEWED_SOFTWARE_BUILD_PASSED_HARDWARE_PENDING",
+  "reviewed": "2026-10-19T10:07:53.153800",
+  "archive_name": "颜色识别、视频稳定性与显示功能改进（默认底栏精简）",
+  "branch": "release/transparent-ring-stability-20261015",
+  "bit": "build/target_color_regions_refined_20261019_100417/target_color_regions.bit",
+  "bit_sha256": "fe6029bb4fd343df1e7757418c1b2540e2c9884d93f27206a9464509bc3586fe",
+  "source_zip": "build/target_color_regions_refined_20261019_100417/color_video_refined_source.zip",
+  "source_zip_sha256": "84711c7f21cb0f5d025d3842c9cb52cc62028695356b4442e9f5b5981ec5502e",
+  "current_source_files_verified": 3709,
+  "compiler_inputs_verified": 295,
+  "software_checks": 157,
+  "resources": {
+    "slice": 17584,
+    "lut6": 16991,
+    "reg": 19355,
+    "eram": 100,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": 0.142,
+    "HWNS": 0.02
+  },
+  "hardware_trials_pending": 46,
+  "board_download": false,
+  "flash_write": false,
+  "github_push": false,
+  "delivery_record_sha256": "4ecdb0e1797aa965a230ed35f809d04372aa9c1b6a826530873344d7dc66e21d",
+  "source_zip_bytes": 65399766
+}

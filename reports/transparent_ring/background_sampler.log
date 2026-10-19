@@ -1,0 +1,3 @@
+
+RING_BACKGROUND_SAMPLER_PASS eight full frames, 512 exact four-pixel words, stratified coordinates and jitter
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\background_sampler.sv:22: $finish called at 18432070 (1s)

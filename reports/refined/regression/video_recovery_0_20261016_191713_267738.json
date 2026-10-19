@@ -1,0 +1,16 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_line_reader.v": "d7e84368c35b809b26a8befbc8e97d271f0611074697934658770fb6c610a72c",
+    "rtl\\color_regions\\stable_model_lane.v": "c221c0d834f863e89dca5113dfd59d4afd0a0accdd7694770264d89fdec1d320",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_ddr_recovery.v": "6b6d37f84ef4868ae2a9661ceb2df4194d742653656dca75d40410b96223d4b9",
+    "rtl\\color_regions\\refined_mc_to_user_interface.v": "b6fb805d42898ba1bf6bf0c44de7a38d20fe740ce8f7070dbf4c94fbe6469ff5",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "user_source\\ip_source\\w155_d512_fifo\\w155_d512_fifo.v": "d600bcd8e876691d6cf3a512650e7e69118fc8016e9fdf892ac85e4c63851e37",
+    "user_source\\ip_source\\w155_d512_fifo\\soft_fifo_al_f58e8b3e1f3d.v": "cffdae59273ca6d7a4ab6473baa8cf94e81ab1900c4b9e358adca6e4b196114d"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\video_recovery_0_20261016_191713_267738"
+}

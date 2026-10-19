@@ -1,0 +1,10 @@
+{
+  "status": "STOPPED_DOMINATED_LAYOUT_COMPARISON",
+  "time": "2026-10-18T11:54:59.691164",
+  "reason": "Iteration16 still 10127 conflicts; same-source main candidate had2825 at16 and now below1000. Preserve layout comparison; prioritize main and known near-clean checkpoint with finite route retry.",
+  "verified_pid": 30784,
+  "verified_parent_pid": 25848,
+  "verified_start": "2026-10-18T11:30:52",
+  "final_timing_pass": false,
+  "deliverable": false
+}

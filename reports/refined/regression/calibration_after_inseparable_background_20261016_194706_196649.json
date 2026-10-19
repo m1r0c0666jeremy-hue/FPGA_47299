@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_calibration.v": "c1742e77355a7a3d1dd4fddf640258037770be5ce4eec9b5d28c511141cb6ce7",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\calibration_after_inseparable_background_20261016_194706_196649"
+}

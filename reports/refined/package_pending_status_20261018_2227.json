@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "pending_cases": 3,
+  "published_case_rejected": true,
+  "package_sha256": "cc04e8def24dadcdcf6cc9c92a285318755f921666b3314dc5c8a8390c69f8b8",
+  "no_packager_executed": true
+}

@@ -1,0 +1,287 @@
+Created by          : Tang Dynasty v6.2.168116
+                    : Copyright (c) 2012-2025 Anlogic Inc.
+Generated           : Sun Oct 18 19:31:56 2026
+
+Top Model           : criticalwork_top
+Device              : PH1P35MDG324
+Speed               : 3
+STA coverage        : 98.76%
+
+----------------------------------------------------------------------------------------------------
+Path Group     :     pll_clk_24m -> HDMI_PIXEL_CLK
+Type           :     Same Domain
+From Clock     :     pll_clk_24m
+To Clock       :     HDMI_PIXEL_CLK
+Min Period     :     16.865ns
+Fmax           :     59.294MHz
+
+Statistics:
+Max            : SWNS     -0.173ns, STNS     -0.173ns,         1 Viol Endpoints,         1 Total Endpoints,         1 Paths Analyzed
+Min            : HWNS      0.100ns, HTNS      0.000ns,         0 Viol Endpoints,         1 Total Endpoints,         1 Paths Analyzed
+----------------------------------------------------------------------------------------------------
+
+Max Paths
+----------------------------------------------------------------------------------------------------
+Slack               : -0.173ns
+Begin Point         : u_camera/u_config/retries_reg[1]_syn_17.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+End Point           : camera_event_sync_reg[0]_syn_2.ima (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })
+Check Type          : setup
+Process             : slow_m40c
+Budget              : 0.653ns { HDMI_PIXEL_CLK rising@546.653ns - pll_clk_24m rising@546.000ns }
+Data Path Delay     : 0.564ns (cell 0.213ns (37%), net 0.351ns (63%))
+Clock Skew          : 0.000ns
+Logic Level         : 0
+Max Fanout          : 2
+Clock Uncertainty   : 0.198ns (sdc uncertainty: 0.000ns, default uncertainty: 0.198ns)
+
+Delay Type          Location             Incr           Path   Level  Netlist Info
+--------------------------------------------------------------------  ---------------
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+launch edge                           546.000    r   546.000               
+--------------------------------------------------------------------  ---------------
+clk2q               x039y010z6          0.126    f   546.126          pin: u_camera/u_config/retries_reg[1]_syn_17.oqa
+net (fo=2)                              0.351        546.477          net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+                                                                      pin: camera_event_sync_reg[0]_syn_2.ima
+reg                 x039y012z3          0.087    r   546.564          net: camera_event_sync[0],  compiled_source/rtl/color_regions/stable_top.v(86)
+--------------------------------------------------------------------  ---------------
+Arrival                                              546.564               
+
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[4]
+net (fo=1)                              0.000          0.000          net: u_controls/I_clk,  compiled_source/rtl/color_regions/refined_controls.v(6)
+                                                                      pin: u_controls/I_clk_created_gclkinst.clkin[0]
+GCLK                x023y039z17         0.000          0.000          pin: u_controls/I_clk_created_gclkinst.clkout
+net (fo=2807)                           0.000          0.000          net: u_controls/I_clk_syn_659,  compiled_source/rtl/color_regions/refined_controls.v(6)
+                                                                      pin: camera_event_sync_reg[0]_syn_2.clk
+capture edge                          546.653    r   546.653               
+--------------------------------------------------------------------  ---------------
+setup                                  -0.064        546.589               
+clock uncertainty                      -0.198        546.391               
+clock pessimism                         0.000        546.391               
+--------------------------------------------------------------------  ---------------
+Required                                             546.391               
+--------------------------------------------------------------------  ---------------
+Slack                                                 -0.173               
+
+
+
+Min Paths
+----------------------------------------------------------------------------------------------------
+Slack               : 0.100ns
+Begin Point         : u_camera/u_config/retries_reg[1]_syn_17.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+End Point           : camera_event_sync_reg[0]_syn_2.ima (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })
+Check Type          : hold
+Process             : fast_m40c
+Budget              : 0.000ns { pll_clk_24m rising@0.000ns - HDMI_PIXEL_CLK rising@0.000ns }
+Data Path Delay     : 0.172ns (cell 0.091ns (52%), net 0.081ns (48%))
+Clock Skew          : 0.000ns
+Logic Level         : 0
+Max Fanout          : 2
+Clock Uncertainty   : 0.060ns (sdc uncertainty: 0.000ns, default uncertainty: 0.060ns)
+
+Delay Type          Location             Incr           Path   Level  Netlist Info
+--------------------------------------------------------------------  ---------------
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+launch edge                             0.000    r     0.000               
+--------------------------------------------------------------------  ---------------
+clk2q               x039y010z6          0.062    f     0.062          pin: u_camera/u_config/retries_reg[1]_syn_17.oqa
+net (fo=2)                              0.081          0.143          net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+                                                                      pin: camera_event_sync_reg[0]_syn_2.ima
+reg                 x039y012z3          0.029    f     0.172          net: camera_event_sync[0],  compiled_source/rtl/color_regions/stable_top.v(86)
+--------------------------------------------------------------------  ---------------
+Arrival                                                0.172               
+
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[4]
+net (fo=1)                              0.000          0.000          net: u_controls/I_clk,  compiled_source/rtl/color_regions/refined_controls.v(6)
+                                                                      pin: u_controls/I_clk_created_gclkinst.clkin[0]
+GCLK                x023y039z17         0.000          0.000          pin: u_controls/I_clk_created_gclkinst.clkout
+net (fo=2807)                           0.000          0.000          net: u_controls/I_clk_syn_659,  compiled_source/rtl/color_regions/refined_controls.v(6)
+                                                                      pin: camera_event_sync_reg[0]_syn_2.clk
+capture edge                            0.000    r     0.000               
+--------------------------------------------------------------------  ---------------
+hold                                    0.012          0.012               
+clock uncertainty                       0.060          0.072               
+clock pessimism                         0.000          0.072               
+--------------------------------------------------------------------  ---------------
+Required                                               0.072               
+--------------------------------------------------------------------  ---------------
+Slack                                                  0.100               
+
+
+----------------------------------------------------------------------------------------------------
+Path Group     :     pll_clk_24m -> pll_clk_24m
+Type           :     Self
+From Clock     :     pll_clk_24m
+To Clock       :     pll_clk_24m
+Min Period     :     1.000ns
+Fmax           :     1000.000MHz
+
+Statistics:
+Max            : SWNS     41.019ns, STNS      0.000ns,         0 Viol Endpoints,         1 Total Endpoints,         1 Paths Analyzed
+Min            : HWNS      0.123ns, HTNS      0.000ns,         0 Viol Endpoints,         1 Total Endpoints,         1 Paths Analyzed
+----------------------------------------------------------------------------------------------------
+
+Max Paths
+----------------------------------------------------------------------------------------------------
+Slack               : 41.019ns
+Begin Point         : u_camera/u_config/retries_reg[1]_syn_17.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+End Point           : u_camera/u_config/retries_reg[1]_syn_17.ima (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+Check Type          : setup
+Process             : slow_m40c
+Budget              : 42.000ns { pll_clk_24m rising@42.000ns - pll_clk_24m rising@0.000ns }
+Data Path Delay     : 0.719ns (cell 0.481ns (66%), net 0.238ns (34%))
+Clock Skew          : 0.000ns
+Logic Level         : 1 ( LUT4=1 )
+Max Fanout          : 2
+Clock Uncertainty   : 0.198ns (sdc uncertainty: 0.000ns, default uncertainty: 0.198ns)
+
+Delay Type          Location             Incr           Path   Level  Netlist Info
+--------------------------------------------------------------------  ---------------
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+launch edge                             0.000    r     0.000               
+--------------------------------------------------------------------  ---------------
+clk2q               x039y010z6          0.126    f     0.126          pin: u_camera/u_config/retries_reg[1]_syn_17.oqa
+net (fo=2)                              0.238          0.364          net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.ima
+LUT4 (reg)          x039y010z6          0.355    f     0.719       1  net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+--------------------------------------------------------------------  ---------------
+Arrival                                                0.719               
+
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+capture edge                           42.000    r    42.000               
+--------------------------------------------------------------------  ---------------
+setup                                  -0.064         41.936               
+clock uncertainty                      -0.198         41.738               
+clock pessimism                         0.000         41.738               
+--------------------------------------------------------------------  ---------------
+Required                                              41.738               
+--------------------------------------------------------------------  ---------------
+Slack                                                 41.019               
+
+
+
+Min Paths
+----------------------------------------------------------------------------------------------------
+Slack               : 0.123ns
+Begin Point         : u_camera/u_config/retries_reg[1]_syn_17.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+End Point           : u_camera/u_config/retries_reg[1]_syn_17.ima (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })
+Check Type          : hold
+Process             : fast_m40c
+Budget              : 0.000ns { pll_clk_24m rising@0.000ns - pll_clk_24m rising@0.000ns }
+Data Path Delay     : 0.195ns (cell 0.163ns (83%), net 0.032ns (17%))
+Clock Skew          : 0.000ns
+Logic Level         : 1 ( LUT4=1 )
+Max Fanout          : 2
+Clock Uncertainty   : 0.060ns (sdc uncertainty: 0.000ns, default uncertainty: 0.060ns)
+
+Delay Type          Location             Incr           Path   Level  Netlist Info
+--------------------------------------------------------------------  ---------------
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+launch edge                             0.000    r     0.000               
+--------------------------------------------------------------------  ---------------
+clk2q               x039y010z6          0.062    f     0.062          pin: u_camera/u_config/retries_reg[1]_syn_17.oqa
+net (fo=2)                              0.032          0.094          net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.ima
+LUT4 (reg)          x039y010z6          0.101    f     0.195       1  net: u_camera/u_config/parameter_event,  compiled_source/rtl/color_regions/refined_camera_config.v(9)
+--------------------------------------------------------------------  ---------------
+Arrival                                                0.195               
+
+source latency                          0.000          0.000               
+port                C4                  0.000          0.000          pin: I_sys_clk
+hierarchy                               0.000          0.000          pin: I_sys_clk_syn_7.ipad
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.sg09_di
+HDIO                x033y078            0.000          0.000          pin: I_sys_clk_syn_7.di
+net (fo=3)          x043y079            0.000          0.000          net: I_sys_clk_dup_6,  compiled_source/rtl/color_regions/stable_top.v(7)
+                                                                      pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.refclk
+PLL                 x043y079            0.000          0.000          pin: u_PLL/ph1p_phy_pll_wrapper_25a56e5ce2f9_Inst/u_PH1P_PHY_PLL.clkc[1]
+net (fo=1)                              0.000          0.000          net: O_cam_24m_dup_1,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: O_cam_24m_dup_1_created_gclkinst.clkin[0]
+GCLK                x023y039z18         0.000          0.000          pin: O_cam_24m_dup_1_created_gclkinst.clkout
+net (fo=95)                             0.000          0.000          net: O_cam_24m_syn_3,  compiled_source/rtl/color_regions/stable_top.v(12)
+                                                                      pin: u_camera/u_config/retries_reg[1]_syn_17.clk
+capture edge                            0.000    r     0.000               
+--------------------------------------------------------------------  ---------------
+hold                                    0.012          0.012               
+clock uncertainty                       0.060          0.072               
+clock pessimism                         0.000          0.072               
+--------------------------------------------------------------------  ---------------
+Required                                               0.072               
+--------------------------------------------------------------------  ---------------
+Slack                                                  0.123               
+
+
+
+

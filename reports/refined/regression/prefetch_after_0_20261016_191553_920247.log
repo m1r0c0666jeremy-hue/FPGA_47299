@@ -1,0 +1,3 @@
+
+REFINED_PREFETCH_PASS rotation0 rows4 RGB5120 masks2560 class/load cycles644
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\prefetch_after_0_20261016_191553_920247\tb.sv:50: $finish called at 120225000 (1ps)

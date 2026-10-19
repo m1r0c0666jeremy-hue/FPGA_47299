@@ -1,0 +1,2 @@
+RECIPROCAL_FOUR_CLOCK_RTL_PASS 150000 dynamic RGB/model cycles, unchanged four-clock masks, numerator/max/min exact; dual11939
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\reciprocal_one_logic_private_math_20261017_232758_708566\tb.sv:17: $finish called at 1500120 (1s)

@@ -1,0 +1,8 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:53: error: Unable to bind wire/reg/memory `S_init_calib_complete' in `criticalwork_top.u_video'
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:70:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:53: error: Failed to elaborate input port 'init_ready' expression (S_init_calib_complete) in instance u_video.recover_ddr of module: refined_ddr_recovery.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:221: error: Net source_mask is not defined in this context.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:307:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:221: error: Output port expression must support a continuous assignment.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_memory_video_out.v:221:      : Port 27 (O_mask) of stable_line_reader is connected to criticalwork_top.u_video.source_mask
+4 error(s) during elaboration.

@@ -1,0 +1,6 @@
+{
+  "status": "FAILED_ROUTING_NOT_DELIVERABLE",
+  "source_commit": "234eebfadc56503de403c03f8f2f07541b957d91",
+  "reason": "TD PHY-8080: routing violations could not be cleaned; no bit generated",
+  "recorded": "2026-10-17T16:42:11.263521"
+}

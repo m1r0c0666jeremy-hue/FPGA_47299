@@ -1,0 +1,4 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:68: error: Unable to bind wire/reg/memory `detect_sof_internal' in `criticalwork_top.u_camera'
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:69:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:68: error: Unable to elaborate condition expression.
+2 error(s) during elaboration.

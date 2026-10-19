@@ -1,0 +1,3 @@
+REFINED_CAMERA_PASS startup, ACK-complete gain, bad-frame confirmation reset, reapply and real framing
+CAMERA_RELAY_SUPERVISOR_PASS mode0 gain ACK, event invalidation, ready and diagnostic feedback
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_relay_private_integration_0_20261018_221653_389756\tb.sv:42: $finish called at 80964048 (1ps)

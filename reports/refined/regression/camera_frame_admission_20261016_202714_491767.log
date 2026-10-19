@@ -1,0 +1,3 @@
+
+REFINED_CAMERA_GATE_PASS full-source monitor, no pre-ready output, gain/restart truncates frame, re-ready waits for fresh SOF
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_frame_admission_20261016_202714_491767\tb.sv:24: $finish called at 2304620000 (1ps)

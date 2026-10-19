@@ -1,0 +1,3 @@
+
+REFINED_TIMING_PASS 75-cycle us, asynchronous Gray time, actual source IDs, overwritten/aliased/reset tokens rejected, endpoint/repeat/abort/wrap
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\source_time_and_endpoint_20261016_202511_186568\tb.sv:26: $finish called at 105966 (1s)

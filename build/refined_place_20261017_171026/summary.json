@@ -1,0 +1,22 @@
+{
+  "stage": "place",
+  "head": "e363b588e3a0131a9b4c3f9f43dac75f498345c0",
+  "head_after": "e363b588e3a0131a9b4c3f9f43dac75f498345c0",
+  "route_effort": "normal",
+  "placement_strategy": 1,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "resources": {
+    "slice": 20049,
+    "lut6": 19544,
+    "reg": 23529,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

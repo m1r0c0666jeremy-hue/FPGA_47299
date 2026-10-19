@@ -1,0 +1,4 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_frame_store.v:20: error: Unable to bind wire/reg/memory `co' in `tb.after_store'
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_frame_store.v:31:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_frame_store.v:20: error: Unable to elaborate r-value: (co)&(id_settled)
+2 error(s) during elaboration.

@@ -1,0 +1,14 @@
+V4_UI_CASE_PASS overview
+V4_UI_CASE_PASS colour
+V4_UI_CASE_PASS models
+V4_UI_CASE_PASS performance
+V4_UI_CASE_PASS cal1
+V4_UI_CASE_PASS cal2
+V4_UI_CASE_PASS cal3
+V4_UI_CASE_PASS cal4
+V4_UI_CASE_PASS busy
+V4_UI_CASE_PASS fail
+V4_UI_CASE_PASS insufficient
+V4_UI_CASE_PASS late_abort
+REFINED_V4_UI_PASS 11 states complete footer rows, latency/fault/model/quality, transparent original colours and outline
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\footer_late_abort_after_20261017_164213_907696\tb.sv:28: $finish called at 15361200 (1s)

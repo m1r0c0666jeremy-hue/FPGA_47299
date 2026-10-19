@@ -1,0 +1,2 @@
+COMPACT_FOOTER_EQUIVALENCE_PASS 240 contexts, 30720 characters; default overview and calibration identical; diagnostic selector ignored; five zooms, states, decimal clamp and invalid latency
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\compact_footer_equivalence_20261019_092106_917460\tb.sv:33: $finish called at 5764830 (1s)

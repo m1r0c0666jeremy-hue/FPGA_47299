@@ -1,0 +1,11 @@
+{
+ "status": "stopped_superseded_by_failed_job_peak_fix",
+ "observed_at": "2026-10-17T23:11:38+08:00",
+ "source_commit": "90dff28c2f72c1f756d6a070fa15fb74d5c40acf",
+ "last_route_iteration": 9,
+ "last_violations": 10849,
+ "verified_pid": 32388,
+ "verified_start": "2026-10-17T22:44:56+08:00",
+ "deliverable": false,
+ "reason": "Diagnostic review found that failed jobs did not preserve wait peaks; current reader was corrected. The superseded attempt was stopped with frozen inputs and logs retained, without claiming final TD timing failure or pass."
+}

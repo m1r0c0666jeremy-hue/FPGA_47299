@@ -15,7 +15,8 @@ module stable_isp (
     output 			O_tlast			,
     output 			O_tuser			,
     output 			O_tvalid		,
-    output 			I_tready
+    output 			I_tready,
+    input wire [32:0] I_frame_tag,output wire [32:0] O_raw_tag,O_detect_tag
 );
  
 wire         m_aixs_tvalid;  //synthesis keep 
@@ -54,7 +55,11 @@ wire         m_aixs_tvalid;  //synthesis keep
   //assign O_tvalid = m_aixs_tvalid   ;
  
  
-demosaic #(
+wire [32:0] demosaic_tag;reg [32:0] wb_tag0,wb_tag1;
+assign O_raw_tag=demosaic_tag;assign O_detect_tag=wb_tag1;
+always @(posedge axi4s_video_aclk or negedge I_rst_n)
+if(!I_rst_n)begin wb_tag0<=0;wb_tag1<=0;end else begin wb_tag0<=demosaic_tag;wb_tag1<=wb_tag0;end
+refined_demosaic #(
     .IMG_HEIGHT          (720 ), // 图像高度
     .IMG_WIDTH           (1280), // 图像宽度
     .data_complete_delay (50  ),
@@ -62,6 +67,7 @@ demosaic #(
 )
 u_demosaic
 (
+    .I_frame_tag(I_frame_tag),.O_frame_tag(demosaic_tag),
     .I_clk   			(axi4s_video_aclk)	,   // 时钟信号
     .I_rst_n 			(I_rst_n)	,   // 复位信号，低有效
     .axi4s_video_tdata 	(I_tdata)	,  // AXI4-Stream视频数据

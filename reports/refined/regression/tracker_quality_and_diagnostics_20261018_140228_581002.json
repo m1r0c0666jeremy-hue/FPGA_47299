@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_tracker.v": "b24398a276aecdda3f452f6bfe562551f8d20ecc0ca0a6a797834ec98a27954c"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\tracker_quality_and_diagnostics_20261018_140228_581002"
+}

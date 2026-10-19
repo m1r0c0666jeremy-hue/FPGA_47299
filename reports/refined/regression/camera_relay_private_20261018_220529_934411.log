@@ -1,0 +1,2 @@
+CAMERA_RELAY_PRIVATE_PASS 512 gain transactions; direction, ACK, 18-bit status, events, 8 resets; unrelated clocks
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_relay_private_20261018_220529_934411\tb.sv:44: $finish called at 1027251360 (1ps)

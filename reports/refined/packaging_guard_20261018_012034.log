@@ -1,0 +1,11 @@
+REFINED_PROTECTION_PASS 91 baseline files plus preserved later project save
+Traceback (most recent call last):
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_refined.py", line 12, in <module>
+    obj=audit(args.attempt,True)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 68, in audit
+    assert s['stage']=='full' and s['exit_code']==0 and s['resource_pass'] and s['timing_pass'] and s['inputs_unchanged'],s
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'stage': 'full', 'head': '90dff28c2f72c1f756d6a070fa15fb74d5c40acf', 'head_after': '90dff28c2f72c1f756d6a070fa15fb74d5c40acf', 'route_effort': 'routability', 'placement_strategy': 1, 'map_mode': 'area_prior', 'pack_effort': 'high', 'infer_fsm': 'project', 'map_strategy': None, 'macro_performance': 'macro_congestion', 'pack_mode': None, 'place_effort': None, 'max_fanout': None, 'exit_code': 4294967295, 'inputs_unchanged': True, 'working_tree_matches': False}
+
+PACKAGING_GUARD_PASS failed TD rejected before artifact publication; docs and directories unchanged

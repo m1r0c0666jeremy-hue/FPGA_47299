@@ -1,0 +1,7 @@
+{
+  "status": "STOPPED_NOT_A_DELIVERABLE",
+  "time": "2026-10-18T18:37:59.082735",
+  "reason": "At phase1 round39 minimum154 while strategy5 had cleared phase1 and phase2 minimum28; replace slower backup with targeted physical fanout comparison",
+  "source_unchanged": true,
+  "constraints_relaxed": false
+}

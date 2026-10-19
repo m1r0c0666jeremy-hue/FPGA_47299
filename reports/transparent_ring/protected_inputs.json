@@ -1,0 +1,22 @@
+{
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\baseline\\baseline.bit": "07181fbd16a6c510c7ccbb33383fd139d96f48afc7ea9c51af948bbd3034eaf2",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\criticalwork\\criticalwork.bit": "5905f0042fa1e562aafbba9a22d8029e54aee6b67b21811b45ee65ce0b5dd4dd",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\debug1\\debug1.bit": "b1e2ad162d3ec56dfc7cbd575f7daf9b1a21e33e0e5a5930fd0ce5576b9411f2",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\imagepreprocess_10_3\\imagepreprocess_10_3.bit": "eddd9d7d28eb431de92d1d0f061962645b7734b027469290ae06166c9183ddf9",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\scaling_test\\scaling_test.bit": "a598cff3ea804c0fbc9e54d1693e03cfc32fa4b9aef2d7133f234879dc6edf8c",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_color_regions\\target_color_regions.bit": "87956070e9ddfb8d1c3c56cef5adf830b6513b34e9f1d3cd4a5ff2554d8a1e0f",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_color_regions_stable_20261014_040811\\target_color_regions.bit": "5cf695092e8b1a5d6dbf601f751cdbd33e0f74ae9bd349054fff9e16eac5fbde",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_lock\\target_lock.bit": "e9a28707a3b68d02ff711512c0079b8918d67ffe509a299ca0f093c08315425a",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_lock_candidates\\target_lock_candidates.bit": "cb3e71c356a288772f23397e3e280c6e2d6c9789f112306ab9fcede3095517c2",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_lock_candidates_ingress\\target_lock_candidates_ingress.bit": "92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_lock_dualcolor\\target_lock_dualcolor.bit": "40ca82c86b289eb3392623bfaa0e5270bc067c2130b78ae5e4c0b70f301d01e5",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_color_regions\\color_regions_source_snapshot.zip": "62bbfead927fc96883abc18eef82f17f5c08917ce3ef7eb2ecec3334246bc902",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_color_regions_stable_20261014_040811\\color_regions_stable_source.zip": "786b336f1472c5f9a3282be13561320f51e98eb034b6050681b040340d1fb22e",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_color_regions_stable_20261014_040811\\compiled_source_snapshot.zip": "b067cfe80b6f1ee36070585dd1f23c4a08feafef857f4c994e82be87962c17ac",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\build\\target_lock_candidates_ingress\\candidate_ingress_source_snapshot.zip": "628529673d888df6813f5e6128343bfaa32aed70e3adc81b8e5a12bccbeb11ad",
+  "D:\\aaa_FPGA\\color-regions-env-issues\\td_project\\target_color_regions.al": "8ce2480d77f6554625f6949cb3339c1e1a374599609155ee16585a8e57feef59",
+  "D:\\aaa_FPGA\\criticalwork\\td_project\\target_color_regions.al": "a5ad23c502cede4a6ec00f9df782aae19fa24b1a31ae21e5fd58cc0394c75f6d",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\td_project\\target_lock.adc": "0698d6d2ec770104d8fc773e82f6b84c3a8ed4202be00963cc2db41c6a70c0de",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\td_project\\target_lock.sdc": "7cffc5a2bbbc07f9f527cd43c7befa3629a4df21604cc26af49455a20fe5b13c",
+  "D:\\aaa_FPGA\\transparent-ring-stability\\user_source\\hdl_source\\video_in.v": "6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b"
+}

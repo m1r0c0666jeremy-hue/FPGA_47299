@@ -1,0 +1,3 @@
+
+REFINED_SAMPLING_PASS after_0_0 pair0 negative0 512 exact groups; material/background replay cycles1048660 status00
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\sampling_after_0_0_20261016_194011_260385\tb.sv:24: $finish called at 28918680000 (1ps)

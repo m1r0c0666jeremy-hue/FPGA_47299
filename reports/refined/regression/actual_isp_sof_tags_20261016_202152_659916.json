@@ -1,0 +1,18 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_isp.v": "c3729e433b92512a01e24d4f0e60499f93c12d59eb39b890cc14d8c1bd93be27",
+    "rtl\\color_regions\\stable_awb.v": "23d822472a1d49b27dddaac02a5e1ed5ca2d7bfb8190f2e7a7752c88565087bf",
+    "rtl\\color_regions\\stable_packer.v": "d321fd9740e28608f7082337af1050a6b0999f404bce9b0f89be8880a34b7908",
+    "rtl\\color_regions\\refined_demosaic.v": "e9556fb7eb8c3555ce7932cfef9b712b235926d04ff5144ba4b65cef4cbe4a51",
+    "rtl\\color_regions\\refined_raw_matrix_3x3_buffer.v": "1e556270421e76f2adc8bb30779cf48992102e6ef4d29f7f0089c10c96b66319",
+    "rtl\\color_regions\\refined_zhenghe.v": "3786a519a48895fbed68d9c6359b3aab240df5317613f0312d5acb98d8aa5cb9",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\mipi_to_raw_converter.v": "b77e678034af9968d0969655f403cac3b992412b109dba889e8ccb3f6f224975",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\bilinear_interpolation.v": "53a4fc3dea805d59cee9bdab1a090c26c03eb555ab612a1a4698d810c1991baf",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\line_buffer_demosaic.v": "57d2626ef83f555d027cc442fae0959a916cf1b0939c0115aaa9d414745f94c7",
+    "user_source\\hdl_source\\isp\\data128_96\\data128_96.v": "b6acceb73cc76058d4afe6ec593360bae6701646fdda780a9264ada3befd5318",
+    "build\\sim\\refined_isp_models\\line_ram_models.sv": "3cdd950bf9cbd7f22112dcf2416c5f4472cde7d4ce4fe5b43a4294e15fa08f6b"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\actual_isp_sof_tags_20261016_202152_659916"
+}

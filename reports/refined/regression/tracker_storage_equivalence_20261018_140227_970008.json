@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_tracker_storage_prototype\\reference.v": "5102ca016e764e4d2426ad3456284e5c72c4ef27afd38588bfe2fa1f3df59781",
+    "rtl\\color_regions\\stable_tracker.v": "b24398a276aecdda3f452f6bfe562551f8d20ecc0ca0a6a797834ec98a27954c"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\tracker_storage_equivalence_20261018_140227_970008"
+}

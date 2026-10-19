@@ -1,0 +1,3 @@
+
+RING_PROTOCOL_PASS v2 rejected, v3 all 640 bits preserved with actual bank and image ID
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\protocol_v3.sv:11: $finish called at 140 (1s)

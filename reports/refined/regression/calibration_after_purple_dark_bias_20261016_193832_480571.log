@@ -1,0 +1,3 @@
+
+RING_DISTRIBUTION_PASS purple_dark_bias baseline=0 success=1 cycles=1707556 model=cce8878990000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\calibration_after_purple_dark_bias_20261016_193832_480571\tb.sv:11: $finish called at 17075600 (1s)

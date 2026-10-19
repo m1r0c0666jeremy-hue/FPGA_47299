@@ -1,0 +1,2 @@
+HUE_RETIME_PRIVATE_PASS 300000 dynamic RGB/model clocks, reset, numerator/max/min and registered outputs equal; four-cycle latency unchanged; checks300012
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\hue_retime_private_20261018_222252_961285\tb.sv:19: $finish called at 3000120 (1s)

@@ -1,0 +1,3 @@
+
+REFINED_BANK_COMMIT_PASS pending frame tail survives next bank begin; incomplete, reused and out-of-order banks rejected
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\bank_actual_commit_20261016_190540_796960\tb.sv:14: $finish called at 400 (1s)

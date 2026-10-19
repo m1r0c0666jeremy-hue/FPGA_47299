@@ -1,0 +1,15 @@
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+
+STABLE_LIVE_PASS pair0 rotation0 real capture->DDR->640/675 CDC->moving viewport->source masks->OSD: four pages, three zooms, parameter switch, 3993600 pixels, 6 snapshots, 4 tip snapshots, 2073600 written words
+D:\aaa_FPGA\transparent-ring-stability\sim\tb_stable_live.sv:87: $finish called at 107577205258 (1ps)
+
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_osd.v:49: error: Unknown module type: stable_footer_program_rom
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_osd.v:50: error: Unknown module type: stable_footer_text_rom
+3 error(s) during elaboration.
+*** These modules were missing:
+        stable_footer_program_rom referenced 1 times.
+        stable_footer_text_rom referenced 1 times.
+***

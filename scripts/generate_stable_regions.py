@@ -33,7 +33,7 @@ def assets():
     s=swap(s,'isp_top u_isp_top (','stable_isp u_isp_top (\n.I_gain_r(I_gain_r),.I_gain_b(I_gain_b),.O_raw_rgb(O_raw_rgb),.O_raw_sof(O_raw_sof),.O_raw_valid(O_raw_valid),')
     out['rtl/color_regions/stable_camera_capture.v']=s
     s=(R/'rtl/color_regions/regions_frame_store.v').read_text(encoding='utf-8')
-    s=s.replace('module regions_frame_store','module stable_frame_store').replace('[415:0]','[639:0]').replace('[450:0]','[674:0]').replace("==1;","==2;").replace("416'd0","640'd0").replace('O_data[415:0]','O_data[639:0]')
+    s=s.replace('module regions_frame_store','module stable_frame_store').replace('[415:0]','[639:0]').replace('[450:0]','[674:0]').replace("==1;","==3;").replace("416'd0","640'd0").replace('O_data[415:0]','O_data[639:0]')
     out['rtl/color_regions/stable_frame_store.v']=s
     s=(R/'rtl/color_regions/regions_memory_video_out.v').read_text(encoding='utf-8')
     s=s.replace('module regions_memory_video_out','module stable_memory_video_out')
@@ -48,6 +48,14 @@ def assets():
     s=s.replace('regions_preprocess u_image_preprocess','stable_preprocess u_image_preprocess').replace('regions_osd u_osd','stable_osd u_osd')
     s=swap(s,'.I_meta(active_meta),.I_x0(roi_x),','.I_tracking(I_tracking),.I_meta(active_meta),.I_x0(roi_x),')
     s=swap(s,'.I_de(S_hdmi_out_de), .I_rgb(S_hdmi_out_data),','.I_de(S_hdmi_out_de), .I_rgb(S_hdmi_out_data),.I_mask(source_mask),')
+    s=swap(s,'input wire I_pair,I_tracking,I_show,I_conflict,','input wire I_rotate,input wire [1:0] I_diag,\n    input wire I_pair,I_tracking,I_show,I_conflict,')
+    s=swap(s,'wire [1:0] active_zoom,frame_mode,selected_bank;','wire active_rotate;wire [1:0] active_zoom,frame_mode,selected_bank;')
+    s=swap(s,'reg [1:0] mode_at_vs,zoom_at_vs;','reg rotate_at_vs;reg [1:0] diag_at_vs,mode_at_vs,zoom_at_vs;')
+    s=swap(s,'vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;','vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;rotate_at_vs<=1;diag_at_vs<=0;')
+    s=swap(s,'mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;','mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;rotate_at_vs<=I_rotate;diag_at_vs<=I_diag;')
+    s=swap(s,'stable_display u_viewport(','stable_display u_viewport(\n        .I_rotate(rotate_at_vs),.O_rotate(active_rotate),')
+    s=swap(s,'stable_line_reader u_scaler (','stable_line_reader u_scaler (\n        .I_rotate(active_rotate),')
+    s=swap(s,'stable_osd u_osd (','stable_osd u_osd (\n        .I_rotate(active_rotate),.I_diag(diag_at_vs),.I_image_id(selected_frame_id),')
     out['rtl/color_regions/stable_memory_video_out.v']=s
     s=(R/'rtl/color_regions/regions_top.v').read_text(encoding='utf-8')
     s=swap(s,'wire gain_req, gain_up, gain_ack;','''wire gain_req, gain_up, gain_ack;
@@ -76,7 +84,10 @@ target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n
     s=swap(s,'.I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),','.I_keys_n(I_button), .I_ui_switch(I_ui_switch), .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),\n    .O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),')
     s=s.replace('camera_capture u_camera (','stable_camera_capture u_camera (\n    .I_gain_r(wb_r),.I_gain_b(wb_b),.O_raw_rgb(raw_rgb),.O_raw_sof(raw_sof),.O_raw_valid(raw_valid),')
     s=s.replace('regions_memory_video_out #','stable_memory_video_out #')
-    s=swap(s,'.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),','.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),\n    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:6]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),')
+    s=swap(s,'.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),','.I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),\n    .I_models(color_models),.I_revision(color_revision),.I_gains(frame_gains),.I_cal_status(capture_cal_status),.I_cal_active(capture_cal_status[7:5]!=0),.I_needs_cal(needs_cal),.I_frame_pair(frame_pair),')
+    s=swap(s,'wire gain_req, gain_up, gain_ack;','wire ui_rotate;wire [1:0] ui_diag;wire gain_req, gain_up, gain_ack;')
+    s=swap(s,'.O_cal_enter(cal_enter),','.O_rotate(ui_rotate),.O_diag(ui_diag),.O_cal_enter(cal_enter),')
+    s=swap(s,'.I_models(color_models),','.I_rotate(ui_rotate),.I_diag(ui_diag),.I_models(color_models),')
     out['rtl/color_regions/stable_top.v']=s
     out.update(ui_assets())
     root=ET.fromstring((R/'td_project/target_color_regions.al').read_text(encoding='utf-8').replace('&','&amp;').replace('::','__TD_COLON__'))
@@ -85,10 +96,13 @@ target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n
     for node in list(sources):
         path=node.attrib.get('Path','')
         if '/color_regions/' in path or Path(path).name in ('target_controls.v','camera_capture.v'):sources.remove(node)
-    names=['model_lane','awb','packer','calibration','controls','filter4','grid','tracker','capture','frame_store','display','line_reader','preprocess','osd','glyph_rom','isp','camera_capture','memory_video_out','top']
+    names=['footer_program_rom','footer_text_rom','footer_glyph_rom','model_lane','awb','packer','calibration','controls','filter4','grid','tracker','capture','frame_store','display','line_reader','preprocess','osd','glyph_rom','isp','camera_capture','memory_video_out','top']
     names=['regions_divide']+['stable_'+n for n in names]
     for name in names:
         node=ET.SubElement(sources,'File',Path=f'../rtl/color_regions/{name}.v');info=ET.SubElement(node,'FileInfo')
+        for k,v in [('UsedInSyn','true'),('UsedInP&R','true'),('BelongTo','design_1')]:ET.SubElement(info,'Attr',Name=k,Val=v)
+    if not any(Path(node.attrib['Path']).name=='scaling_logo_rom.v' for node in sources):
+        node=ET.SubElement(sources,'File',Path='../rtl/09_osd_ui/scaling_logo_rom.v');info=ET.SubElement(node,'FileInfo')
         for k,v in [('UsedInSyn','true'),('UsedInP&R','true'),('BelongTo','design_1')]:ET.SubElement(info,'Attr',Name=k,Val=v)
     for n,node in enumerate(sources):
         info=node.find('FileInfo')
@@ -98,56 +112,8 @@ target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n
     ET.indent(root,space='    ')
     out['td_project/target_color_regions.al']='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n'
     return out
-def ui_assets():
-    chars=' '+''.join(dict.fromkeys('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ:+-/原图色彩高亮灰度二值模式倍率配红蓝黄紫候选状态待命搜索中区域多个拥挤按键冲突视频未就绪无新帧更多判取样隐藏'))
-    labels=['待命','中央选取','确认中','跟踪中','缺色','失锁保持','中央重选','尖端越界','无效帧']
-    cal_labels=['请重新校准','白纸按KEY3','A色按KEY3','B色按KEY3','采样处理中','采样失败重试']
-    chars=''.join(dict.fromkeys(chars+''.join(labels+cal_labels)+'安路等待结果'))
-    assert len(chars)<=128,len(chars)
-    ids={c:i for i,c in enumerate(chars)}
-    def text_cases(text,start=3):return '\n'.join(f'{start+i}:footer={ids[c]};' for i,c in enumerate(text))
-    s=(R/'rtl/color_regions/regions_osd.v').read_text(encoding='utf-8')
-    s=s.replace('module regions_osd','module stable_osd').replace('[415:0]','[639:0]').replace('regions_glyph_rom font','stable_glyph_rom font')
-    s=s.replace('input wire I_show,I_video_ok,','input wire I_tracking,I_show,I_video_ok,')
-    a=s.index(' if(row && col>=19');s=s[:a]+''' if(row && col>=3 && col<19)begin
-footer=0;
-'''+''.join(f'if(I_meta[36:33]=={n} && I_tracking)case(col)\n{text_cases(t)}\nendcase\n' for n,t in enumerate(labels))+'''
-if(!I_tracking)case(col)
-'''+text_cases('待命')+'\nendcase\n'+''.join(f'if(I_meta[567:566]=={n})case(col)\n{text_cases(cal_labels[n])}\nendcase\n' for n in range(1,4))+'''
-if(I_meta[565] && I_meta[567:566]!=0)case(col)
-'''+text_cases(cal_labels[4])+'''\nendcase
-if(I_meta[563:560]!=0 && I_meta[567:566]!=0)case(col)
-'''+text_cases(cal_labels[5])+'''\nendcase
-if(I_meta[568] && I_meta[567:566]==0)case(col)
-'''+text_cases(cal_labels[0])+'''\nendcase
-end
-'''+s[a:]
-    s=s.replace('39:footer=2;','39:footer=3;').replace('35:footer=28;','35:footer=29;')
-    s=s.replace('35:footer=29;',f'35:footer={ids["安"]};').replace('36:footer=2;',f'36:footer={ids["路"]};').replace('37:footer=39;',f'37:footer={ids["S"]};').replace('38:footer=1;',f'38:footer={ids["2"]};').replace('39:footer=3;','39:footer=0;')
-    s=s.replace('if(I_meta[568] && I_meta[567:566]==0)case(col)',f'if(I_meta[563:560]!=0 && I_meta[567:566]!=0)begin if(col==15)footer={ids["E"]};if(col==16)footer={ids["0"]}+I_meta[563:560];end\nif(I_meta[568] && I_meta[567:566]==0)case(col)')
-    # Live/stale state always wins over a historical tracking/calibration label.
-    end=s.index(' end endfunction',s.index('function [6:0] footer'))
-    priority=' if(row && col>=3 && col<19)begin\n'
-    for condition,text in [('I_tracking && !I_detection_valid','等待结果'),('I_state==5','按键冲突'),('I_state==7','无新帧'),('!I_video_ok || I_state==6','视频未就绪')]:
-        priority+=f'if({condition})begin footer=0;case(col)\n{text_cases(text)}\nendcase end\n'
-    s=s[:end]+priority+'end\n'+s[end:]
-    marker='     if(I_show && I_mode==1 && border('
-    index=s.index(marker)
-    s=s[:index]+'''     if(I_show && I_detection_valid && I_meta[32])begin
-       lx=mapx(I_meta[89:79]);ly=mapy(I_meta[99:90]);ldx=xx-lx;ldy=yy-ly;
-       if((ldx>=-6 && ldx<=6 && ldy>=-1 && ldy<=1)||(ldy>=-6 && ldy<=6 && ldx>=-1 && ldx<=1))begin back_on=1;back=24'h40ff90;end
-     end
-     if(I_meta[567:566]!=0 && border(xx,yy,mapx(632),mapx(647)+(14'sd1<<<I_zoom)-1,mapy(352),mapy(367)+(14'sd1<<<I_zoom)-1))begin back_on=1;back=24'h80ff80;end
-     if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,mapx(320),mapx(959),mapy(180),mapy(539)))begin back_on=1;back=24'h40c080;end
-'''+s[index:]
-    out={'rtl/color_regions/stable_osd.v':s}
-    font=ImageFont.truetype('C:/Windows/Fonts/simhei.ttf',16);rows=[]
-    for ch in chars:
-        im=Image.new('1',(16,16));ImageDraw.Draw(im).text((0,-1),ch,font=font,fill=1)
-        rows.extend(sum(int(im.getpixel((x,y)))<<(15-x) for x in range(16)) for y in range(16))
-    rows+=[0]*(2048-len(rows))
-    out['rtl/color_regions/stable_glyph_rom.v']='module stable_glyph_rom(input wire clk,input wire [10:0] addr,output reg [15:0] data);\n(* ram_style="block" *) reg [15:0] rom[0:2047];\ninitial begin\n'+''.join(f"rom[{i}]=16'h{v:04x};\n" for i,v in enumerate(rows))+'end\nalways @(posedge clk)data<=rom[addr];\nendmodule\n'
-    return out
+from generate_ring_ui import ui_assets
+
 def generate(check=False):
     for name,s in assets().items():
         p=R/name;data=s.replace('\r\n','\n').encode('utf-8')

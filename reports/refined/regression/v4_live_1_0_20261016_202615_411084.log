@@ -1,0 +1,35 @@
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 11 (ceb) of module ram_infer_4057d6b76aa6 expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221: warning: Port 15 (addrb) of module ram_infer_4057d6b76aa6 expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w128_d512_fifo\soft_fifo_al_4057d6b76aa6.v:221:        : Pruning 23 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:28: error: Unable to bind wire/reg/memory `committed' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:52:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:28: error: Failed to elaborate input port 'I_write' expression (committed) in instance tb_stable_live.store of module: stable_frame_store.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:28: error: Unable to bind wire/reg/memory `commitaddr' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:52:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:28: error: Failed to elaborate input port 'I_addr' expression (commitaddr) in instance tb_stable_live.store of module: stable_frame_store.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:35: error: Unable to bind wire/reg/memory `accepted_reads' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:52:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:35: error: Failed to elaborate input port 'I_accepted_reads' expression (accepted_reads) in instance tb_stable_live.reader of module: stable_line_reader.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:35: error: Unable to bind wire/reg/memory `unexpected' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:52:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:35: error: Failed to elaborate input port 'I_unexpected_return' expression (unexpected) in instance tb_stable_live.reader of module: stable_line_reader.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:53: error: Unable to bind wire/reg/memory `dc_cycle' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:60:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:53: error: Unable to bind wire/reg/memory `dc_cycle' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:60:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:53: error: Unable to elaborate r-value: (cmd['sd0])?((((dc_cycle)%('sd19))!=('sd0))&&(((dc_cycle)%('sd23))!=('sd0))):(((dc_cycle)%('sd13))!=('sd0))
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:54: error: Unable to bind wire/reg/memory `dc_cycle' in `tb_stable_live'
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:60:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\v4_live_1_0_20261016_202615_411084\tb.sv:54: error: Unable to elaborate r-value: ((dc_cycle)%('sd7))!=('sd0)
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 3 (cea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 4 (ocea) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 11 (ceb) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 13 (web) of module ram_infer_f58e8b3e1f3d expects 1 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning (signed) 31 high bits of the expression.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201: warning: Port 15 (addrb) of module ram_infer_f58e8b3e1f3d expects 9 bit(s), given 32.
+D:\aaa_FPGA\transparent-ring-stability\user_source\ip_source\w155_d512_fifo\soft_fifo_al_f58e8b3e1f3d.v:201:        : Pruning 23 high bits of the expression.
+13 error(s) during elaboration.

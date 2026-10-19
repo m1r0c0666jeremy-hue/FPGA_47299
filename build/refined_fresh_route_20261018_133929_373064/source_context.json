@@ -1,0 +1,63 @@
+{
+  "compiled_source_commit": "6a43cfff556746501e6bc88035080aa747f7cacf",
+  "creation_time": "20261018_133929_373064",
+  "input_count": 295,
+  "inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+  "placed_checkpoint": {
+    "parent": "build/refined_place_20261018_005818",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "2cc9e38bc9fcb815d98f0916580060e580c00ee681f5459844f0de3df9c85ab9",
+    "parent_summary_sha256": "dd8ecb8e87949753191e1ec1454b4033884d468a99bca8883b776b9f3e7dee29",
+    "parent_context_sha256": "3e2df2e0328790b4c8c8994064265b60b8fe910d1133b1e088146814791a366b",
+    "parent_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856"
+  },
+  "replaced_strategy": null,
+  "retry_routability": true,
+  "failed_checkpoint_provenance": {
+    "source_attempt": "build/refined_route_20261018_115500_912935",
+    "probe": "build/refined_failed_checkpoint_probe_20261018_133626",
+    "checkpoint_sha256": "dda348d2b24b43a53f021b0129bc02063b893fc74f39234da3aa895c42a1a337",
+    "source_context_sha256": "3ab42dcaca14b8eecb7a8bc9e1f24018f2db5b51d9065a50f1e22f23864a1dfd",
+    "source_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856",
+    "source_saved_proof_sha256": "ccd28f7cf5794bc7ebe1e2e48f8f0a08a958a5e33130217aaa803224b50aa4a8",
+    "source_prefix_sha256": "a5f1ba30f31a90ed23729bd577a462dae43a1384221469aeafa2a480928bed38",
+    "initial_provenance_sha256": "7730b0ad5857f379b332f0f1b79b96ea4a01218a13e27284fbc092f992e190ba",
+    "probe_summary_sha256": "e5a330a9f8511606a9e3d99e4c536f480aa4c0b8f59f12dc097d4065586e1406",
+    "probe_clocks_sha256": "090c1115c3dec56110f3d3e1c0161932178f96ca802f2409a761806a72abb7ef",
+    "probe_exceptions_sha256": "47b15f40d003001b11dd412f9d68523ee0b0acf2d44dae62cc6c31b5257f47f9",
+    "clock_periods": [
+      [
+        "HDMI_PIXEL_CLK",
+        "13.333"
+      ],
+      [
+        "HDMI_SERIAL_CLK",
+        "2.666"
+      ],
+      [
+        "MIPI_RX_BYTE_CLK",
+        "16.668"
+      ],
+      [
+        "pll_clk_100m",
+        "10.000"
+      ],
+      [
+        "pll_clk_24m",
+        "42.000"
+      ],
+      [
+        "sys_clk_50m",
+        "20.000"
+      ],
+      [
+        "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk",
+        "39.374"
+      ],
+      [
+        "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk",
+        "15.000"
+      ]
+    ]
+  }
+}

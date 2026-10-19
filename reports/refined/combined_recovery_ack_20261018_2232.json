@@ -1,0 +1,22 @@
+{
+  "confidence": "Placed / Manhattan ONLY",
+  "checkpoint": "build/refined_timing_paths_place_20261018_222507/target_color_regions_placed.db",
+  "paths": [
+    {
+      "slack_ns": 2.494,
+      "check": "setup",
+      "begin": "u_video/recovery_telemetry/ack_reg_syn_3.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "end": "u_video/recovery_telemetry/ack1_reg_syn_3.ima (falling edge triggered by clock sys_clk_50m  { rise@0.000000ns  fall@10.000000ns  period=20.000000 })",
+      "budget": "3.334ns { sys_clk_50m falling@30.000ns - HDMI_PIXEL_CLK rising@26.666ns }",
+      "delay": "0.614ns (cell 0.213ns (34%), net 0.401ns (66%))"
+    },
+    {
+      "slack_ns": 3.491,
+      "check": "hold",
+      "begin": "u_video/recovery_telemetry/ack_reg_syn_3.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "end": "u_video/recovery_telemetry/ack1_reg_syn_3.ima (falling edge triggered by clock sys_clk_50m  { rise@0.000000ns  fall@10.000000ns  period=20.000000 })",
+      "budget": "3.332ns { HDMI_PIXEL_CLK rising@0.000ns - sys_clk_50m falling@-3.332ns }",
+      "delay": "0.231ns (cell 0.091ns (39%), net 0.140ns (61%))"
+    }
+  ]
+}

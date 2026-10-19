@@ -1,0 +1,8 @@
+{
+ "status": "stopped_superseded_by_fault_count_snapshot_fix",
+ "observed_at": "2026-10-17T23:15:38+08:00",
+ "verified_pid": 15204,
+ "verified_start": "2026-10-17T23:13:31+08:00",
+ "deliverable": false,
+ "reason": "During diagnostic field review, successful rows were found to overwrite the retained fault beat counts. The targeted before/after test confirmed the defect and correction. Stopped during synthesis; inputs, log and summary retained."
+}

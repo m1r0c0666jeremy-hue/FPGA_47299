@@ -1,0 +1,223 @@
+(0, 0, 0, 48, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 1, 320, 204, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 2, 480, 282, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 0, 0, 48, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 1, 320, 204, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 0, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 0, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 2, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 2, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 3, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 480, 282, 3, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        480 y0=        282 frames=          1 pixels=     798720 DDR=      38880 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(0, 0, 0, 48, 0, 1, 2, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     164160 black=     733440
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 33551170808 (1ps)
+
+(0, 0, 0, 48, 0, 1, 2, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     288720 black=      69120
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 33551170808 (1ps)
+
+(0, 0, 0, 48, 0, 2, 3, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          3 pixels=    2396160 DDR=     298560 black=     815360
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 50051995808 (1ps)
+
+(0, 0, 0, 48, 0, 2, 3, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          3 pixels=    2396160 DDR=     304560 black=     785920
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 50051995808 (1ps)
+
+(0, 0, 0, 48, 0, 0, 2, 0)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     189120 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 33551170808 (1ps)
+
+(0, 0, 0, 48, 0, 0, 2, 1)
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     189120 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 33551170808 (1ps)
+
+(1, 2, 960, 564, 1, 0, 1, 0)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        960 y0=        564 frames=          1 pixels=     798720 DDR=      38640 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)
+
+(1, 2, 960, 564, 1, 0, 1, 1)
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        960 y0=        564 frames=          1 pixels=     798720 DDR=      38400 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\stable_video\tb_stable_video.sv:149: $finish called at 17050345808 (1ps)

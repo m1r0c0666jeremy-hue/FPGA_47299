@@ -1,0 +1,2 @@
+CAL_ARITHMETIC_PRIVATE_PASS 200000 RGB/quantile/count/frame arrays, selected gain products, unchanged state scheduling
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\cal_arithmetic_private_20261018_002147_417992\tb.sv:41: $finish called at 200000 (1s)

@@ -1,0 +1,48 @@
+{
+  "zip": "D:/BaiduNetdiskDownload/HX1P35A_Contest_202606/7_lab_ex_2026_nosoft/lab_ex1_mipi_hdmi_SC500_720P.zip",
+  "zip_sha256": "c09fdcb845d7c9f6035e4c40c370c711310c348640eabce5da4ec88c6b77457b",
+  "files": [
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/td_project/camera_to_dsi_display_Runs/phy_1/route.qor",
+      "sha256": "9410db8acf68d268678e4a9cc6e70eb5ecc1e1d56aa59cfac00010c578542a96",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_route.qor",
+      "local": null,
+      "local_equal": null
+    },
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/td_project/camera_to_dsi_display_Runs/phy_1/settings.cfg",
+      "sha256": "d431e16d7795b8b953e860fc34a6781f1947ae8494e3bce7432cb9aecfe3cee3",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_settings.cfg",
+      "local": null,
+      "local_equal": null
+    },
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/constraints_source/timing.sdc",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_timing.sdc",
+      "local": "user_source/constraints_source/timing.sdc",
+      "local_equal": true
+    },
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/mc_to_user_interface.v",
+      "sha256": "feb0e79b852ce9ae3319bdd8cb563a3a829498e487f9252f89818482651ff527",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_mc_to_user_interface.v",
+      "local": "user_source/hdl_source/mc_to_user_interface.v",
+      "local_equal": true
+    },
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/ph1p35_ddr/ph1p35_324_ddr_wrapper.v",
+      "sha256": "891e2838ab36107b05bd23f67967f8ef3f9e9564f2fb022ec382f54e233e9e8d",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_ph1p35_324_ddr_wrapper.v",
+      "local": "user_source/hdl_source/ph1p35_ddr/ph1p35_324_ddr_wrapper.v",
+      "local_equal": true
+    },
+    {
+      "zip_entry": "lab_ex1_mipi_hdmi_SC500_720P/lab_ex1_mipi_hdmi/user_source/hdl_source/video_in.v",
+      "sha256": "811f5261715885023fddbd1f556e0c04db6b8523a9d68167482d237069c7898d",
+      "reference_file": "build/refined_reference_review_20261018_1638/lab1_video_in.v",
+      "local": "user_source/hdl_source/video_in.v",
+      "local_equal": false
+    }
+  ]
+}

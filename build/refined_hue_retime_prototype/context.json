@@ -1,0 +1,7 @@
+{
+  "private_not_adopted": true,
+  "original_sha256": "f6f2e2dbe1880af14a6b1aae033f94e6bfa341b2ac1d9bba9576e6813565db84",
+  "candidate_sha256": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+  "pipeline_cycles": 4,
+  "model_thresholds_changed": false
+}

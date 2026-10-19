@@ -1,0 +1,33 @@
+{
+  "stage": "place",
+  "head": "75b5bb2921ed89c3c30b55ff12af7894569f6336",
+  "head_after": "cb9cae62cab344eb17cf72695586850fa3fa2399",
+  "route_effort": "normal",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": 128,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "checkpoints": {
+    "target_color_regions_gate.db": "7912626cd9d8082d18f36c238724adb05a664a6a861f5585bce084a8022544e6",
+    "target_color_regions_placed.db": "cdb943cd5c1079516d0955e99885c021495592794a61df40ba8c8d0ba45baefb"
+  },
+  "resources": {
+    "slice": 19741,
+    "lut6": 19111,
+    "reg": 23283,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

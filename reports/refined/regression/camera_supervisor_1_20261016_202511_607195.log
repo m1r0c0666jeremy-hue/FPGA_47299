@@ -1,0 +1,3 @@
+
+REFINED_CAMERA_NACK_PASS transient byte NACK, full soft-reset replay, stored gain and three-frame recovery
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_supervisor_1_20261016_202511_607195\tb.sv:28: $finish called at 17700000 (1ps)

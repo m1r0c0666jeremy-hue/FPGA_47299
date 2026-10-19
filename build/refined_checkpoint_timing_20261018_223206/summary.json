@@ -1,0 +1,65 @@
+{
+  "probe_only": true,
+  "confidence": "Placed / Manhattan; NOT final routed timing",
+  "source": "build/refined_timing_paths_place_20261018_222507/target_color_regions_placed.db",
+  "sha256": "bf0c4d8969130c59d343369c5c8eb3983db7167bfdb8fe7d5d7f078504d07539",
+  "checkpoint_unchanged": true,
+  "exit_code": 0,
+  "tool_script_executed": true,
+  "reported_paths": 1031,
+  "worst_paths": {
+    "setup": [
+      {
+        "slack_ns": 0.999,
+        "check": "setup",
+        "begin": "u_video/u_scaler/pixel_quad[16]_syn_6.clk (rising edge triggered by clock HDMI_SERIAL_CLK  { rise@0.000000ns  fall@1.333000ns  period=2.666000 })",
+        "end": "u_video/u_hdmi_tx/u_hdmi2phy_wrapper/u3_lane_lvds_8_1/S_shift_data_reg[3]_syn_2.imf (rising edge triggered by clock HDMI_SERIAL_CLK  { rise@0.000000ns  fall@1.333000ns  period=2.666000 })",
+        "budget": "2.666ns { HDMI_SERIAL_CLK rising@2.666ns - HDMI_SERIAL_CLK rising@0.000ns }",
+        "delay": "1.466ns (cell 0.354ns (24%), net 1.112ns (76%))"
+      },
+      {
+        "slack_ns": 1.044,
+        "check": "setup",
+        "begin": "u_video/u_hdmi_tx/u_hdmi2phy_wrapper/u3_lane_lvds_8_1/S_shift_data_reg[3]_syn_2.clk (rising edge triggered by clock HDMI_SERIAL_CLK  { rise@0.000000ns  fall@1.333000ns  period=2.666000 })",
+        "end": "u_video/u_hdmi_tx/u_hdmi2phy_wrapper/u3_lane_lvds_8_1/S_shift_data_reg[5]_syn_2.imf (rising edge triggered by clock HDMI_SERIAL_CLK  { rise@0.000000ns  fall@1.333000ns  period=2.666000 })",
+        "budget": "2.666ns { HDMI_SERIAL_CLK rising@2.666ns - HDMI_SERIAL_CLK rising@0.000ns }",
+        "delay": "1.421ns (cell 0.343ns (24%), net 1.078ns (76%))"
+      },
+      {
+        "slack_ns": 1.057,
+        "check": "setup",
+        "begin": "camera_relay/cam_to_ref/payload_reg[9]_syn_2.clk (rising edge triggered by clock pll_clk_24m  { rise@0.000000ns  fall@21.000000ns  period=42.000000 })",
+        "end": "u_video/u_scaler/c1/raw_b[4]_syn_684.imb (rising edge triggered by clock pll_clk_100m  { rise@0.000000ns  fall@5.000000ns  period=10.000000 })",
+        "budget": "2.000ns { pll_clk_100m rising@170.000ns - pll_clk_24m rising@168.000ns }",
+        "delay": "0.681ns (cell 0.215ns (31%), net 0.466ns (69%))"
+      }
+    ],
+    "hold": [
+      {
+        "slack_ns": -0.304,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_mdl_cal_wrapper/mdl_cal[1]$u_ddrphy_mdl_cal/cal_en_reg_syn_3.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/u_ddrphy_byte.cal_en[0] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.244ns (cell -0.401ns (164%), net 0.157ns (-64%))"
+      },
+      {
+        "slack_ns": -0.275,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/u_ddrphy_cmd_execution/dhi_addr_reg[12]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/ac_byte[2]$ac_byte_used$u_ddrphy_ac_byte_wrapper/u_ddrphy_byte.ctl_wdata[9] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.215ns (cell -0.283ns (131%), net 0.068ns (-31%))"
+      },
+      {
+        "slack_ns": -0.274,
+        "check": "hold",
+        "begin": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy_cmd_wrapper/u_ddrphy_cmd_execution/dhi_addr_reg[12]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "end": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/ac_byte[2]$ac_byte_used$u_ddrphy_ac_byte_wrapper/u_ddrphy_byte.ctl_wdata[8] (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+        "budget": "0.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+        "delay": "-0.214ns (cell -0.282ns (131%), net 0.068ns (-31%))"
+      }
+    ]
+  },
+  "status": "PASS"
+}

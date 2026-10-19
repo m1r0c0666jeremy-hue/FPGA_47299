@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "build\\refined_cal_math_prototype\\reference.v": "674f7dbb6482846867079729d553259b39b0ea33ef746d5cb0aaf0e9d37ed60d",
+    "build\\refined_cal_math_prototype\\stable_calibration.v": "3ba8b2a9a3ebe9169835375c2b01b03795f3d3a88bc5315a783a037123fae735",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\cal_arithmetic_private_20261018_002147_417992"
+}

@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_controls.v": "6bf2678304281d7700fdaf696fa1ca894447c174c0a5fd198f1a4059d8e0d854",
+    "rtl\\color_regions\\refined_controls.v": "eeff5dffe122363b8daf38266642249d178d67af60651c789a3e1d9b78f80c2a"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\controls_repeat_equivalence_135_20261019_092010_410569"
+}

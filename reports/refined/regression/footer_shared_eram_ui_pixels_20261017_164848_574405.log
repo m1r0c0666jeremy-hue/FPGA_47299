@@ -1,0 +1,4 @@
+D:\aaa_FPGA\transparent-ring-stability\build\refined_footer_eram_prototype\refined_osd.v:123: error: Unable to bind wire/reg/memory `footer_col' in `tb.dut'
+D:\aaa_FPGA\transparent-ring-stability\build\refined_footer_eram_prototype\refined_osd.v:171:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\build\refined_footer_eram_prototype\refined_osd.v:123: error: Unable to elaborate r-value: (!(I_de))?(footer_col):(((x)==('sd0))?(6'd0):(((((x)>=('sd16))&&((x)<(('sd16)+((COLS)*(FONT)))))&&((footer_px)==((FONT)-('sd1))))?((footer_col)+(1'd1)):(footer_col)))
+2 error(s) during elaboration.

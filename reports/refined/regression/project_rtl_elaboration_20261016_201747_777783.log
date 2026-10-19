@@ -1,0 +1,11 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:160: error: Unable to bind wire/reg/memory `converter_tag' in `criticalwork_top.u_camera.u_isp_top.u_demosaic.raw_matrix_3x3_buffer_d'
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:327:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:160: error: Failed to elaborate input port 'I_frame_tag' expression (converter_tag) in instance raw_matrix_3x3_buffer_d.zhenghe_d of module: refined_zhenghe.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:160: error: Net zhenghe_tag is not defined in this context.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:327:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:160: error: Output port expression must support a continuous assignment.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_raw_matrix_3x3_buffer.v:160:      : Port 2 (O_frame_tag) of refined_zhenghe is connected to criticalwork_top.u_camera.u_isp_top.u_demosaic.raw_matrix_3x3_buffer_d.zhenghe_tag
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:66: error: Unable to bind wire/reg/memory `ready_capture['sd1]' in `criticalwork_top.u_camera'
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:70:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\stable_camera_capture.v:66: error: Unable to elaborate condition expression.
+6 error(s) during elaboration.

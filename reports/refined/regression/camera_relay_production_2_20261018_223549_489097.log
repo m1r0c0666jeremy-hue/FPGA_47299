@@ -1,0 +1,3 @@
+REFINED_CAMERA_FAILURE_PASS mode2 initial+3 retries then latched failure
+CAMERA_RELAY_SUPERVISOR_PASS mode2 gain ACK, event invalidation, ready and diagnostic feedback
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_relay_production_2_20261018_223549_489097\tb.sv:42: $finish called at 28841442 (1ps)

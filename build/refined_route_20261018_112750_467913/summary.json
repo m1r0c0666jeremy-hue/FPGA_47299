@@ -1,0 +1,130 @@
+{
+  "stage": "full",
+  "head": "e97317b11cae6edb30f992e3ada78a2d74ab61f9",
+  "head_after": "c6573a2ea06a19f31d16e8a161e5ac174c97590a",
+  "route_effort": "normal",
+  "placement_strategy": 1,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": null,
+  "exit_code": 4294967295,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": {
+    "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+    "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+    "selected": {
+      "AreaOptimizeHigh": {
+        "description": "Does mapping with pursuing lowest area as much as possible",
+        "is_syn": "syn",
+        "params": [
+          {
+            "step": "gate",
+            "param": "add_map_lut_struct",
+            "val": "high"
+          },
+          {
+            "step": "gate",
+            "param": "map_mode",
+            "val": "area_prior"
+          },
+          {
+            "step": "gate",
+            "param": "multi_thread_mapping",
+            "val": "partition"
+          },
+          {
+            "step": "rtl",
+            "param": "resource_sharing",
+            "val": "auto"
+          },
+          {
+            "step": "rtl",
+            "param": "shifter_style",
+            "val": "shifter_reg"
+          }
+        ]
+      },
+      "CongestionHigh": {
+        "description": "Makes extra optimization on macros besides those actions on unit cells to get lower congestion result.",
+        "is_syn": "phy",
+        "params": [
+          {
+            "step": "place",
+            "param": "opt_timing",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "ofv",
+            "val": "70"
+          },
+          {
+            "step": "place",
+            "param": "opt_max_density",
+            "val": "50"
+          },
+          {
+            "step": "place",
+            "param": "target_density",
+            "val": "0.6"
+          },
+          {
+            "step": "place",
+            "param": "target_density_pp",
+            "val": "0.7"
+          },
+          {
+            "step": "place",
+            "param": "aggressive_opt",
+            "val": "20"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_beeline_opt",
+            "val": "2"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_gp",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "non_crit_opt",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "post_place_opt",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "enable_congestion_recovery",
+            "val": "on"
+          },
+          {
+            "step": "route",
+            "param": "post_route_opt",
+            "val": "high"
+          }
+        ]
+      }
+    }
+  },
+  "checkpoint_provenance": {
+    "parent": "build/refined_place_20261018_012202",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "1c7009512c757ec64b0c9126a4661e7e048a9ab549350952c522564e388660ec",
+    "parent_summary_sha256": "8e7242b2313fe3699f5e6bba1e710c90c1eec1c2ec1e48c6f97af14d3a1557c2",
+    "parent_context_sha256": "b6032e18ff5e22f2067388d021dd2c72f08af0e93d517be10dea376113ca7746",
+    "parent_inputs_sha256": "956614e8e3a87cf570cbdf824df973f840fdcda92ab162625b79f8c9a47db856"
+  },
+  "checkpoint_unchanged": true
+}

@@ -1,0 +1,3 @@
+
+REFINED_CAMERA_FAILURE_PASS mode4 initial+3 retries then latched failure
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_supervisor_4_20261016_205204_783558\tb.sv:29: $finish called at 78150000 (1ps)

@@ -1,0 +1,3 @@
+REFINED_HISTORY_PASS private_history_pipeline full RGB frame, four old-location decoys plus new central thin marker, selected count48 x641
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\capture_history_pipeline_expired_identity_20261019_015318_752121\tb.sv:31: $finish called at 2613340 (1s)
+PRIVATE_CAPTURE_HISTORY_PIPELINE_PASS clocks261334 starts1 exact-cycle metadata/output

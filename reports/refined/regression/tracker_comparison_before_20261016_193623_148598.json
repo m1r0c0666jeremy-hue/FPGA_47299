@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "build\\refined_baseline_20261016_190016\\stable_tracker_before.v": "d151ed230a0f991826bc3eb428dcd0bbdce99d123e4a90d5b43be7fbb39214b3"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\tracker_comparison_before_20261016_193623_148598"
+}

@@ -1,0 +1,2 @@
+RING_DISTRIBUTION_PASS blue_metal_reflection baseline=0 success=1 cycles=1701396 model=b29b6783c8000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\cal_math_calibration_after_blue_metal_reflection_20261018_003922_811815\tb.sv:11: $finish called at 17014000 (1s)

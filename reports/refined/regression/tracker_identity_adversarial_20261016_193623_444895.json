@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_tracker.v": "0ea5243571316d577187d473f932fc2cb656d7aead970ab7221692bfe40efc9a"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\tracker_identity_adversarial_20261016_193623_444895"
+}

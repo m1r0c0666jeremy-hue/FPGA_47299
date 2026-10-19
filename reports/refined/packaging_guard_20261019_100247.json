@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "expected_build_rejection": true,
+  "cases": [
+    {
+      "attempt": "build/refined_full_20261017_224454",
+      "build_exit_code": 4294967295,
+      "guard_exit_code": 1,
+      "checkpoint": false
+    },
+    {
+      "attempt": "build/refined_route_20261018_010650_797911",
+      "build_exit_code": 1,
+      "guard_exit_code": 1,
+      "checkpoint": true
+    },
+    {
+      "attempt": "build/refined_route_20261018_233608_631875",
+      "build_exit_code": 0,
+      "guard_exit_code": 1,
+      "checkpoint": true
+    }
+  ],
+  "inputs": {
+    "scripts/package_refined.py": "971dfde59fc489ea0e0619e8562a6c197bf4d7712ba277dbb79a08224e31e40e",
+    "scripts/audit_refined.py": "5d896dd2965f9b76a4e45799f76b3c7f4cc8268bb30097bb4c3f866eb27f5ad4",
+    "scripts/test_refined_packaging_guard.py": "fefbb3a7785809e5b36c5dc4dbefead804028bb40641a9e91155fd034398c780",
+    "build/refined_full_20261017_224454/summary.json": "f0966b33398fc28c9a63c381ddf493d96cea99291aefdb12503b41f8375af331",
+    "build/refined_route_20261018_010650_797911/summary.json": "d9f9a405cbe313038cc92ef67a376de5fa25f6525ce3dbf49c56a069c84cdd26",
+    "build/refined_route_20261018_233608_631875/summary.json": "69ab8f5e2a049310ce1258608f27a64416e28ccfc196c004a3349ec9849aa551"
+  },
+  "protected_document_hashes": {
+    "README.md": "fe6fbe293ce9a8a88d4328b8ebc9d9c7ed5d1dd9075245381a069d115669c778",
+    "reports/refined/最终验证报告.md": "bb8b9649d9aba64bda3c620e592020eea5725e172904593c9ad8843f92e43f52",
+    "docs/颜色视频显示改进_上板一页.md": "c8311d7da594d56d521e5461cd79d48284754b5dffb710c116ec8c46bd47488a"
+  }
+}

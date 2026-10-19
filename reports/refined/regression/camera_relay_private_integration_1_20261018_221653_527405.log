@@ -1,0 +1,3 @@
+REFINED_CAMERA_NACK_PASS transient byte NACK, full soft-reset replay, stored gain and three-frame recovery
+CAMERA_RELAY_SUPERVISOR_PASS mode1 gain ACK, event invalidation, ready and diagnostic feedback
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_relay_private_integration_1_20261018_221653_527405\tb.sv:42: $finish called at 75670450 (1ps)

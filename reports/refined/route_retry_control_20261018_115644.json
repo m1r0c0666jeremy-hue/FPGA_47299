@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "physical_routing": false,
+  "inputs": {
+    "build/refined_route_20261018_115500_912935/run.tcl": "380d34515ea753d418e542c9a09755201f3d6aabbaff3a47f4ba2486e2e64269",
+    "build/refined_retry_control_20261018_115644/run.tcl": "906551b9d8a028a5ace58bc9b0f21a6db5725dbf1c2b42b5a9144639783c2a3e",
+    "scripts/run_refined_route.py": "d9846e7ed9d924708572216a90c64a0298bfa60ac5558447e9101b441ead62f0",
+    "scripts/test_refined_route_retry.py": "580bafaa447656b6fb4cbab50e7afa244ecdbc8dad28b90ab8828035be05800b"
+  }
+}

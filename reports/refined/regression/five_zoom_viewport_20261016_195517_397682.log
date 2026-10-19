@@ -1,0 +1,3 @@
+
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\five_zoom_viewport_20261016_195517_397682\tb.sv:12: upper clamp not reached
+       Time: 42040  Scope: tb

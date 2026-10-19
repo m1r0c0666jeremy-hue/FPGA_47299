@@ -1,0 +1,3 @@
+
+REFINED_SNAPSHOT_FAULT_PASS once per actual display frame, no invalid-bank reads, diagnosis survives stream reset
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\final_missing_snapshot_20261016_204222_424059\tb.sv:8: $finish called at 1230 (1s)

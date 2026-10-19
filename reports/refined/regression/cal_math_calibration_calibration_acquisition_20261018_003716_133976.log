@@ -1,0 +1,17 @@
+REFINED_CALIBRATION_STEP kind0 status40
+REFINED_CALIBRATION_STEP kind4 status60
+REFINED_CALIBRATION_STEP kind1 status80
+REFINED_CALIBRATION_STEP kind2 status00
+REFINED_CALIBRATION_STEP kind3 status22
+REFINED_CALIBRATION_STEP kind7 status22
+REFINED_CALIBRATION_STEP kind8 status23
+REFINED_CALIBRATION_STEP kind4 status40
+REFINED_CALIBRATION_STEP kind4 status60
+REFINED_CALIBRATION_STEP kind9 status6a
+REFINED_CALIBRATION_STEP kind10 status64
+REFINED_CALIBRATION_STEP kind4 status40
+REFINED_CALIBRATION_STEP kind4 status60
+REFINED_CALIBRATION_STEP kind5 status80
+REFINED_CALIBRATION_STEP kind6 status00
+RING_CALIBRATION_PASS red/blue and yellow/purple white/background/A/B eight full frames, 3px band, quantiles, neutral background, independent profiles, cancel, dark/overexposure/gain/sample/mixed rejects, gain invalidate, SOF versions, reset
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\cal_math_calibration_calibration_acquisition_20261018_003716_133976\tb.sv:81: $finish called at 303054910 (1s)

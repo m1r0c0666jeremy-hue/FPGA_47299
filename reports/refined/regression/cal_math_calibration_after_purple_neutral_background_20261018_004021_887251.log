@@ -1,0 +1,2 @@
+RING_DISTRIBUTION_PASS purple_neutral_background baseline=0 success=1 cycles=1048660 model=c926a643c8000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\cal_math_calibration_after_purple_neutral_background_20261018_004021_887251\tb.sv:11: $finish called at 10486640 (1s)

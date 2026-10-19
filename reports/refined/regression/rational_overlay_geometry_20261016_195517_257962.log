@@ -1,0 +1,3 @@
+
+REFINED_GEOMETRY_PASS 360 rational-reference cases, all zooms/directions, odd extents, clipped boxes, sample/guide and mirrored point centres
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\rational_overlay_geometry_20261016_195517_257962\tb.sv:9: $finish called at 72040 (1s)

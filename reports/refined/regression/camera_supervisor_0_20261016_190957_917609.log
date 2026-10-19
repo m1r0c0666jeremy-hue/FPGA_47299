@@ -1,0 +1,2 @@
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\camera_supervisor_0_20261016_190957_917609\tb.sv:5: error: parameter `CLK_1` not found in `tb.dut`.
+2 error(s) during elaboration.

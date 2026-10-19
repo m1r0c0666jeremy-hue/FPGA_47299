@@ -1,0 +1,3 @@
+
+RING_CALIBRATION_PASS red/blue and yellow/purple white/background/A/B eight full frames, 3px band, quantiles, neutral background, independent profiles, cancel, dark/overexposure/gain/sample/mixed rejects, gain invalidate, SOF versions, reset
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\calibration_acquisition.sv:80: $finish called at 303054910 (1s)

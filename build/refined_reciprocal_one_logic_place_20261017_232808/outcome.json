@@ -1,0 +1,8 @@
+{
+ "status": "stopped_private_gate_dsp_over_capacity",
+ "verified_pid": 12696,
+ "verified_start": "2026-10-17T23:28:11+08:00",
+ "gate_resources": {"estimated_slice": 22203, "eram": 105, "dsp": 41},
+ "deliverable": false,
+ "reason": "One small trial multiplier correctly moved to LUTs but the mapper allocated that DSP to calibration; total remained41. Gate area improvement was negligible and ERAM rose by6. Private prototype not adopted; production40ef1ca unchanged. No final physical result claimed."
+}

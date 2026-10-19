@@ -1,0 +1,3 @@
+
+RING_DIAGNOSTICS_PASS eight full RGB frames, raw/filter/candidate/support/decision counts, frozen model versions, mailbox blockage and bank reuse
+D:\aaa_FPGA\transparent-ring-stability\build\sim\ring_calibration\diagnostics_capture.sv:32: $finish called at 20563120 (1s)

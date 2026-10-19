@@ -1,0 +1,19 @@
+{
+  "assets/osd/anlogic/refined_ui_manifest.json": "6f5d0bc7917ace5b1dd8270fd2997d75597debf8d61e0c36070d3f7de6bf58ec",
+  "rtl/color_regions/refined_controls.v": "3feb09319ba3cddaac3f7679edbf489a06a772ce282707c942c6a9b79e9653a6",
+  "rtl/color_regions/refined_footer_program_rom.v": "e31d70374e6e02771b4c6a52ee246982f88044ba18800c7ee55463b9bb4f2741",
+  "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+  "rtl/color_regions/refined_osd.v": "f54d426f4ebf42b387973bb9f07b678fcc98e1eb196ff63855b00d98e66a71fe",
+  "rtl/color_regions/stable_footer_glyph_rom.v": "7c7da05c622cafc58cb2f646f8af15f518e6f7486add622c2005eaafc5e4b615",
+  "rtl/color_regions/stable_footer_program_rom.v": "6dc9fcd88de34446f8cda8e590fe978b31d294ac86b14e4852a45a5f207f4d3b",
+  "rtl/color_regions/stable_footer_text_rom.v": "740bede43a2cd79173dcfff21365e95981089824d928b5e710e532e9c5489be9",
+  "rtl/color_regions/stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+  "rtl/color_regions/stable_osd.v": "c00e6e6f58007dbb99374d046f838859c27d723a110fc301ac89b76e41c3cfe6",
+  "scripts/generate_refined_ui.py": "6418c019e1007916680075d3618870e6953b3497a41fe7a986132afe34bd0bb6",
+  "scripts/refined_controls_logic.py": "2c7f5f487313ffe7635b069447375f237794174effd3e74048b2d6ae3558f7e0",
+  "scripts/refined_osd.v.txt": "d53113fe2e0c1ed65fc0890c30fca236191f1df5df10d2ac312e8e118bc9e3de",
+  "scripts/test_refined_control_equivalence.py": "382884daee4f489244c14888f20b8587924503513618c657622ccaff26d1dade",
+  "scripts/test_refined_controls.py": "07db23614bd15e5345210f443b0476d909807c2c00883ab7050a31098956a2ca",
+  "scripts/test_refined_footer_abort.py": "126c05df777f14d48cbe7a047d11325485685e0c5df361484fcfa5f735aac49c",
+  "scripts/test_refined_v4_ui.py": "a5d1b85d29a017fa0243d361fb2ea4a32c82ee109e9943d47e303aa1d0cbbe65"
+}

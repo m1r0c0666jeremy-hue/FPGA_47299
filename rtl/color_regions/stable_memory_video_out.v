@@ -4,9 +4,13 @@
 // Pin compatibility and physical camera/display operation remain unverified.
 `default_nettype none
 module stable_memory_video_out #(parameter integer DEBUG_MODE = 0) (
+    input wire [31:0] I_source_id,I_source_us,I_capture_us,I_board_us,I_latest_gray,
+    input wire I_source_time_valid,input wire [1:0] I_model_state,input wire [41:0] I_quality,
+    input wire I_camera_event,I_camera_ready,input wire [17:0] I_camera_status,
     input wire I_sys_clk, input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
-    input wire [1:0] I_zoom,
+    input wire [2:0] I_zoom,
+    input wire I_rotate,input wire [1:0] I_diag,
     input wire I_pair,I_tracking,I_show,I_conflict,input wire [7:0] I_session,
     input wire [95:0] I_detect_rgb,input wire I_detect_sof,I_detect_valid,
     input wire [127:0] I_models,input wire [15:0] I_revision,input wire [23:0] I_gains,
@@ -44,6 +48,15 @@ wire        S_ddr_user_rd_valid;
 wire        S_ddr_user_ready;
 wire[127:0] S_ddr_user_wr_data;
 wire        S_ddr_user_wr_en;
+wire S_init_calib_complete;wire [1:0] source_mask;
+wire committed_write;wire [24:0] committed_address;wire [9:0] outstanding_reads;wire unexpected_return;
+wire [31:0] accepted_reads;
+wire controller_reset_n,stream_async_n,stream_pixel_n,read_fault_toggle,recovery_failed;
+wire [15:0] stream_epoch,recovery_count;wire [1:0] recovery_retries;wire [3:0] recovery_reason;
+wire [127:0] ddr_diagnostics,pixel_diagnostics;
+refined_ddr_recovery #(.CYCLES_PER_MS(50000)) recover_ddr(.clk(I_sys_clk),.rst_n(I_rst_n),.init_ready(S_init_calib_complete),.fault_toggle(read_fault_toggle),
+ .controller_n(controller_reset_n),.pipeline_n(stream_async_n),.epoch(stream_epoch),.recoveries(recovery_count),.retries(recovery_retries),.reason(recovery_reason),.failed(recovery_failed));
+refined_reset_bridge pixel_stream_reset(I_pixel_clk,stream_async_n,stream_pixel_n);
 wire        S_hdmi_de;
 wire[3:0]   S_hdmi_debug_status;
 wire        S_hdmi_hsync;
@@ -58,7 +71,6 @@ wire        S_hdmi_serial_clk;
 wire        S_hdmi_user;
 wire        S_hdmi_vsync;
 wire        S_hdmi_window_rd_en;
-wire        S_init_calib_complete;
 wire[24:0]  S_mc_app_addr;
 wire[2:0]   S_mc_app_cmd;
 wire        S_mc_app_en;
@@ -97,8 +109,11 @@ assign S_video_out_vsync = ~S_hdmi_vsync;
 wire write_frame_begin,capture_overflow;
 wire [1:0] write_frame_bank;
 wire [31:0] write_frame_id,capture_frame_id;
-video_in u_video_in(
-        .I_rst_n              (  S_rst_n             ),
+wire [31:0] capture_frame_us,write_frame_us;wire [15:0] capture_epoch,write_epoch;wire capture_time_valid,write_time_valid;
+refined_video_in u_video_in(
+        .I_frame_us(capture_frame_us),.I_epoch(capture_epoch),.I_time_valid(capture_time_valid),
+        .O_frame_us(write_frame_us),.O_epoch(write_epoch),.O_time_valid(write_time_valid),
+        .I_rst_n              (  stream_async_n      ),
 
         .I_camera_clk         ( S_csi_rx_clk          ),
         .I_camera_frame_start ( S_ISP_O_tuser  ),
@@ -133,18 +148,21 @@ video_in u_video_in(
 
     wire [10:0] active_cx,roi_x;
     wire [9:0] active_cy,roi_y;
-    wire [1:0] active_zoom,frame_mode,selected_bank;
+    wire active_rotate;wire [2:0] active_zoom;wire [1:0] frame_mode,selected_bank;
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
-    wire [639:0] active_meta;
+    wire [767:0] active_meta;
+    wire [31:0] image_us,latest_image_id;wire [15:0] image_epoch;wire image_time_valid;
+    wire latency_valid;wire [31:0] latency_us,frame_age;
+    refined_gray_sync latest_source(I_pixel_clk,I_process_rst_n,I_latest_gray,latest_image_id);
     wire detection_valid,sample_valid;
     wire active_pair,active_show,tip_valid,video_ok,frame_commit,selected_good;
     (* async_reg="true", syn_preserve=1 *) reg [1:0] capture_reset,ddr_reset;
     wire capture_rst_n=capture_reset[1],ddr_rst_n=ddr_reset[1];
-    always @(posedge I_capture_clk or negedge I_rst_n)
-        if(!I_rst_n) capture_reset<=0;else capture_reset<={capture_reset[0],1'b1};
-    always @(posedge S_ddr_clk or negedge I_rst_n)
-        if(!I_rst_n) ddr_reset<=0;else ddr_reset<={ddr_reset[0],1'b1};
+    always @(posedge I_capture_clk or negedge stream_async_n)
+        if(!stream_async_n) capture_reset<=0;else capture_reset<={capture_reset[0],1'b1};
+    always @(posedge S_ddr_clk or negedge stream_async_n)
+        if(!stream_async_n) ddr_reset<=0;else ddr_reset<={ddr_reset[0],1'b1};
     // Control-session bundle prevents results from a previous enable cycle
     // from reappearing after rapid stop/restart.
     wire command_ready,command_valid;
@@ -152,51 +170,65 @@ video_in u_video_in(
     reg [9:0] command_sent,command_active;
     wire [9:0] command_now={I_pair,I_session,I_tracking};
     wire command_send=command_now!=command_sent && command_ready;
-    always @(posedge I_pixel_clk or negedge I_process_rst_n)
-        if(!I_process_rst_n) command_sent<=0;else if(command_send) command_sent<=command_now;
+    always @(posedge I_pixel_clk or negedge stream_pixel_n)
+        if(!stream_pixel_n) command_sent<=0;else if(command_send) command_sent<=command_now;
     always @(posedge I_capture_clk or negedge capture_rst_n)
         if(!capture_rst_n) command_active<=0;else if(command_valid) command_active<=command_data;
     target_mailbox #(.WIDTH(10)) u_command(
-        .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
+        .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(command_send),.S_data(command_now),.S_ready(command_ready),
         .D_clk(I_capture_clk),.D_rst_n(capture_rst_n),.D_valid(command_valid),.D_data(command_data));
     wire capture_result,ddr_result,result_ready;
-    wire [639:0] capture_meta,ddr_meta;
-    stable_capture u_detection(
+    wire [767:0] capture_meta,ddr_meta;
+    stable_capture #(.V4(1)) u_detection(
+        .I_source_id(I_source_id),.I_source_us(I_source_us),.I_now_us(I_capture_us),.I_epoch(stream_epoch),
+        .I_time_valid(I_source_time_valid),.I_model_state(I_model_state),.I_quality(I_quality),
+        .O_frame_us(capture_frame_us),.O_epoch(capture_epoch),.O_time_valid(capture_time_valid),
         .I_models(I_models),.I_revision(I_revision),.I_gains(I_gains),.I_cal_status(I_cal_status),.I_cal_active(I_cal_active),.I_needs_cal(I_needs_cal),
         .I_clk(I_capture_clk),.I_rst_n(capture_rst_n),.I_sof(I_detect_sof),.I_valid(I_detect_valid),
         .I_fault(capture_overflow),.I_rgb(I_detect_rgb),.I_pair(I_frame_pair),.I_enable(command_active[0]),.I_session(command_active[8:1]),
         .I_result_ready(result_ready),.O_dropped(),.O_frame_id(capture_frame_id),.O_valid(capture_result),.O_meta(capture_meta));
-    target_mailbox #(.WIDTH(640)) u_results(
+    target_mailbox #(.WIDTH(768)) u_results(
         .S_clk(I_capture_clk),.S_rst_n(capture_rst_n),.S_send(capture_result),.S_data(capture_meta),.S_ready(result_ready),
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(ddr_result),.D_data(ddr_meta));
     // At every display VS request an atomic bank/generation/result snapshot.
     reg vs_last;
-    reg [1:0] mode_at_vs,zoom_at_vs;
+    reg rotate_at_vs;reg [1:0] diag_at_vs,mode_at_vs;reg [2:0] zoom_at_vs;
     always @(posedge I_pixel_clk or negedge I_process_rst_n)
-        if(!I_process_rst_n) begin vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;end
-        else begin vs_last<=S_hdmi_vsync;if(S_hdmi_vsync&&!vs_last) begin mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;end end
+        if(!I_process_rst_n) begin vs_last<=0;mode_at_vs<=0;zoom_at_vs<=0;rotate_at_vs<=1;diag_at_vs<=0;end
+        else begin vs_last<=S_hdmi_vsync;if(S_hdmi_vsync&&!vs_last) begin mode_at_vs<=I_process_mode;zoom_at_vs<=I_zoom;rotate_at_vs<=I_rotate;diag_at_vs<=I_diag;end end
     wire snap_request_ready,snap_request;wire [9:0] snapshot_command;
     target_mailbox #(.WIDTH(10)) u_snapshot_request(
-        .S_clk(I_pixel_clk),.S_rst_n(I_process_rst_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
+        .S_clk(I_pixel_clk),.S_rst_n(stream_pixel_n),.S_send(S_hdmi_vsync&&!vs_last && snap_request_ready),.S_data(command_now),.S_ready(snap_request_ready),
         .D_clk(S_ddr_clk),.D_rst_n(ddr_rst_n),.D_valid(snap_request),.D_data(snapshot_command));
     wire snapshot_ready,store_snapshot,pixel_snapshot;
-    wire [674:0] store_data,pixel_data;
-    stable_frame_store u_frame_store(
+    wire [851:0] store_data,pixel_data;
+    (* async_reg="true" *) reg [1:0] camera_event_d;reg camera_event_last;
+    always @(posedge S_ddr_clk or negedge ddr_rst_n)
+    if(!ddr_rst_n)begin camera_event_d<=0;camera_event_last<=0;end
+    else begin camera_event_d<={camera_event_d[0],I_camera_event};camera_event_last<=camera_event_d[1];end
+    wire invalidate_camera=camera_event_d[1]!=camera_event_last;
+    refined_frame_store #(.V4(1)) u_frame_store(
+        .I_frame_us(write_frame_us),.I_epoch(write_epoch),.I_time_valid(write_time_valid),.I_invalidate(invalidate_camera),
         .I_clk(S_ddr_clk),.I_rst_n(ddr_rst_n),.I_begin(write_frame_begin),.I_bank(write_frame_bank),.I_frame_id(write_frame_id),
-        .I_write(S_vi_ddr_wr_en),.I_addr(S_vi_ddr_wr_addr),.I_result(ddr_result),.I_meta(ddr_meta),
+        .I_write(committed_write),.I_addr(committed_address),.I_result(ddr_result),.I_meta(ddr_meta),
         .I_snapshot(snap_request && snapshot_ready),.I_command(snapshot_command),.O_snapshot(store_snapshot),.O_data(store_data),.O_selected_good(selected_good));
-    target_mailbox #(.WIDTH(675)) u_snapshot_response(
+    target_mailbox #(.WIDTH(852)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
-        .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
-    stable_display u_viewport(
-        .I_clk(I_pixel_clk),.I_rst_n(I_process_rst_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
+        .D_clk(I_pixel_clk),.D_rst_n(stream_pixel_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
+    stable_display #(.V4(1)) u_viewport(
+        .O_image_us(image_us),.O_epoch(image_epoch),.O_time_valid(image_time_valid),
+        .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
+        .I_clk(I_pixel_clk),.I_rst_n(stream_pixel_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
         .I_pair(I_pair),.O_pair(active_pair),.I_snapshot(pixel_snapshot),.I_data(pixel_data),.I_tracking(I_tracking),.I_show(I_show),.I_conflict(I_conflict),
-        .I_live(video_ok),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
+        .I_live(video_ok && I_camera_ready && stream_pixel_n),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
         .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status));
-    stable_line_reader u_scaler (
-        .I_frame_commit(frame_commit),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
+    refined_line_reader u_scaler (
+        .I_stream_n(stream_async_n),.O_fault_toggle(read_fault_toggle),.O_ddr_diag(ddr_diagnostics),.O_pixel_diag(pixel_diagnostics),
+        .I_accepted_reads(accepted_reads),.I_unexpected_return(unexpected_return),
+        .I_rotate(active_rotate),
+        .I_frame_commit(frame_commit && image_time_valid),.I_selected_good(selected_good),.I_models(active_meta[543:416]),
         .I_rst_n(S_rst_n), .I_ddr_clk(S_ddr_clk),
         .I_write_busy(S_video_in_wr_busy), .I_write_en(S_vi_ddr_wr_en), .I_read_buffer(selected_bank),.I_frame_id(selected_frame_id),
         .I_ddr_ready(S_ddr_user_ready && S_init_calib_complete), .I_ddr_valid(S_ddr_user_rd_valid),
@@ -208,9 +240,12 @@ video_in u_video_in(
         .O_rgb(S_hdmi_out_data), .O_mask(source_mask),.O_video_ok(video_ok)
     );
 
-    mc_to_user_interface u_mc_to_user_interface(
+    refined_mc_to_user_interface u_mc_to_user_interface(
+        .O_write_commit(committed_write),.O_write_addr(committed_address),
+        .O_outstanding_reads(outstanding_reads),.O_unexpected_return(unexpected_return),
+        .O_accepted_reads(accepted_reads),
         .I_clk                   ( S_ddr_clk               ),
-        .I_rst_n                 ( S_rst_n                 ),
+        .I_rst_n                 ( ddr_rst_n               ),
 
         .I_ddr_user_wr_en        ( S_ddr_user_wr_en        ),
         .I_ddr_user_rd_en        ( S_ddr_user_rd_en        ),
@@ -234,9 +269,9 @@ video_in u_video_in(
         .I_mc_app_rd_data_valid  ( S_mc_app_rd_data_valid  )
     );
 
-    ph1p35_324_ddr_wrapper u_ph1p35_324_ddr_wrapper(
+    refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper(
         .I_sys_clk              ( I_sys_clk              ),
-        .I_sys_rst_n            ( S_rst_n                ),
+        .I_sys_rst_n            ( controller_reset_n     ),
 
         .O_ddr_clk              ( S_ddr_clk              ),
         .O_init_calib_complete  ( S_init_calib_complete  ),
@@ -288,7 +323,7 @@ video_in u_video_in(
         .O_vtc_last    ( S_hdmi_last      )
     );
 
-    wire process_vs, process_hs, process_de;wire [1:0] source_mask;
+    wire process_vs, process_hs, process_de;
     wire [23:0] process_rgb;
     wire [1:0] actual_mode;
     // Display-side RGB processing leaves the camera/DDR packed stream unchanged.
@@ -303,11 +338,23 @@ video_in u_video_in(
 
     wire osd_vs, osd_hs, osd_de;
     wire [23:0] osd_rgb;
-    stable_osd u_osd (
+    wire telemetry_ready;wire [127:0] ddr_ui;wire recovery_ui_ready;wire [38:0] recovery_ui;
+    target_mailbox #(.WIDTH(128)) telemetry(.S_clk(S_ddr_clk),.S_rst_n(I_rst_n),.S_send(snap_request && telemetry_ready),.S_data(ddr_diagnostics),.S_ready(telemetry_ready),
+     .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(),.D_data(ddr_ui));
+    refined_recovery_mailbox #(.WIDTH(39)) recovery_telemetry(.S_clk(I_sys_clk),.S_rst_n(I_rst_n),.S_send(recovery_ui_ready),
+     .S_data({recovery_failed,recovery_reason,recovery_retries,recovery_count,stream_epoch}),.S_ready(recovery_ui_ready),
+     .D_clk(I_pixel_clk),.D_rst_n(I_process_rst_n),.D_valid(),.D_data(recovery_ui));
+    refined_performance performance(I_pixel_clk,I_process_rst_n,osd_vs,osd_de,video_ok && I_camera_ready && stream_pixel_n,
+     I_board_us,image_us,selected_frame_id,latest_image_id,image_time_valid,latency_valid,latency_us,frame_age);
+    refined_osd u_osd (
+        .I_latency_valid(latency_valid),.I_latency_us(latency_us),.I_frame_age(frame_age),
+        .I_ddr_diag(ddr_ui),.I_pixel_diag(pixel_diagnostics),.I_recovery(recovery_ui),.I_camera(I_camera_status),
+        .I_geometry_commit(frame_commit),
+        .I_rotate(active_rotate),.I_diag(diag_at_vs),.I_image_id(selected_frame_id),
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
         .I_vs(process_vs),.I_hs(process_hs),.I_de(process_de),.I_rgb(process_rgb),
         .I_tracking(I_tracking),.I_meta(active_meta),.I_x0(roi_x),.I_y0(roi_y),.I_zoom(active_zoom),.I_mode(actual_mode),
-        .I_detection_valid(detection_valid),.I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_sample_valid(sample_valid),.I_video_ok(video_ok),
+        .I_detection_valid(detection_valid),.I_pair(active_pair),.I_state(active_status),.I_show(active_show),.I_sample_valid(sample_valid),.I_video_ok(video_ok && I_camera_ready && stream_pixel_n),
         .O_vs(osd_vs),.O_hs(osd_hs),.O_de(osd_de),.O_rgb(osd_rgb)
     );
     hdmi_tx u_hdmi_tx(
@@ -341,5 +388,46 @@ video_in u_video_in(
         .O_tmds_clk_p       ( O_tmds_clk_p      )
     );
 
+endmodule
+`default_nettype wire
+
+// Bundled-data CDC: hold payload until acknowledgement returns. Both domains
+// share asynchronous assertion; each receives locally synchronized release.
+`default_nettype none
+module refined_recovery_mailbox #(parameter WIDTH=256)(
+    input wire S_clk,S_rst_n,S_send,
+    input wire [WIDTH-1:0] S_data,
+    output wire S_ready,
+    input wire D_clk,D_rst_n,
+    output reg D_valid,
+    output reg [WIDTH-1:0] D_data
+);
+    reg request,ack;
+    reg [WIDTH-1:0] payload;
+    (* async_reg="true", syn_preserve=1 *) reg ack1,ack_mid,ack2,req1,req2,req3;
+    // A full source-clock period plus a half period resolve ACK before use.
+    // First two samples use falling edges; final rising-edge stage preserves
+    // the original source-side request/payload update edge.
+    always @(negedge S_clk or negedge S_rst_n)begin
+        if(!S_rst_n)begin ack1<=0;ack_mid<=0;end
+        else begin ack1<=ack;ack_mid<=ack1;end
+    end
+    always @(posedge S_clk or negedge S_rst_n)
+        if(!S_rst_n)ack2<=0;else ack2<=ack_mid;
+    assign S_ready=request==ack2;
+    always @(posedge S_clk or negedge S_rst_n) begin
+        if(!S_rst_n) begin request<=0;payload<=0;end
+        else begin
+
+            if(S_send && S_ready) begin payload<=S_data;request<=~request;end
+        end
+    end
+    always @(posedge D_clk or negedge D_rst_n) begin
+        if(!D_rst_n) begin req1<=0;req2<=0;req3<=0;ack<=0;D_valid<=0;D_data<=0;end
+        else begin
+            req1<=request;req2<=req1;req3<=req2;D_valid<=0;
+            if(req3!=ack) begin D_data<=payload;D_valid<=1;ack<=req3;end
+        end
+    end
 endmodule
 `default_nettype wire

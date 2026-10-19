@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_timebase.v": "5af1ebefc85253a20c945704a63fac645117ebd95f0818193ce8a581a97f2d71",
+    "rtl\\color_regions\\refined_stamp_source.v": "ed89ce2b82533889113153d8d2b2883700f9b60d66a21d726c613501430f8c9a",
+    "rtl\\color_regions\\refined_performance.v": "2923c7b98fef4724fe052d60c5920aa933eef55dcc4140aaf4ec3f7f525c2a22"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\source_time_and_endpoint_20261016_202511_186568"
+}

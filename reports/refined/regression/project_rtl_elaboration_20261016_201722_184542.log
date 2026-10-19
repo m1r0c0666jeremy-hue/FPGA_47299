@@ -1,0 +1,14 @@
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_demosaic.v:91: error: Possible nested comment.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_demosaic.v:102: error: Possible nested comment.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:7: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:1: error: Syntax error in variable list.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:9: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:9: error: Invalid module item.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:11: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:11: error: Syntax error in continuous assignment
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:16: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:16: Syntax in assignment statement l-value.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:18: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:18: Syntax in assignment statement l-value.
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:20: syntax error
+D:\aaa_FPGA\transparent-ring-stability\rtl\color_regions\refined_stamp_source.v:20: error: Malformed statement

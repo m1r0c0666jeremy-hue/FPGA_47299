@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_frame_store.v": "807a2cee25d364dec14fbf05f69ab40f729f2d90bc2f3b8d517755e98c795cab",
+    "rtl\\color_regions\\refined_frame_store.v": "b0c3cc5c3988380f164deb78ae19405f1c3e3aa817d65880f45d63bd877f28d3"
+  },
+  "exit_code": 2,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\store_cached_id_comparison_20261017_011424_954238"
+}

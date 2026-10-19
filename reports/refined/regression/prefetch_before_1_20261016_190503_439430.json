@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "build\\refined_baseline_20261016_190016\\stable_line_reader_before.v": "a81ecadaf9047e75962d8619211ab3dbed926a69ac0a0b4003cf4fd80917f5b5",
+    "rtl\\color_regions\\stable_model_lane.v": "c221c0d834f863e89dca5113dfd59d4afd0a0accdd7694770264d89fdec1d320",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\prefetch_before_1_20261016_190503_439430"
+}

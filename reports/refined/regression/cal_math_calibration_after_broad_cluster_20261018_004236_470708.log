@@ -1,0 +1,2 @@
+RING_DISTRIBUTION_PASS broad_cluster baseline=0 success=1 cycles=907300 model=ab1c2a6bb8000000
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\cal_math_calibration_after_broad_cluster_20261018_004236_470708\tb.sv:11: $finish called at 9073040 (1s)

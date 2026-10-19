@@ -1,0 +1,41 @@
+{
+  "status": "PLACED_RESOURCE_COMPARISON_ONLY_NOT_FINAL_TIMING",
+  "recorded": "2026-10-19T09:33:06.540670",
+  "baseline": "build/refined_place_20261018_225243",
+  "candidate": "build/refined_place_20261019_092321",
+  "baseline_resources": {
+    "slice": 19799,
+    "lut6": 19160,
+    "reg": 23325,
+    "eram": 99,
+    "dsp": 40
+  },
+  "candidate_resources": {
+    "slice": 17584,
+    "lut6": 16991,
+    "reg": 19355,
+    "eram": 100,
+    "dsp": 40
+  },
+  "delta": {
+    "slice": -2215,
+    "lut6": -2169,
+    "reg": -3970,
+    "eram": 1,
+    "dsp": 0
+  },
+  "new_source_commit": "ca2622973e41f96a06b8baf747334a74ddbc2595",
+  "input_count": 295,
+  "artifact_hashes": {
+    "build/refined_place_20261018_225243/summary.json": "db688ef01a730531b5be34b5ecea7ef8c0126c91b0592da0bd842377264ea446",
+    "build/refined_place_20261019_092321/summary.json": "1a3121637f4573b630bcb7a07152367d7c53aa6608236b395c0b087520e0bbf3",
+    "build/refined_place_20261018_225243/target_color_regions_gate.area": "0663b228e8ffcbc471750ffcac8c8505f093535a7b5e766085fa30733596a4bc",
+    "build/refined_place_20261019_092321/target_color_regions_gate.area": "c51526e7ad80b3f3b020c34090d30b03c6130374929a2a7e738b9fd74e238ddf",
+    "build/refined_place_20261018_225243/target_color_regions_phy.area": "f99c971d1cf99e46f5bf7d09b434c13266f088bb063dd8b19cca53293f39b87c",
+    "build/refined_place_20261019_092321/target_color_regions_phy.area": "61f8790508aaadd299e152ee1216a8e14a3a1900895673f933bde2f0fb1455de",
+    "build/refined_place_20261019_092321/inputs.json": "5061bb931bb1c7a8494f75931a78ff7fbcf8f91afa8cda3ba5b5edb77c89eef3",
+    "build/refined_place_20261019_092321/place.qor": "e1725cb6c0eddbca88453e95526abf39f1847158f5ef6fe537e7e49bb5b73379"
+  },
+  "software": "full 157-current-source audit pending",
+  "hardware": "PENDING"
+}

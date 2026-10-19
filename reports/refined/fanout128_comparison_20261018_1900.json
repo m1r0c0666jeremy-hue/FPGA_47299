@@ -1,0 +1,272 @@
+{
+  "same_295_source_inputs": true,
+  "not_final_timing": true,
+  "comparisons": [
+    {
+      "probe": "refined_fanout_baseline_probe_20261018_185910",
+      "summary": {
+        "probe_only": true,
+        "source": "build/refined_full_20261018_170526/target_color_regions_placed.db",
+        "sha256": "b7bc338f84b199f8634e32beb6f595d7db079f2b8e2f763e015de57f7eca216a",
+        "checkpoint_unchanged": true,
+        "exit_code": 0
+      },
+      "top30": [
+        [
+          "u_video/capture_reset[1]",
+          3228
+        ],
+        [
+          "u_video/ddr_reset[1]",
+          1331
+        ],
+        [
+          "u_camera/rx_data_reset/release_pipe[1]",
+          1140
+        ],
+        [
+          "u_video/u_scaler/data_reset/release_pipe[1]",
+          1051
+        ],
+        [
+          "u_video/I_process_rst_n",
+          918
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_alc_mc_top/u_rbuf_addr_fifo/rst",
+          893
+        ],
+        [
+          "cal_reset_bridge[1]",
+          861
+        ],
+        [
+          "u_video/u_osd/fage_b_n",
+          732
+        ],
+        [
+          "u_video/pixel_stream_reset/release_pipe[1]",
+          694
+        ],
+        [
+          "u_video/u_snapshot_response/payload_b_n",
+          658
+        ],
+        [
+          "u_video/u_frame_store/I_snapshot",
+          658
+        ],
+        [
+          "u_video/u_snapshot_response/D_data_b_n",
+          657
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/dx_phy_rst_n",
+          635
+        ],
+        [
+          "u_video/u_viewport/O_bank_b_n",
+          625
+        ],
+        [
+          "u_video/u_detection/state_reg_syn_1[5]",
+          612
+        ],
+        [
+          "u_video/u_results/payload_b_n",
+          607
+        ],
+        [
+          "u_video/u_results/D_data_b_n",
+          606
+        ],
+        [
+          "u_video/u_detection/grid/color",
+          495
+        ],
+        [
+          "u_video/u_viewport/match",
+          379
+        ],
+        [
+          "u_video/u_hdmi_tx/u_hdmi_1_4b_transmitter_core_wrapper/u_hdmi_edid_wrapper/u_iic_master_wrapper/u_iic_receiver_controller/I_rst",
+          377
+        ],
+        [
+          "S_rst_n",
+          359
+        ],
+        [
+          "u_video/u_frame_store/chosen[0]",
+          346
+        ],
+        [
+          "u_video/u_frame_store/chosen[1]",
+          346
+        ],
+        [
+          "u_video/u_frame_store/O_data_b3[571]_syn_653",
+          314
+        ],
+        [
+          "u_video/u_frame_store/O_data_b3[571]_syn_651",
+          314
+        ],
+        [
+          "u_video/u_scaler/pixel_reset/release_pipe[1]",
+          310
+        ],
+        [
+          "u_video/u_detection/grid/state[3]",
+          289
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/cal_done",
+          252
+        ],
+        [
+          "u_video/u_detection/wb",
+          247
+        ]
+      ]
+    },
+    {
+      "probe": "refined_fanout128_probe_20261018_185633",
+      "summary": {
+        "probe_only": true,
+        "source": "build/refined_full_20261018_183727/target_color_regions_placed.db",
+        "sha256": "ea08c9bfbec72f512be9d556b9a12ccc47b9b35a7ee3de2c2c192813a313feb7",
+        "checkpoint_unchanged": true,
+        "exit_code": 0
+      },
+      "top30": [
+        [
+          "u_video/capture_reset[1]",
+          3195
+        ],
+        [
+          "u_video/ddr_reset[1]",
+          1306
+        ],
+        [
+          "u_camera/rx_data_reset/release_pipe[1]",
+          1136
+        ],
+        [
+          "u_video/u_scaler/data_reset/release_pipe[1]",
+          1043
+        ],
+        [
+          "cal_reset_bridge[1]",
+          864
+        ],
+        [
+          "u_video/pixel_stream_reset/release_pipe[1]",
+          717
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/dx_phy_rst_n",
+          645
+        ],
+        [
+          "S_rst_n",
+          361
+        ],
+        [
+          "u_video/I_process_rst_n_dup_9837",
+          323
+        ],
+        [
+          "u_video/u_scaler/pixel_reset/release_pipe[1]",
+          317
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_alc_mc_top/u_rbuf_addr_fifo/rst_dup_203",
+          264
+        ],
+        [
+          "u_video/u_hdmi_tx/u_hdmi_1_4b_transmitter_core_wrapper/u_hdmi_edid_wrapper/u_iic_master_wrapper/u_iic_receiver_controller/I_rst_dup_10",
+          258
+        ],
+        [
+          "u_video/u_results/payload_b_n_dup_12",
+          248
+        ],
+        [
+          "u_video/u_snapshot_response/payload_b_n_dup_7",
+          239
+        ],
+        [
+          "u_video/u_detection/grid/state[3]_dup_60",
+          236
+        ],
+        [
+          "u_video/u_osd/fage_b_n_dup_7",
+          231
+        ],
+        [
+          "u_camera/u_isp_top/u_data_96bit_to_128bit/bits[6]_dup_1",
+          226
+        ],
+        [
+          "u_video/u_scaler/state_reg_syn_dup_19",
+          221
+        ],
+        [
+          "u_video/u_frame_store/I_snapshot_dup_1",
+          216
+        ],
+        [
+          "u_video/u_osd/fage_b_n_dup_3",
+          206
+        ],
+        [
+          "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/cal_done_dup_101",
+          203
+        ],
+        [
+          "u_video/u_viewport/match",
+          202
+        ],
+        [
+          "u_video/u_snapshot_response/D_data_b_n_dup_7",
+          199
+        ],
+        [
+          "u_video/u_detection/grid/color_dup_8",
+          194
+        ],
+        [
+          "u_video/u_osd/program_rom/registered_addr[4]",
+          180
+        ],
+        [
+          "u_video/I_process_rst_n_dup_9831",
+          175
+        ],
+        [
+          "u_video/u_results/payload_b_n",
+          173
+        ],
+        [
+          "u_video/u_viewport/O_bank_b_n_dup_7",
+          171
+        ],
+        [
+          "u_video/u_frame_store/chosen[1]_dup_2",
+          169
+        ]
+      ]
+    }
+  ],
+  "inputs": {
+    "build/refined_fanout_baseline_probe_20261018_185910/run.tcl": "c629c5f776e9bc8f2232cad4d2b159a6e56f823412ad1e8d22c61bdfc8a5f52a",
+    "build/refined_fanout_baseline_probe_20261018_185910/summary.json": "c19abe00ff3497b435803a0990ce316ecd4a32f79995dd923262dabae73821e6",
+    "build/refined_fanout_baseline_probe_20261018_185910/high_fanout.txt": "e03176d700b2aba9ebf6f492a7421276a86fe62b736173d373153ac11a59cb1b",
+    "build/refined_fanout_baseline_probe_20261018_185910/place_parameters.txt": "7bcfa45c0b1d5a07d8cb63b8351fc5269ceca2b16aac7c30c8f9eab2af3e0ea4",
+    "build/refined_fanout128_probe_20261018_185633/run.tcl": "f00cf4f163753fcb931b9d2a206247dfe9a80991973f093129e901316b600093",
+    "build/refined_fanout128_probe_20261018_185633/summary.json": "d9543ffb1384c0fb230870502ba35d8d641a41c43f256e7e39c73aeb0478f019",
+    "build/refined_fanout128_probe_20261018_185633/high_fanout.txt": "2197412d23c16c58338fc0349b5ded0451989e71e7296756af5404ba97c0c05e",
+    "build/refined_fanout128_probe_20261018_185633/place_parameters.txt": "e479ecd8db3855e7187fb548d29c1878d1d927d4baf211ba79cea869c8d7f533"
+  }
+}

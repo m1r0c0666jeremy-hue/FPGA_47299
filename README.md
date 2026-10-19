@@ -1,6 +1,26 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前实施：颜色识别、视频稳定性与显示功能改进
+
+分支 `release/transparent-ring-stability-20261015`，基线 `2f79847`。本轮入口为 **`td_project/target_color_regions_refined.al`**：独立DDR握手/恢复与相机应答监督、定向背景校准、五档倍率、透明官方Logo、默认底栏及校准提示和v4板内延迟。原工程、历史bit及源码包保留。
+
+10月19日按Jeremy要求取消三个诊断分页及KEY2+KEY3切页，保留四种图像模式、两配色和五档倍率。资源与交付状态见下方清单。
+
+软件与完整TD构建通过，实物待验。[独立测试bit](build/target_color_regions_refined_20261019_100417/target_color_regions.bit)、[同源源码包](build/target_color_regions_refined_20261019_100417/color_video_refined_source.zip)。建立+0.142ns，保持+0.020ns；ERAM100/108，DSP40/40。
+
+[一页校准与拍摄说明](docs/颜色视频显示改进_上板一页.md)、[诊断数字解释](docs/颜色视频显示改进_诊断字段.md)、[验证报告](reports/refined/最终验证报告.md)、[实物复测表](reports/refined/hardware_retest.csv)。实物尚未验证。
+
+新生成器：`scripts/generate_refined_regions.py [--check]`；构建：`scripts/run_refined_build.py --stage full`；审计：`scripts/audit_refined.py --regression --attempt <完整构建目录>`。每次构建使用独立冻结目录；旧生成和构建入口继续属于下方历史版本。
+
+## 当前分支：透明色环稳定性优化（2026-10-15）
+
+`feature/transparent-ring-stability`，基线43564ee；在独立工作区实施四步材料/背景校准、候选质量、v3同帧诊断、官方图标、组合键和默认180°显示，保留双色工具/尖端/跟随。软件与TD通过，实物待验。
+
+[新独立上板测试bit](build/target_color_regions_ring_stability_20261015_033550/target_color_regions.bit)、[同源源码包](build/target_color_regions_ring_stability_20261015_033550/transparent_ring_stability_source.zip)、[操作与最小复测](docs/透明色环稳定性优化_上板与复测.md)、[实际验证报告](reports/transparent_ring/最终验证报告.md)。历史bit和下方历史说明保留，不能用旧bit执行四步流程。
+
+本版实际Slice18981/21216、ERAM100/108、DSP40/40，建立+0.110ns/保持+0.020ns。新输出独立且输入冻结，未放宽约束。完整构建用 `scripts/run_stable_regions_build.py --stage full --prefix ring_stability`；只读审计用 `scripts/audit_color_regions.py --attempt build/ring_stability_full_20261015_014510 --check-build`。不要直接重跑冻结目录run.tcl覆盖历史输出。
+
 ## 当前正式工程：双色工具识别、尖端定位与自动跟随（2026-10-14）
 
 本地仓库 `D:/aaa_FPGA/color-regions-env-issues`，分支 `docs/color-regions-env-issues`，基线 `0735398`。沿用 `td_project/target_color_regions.al`：固定白平衡与两组材料校准、八邻域去孤立、80×45 双银行网格、每色四候选、中央选取一件工具、K=0.5 尖端和平滑放大跟随。四页面、配色与倍率操作保留。
@@ -132,17 +152,3 @@ Maintainer: Fle & Jeremy
 输出维持1280×720、总周期1650×750、75MHz像素时钟，理论约60.606Hz。不是分辨率放大，也不是已实测的标准60Hz。跟踪、局部放大、对准和“安路”Logo叠加尚未实现。
 
 按Jeremy要求，本轮暂不修改打包复位、缓存尾字、完整帧恢复等旧问题。已解决的基础引脚对照与基本出图不再列入当前待办；未解决项集中见问题清单。迁移工程应携带整个文件夹，不能只复制 `.al`。
-
-## ImproveFourfoldScale 上板验收结论（2026-10-06）
-
-分支 ScalingTest 之上还完成了 **ImproveFourfoldScale** 版本（4 倍的「原图/灰度」改为双线性插值，
-1/2 倍与边缘/二值化保持最近邻）。该版本已于 2026-10-06 完成**首次上板 A/B 验收并通过**：
-
-- 结论与量化数据：[docs/ImproveFourfoldScale上板验收结论.md](docs/ImproveFourfoldScale上板验收结论.md)
-- 测试流程与判据：[docs/上板测试流程_ImproveFourfoldScale.md](docs/上板测试流程_ImproveFourfoldScale.md)
-- 设计与软件验证：[docs/ImproveFourfoldScale使用与实现.md](docs/ImproveFourfoldScale使用与实现.md)、[reports/ImproveFourfoldScale验证报告.md](reports/ImproveFourfoldScale验证报告.md)
-- 证据与靶标：[细缝可辨性对比](reports/improve_fourfold_ab/细缝可辨性对比_旧bit_vs_新bit.png)、[四倍缩放 AB 对照卡](docs/四倍缩放AB对照卡_1920x1080.png)
-
-关键数据：4× 原图/灰度边缘过渡宽度 17 → 25 像素（平滑生效），窄缝平均深度 0.71 → 0.71（可辨性未下降）；
-1×/2× 与 4× 边缘/二值化与旧 bit 无可辨差异。
-**说明**：该版本的 RTL 与 bit 已归档在 `ImproveFourfoldScale` 分支（`86ef777`）；本分支归档说明文档与验收结论，未合并 main。

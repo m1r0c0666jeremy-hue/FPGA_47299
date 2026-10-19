@@ -7,7 +7,7 @@ def run(name,src,modules):
     tb=O/(name+'.sv');tb.write_text(src,encoding='utf-8')
     for cmd in ([iv,'-g2012','-s','tb','-o',O/(name+'.vvp'),tb,*[R/f'rtl/color_regions/{m}.v' for m in modules]], [iv.with_name('vvp.exe'),O/(name+'.vvp')]):
         p=subprocess.run(list(map(str,cmd)),cwd=R,env=env,capture_output=True,text=True,timeout=900)
-        logs.append(p.stdout+p.stderr);print(logs[-1],flush=True);(R/'reports/stable_adversarial.log').write_text('\n'.join(logs),encoding='utf-8')
+        logs.append(p.stdout+p.stderr);print(logs[-1],flush=True);(R/'reports/transparent_ring/regression/stable_adversarial.log').write_text('\n'.join(logs),encoding='utf-8')
         if p.returncode:raise SystemExit(p.returncode)
 run('tracker',r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,start=0,complete=1;reg [31:0] id=0;reg [9:0] cmd=3;reg [15:0] rev=0;

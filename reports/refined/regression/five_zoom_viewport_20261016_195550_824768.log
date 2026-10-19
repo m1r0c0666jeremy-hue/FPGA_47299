@@ -1,0 +1,3 @@
+
+REFINED_VIEWPORT_PASS five zooms, odd-width clamps, step-limited movement, both orientations, calibration/restoration
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\five_zoom_viewport_20261016_195550_824768\tb.sv:16: $finish called at 72160 (1s)

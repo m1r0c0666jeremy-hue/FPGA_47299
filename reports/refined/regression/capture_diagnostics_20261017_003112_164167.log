@@ -1,0 +1,2 @@
+FATAL: D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\capture_diagnostics_20261017_003112_164167\tb.sv:29: pending diagnostics changed on bank reuse
+       Time: 20562120  Scope: tb

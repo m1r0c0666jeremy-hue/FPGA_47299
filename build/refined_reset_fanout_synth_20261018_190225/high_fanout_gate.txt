@@ -1,0 +1,51 @@
+Net Fanout Histogram
+-------------------------------
+  Fanout   |  Nets   |    %    
+-------------------------------
+     0     |   841   |  1.16   
+     1     |  51386  |  70.95  
+     2     |  7948   |  10.97  
+     3     |  3118   |  4.31   
+     4     |  2625   |  3.62   
+   5-10    |  4946   |  6.83   
+   11-50   |  1296   |  1.79   
+  51-100   |   150   |  0.21   
+  101-500  |   86    |  0.12   
+   >500    |   27    |  0.04   
+-------------------------------
+   Total   |  72423  |  100%   
+-------------------------------
+Net Fanout Summary
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                                    Net                                                                                    |  Fanout  |      Driver       |  Driver location  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                             u_camera/u_isp_top/u_demosaic/raw_matrix_3x3_buffer_d/zhenghe_d/blk_mem_gen_zhenghe_d1/ram_d32970204f32_Inst/clkb                             |   9692   |   PH1P_PHY_GCLK   |       [-,-]       
+                                                                        u_video/u_frame_store/I_clk                                                                        |   8371   |   PH1P_PHY_GCLK   |       [-,-]       
+                                                                        u_video/u_detection/I_rst_n                                                                        |   5361   |    AL_BUFKEEP     |       [-,-]       
+                                                                             u_controls/I_clk                                                                              |   4999   |  PH1P_PHY_PLL_V2  |       [-,-]       
+                                                                             u_video/ddr_rst_n                                                                             |   2481   |    AL_BUFKEEP     |       [-,-]       
+                                                                          u_video/u_scaler/d_rst                                                                           |   1910   |    AL_BUFKEEP     |       [-,-]       
+                                                                          u_camera/capture_rst_n                                                                           |   1834   |    AL_BUFKEEP     |       [-,-]       
+                                                                          u_video/I_process_rst_n                                                                          |   1639   |    AL_MAP_SEQ     |       [-,-]       
+                                                                                 cal_rst_n                                                                                 |   1501   |    AL_BUFKEEP     |       [-,-]       
+                                u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_alc_mc_top/u_rbuf_addr_fifo/rst                                |   1483   |    AL_MAP_SEQ     |       [-,-]       
+                                                                          u_video/stream_pixel_n                                                                           |   1341   |    AL_BUFKEEP     |       [-,-]       
+  u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/dx_phy_rst_n  |   1180   |  PH1P_PHY_PLL_V2  |       [-,-]       
+                                                                          u_video/u_osd/fage_b_n                                                                           |   736    |    AL_MAP_LUT6    |       [-,-]       
+                      u_video/u_hdmi_tx/u_hdmi_1_4b_transmitter_core_wrapper/u_hdmi_edid_wrapper/u_iic_master_wrapper/u_iic_receiver_controller/I_rst                      |   677    |    AL_MAP_SEQ     |       [-,-]       
+                                                                     u_video/u_frame_store/I_snapshot                                                                      |   659    |    AL_MAP_LUT3    |       [-,-]       
+                                                                  u_video/u_snapshot_response/payload_b_n                                                                  |   658    |    AL_MAP_LUT3    |       [-,-]       
+                                                                  u_video/u_snapshot_response/D_data_b_n                                                                   |   658    |    AL_MAP_LUT2    |       [-,-]       
+                                                                      u_video/u_detection/grid/color                                                                       |   629    |    AL_MAP_SEQ     |       [-,-]       
+                                                                       u_video/u_viewport/O_bank_b_n                                                                       |   625    |    AL_MAP_LUT3    |       [-,-]       
+                                                                  u_video/u_detection/state_reg_syn_1[5]                                                                   |   613    |    AL_MAP_SEQ     |       [-,-]       
+                                                                       u_video/u_results/payload_b_n                                                                       |   607    |    AL_MAP_LUT3    |       [-,-]       
+                                                                       u_video/u_results/D_data_b_n                                                                        |   607    |    AL_MAP_LUT2    |       [-,-]       
+                                                                                  S_rst_n                                                                                  |   576    |  PH1P_PHY_PLL_V2  |       [-,-]       
+                                                               u_video/u_frame_store/O_data_b3[571]_syn_653                                                                |   573    |    AL_MAP_LUT5    |       [-,-]       
+                                                               u_video/u_frame_store/O_data_b3[571]_syn_651                                                                |   573    |    AL_MAP_LUT6    |       [-,-]       
+                                                                          u_video/u_scaler/p_rst                                                                           |   545    |    AL_BUFKEEP     |       [-,-]       
+                                                                         u_video/u_viewport/match                                                                          |   517    |    AL_MAP_LUT4    |       [-,-]       
+                                                                     u_video/u_detection/grid/state[3]                                                                     |   418    |    AL_MAP_SEQ     |       [-,-]       
+                                                                    u_video/u_scaler/state_reg_syn_1[8]                                                                    |   398    |    AL_MAP_SEQ     |       [-,-]       
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

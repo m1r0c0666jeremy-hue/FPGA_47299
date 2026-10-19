@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_controls.v": "9fc9c1cdd3476c3787ef98e20fcc6b2a211222ac145670d2c983a0176cfb3333"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\controls_with_camera_pause_20261016_195517_596297"
+}

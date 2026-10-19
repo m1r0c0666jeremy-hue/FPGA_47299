@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "build\\refined_camera_relay_prototype\\relay.v": "0cdf7da203013107f047417d2433591166719bb6938b06df877ed81fd069cb43",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\camera_relay_private_20261018_220529_934411"
+}

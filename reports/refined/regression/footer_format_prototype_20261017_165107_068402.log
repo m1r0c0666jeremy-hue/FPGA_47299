@@ -1,0 +1,2 @@
+FOOTER_FORMAT_PASS 256 random tables 32768 glyphs, all pages/calibration/error/value ranges; no consumed RAM collision
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\footer_format_prototype_20261017_165107_068402\tb.sv:28: $finish called at 6156800 (1s)

@@ -1,0 +1,10 @@
+{
+  "status": "STOPPED_NO_FINAL_ROUTING_RESULT",
+  "time": "2026-10-18T01:18:37.776115",
+  "reason": "Six completed iterations without improvement over minimum3715 at16; latest4492 at22. Same-source, same-placement normal checkpoint routing has reached2227 and continues improving. Preserve all files.",
+  "verified_pid": 34700,
+  "verified_parent_pid": 1424,
+  "verified_start": "2026-10-18T00:30:42",
+  "final_timing_pass": false,
+  "deliverable": false
+}

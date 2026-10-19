@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "build\\refined_recovery_mailbox_prototype\\recovery_mailbox.v": "be025676059a4db27bd66340be28558f89c6f3bd3bc7231dfa712bff97da6f6c"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\recovery_mailbox_private_0_20261018_222440_269236"
+}
