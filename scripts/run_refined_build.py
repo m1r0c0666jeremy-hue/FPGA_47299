@@ -49,6 +49,8 @@ paths.update(p for p in (R/'user_source').rglob('*') if p.is_file() and 'log' no
 paths.update(p for p in (R/'ip/refined_ddr2').rglob('*') if p.is_file())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 before={p.relative_to(R).as_posix():sha(p) for p in sorted(paths)}
+from audit_refined import canonical_build_inputs
+canonical_build_inputs(before)
 (out/'inputs.json').write_text(json.dumps(before,indent=2),encoding='utf-8')
 (out/'source_context.json').write_text(json.dumps(dict(compiled_source_commit=created_head,creation_time=stamp,input_count=len(before),inputs_sha256=sha(out/'inputs.json')),indent=2),encoding='utf-8')
 with zipfile.ZipFile(out/'compiled_inputs.zip','w',zipfile.ZIP_DEFLATED) as z:

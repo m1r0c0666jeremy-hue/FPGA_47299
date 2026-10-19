@@ -2,7 +2,7 @@
 from refined_testlib import R,run
 import argparse,sys,json,hashlib
 from concurrent.futures import ThreadPoolExecutor
-ap=argparse.ArgumentParser();ap.add_argument('--full',action='store_true');ap.add_argument('--faults',action='store_true');ap.add_argument('--debug',type=int,choices=[0,1]);ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--workers',type=int,default=3);ap.add_argument('--reuse-current',action='store_true');a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--full',action='store_true');ap.add_argument('--faults',action='store_true');ap.add_argument('--debug',type=int,choices=[0,1]);ap.add_argument('--reader',choices=['stable','refined'],default='refined');ap.add_argument('--workers',type=int,default=3);ap.add_argument('--reuse-current',action='store_true');ap.add_argument('--case-range',nargs=2,type=int);a=ap.parse_args()
 # Reuse the independent colour/support oracle and timing fixture, with new output
 # paths. Its power-of-two coordinate oracle below is replaced by rational maths.
 legacy=R/'scripts/test_stable_video.py'
@@ -38,6 +38,8 @@ if a.full:jobs=[(pair,z,page,rot,0,1) for pair in (0,1) for z in range(5) for pa
 if a.faults:
  fault_jobs=[(0,0,0,rot,1,2) for rot in (0,1)]+[(0,1,0,rot,0,2) for rot in (0,1)]
  jobs=jobs+fault_jobs if a.full else fault_jobs
+if a.case_range is not None:
+ first,last=a.case_range;assert 0<=first<last<=len(jobs);jobs=jobs[first:last]
 if a.debug is not None:
  jobs=[(0,0,0,a.debug,0,1)]
  s=s.replace('            if(sde) begin', '''            if(sde && sycount==0 && sxcount<8)$display("VIDEO_DEBUG x%0d sx%0d sy%0d rgb%h q%h addr%0d good%0d ok%0d ready%b tag%0d mem0%h",sxcount,dut.sx,dut.sy,rgb,dut.pixel_q,dut.rgb_read_addr,dut.good,ok,dut.ready,dut.tags[0],dut.lines[0]);

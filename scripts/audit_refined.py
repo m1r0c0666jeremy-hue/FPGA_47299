@@ -42,6 +42,10 @@ def checkpoint_report_signature(path,parent,out):
 
 def canonical_build_inputs(inputs):
  names=set(inputs)
+ english_roms={'rtl/color_regions/refined_english_font_rom.v','rtl/color_regions/refined_english_text_rom.v'}
+ if names & english_roms:
+  baseline=set(json.loads((R/'build/refined_route_20261019_100156_645532/inputs.json').read_text(encoding='utf-8')))
+  assert names==baseline|english_roms,'OSD successor compiler dependency set changed unexpectedly'
  assert {n for n in names if n.endswith('.al')}=={'td_project/target_color_regions_refined.al'},'Noncanonical project entry'
  assert all(not Path(n).is_absolute() and not Path(n).drive and '..' not in Path(n).parts and not n.replace('\\','/').startswith('build/') for n in names),'Private/escaped compiler input'
  required={'rtl/color_regions/'+n for n in ('stable_tracker.v','stable_capture.v','stable_grid.v','refined_line_reader.v','refined_frame_store.v')}
