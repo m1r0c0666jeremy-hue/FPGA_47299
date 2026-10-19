@@ -25,6 +25,8 @@ def main():
     assert sha(dest/'target_color_regions.bit')==obj['build']['bit_sha256']
     compiled=json.loads((attempt/'inputs.json').read_text(encoding='utf-8'))
     paths={R/n for n in compiled}
+    paths|={attempt/'compiled_source'/n for n in compiled}
+    paths|={attempt/n for n in obj['build']['summary'].get('route_checkpoints',{})}
     for folder in ('scripts','rtl','sim'):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.v','.sv','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
@@ -51,6 +53,8 @@ def main():
         if (attempt/n).is_file():paths.add(attempt/n)
     if obj['build']['summary'].get('checkpoint_provenance'):
         proof=obj['build']['summary']['checkpoint_provenance'];parent=R/proof['parent']
+        paths.add(attempt/proof['checkpoint_name'])
+        paths|={parent/'compiled_source'/n for n in compiled}
         for n in ('summary.json','source_context.json','inputs.json','inputs_after.json','flow_options.json','run.tcl','td.log',
                   'target_color_regions_gate.area','target_color_regions_phy.area','placed_clocks.txt','placed_exceptions.timing',proof['checkpoint_name']):
             if (parent/n).is_file():paths.add(parent/n)
