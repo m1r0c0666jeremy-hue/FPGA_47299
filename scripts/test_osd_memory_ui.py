@@ -4,7 +4,7 @@ import argparse,hashlib,json,re,zipfile
 from PIL import Image
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--abort',action='store_true');a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--abort',action='store_true');ap.add_argument('--wait',action='store_true');a=ap.parse_args();assert not(a.abort and a.wait)
     manifest=json.loads((R/'assets/osd/anlogic/english_ui_manifest.json').read_text())
     chars=manifest['characters'];ids={c:i for i,c in enumerate(chars)}
     assert len(chars)<=64 and manifest['font_width']==8 and manifest['font_height']==16
@@ -55,6 +55,9 @@ def main():
         cases=[]
         case('late_abort',overview(latency='----.-',age='---'))
         case('last_pixel_abort',overview(latency='----.-',age='---'))
+    if a.wait:
+        cases=[]
+        case('wait_transition',['WAIT RESULT',''])
     palette=[0x101824,0x1c2c4e,0xed1b23,0xe0e8f4]
     expected_files=[]
     for n,d in enumerate(cases):
@@ -69,7 +72,7 @@ def main():
             for xx in range(98):
                 v=logo[yy*98+xx]
                 if v:pixels[(16+yy)*1280+1167+xx]=palette[v]
-        p=out/(('abort_' if a.abort else '')+str(n)+'.hex');p.write_text(''.join(f'{v:06x}\n' for v in pixels),encoding='ascii');expected_files.append(p)
+        p=out/(('abort_' if a.abort else 'wait_' if a.wait else '')+str(n)+'.hex');p.write_text(''.join(f'{v:06x}\n' for v in pixels),encoding='ascii');expected_files.append(p)
         if n in (0,29,36):
             im=Image.new('RGB',(1280,96));im.putdata([(v>>16,(v>>8)&255,v&255) for v in pixels]);im.save(out/(d['name']+'.png'))
     src=r'''module tb;
@@ -91,14 +94,14 @@ if(y==640 && x==0 && !dut.footer_ready)$fatal(1,"formatter deadline");end
 if(outn!=122880)$fatal(1,"English footer count %0d",outn);end endtask
 initial begin
 '''
-    src=src.replace('ABORT_EVENT', 'if((c==0 && y==622 && x==0)||(c==1 && y==624 && x==2))lv=0;' if a.abort else '')
+    src=src.replace('ABORT_EVENT', 'if((c==0 && y==622 && x==0)||(c==1 && y==624 && x==2))lv=0;' if a.abort else 'if(y==630 && x==0)tracking=0;' if a.wait else '')
     for n,(d,p) in enumerate(zip(cases,expected_files)):
         values={'ts':(33,4),'phase':(565,3),'busy':(564,1),'error':(560,4),'dirty':(568,1),'mvalid':(255,1),'fvalid':(247,1)}
         meta=(4<<413)|(1<<721)|(0xaf<<544)
         for k,(lo,w) in values.items():meta|=d[k]<<lo
         src+=f"c={n};meta=768'h{meta:0192x};diag={n%4};"+''.join(f'{k}={d[k]};' for k in ('zoom','mode','pair','rotate','control','tracking','video','lv','latency','age'))
         src+=f'$readmemh("{p.as_posix()}",expected);frame;$display("ENGLISH_UI_CASE_PASS {d["name"]}");\n'
-    prefix='osd_english_abort' if a.abort else 'osd_english_ui'
+    prefix='osd_english_abort' if a.abort else 'osd_english_wait' if a.wait else 'osd_english_ui'
     src+=f'$display("{prefix.upper()}_PASS {len(cases)} cases {len(cases)*122880} pixels");$finish;end endmodule'
     mods=[R/'rtl/color_regions'/f'{n}.v' for n in ('refined_osd','refined_english_font_rom','refined_english_text_rom','refined_footer_program_rom','refined_logo_rom','refined_overlay_geometry')]
     run(prefix,src,mods,timeout=1800)
