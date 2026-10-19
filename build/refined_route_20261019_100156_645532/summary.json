@@ -1,0 +1,51 @@
+{
+  "stage": "full",
+  "head": "ca2622973e41f96a06b8baf747334a74ddbc2595",
+  "head_after": "5a03983ecaa0d09226d5dce450656daf12420d5a",
+  "route_effort": "normal",
+  "placement_strategy": 5,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "project",
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": null,
+  "place_effort": null,
+  "max_fanout": 128,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": null,
+  "checkpoint_provenance": {
+    "parent": "build/refined_place_20261019_092321",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "716985e71484cc1dba8adf39b606c795640b1a8c478574479d0fd0b905186cb1",
+    "parent_summary_sha256": "1a3121637f4573b630bcb7a07152367d7c53aa6608236b395c0b087520e0bbf3",
+    "parent_context_sha256": "aca3d500ede50620483faa388bc28204d3b1c960fb37a45a0cc62445789798c9",
+    "parent_inputs_sha256": "5061bb931bb1c7a8494f75931a78ff7fbcf8f91afa8cda3ba5b5edb77c89eef3"
+  },
+  "checkpoint_unchanged": true,
+  "replaced_strategy": null,
+  "flow_threads": null,
+  "retry_routability": false,
+  "route_retry_performed": false,
+  "final_route_effort": "normal",
+  "route_checkpoints": {
+    "target_color_regions_routed.db": "83f3e79f109fa242569b335524927b15ca959586d2824b1f1f6557409a660254"
+  },
+  "resources": {
+    "slice": 17584,
+    "lut6": 16991,
+    "reg": 19355,
+    "eram": 100,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false,
+  "slack_ns": {
+    "SWNS": 0.142,
+    "HWNS": 0.02
+  },
+  "timing_pass": true
+}

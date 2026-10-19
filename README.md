@@ -7,8 +7,7 @@ Maintainer: Fle & Jeremy
 
 10月19日按Jeremy要求取消三个诊断分页及KEY2+KEY3切页，保留四种图像模式、两配色和五档倍率。资源与交付状态见下方清单。
 
-<!-- REFINED_DELIVERY -->
-完整构建和最终交付正在进行，目前不要将中间尝试作为上板版本。
+软件与完整TD构建通过，实物待验。[独立测试bit](build/target_color_regions_refined_20261019_100417/target_color_regions.bit)、[同源源码包](build/target_color_regions_refined_20261019_100417/color_video_refined_source.zip)。建立+0.142ns，保持+0.020ns；ERAM100/108，DSP40/40。
 
 [一页校准与拍摄说明](docs/颜色视频显示改进_上板一页.md)、[诊断数字解释](docs/颜色视频显示改进_诊断字段.md)、[验证报告](reports/refined/最终验证报告.md)、[实物复测表](reports/refined/hardware_retest.csv)。实物尚未验证。
 
