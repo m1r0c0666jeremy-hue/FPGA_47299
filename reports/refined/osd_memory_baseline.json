@@ -1,0 +1,20 @@
+{
+  "baseline_commit": "7df95aabb9fedc7927d03aa6013aa6a9346eb962",
+  "archive": "build/osd_memory_baseline_20261019_225629/before.zip",
+  "inputs": {
+    "scripts/generate_refined_ui.py": "4543c85dff84714bbe2e959e8a4ba8d910573f383b848be68a5474cbba96ed0b",
+    "scripts/refined_osd.v.txt": "d53113fe2e0c1ed65fc0890c30fca236191f1df5df10d2ac312e8e118bc9e3de",
+    "assets/osd/anlogic/refined_ui_manifest.json": "9a3a0a14314a5c6680de74fcb28012b88dbaf6dc222cd9021c3248626577468b",
+    "rtl/color_regions/refined_osd.v": "2bde65b08f1a57f6c36c11b196da81c22d4f787fe039497f75c06d4d0220aeb3",
+    "rtl/color_regions/stable_osd.v": "14ba635eff67bd5668849cf3c41636b0dffaa75d4ba3c8f05f729e30d6ac5cb9",
+    "rtl/color_regions/stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+    "rtl/color_regions/stable_footer_glyph_rom.v": "7c7da05c622cafc58cb2f646f8af15f518e6f7486add622c2005eaafc5e4b615",
+    "rtl/color_regions/stable_footer_text_rom.v": "740bede43a2cd79173dcfff21365e95981089824d928b5e710e532e9c5489be9",
+    "rtl/color_regions/refined_footer_program_rom.v": "8756980a87eccee3c74087d5bc74fdaa7ff48a15886c85f8d9d60da1318623a2",
+    "rtl/color_regions/stable_footer_program_rom.v": "52423804cdaf8b8299c13a5210ea8832aba9b4026009c42658474d6b3ca14b60",
+    "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl/color_regions/refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7"
+  },
+  "archive_sha256": "f503666490347dffc59b30ec2f433cdcafcac825b0068abcee6c80005b98d143",
+  "delivered_bit_sha256": "fe6029bb4fd343df1e7757418c1b2540e2c9884d93f27206a9464509bc3586fe"
+}

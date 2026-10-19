@@ -15,7 +15,8 @@ ap.add_argument('--threads',type=int,choices=(2,4,8,16,32))
 ap.add_argument('--retry-routability',action='store_true');a=ap.parse_args()
 if a.retry_routability:assert a.route_effort=='normal'
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
-assert branch=='release/transparent-ring-stability-20261015'
+from osd_memory_branch import check_branch
+assert branch==check_branch(R)
 subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
 parent=(R/a.parent).resolve();assert parent.is_relative_to(R/'build') and re.fullmatch(r'[A-Za-z0-9_]+',parent.name)
 s=json.loads((parent/'summary.json').read_text(encoding='utf-8'))

@@ -11,6 +11,7 @@ prefix=prefix.replace("O=R/'build/sim/stable_video'",f"O=R/'build/sim/refined_vi
 saved=sys.argv;sys.argv=[str(legacy)];scope={'__file__':str(legacy),'__name__':'refined_video_fixture'}
 exec(compile(prefix,str(legacy),'exec'),scope);sys.argv=saved
 s=scope['s'];oracle_dir=scope['O']
+s=s.replace('stable_osd osd','refined_osd osd')
 s=s.replace('stable_line_reader dut',a.reader+'_line_reader dut').replace(".I_meta(640'd0)",".I_meta(768'd0)")
 s=s.replace("ok,1'(rarg));","ok,1'(rarg),1'b1,,,,32'd0,1'b0);")
 s=s.replace('reg [1:0] zoom=0, mode=0;','reg [2:0] zoom=0;reg [1:0] mode=0;')
@@ -28,6 +29,8 @@ s=s.replace('    function [127:0] word_at',r'''    function integer ratio_p(inpu
 s=s.replace('x0=959;y0=563;zoom=2;','x0=959;y0=563;zoom=4;')
 mods=[R/'rtl/color_regions'/f'{m}.v' for m in ('stable_line_reader','stable_model_lane','stable_filter4','stable_preprocess','stable_osd','stable_glyph_rom','stable_footer_glyph_rom','stable_footer_program_rom','stable_footer_text_rom','refined_overlay_geometry','refined_zoom_geometry','refined_reset_bridge','refined_logo_rom')]
 mods += [R/'rtl/04_tracking/target_mailbox.v',R/'rtl/09_osd_ui/scaling_logo_rom.v']
+mods=[R/'rtl/color_regions/refined_osd.v' if p.name=='stable_osd.v' else R/'rtl/color_regions/refined_footer_program_rom.v' if p.name=='stable_footer_program_rom.v' else p for p in mods]
+mods += [R/'rtl/color_regions'/f'{n}.v' for n in ('refined_english_font_rom','refined_english_text_rom')]
 mods=[R/f'rtl/color_regions/{a.reader}_line_reader.v' if p.name=='stable_line_reader.v' else p for p in mods]
 origins=[(0,48),(101,99),(320,204),(787,400),(959,563)]
 jobs=[(0,z,0,rot,0,1) for z in (0,1,3) for rot in (0,1)]

@@ -58,7 +58,7 @@ def assets():
         if path.endswith('/mc_to_user_interface.v'):node.set('Path','../rtl/color_regions/refined_mc_to_user_interface.v')
         if path.endswith('/ph1p35_324_ddr_wrapper.v'):node.set('Path','../rtl/color_regions/refined_ph1p35_ddr_wrapper.v')
         if path.endswith('/video_in.v'):node.set('Path','../rtl/color_regions/refined_video_in.v')
-    extra=sorted((R/'rtl/color_regions').glob('refined_*.v'))
+    extra=sorted(set((R/'rtl/color_regions').glob('refined_*.v')) | {R/'rtl/color_regions'/n for n in ('refined_english_font_rom.v','refined_english_text_rom.v')})
     existing={node.attrib.get('Path') for node in files}
     for path in extra:
         name='../'+path.relative_to(R).as_posix()

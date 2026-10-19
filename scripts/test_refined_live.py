@@ -71,6 +71,7 @@ mods=[R/f'rtl/color_regions/{a.reader}_line_reader.v' if p.name=='stable_line_re
 mods=[R/f'rtl/color_regions/{a.store}_frame_store.v' if p.name=='stable_frame_store.v' else p for p in mods]
 mods=[R/'rtl/color_regions/refined_osd.v' if p.name=='stable_osd.v' else R/'rtl/color_regions/refined_footer_program_rom.v' if p.name=='stable_footer_program_rom.v' else p for p in mods]
 mods += [R/'user_source/ip_source'/n for n in ('w128_d512_fifo/w128_d512_fifo.v','w128_d512_fifo/soft_fifo_al_4057d6b76aa6.v','w155_d512_fifo/w155_d512_fifo.v','w155_d512_fifo/soft_fifo_al_f58e8b3e1f3d.v')]
+mods += [R/'rtl/color_regions'/f'{n}.v' for n in ('refined_english_font_rom','refined_english_text_rom')]
 def execute(job):
  pair,rot=job
  return run(f'{a.reader}_v4_live_{pair}_{rot}_{a.store}_g{a.line_gap}',s,mods,top='tb_stable_live',compile_args=[f'-Ptb_stable_live.PAIR_MODE={pair}',f'-Ptb_stable_live.ROTATE={rot}'],timeout=3600)

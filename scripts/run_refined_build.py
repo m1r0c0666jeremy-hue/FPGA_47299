@@ -19,7 +19,8 @@ ap.add_argument('--checkpoint',action='store_true')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
-assert branch=='release/transparent-ring-stability-20261015'
+from osd_memory_branch import check_branch
+assert branch==check_branch(R)
 created_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
 subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
 stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')

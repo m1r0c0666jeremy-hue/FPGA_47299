@@ -11,7 +11,7 @@ module refined_osd(
  input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
  input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera
 );
- localparam FONT=16,COLS=64;
+ localparam FONT=16,CHAR_WIDTH=8,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
  reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
@@ -43,11 +43,11 @@ module refined_osd(
 reg [4:0] template_index;reg token_valid;reg [31:0] hex_value;reg [7:0] decoded_glyph;
 wire [15:0] token_data;wire [7:0] dynamic_glyph;
 wire [10:0] program_addr={template_index,format_col};
-wire [8:0] dynamic_addr=token_data[12:8]==0?({7'd0,fmode}<<2)+{5'd0,token_data[3:0]}:
+wire [8:0] dynamic_addr=token_data[12:8]==0?({7'd0,fmode}<<3)+{5'd0,token_data[2:0]}:
 token_data[12:8]==1?9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]}:
 9'd384+({7'd0,model_id}<<3)+{5'd0,token_data[2:0]};
 refined_footer_program_rom program_rom(I_clk,program_addr,token_data);
-stable_footer_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
+refined_english_text_rom text_rom(I_clk,dynamic_addr,dynamic_glyph);
 always @*begin
 template_index={4'd0,format_row};
 if(fm[567:565]!=0)begin
@@ -68,24 +68,23 @@ hex_value=0;case(token_data[12:8])
 endcase
 decoded_glyph=0;case(token_data[15:13])
 0:decoded_glyph=token_data[7:0];
-1:decoded_glyph=token_valid?8'd1+number_digit_q:8'd173;
-2:decoded_glyph=token_valid?8'd1+hex_digit_q:8'd173;
+1:decoded_glyph=token_valid?8'd1+number_digit_q:8'd41;
+2:decoded_glyph=token_valid?8'd1+hex_digit_q:8'd41;
 3:case(token_data[12:8])
-0:decoded_glyph=fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:fzoom==4?8'd5:8'd2;
-1:decoded_glyph=fzoom==1?8'd172:8'd34;
-2:decoded_glyph=fzoom==1?8'd6:8'd0;
-3:decoded_glyph=fzoom==1?8'd34:8'd0;
-4:decoded_glyph=fpair?8'd160:8'd158;
-5:decoded_glyph=fpair?8'd161:8'd159;
-6:decoded_glyph=frotate?8'd2:8'd1;
-7:decoded_glyph=frotate?8'd9:8'd1;
-8:decoded_glyph=frotate?8'd1:8'd1;
+0:decoded_glyph=fzoom==0?8'd2:fzoom==1?8'd2:fzoom==2?8'd3:fzoom==3?8'd4:8'd5;
+1:decoded_glyph=fzoom==0?8'd34:fzoom==1?8'd39:fzoom==2?8'd34:fzoom==3?8'd34:8'd34;
+2:decoded_glyph=fzoom==0?8'd0:fzoom==1?8'd6:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
+3:decoded_glyph=fzoom==0?8'd0:fzoom==1?8'd34:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
+4:decoded_glyph=fpair==0?8'd28:8'd35;
+5:decoded_glyph=fpair==0?8'd42:8'd42;
+6:decoded_glyph=fpair==0?8'd12:8'd26;
+7:decoded_glyph=frotate==0?8'd1:8'd2;
+8:decoded_glyph=frotate==0?8'd1:8'd9;
+9:decoded_glyph=frotate==0?8'd1:8'd1;
 endcase
-4:begin if(!token_valid)decoded_glyph=8'd173;else case(token_data[12:8])
-default:decoded_glyph=0;endcase end
 5:decoded_glyph=dynamic_glyph;
-endcase end
-
+endcase
+end
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
  flat_valid<=0;flatency<=0;fage<=0;
@@ -122,26 +121,26 @@ endcase end
  wire [23:0] color_a=I_pair?24'hffff40:24'hff6060,color_b=I_pair?24'he080ff:24'h6090ff;
  reg [5:0] footer_col;reg [4:0] footer_px;
  reg [7:0] footer_glyph;reg [4:0] footer_gy;reg footer_text,footer_row;
- reg [3:0] label_glyph,label_gx,label_gy;reg label_text,back_on,logo_on;
+ reg [7:0] label_glyph;reg [3:0] label_gx,label_gy;reg [6:0] label_width;reg label_text,back_on,logo_on;
  reg [23:0] ink,back;reg [12:0] logo_addr;reg [41:0] box;reg valid_box;
  reg signed [13:0] xx,yy,bx0,bx1,by0,by1,lx,ly,ldx,ldy;
  integer j,lc;reg [9:0] logo_y;reg [10:0] logo_x;
- localparam [31:0] WAIT_WORD={8'd86,8'd39,8'd87,8'd88};
+ localparam [87:0] WAIT_WORD={8'd33,8'd11,8'd19,8'd30,8'd0,8'd28,8'd15,8'd29,8'd31,8'd22,8'd30};
  wire footer_current=footer_ready && I_tracking==ftracking && I_video_ok==fvideo && I_detection_valid==fdetection && I_state==fstate;
  always @*begin
- footer_glyph=0;footer_gy=0;footer_text=0;footer_row=0;label_glyph=0;label_gx=0;label_gy=0;label_text=0;
+ footer_glyph=0;footer_gy=0;footer_text=0;footer_row=0;label_glyph=0;label_gx=0;label_gy=0;label_text=0;label_width=0;
  back_on=0;back=24'h101824;ink=24'hf0f4ff;logo_on=0;logo_addr=0;logo_y=0;logo_x=0;
  box=0;valid_box=0;xx=$signed({3'd0,x});yy=$signed({4'd0,y});bx0=0;bx1=0;by0=0;by1=0;lx=0;ly=0;ldx=0;ldy=0;lc=0;
  if(y>=624)begin
  back_on=1;
  if(x>=1167 && x<1265 && y>=640 && y<704)begin
  logo_on=1;logo_y=y-640;logo_x=x-1167;logo_addr=(logo_y<<6)+(logo_y<<5)+(logo_y<<1)+logo_x;end
- if(x>=16 && x<16+COLS*FONT && ((y>=632+(32-FONT)/2 && y<632+(32-FONT)/2+FONT) ||
+ if(x>=16 && x<16+COLS*CHAR_WIDTH && ((y>=632+(32-FONT)/2 && y<632+(32-FONT)/2+FONT) ||
  (y>=676+(32-FONT)/2 && y<676+(32-FONT)/2+FONT)))begin
  footer_row=y>=676;footer_gy=footer_row?y-(676+(32-FONT)/2):y-(632+(32-FONT)/2);
  footer_text=1;
  if(footer_current)footer_glyph=characters[(footer_row?COLS:0)+footer_col];
- else if(footer_ready && !footer_row && footer_col<4)footer_glyph=WAIT_WORD>>((3-footer_col)*8);
+ else if(footer_ready && !footer_row && footer_col<11)footer_glyph=WAIT_WORD>>((10-footer_col)*8);
  end
  end else if(I_video_ok && geometry_ready)begin
  if(I_show && I_detection_valid)for(j=0;j<2;j=j+1)begin
@@ -150,11 +149,52 @@ endcase end
  by0=$signed(geometry[j*56+28+:14]);by1=$signed(geometry[j*56+42+:14]);
  if(valid_box && bx1>=0 && bx0<1280 && by1>=0 && by0<624)begin
  if(border(xx,yy,bx0,bx1,by0,by1))begin back_on=1;back=j==0?color_a:color_b;end
- lx=bx0<0?0:bx0>1216?1216:bx0;ly=by0>=18?by0-18:by1+3;
+ label_width=j==0?(I_pair?72:48):(I_pair?72:56);
+ lx=bx0<0?0:bx0>(1280-label_width)?(1280-label_width):bx0;ly=by0>=18?by0-18:by1+3;
  if(ly>608)ly=608;if(ly<0)ly=0;ldx=xx-lx;ldy=yy-ly;
- if(ldx[13:6]==0 && ldy[13:4]==0)begin
- back_on=1;back=24'h101824;label_text=1;ink=j==0?color_a:color_b;label_gx=ldx[3:0];label_gy=ldy[3:0];lc=ldx[5:4];
- case(lc)0:label_glyph=j==0?(I_pair?3:1):(I_pair?4:2);1:label_glyph=5;2:label_glyph=j==0?6:7;3:label_glyph=8;endcase
+ if(ldx>=0 && ldx<label_width && ldy[13:4]==0)begin
+ back_on=1;back=24'h101824;label_text=1;ink=j==0?color_a:color_b;label_gx={1'b0,ldx[2:0]};label_gy=ldy[3:0];lc=ldx[6:3];
+ case({I_pair,j[0]})
+2'd0:case(lc)
+0:label_glyph=8'd28;
+1:label_glyph=8'd15;
+2:label_glyph=8'd14;
+3:label_glyph=8'd0;
+4:label_glyph=8'd11;
+5:label_glyph=8'd2;
+endcase
+2'd1:case(lc)
+0:label_glyph=8'd12;
+1:label_glyph=8'd22;
+2:label_glyph=8'd31;
+3:label_glyph=8'd15;
+4:label_glyph=8'd0;
+5:label_glyph=8'd12;
+6:label_glyph=8'd2;
+endcase
+2'd2:case(lc)
+0:label_glyph=8'd35;
+1:label_glyph=8'd15;
+2:label_glyph=8'd22;
+3:label_glyph=8'd22;
+4:label_glyph=8'd25;
+5:label_glyph=8'd33;
+6:label_glyph=8'd0;
+7:label_glyph=8'd11;
+8:label_glyph=8'd2;
+endcase
+2'd3:case(lc)
+0:label_glyph=8'd26;
+1:label_glyph=8'd31;
+2:label_glyph=8'd28;
+3:label_glyph=8'd26;
+4:label_glyph=8'd22;
+5:label_glyph=8'd15;
+6:label_glyph=8'd0;
+7:label_glyph=8'd12;
+8:label_glyph=8'd2;
+endcase
+endcase
  end end end
  if(I_show && I_detection_valid && I_meta[32])begin
  lx=$signed(geometry[224+:14]);ly=$signed(geometry[238+:14]);ldx=xx-lx;ldy=yy-ly;
@@ -163,10 +203,9 @@ endcase end
  if(I_show && I_tracking && I_meta[36:33]<=2 && border(xx,yy,$signed(geometry[112+:14]),$signed(geometry[126+:14]),$signed(geometry[140+:14]),$signed(geometry[154+:14])))begin back_on=1;back=24'h40c080;end
  if(I_show && I_mode==1 && border(xx,yy,$signed(geometry[168+:14]),$signed(geometry[182+:14]),$signed(geometry[196+:14]),$signed(geometry[210+:14])))begin back_on=1;back=24'h80ff80;end
  end end
- wire [11:0] footer_addr=(footer_glyph<<4)+footer_gy;
- wire [FONT-1:0] footer_font_row;wire [15:0] label_font_row;wire [1:0] logo_pixel;
- stable_footer_glyph_rom footer_font(I_clk,footer_addr,footer_font_row);
- stable_glyph_rom label_font(I_clk,{label_glyph,label_gy},label_font_row);
+ wire [9:0] shared_font_addr=footer_text?{footer_glyph[5:0],footer_gy[3:0]}:{label_glyph[5:0],label_gy};
+ wire [7:0] shared_font_row;wire [1:0] logo_pixel;
+ refined_english_font_rom shared_font(I_clk,shared_font_addr,shared_font_row);
  refined_logo_rom logo(I_clk,logo_addr,logo_pixel);
  reg [4:0] footer_px_d;reg [3:0] label_gx_d;reg footer_d,label_d,logo_d,back_d,vs_d,hs_d,de_d;
  reg [23:0] ink_d,bg_d,rgb_d;
@@ -178,13 +217,13 @@ endcase end
  vs_last<=I_vs;if(I_vs && !vs_last)begin x<=0;y<=0;end
  else if(I_de)begin if(x==1279)begin x<=0;y<=y+1'b1;end else x<=x+1'b1;end
  if(I_de)begin if(x==0)begin footer_col<=0;footer_px<=0;end
- else if(x>=16 && x<16+COLS*FONT)begin if(footer_px==FONT-1)begin footer_px<=0;footer_col<=footer_col+1'b1;end else footer_px<=footer_px+1'b1;end end
+ else if(x>=16 && x<16+COLS*CHAR_WIDTH)begin if(footer_px==CHAR_WIDTH-1)begin footer_px<=0;footer_col<=footer_col+1'b1;end else footer_px<=footer_px+1'b1;end end
  footer_px_d<=footer_px;label_gx_d<=label_gx;footer_d<=footer_text;label_d<=label_text;logo_d<=logo_on;back_d<=back_on;
  ink_d<=ink;bg_d<=back;rgb_d<=I_rgb;vs_d<=I_vs;hs_d<=I_hs;de_d<=I_de;
  O_vs<=vs_d;O_hs<=hs_d;O_de<=de_d;
  O_rgb<=logo_d && logo_pixel!=0?(logo_pixel==1?24'h1c2c4e:logo_pixel==2?24'hed1b23:24'he0e8f4):
- footer_d && footer_font_row[FONT-1-footer_px_d]?ink_d:
- label_d && label_font_row[15-label_gx_d]?ink_d:back_d?bg_d:rgb_d;
+ footer_d && shared_font_row[7-footer_px_d[2:0]]?ink_d:
+ label_d && shared_font_row[7-label_gx_d[2:0]]?ink_d:back_d?bg_d:rgb_d;
  end end
 endmodule
 `default_nettype wire
