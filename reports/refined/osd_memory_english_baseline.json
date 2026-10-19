@@ -1,0 +1,8 @@
+{
+  "archive": "build/osd_memory_english_baseline_20261019_230455/before.zip",
+  "inputs": {
+    "rtl/color_regions/refined_osd.v": "e47199f1ba9b0bee5e4bdae06d910fc9ba08c29162614a846de4ef91b8640d86",
+    "rtl/color_regions/refined_footer_program_rom.v": "dfff1160a223a5431141c9ce359182fb109671154a24cf87d2e4c0feffb6de42",
+    "assets/osd/anlogic/english_ui_manifest.json": "d8e615edeabe847adbd085001ee4d90c926b7440cd69aa65c6721040e1912bdd"
+  }
+}

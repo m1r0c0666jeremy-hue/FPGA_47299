@@ -42,7 +42,33 @@ module refined_osd(
  if(decimal[nibble*4+:4]>=5)adjusted[nibble*4+:4]=decimal[nibble*4+:4]+3;end
 reg [4:0] template_index;reg token_valid;reg [31:0] hex_value;reg [7:0] decoded_glyph;
 wire [15:0] token_data;wire [7:0] dynamic_glyph;
-wire [10:0] program_addr={template_index,format_col};
+reg [9:0] template_start;reg [6:0] template_length;
+always @*begin template_start=0;template_length=0;case(template_index)
+0:begin template_start=10'd0;template_length=7'd53;end
+1:begin template_start=10'd53;template_length=7'd41;end
+2:begin template_start=10'd94;template_length=7'd42;end
+3:begin template_start=10'd136;template_length=7'd46;end
+4:begin template_start=10'd182;template_length=7'd60;end
+5:begin template_start=10'd242;template_length=7'd45;end
+6:begin template_start=10'd287;template_length=7'd47;end
+7:begin template_start=10'd334;template_length=7'd53;end
+8:begin template_start=10'd387;template_length=7'd23;end
+9:begin template_start=10'd410;template_length=7'd36;end
+10:begin template_start=10'd446;template_length=7'd39;end
+11:begin template_start=10'd485;template_length=7'd40;end
+12:begin template_start=10'd525;template_length=7'd40;end
+13:begin template_start=10'd565;template_length=7'd37;end
+14:begin template_start=10'd602;template_length=7'd39;end
+15:begin template_start=10'd641;template_length=7'd40;end
+16:begin template_start=10'd681;template_length=7'd40;end
+17:begin template_start=10'd721;template_length=7'd41;end
+18:begin template_start=10'd762;template_length=7'd42;end
+19:begin template_start=10'd804;template_length=7'd42;end
+20:begin template_start=10'd846;template_length=7'd40;end
+endcase end
+wire [9:0] program_addr=template_start+{4'd0,format_col};
+reg program_in_range,program_in_range_q;
+always @(posedge I_clk)begin program_in_range<=({1'b0,format_col}<template_length);program_in_range_q<=program_in_range;end
 wire [8:0] dynamic_addr=token_data[12:8]==0?({7'd0,fmode}<<3)+{5'd0,token_data[2:0]}:
 token_data[12:8]==1?9'd64+({4'd0,status_id}<<4)+{5'd0,token_data[3:0]}:
 9'd384+({7'd0,model_id}<<3)+{5'd0,token_data[2:0]};
@@ -84,6 +110,7 @@ decoded_glyph=0;case(token_data[15:13])
 endcase
 5:decoded_glyph=dynamic_glyph;
 endcase
+if(!program_in_range_q)decoded_glyph=0;
 end
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
