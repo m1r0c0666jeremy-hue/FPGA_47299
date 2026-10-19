@@ -1,0 +1,14 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_capture.v": "03871379cf640c2395c4260093efb412877b3fded12b9ab83b8cd93a1531a7c8",
+    "build\\refined_capture_history_formal\\reference.v": "f9df075be6c00e00562290787a5e6ae5d70db4d2dd19ed0610e2958ea770f440",
+    "rtl\\color_regions\\stable_tracker.v": "b24398a276aecdda3f452f6bfe562551f8d20ecc0ca0a6a797834ec98a27954c",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\stable_grid.v": "cd243ccf55fb9d5815963919e2040106a45cffd5c8330fcce7b09a0355a26ef4",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\transparent-ring-stability\\build\\sim\\refined\\capture_history_pipeline_stale_context_20261019_015237_846899"
+}

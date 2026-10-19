@@ -11,6 +11,7 @@ def assets():
     from refined_tracker_storage import tracker_asset
     from refined_camera_relay_logic import camera_top_asset
     from refined_recovery_mailbox_logic import recovery_video_asset
+    from refined_capture_history_logic import history_asset
     isp=isp_assets()
     # A separate IP instance preserves the historical controller and constraints.
     # STRICT keeps an accepted read behind all previously accepted write commands;
@@ -74,7 +75,7 @@ def assets():
     ET.indent(root,space='    ')
     project='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(root,encoding='unicode').replace('&amp;','&').replace('__TD_COLON__','::')+'\n'
     from generate_refined_ui import ui_assets
-    return {'rtl/color_regions/stable_memory_video_out.v':recovery_video_asset((R/'scripts/refined_memory_video_base.v.txt').read_text(encoding='utf-8'),(R/'rtl/04_tracking/target_mailbox.v').read_text(encoding='utf-8')),'rtl/color_regions/stable_top.v':camera_top_asset((R/'scripts/refined_camera_top_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_tracker.v':tracker_asset((R/'scripts/refined_tracker_storage_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_model_lane.v':retime_hue_asset(shared_hue_asset(original_lane)),'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
+    return {'rtl/color_regions/stable_capture.v':history_asset((R/'scripts/refined_capture_history_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_memory_video_out.v':recovery_video_asset((R/'scripts/refined_memory_video_base.v.txt').read_text(encoding='utf-8'),(R/'rtl/04_tracking/target_mailbox.v').read_text(encoding='utf-8')),'rtl/color_regions/stable_top.v':camera_top_asset((R/'scripts/refined_camera_top_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_tracker.v':tracker_asset((R/'scripts/refined_tracker_storage_base.v.txt').read_text(encoding='utf-8')),'rtl/color_regions/stable_model_lane.v':retime_hue_asset(shared_hue_asset(original_lane)),'rtl/color_regions/refined_controls.v':control_asset((R/'rtl/color_regions/stable_controls.v').read_text(encoding='utf-8')),'rtl/color_regions/refined_frame_store.v':store_asset((R/'rtl/color_regions/stable_frame_store.v').read_text(encoding='utf-8')),**ddr,**isp,**ui_assets(),'rtl/color_regions/refined_ph1p35_ddr_wrapper.v':source,'rtl/color_regions/refined_video_in.v':writer,'td_project/target_color_regions_refined.al':project}
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
     for name,text in assets().items():

@@ -42,9 +42,13 @@ module stable_capture #(parameter V4=0)(input wire I_clk,I_rst_n,I_sof,I_valid,I
  wire [9:0] hist_command;wire [15:0] hist_revision;wire [31:0] hist_frame;wire [4:0] hist_loss;wire [3:0] tip_bounds;
  wire detect_allowed=cmds[wb][0] && !needs[wb] && status[wb][7:5]==0;
  wire [1:0] selected_state;wire [31:0] history_gap=ids[wb]-hist_frame;
- wire history_for_bank=hist_valid && hist_command=={cmds[wb][9:1],detect_allowed} && hist_revision==revs[wb] &&
+ wire history_for_bank_now=hist_valid && hist_command=={cmds[wb][9:1],detect_allowed} && hist_revision==revs[wb] &&
  history_gap!=0 && !history_gap[31] && history_gap<=15 && ({27'd0,hist_loss}+history_gap)<=15 &&
  (selected_state==2 || history_gap==1);
+ // state 0 selects wb; state 1 freezes its history predicate and issues gs.
+ // The grid samples both on the next edge. Its candidate/result cycles do not
+ // change, and the history command/revision/frame/lifetime checks stay intact.
+ reg history_for_bank;
  stable_grid grid(clk,rst_n,fv && ft[1],ft[0],fx,fy,fa,fb,gs,wb,
  history_for_bank,hist_boxes,history_for_bank,gb,gd,gfailed,candidates,work_cycles);
  wire td,tv;wire [127:0] a,b;wire [10:0] tx;wire [9:0] ty;wire [3:0] reason;
@@ -52,6 +56,9 @@ module stable_capture #(parameter V4=0)(input wire I_clk,I_rst_n,I_sof,I_valid,I
  stable_tracker tracker(clk,rst_n,ts,ids[wb],{cmds[wb][9:1],detect_allowed},revs[wb],work_complete,
  candidates,td,a,b,tv,tx,ty,reason,hist_valid,hist_boxes,selected_state,hist_command,hist_revision,hist_frame,hist_loss,tip_bounds);
  reg [2:0] state;reg [767:0] packet,waiting_packet;reg waiting_result;
+ always @(posedge clk or negedge rst_n)
+ if(!rst_n)history_for_bank<=0;
+ else if(state==1)history_for_bank<=history_for_bank_now;
  // The mailbox samples only on O_valid. This independent pending bank is
  // already immutable until its next complete result copy; a second 640-bit
  // output register adds no protection. Do not issue a pulse on a copy cycle:

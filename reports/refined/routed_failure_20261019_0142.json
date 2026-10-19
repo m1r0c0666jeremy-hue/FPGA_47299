@@ -1,0 +1,180 @@
+{
+  "status": "TIMING_FAILED_NOT_DELIVERABLE",
+  "attempt": "build/refined_route_20261018_233608_631875",
+  "recorded": "2026-10-19T01:46:57.530273",
+  "summary": {
+    "stage": "full",
+    "head": "d3955180bd550e18e5b788dc2058732ef902eabc",
+    "head_after": "86d9d13dc2949387567dc118749671136440aa5f",
+    "route_effort": "normal",
+    "placement_strategy": 5,
+    "map_mode": "area_prior",
+    "pack_effort": "high",
+    "infer_fsm": "project",
+    "map_strategy": null,
+    "macro_performance": null,
+    "pack_mode": null,
+    "place_effort": null,
+    "max_fanout": 128,
+    "exit_code": 0,
+    "inputs_unchanged": true,
+    "working_tree_matches": true,
+    "official_strategy": null,
+    "checkpoint_provenance": {
+      "parent": "build/refined_place_20261018_225243",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "83c8e37a1c9cabcd6e6b674f6500d9a7ab07eb1f66cb28a4e771f7154d896f2a",
+      "parent_summary_sha256": "db688ef01a730531b5be34b5ecea7ef8c0126c91b0592da0bd842377264ea446",
+      "parent_context_sha256": "61cd9fba71200d04ac6b57db6a8e7308c5b29d2003117fb29690aa4369168901",
+      "parent_inputs_sha256": "d8acdea4acf9a11fbe8bda51a071d0f553d310132e5bf75fac5dfcaa19c0df9d"
+    },
+    "checkpoint_unchanged": true,
+    "replaced_strategy": null,
+    "flow_threads": null,
+    "retry_routability": false,
+    "route_retry_performed": false,
+    "final_route_effort": "normal",
+    "route_checkpoints": {
+      "target_color_regions_routed.db": "76a578e20fcd71c410d8ec83fabe329185bee42d1f9d69252d4d227c0a79b95d"
+    },
+    "resources": {
+      "slice": 19799,
+      "lut6": 19160,
+      "reg": 23325,
+      "eram": 99,
+      "dsp": 40
+    },
+    "gate_estimate": false,
+    "resource_pass": true,
+    "placement_required": false,
+    "slack_ns": {
+      "SWNS": -2.126,
+      "HWNS": -0.008
+    },
+    "timing_pass": false
+  },
+  "paths": [
+    {
+      "slack_ns": -2.126,
+      "begin": "u_video/u_detection/ids_reg[6]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "end": "u_video/u_detection/grid/best_reg[725]_syn_5.ie (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "check": "setup",
+      "budget": "16.668ns { MIPI_RX_BYTE_CLK rising@16.668ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+      "delay": "18.603ns (cell 3.975ns (21%), net 14.628ns (79%))",
+      "levels": "13 ( ADDER=6  LUT6=4  LUT5=1  LUT4=1  LUT3=1 )",
+      "fanout": "90",
+      "clock": "MIPI_RX_BYTE_CLK"
+    },
+    {
+      "slack_ns": -2.093,
+      "begin": "u_video/u_detection/ids_reg[6]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "end": "u_video/u_detection/grid/best_reg[729]_syn_13.id (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "check": "setup",
+      "budget": "16.668ns { MIPI_RX_BYTE_CLK rising@16.668ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+      "delay": "18.570ns (cell 4.032ns (21%), net 14.538ns (79%))",
+      "levels": "13 ( ADDER=6  LUT6=4  LUT5=1  LUT4=1  LUT3=1 )",
+      "fanout": "90",
+      "clock": "MIPI_RX_BYTE_CLK"
+    },
+    {
+      "slack_ns": -1.999,
+      "begin": "u_video/u_detection/ids_reg[6]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "end": "u_video/u_detection/grid/supports_reg[84]_syn_2.imb (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "check": "setup",
+      "budget": "16.668ns { MIPI_RX_BYTE_CLK rising@16.668ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+      "delay": "18.476ns (cell 4.381ns (23%), net 14.095ns (77%))",
+      "levels": "12 ( ADDER=6  LUT6=3  LUT5=2  LUT4=1 )",
+      "fanout": "145",
+      "clock": "MIPI_RX_BYTE_CLK"
+    },
+    {
+      "slack_ns": -2.12,
+      "begin": "u_video/u_mc_to_user_interface/address_reg[16]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "end": "u_video/u_frame_store/O_data_reg[98]_syn_2.imb (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "check": "setup",
+      "budget": "15.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@15.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+      "delay": "16.791ns (cell 4.105ns (24%), net 12.686ns (76%))",
+      "levels": "12 ( LUT6=4  LUT5=2  LUT4=2  ADDER=2  LUT3=1  DRAM=1 )",
+      "fanout": "189",
+      "clock": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk"
+    },
+    {
+      "slack_ns": -2.081,
+      "begin": "u_video/u_results/D_data_reg[719]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "end": "u_video/u_frame_store/O_data_reg[512]_syn_2.ie (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "check": "setup",
+      "budget": "15.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@15.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+      "delay": "16.762ns (cell 3.107ns (18%), net 13.655ns (82%))",
+      "levels": "11 ( LUT4=5  LUT6=4  LUT5=1  DRAM=1 )",
+      "fanout": "72",
+      "clock": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk"
+    },
+    {
+      "slack_ns": -2.048,
+      "begin": "u_video/u_mc_to_user_interface/address_reg[16]_syn_2.clk (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "end": "u_video/u_frame_store/O_data_reg[94]_syn_2.id (rising edge triggered by clock u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk  { rise@0.000000ns  fall@7.500000ns  period=15.000000 })",
+      "check": "setup",
+      "budget": "15.000ns { u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@15.000ns - u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk rising@0.000ns }",
+      "delay": "16.719ns (cell 4.080ns (24%), net 12.639ns (76%))",
+      "levels": "12 ( LUT6=4  LUT5=2  LUT4=2  ADDER=2  LUT3=1  DRAM=1 )",
+      "fanout": "189",
+      "clock": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk"
+    },
+    {
+      "slack_ns": -2.112,
+      "begin": "u_video/u_osd/program_rom/q_reg[8]_syn_2.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "end": "u_video/u_osd/ramread0_syn_114.imb (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "check": "setup",
+      "budget": "13.333ns { HDMI_PIXEL_CLK rising@13.333ns - HDMI_PIXEL_CLK rising@0.000ns }",
+      "delay": "15.042ns (cell 2.886ns (19%), net 12.156ns (81%))",
+      "levels": "10 ( LUT2=3  LUT6=2  LUT3=2  LUT5=1  LUT4=1  DRAM=1 )",
+      "fanout": "22",
+      "clock": "HDMI_PIXEL_CLK"
+    },
+    {
+      "slack_ns": -2.071,
+      "begin": "camera_ready_sync_reg[0]_syn_2.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "end": "u_video/u_viewport/O_y0_reg[8]_syn_2.ie (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "check": "setup",
+      "budget": "13.333ns { HDMI_PIXEL_CLK rising@13.333ns - HDMI_PIXEL_CLK rising@0.000ns }",
+      "delay": "15.081ns (cell 5.157ns (34%), net 9.924ns (66%))",
+      "levels": "14 ( ADDER=6  LUT2=3  LUT5=2  LUT6=1  LUT4=1  LUT3=1 )",
+      "fanout": "21",
+      "clock": "HDMI_PIXEL_CLK"
+    },
+    {
+      "slack_ns": -2.069,
+      "begin": "camera_ready_sync_reg[0]_syn_2.clk (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "end": "u_video/u_viewport/O_y0_reg[8]_syn_2.imf (rising edge triggered by clock HDMI_PIXEL_CLK  { rise@0.000000ns  fall@6.666000ns  period=13.333000 })",
+      "check": "setup",
+      "budget": "13.333ns { HDMI_PIXEL_CLK rising@13.333ns - HDMI_PIXEL_CLK rising@0.000ns }",
+      "delay": "15.079ns (cell 5.101ns (33%), net 9.978ns (67%))",
+      "levels": "14 ( ADDER=6  LUT2=3  LUT5=2  LUT6=1  LUT4=1  LUT3=1 )",
+      "fanout": "21",
+      "clock": "HDMI_PIXEL_CLK"
+    },
+    {
+      "slack_ns": -0.008,
+      "begin": "u_camera/u_isp_top/wb_tag1_reg[15]_syn_2.clk (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "end": "u_video/u_detection/ids_reg[47]_syn_2.ima (rising edge triggered by clock MIPI_RX_BYTE_CLK  { rise@0.000000ns  fall@8.332000ns  period=16.667999 })",
+      "check": "hold",
+      "budget": "0.000ns { MIPI_RX_BYTE_CLK rising@0.000ns - MIPI_RX_BYTE_CLK rising@0.000ns }",
+      "delay": "0.160ns (cell 0.091ns (56%), net 0.069ns (44%))",
+      "levels": "0",
+      "fanout": "4",
+      "clock": "MIPI_RX_BYTE_CLK"
+    }
+  ],
+  "proofs": {
+    "td.log": "2458b46d6e466c6aedd217aa886bf252820466121a63ce293da5b35619e1ae47",
+    "summary.json": "69ab8f5e2a049310ce1258608f27a64416e28ccfc196c004a3349ec9849aa551",
+    "inputs.json": "d8acdea4acf9a11fbe8bda51a071d0f553d310132e5bf75fac5dfcaa19c0df9d",
+    "inputs_after.json": "d8acdea4acf9a11fbe8bda51a071d0f553d310132e5bf75fac5dfcaa19c0df9d",
+    "target_color_regions_phy.ts": "5e996a8691a7f22b958e01cab0b12042766937ac1c1cf388774bc17123542f72",
+    "target_color_regions_pr.timing": "143130460cdf302006cd13cbbb809ed0a8d00d8bf8f381cc83e6460895b05822",
+    "target_color_regions_exception.timing": "f4dc88c1dad154934f1980e6ad0e59cfb3d2f4e7bb7464ce18d43504ed76c9b1",
+    "target_color_regions.bit": "a8a437a54de9b7c9e0e3fa49b857868e985df02ef9e01ebee1c273997ae1370c"
+  },
+  "physical_measurements": "PENDING",
+  "constraints_changed": false
+}
