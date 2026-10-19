@@ -5,7 +5,7 @@ Maintainer: Fle & Jeremy
 
 分支 `release/transparent-ring-stability-20261015`，基线 `2f79847`。本轮入口为 **`td_project/target_color_regions_refined.al`**：独立DDR握手/恢复与相机应答监督、定向背景校准、五档倍率、透明官方Logo、默认底栏及校准提示和v4板内延迟。原工程、历史bit及源码包保留。
 
-10月19日按Jeremy要求取消三个诊断分页及KEY2+KEY3切页，保留四种图像模式、两配色和五档倍率。正在测量精简后的资源和时序；没有新的可交付bit。
+10月19日按Jeremy要求取消三个诊断分页及KEY2+KEY3切页，保留四种图像模式、两配色和五档倍率。资源与交付状态见下方清单。
 
 <!-- REFINED_DELIVERY -->
 完整构建和最终交付正在进行，目前不要将中间尝试作为上板版本。

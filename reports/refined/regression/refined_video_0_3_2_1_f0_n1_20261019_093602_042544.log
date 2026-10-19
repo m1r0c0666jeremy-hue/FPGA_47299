@@ -1,0 +1,2 @@
+STABLE_VIDEO_PASS: zoom=          3 mode=          2 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\refined_video_0_3_2_1_f0_n1_20261019_093602_042544\tb.sv:153: $finish called at 17050345808 (1ps)
