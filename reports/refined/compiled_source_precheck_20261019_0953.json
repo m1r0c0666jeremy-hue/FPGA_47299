@@ -1,0 +1,21 @@
+{
+  "status": "PRE_ROUTE_SOURCE_AND_PLACED_ERAM_VERIFIED_NOT_FINAL_TIMING",
+  "recorded": "2026-10-19T09:53:27.638518",
+  "compiled_source_commit": "ca2622973e41f96a06b8baf747334a74ddbc2595",
+  "git_blob_inputs_verified": 295,
+  "compiler_inputs_unchanged": true,
+  "eram_breakdown": {
+    "颜色区域检测": 39,
+    "源行及掩码处理": 14,
+    "相机ISP及配置": 13,
+    "采集及命令FIFO": 12,
+    "材料/背景校准": 8,
+    "默认底栏与图标": 9,
+    "HDMI": 5
+  },
+  "artifact_hashes": {
+    "build\\refined_place_20261019_092321\\inputs.json": "5061bb931bb1c7a8494f75931a78ff7fbcf8f91afa8cda3ba5b5edb77c89eef3",
+    "build\\refined_place_20261019_092321\\source_context.json": "aca3d500ede50620483faa388bc28204d3b1c960fb37a45a0cc62445789798c9",
+    "build\\refined_place_20261019_092321\\target_color_regions_phy.area": "61f8790508aaadd299e152ee1216a8e14a3a1900895673f933bde2f0fb1455de"
+  }
+}
