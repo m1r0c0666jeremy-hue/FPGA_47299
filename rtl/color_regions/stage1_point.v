@@ -15,7 +15,9 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  reg [21:0] length2,best,endpoint_part;reg [47:0] numerator;
  reg parity,near_edge;
  reg mstart;reg [1:0] mop;reg [47:0] ma,mb;wire mbusy,mdone;wire [47:0] mr;
- stage1_arith #(.DW(23)) alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,);
+ // A source-space triangle has |cross| <= 1279*719 = 919601.
+ // Signed 21-bit multiplication therefore covers cross squared exactly.
+ stage1_arith #(.MW(21),.DW(23)) alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,);
  function [20:0] point;input [671:0] table_data;input [1:0] r;input [3:0] i;begin
 case({r,i[2:0]})
 5'd0:point=table_data[0+:21];

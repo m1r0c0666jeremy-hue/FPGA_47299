@@ -4,17 +4,20 @@ module stage1_segment(input wire clk,rst_n,start,input wire [20:0] a,b,c,d,
  output reg busy,done,hit,overlap,output wire ray_hit);
  reg [20:0] aa,bb,cc,dd;reg [2:0] state;reg [1:0] orient;reg half;
  reg signed [11:0] dx,dy,wx,wy;reg signed [23:0] first;
- reg signed [23:0] o0,o1,o2,o3;
+ // Only sign and exact zero are needed after each orientation finishes.
+ reg [1:0] o0,o1,o2,o3;
  reg mstart;wire mbusy,mdone;wire [47:0] mr;
  reg [47:0] ma,mb;stage1_arith #(.MW(12)) alu(clk,rst_n,mstart,2'd0,ma,mb,mbusy,mdone,mr,);
+ wire signed [23:0] cross_value=first-$signed(mr[23:0]);
+ wire [1:0] orientation_bits={cross_value[23],cross_value==0};
  assign ray_hit=(aa[20:11]>cc[20:11])!=(bb[20:11]>cc[20:11]) &&
- ((bb[20:11]>aa[20:11] && !o0[23] && o0!=0) || (bb[20:11]<aa[20:11] && o0[23]));
+ ((bb[20:11]>aa[20:11] && !o0[1] && !o0[0]) || (bb[20:11]<aa[20:11] && o0[1]));
  function [10:0] lo;input [10:0] x,y;begin lo=x<y?x:y;end endfunction
  function [10:0] hi;input [10:0] x,y;begin hi=x>y?x:y;end endfunction
  wire box_hit=lo(aa[10:0],bb[10:0])<=hi(cc[10:0],dd[10:0]) && lo(cc[10:0],dd[10:0])<=hi(aa[10:0],bb[10:0]) &&
  lo({1'b0,aa[20:11]},{1'b0,bb[20:11]})<=hi({1'b0,cc[20:11]},{1'b0,dd[20:11]}) &&
  lo({1'b0,cc[20:11]},{1'b0,dd[20:11]})<=hi({1'b0,aa[20:11]},{1'b0,bb[20:11]});
- wire collinear=o0==0 && o1==0 && o2==0 && o3==0;
+ wire collinear=o0[0] && o1[0] && o2[0] && o3[0];
  wire x_span=lo(hi(aa[10:0],bb[10:0]),hi(cc[10:0],dd[10:0]))>hi(lo(aa[10:0],bb[10:0]),lo(cc[10:0],dd[10:0]));
  wire y_span=lo(hi({1'b0,aa[20:11]},{1'b0,bb[20:11]}),hi({1'b0,cc[20:11]},{1'b0,dd[20:11]}))>
  hi(lo({1'b0,aa[20:11]},{1'b0,bb[20:11]}),lo({1'b0,cc[20:11]},{1'b0,dd[20:11]}));
@@ -39,10 +42,10 @@ module stage1_segment(input wire clk,rst_n,start,input wire [20:0] a,b,c,d,
  3:if(mdone)begin
  if(!half)begin first<=$signed(mr);half<=1;state<=2;end
  else begin
- case(orient)0:o0<=first-$signed(mr);1:o1<=first-$signed(mr);2:o2<=first-$signed(mr);3:o3<=first-$signed(mr);endcase
+ case(orient)0:o0<=orientation_bits;1:o1<=orientation_bits;2:o2<=orientation_bits;3:o3<=orientation_bits;endcase
  if(orient==3)state<=4;else begin orient<=orient+1'b1;state<=1;end end end
  4:begin
- hit<=box_hit && (o0==0 || o1==0 || o0[23]!=o1[23]) && (o2==0 || o3==0 || o2[23]!=o3[23]);
+ hit<=box_hit && (o0[0] || o1[0] || o0[1]!=o1[1]) && (o2[0] || o3[0] || o2[1]!=o3[1]);
  overlap<=collinear && box_hit && (aa[10:0]!=bb[10:0]?x_span:y_span);
  busy<=0;done<=1;state<=0;end
  default:state<=0;

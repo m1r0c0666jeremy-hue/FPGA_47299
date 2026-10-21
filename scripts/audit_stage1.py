@@ -31,6 +31,8 @@ def specs():
       'stage1_validate':('STAGE1_VALIDATE_PASS cases=220',('stage1_validate','stage1_segment','stage1_arith')),
       'stage1_controls':('STAGE1_CONTROLS_PASS',('stage1_controls',)),
       'stage1_sequence':('STAGE1_SEQUENCE_PASS',('stage1_sequence',)),
+      'stage1_age_equivalence_1':('STAGE1_AGE_EQUIVALENCE_PASS period=1 cycles=1284003',('stage1_sequence',)),
+      'stage1_age_equivalence_3':('STAGE1_AGE_EQUIVALENCE_PASS period=3 cycles=3452003',('stage1_sequence',)),
       'stage1_regions':('STAGE1_REGIONS_PASS',('stage1_regions','stage1_point','stage1_validate','stage1_sequence')),
       'stage1_buzzer':('STAGE1_BUZZER_PASS',('stage1_buzzer',)),
       'stage1_camera_0':('NACK=0 retries=0',('stage1_controls','stage1_top')),
