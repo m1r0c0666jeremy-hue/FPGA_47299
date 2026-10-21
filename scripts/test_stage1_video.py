@@ -8,4 +8,5 @@ s=s.replace('origins=[',"from stage1_test_sources import EXTRA_OSD\nmods += EXTR
 s=s.replace("f'{a.reader}_video_","f'stage1_video_")
 s=s.replace('build/sim/refined_video_{a.reader}','build/sim/stage1_video')
 s=s.replace('REFINED_VIDEO_ALL_PASS','STAGE1_VIDEO_ALL_PASS')
+s=s.replace("if d.get('exit_code')==0", "if d.get('fixture_inputs') and d.get('producer_inputs') and all((R/n).is_file() and hashlib.sha256((R/n).read_bytes()).hexdigest()==h for group in (d['fixture_inputs'],d['producer_inputs']) for n,h in group.items()) and d.get('exit_code')==0")
 exec(compile(s,str(R/'scripts/test_refined_video.py'),'exec'),{'__name__':'__main__','__file__':__file__})

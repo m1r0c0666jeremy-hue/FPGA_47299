@@ -8,17 +8,54 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  output reg [43:0] distances);
  reg [3:0] state;reg [3:0] phase;reg [1:0] region_id;reg [3:0] edge_id,n;
  reg [2:0] total;reg [10:0] qx,ax,bx;reg [9:0] qy,ay,by;
- reg signed [23:0] dx,dy,wx,wy,ex,ey;
- reg signed [47:0] dot,part,cross_value;
- reg [47:0] length2,best,endpoint_part,numerator;
+ // Coordinates are bounded to 1280x720. Differences need signed 12 bits;
+ // squared endpoint distances fit 22 bits, orientation/dot products 24 bits.
+ reg signed [11:0] dx,dy,wx,wy,ex,ey;
+ reg signed [23:0] dot,part,cross_value;
+ reg [21:0] length2,best,endpoint_part;reg [47:0] numerator;
  reg parity,near_edge;
  reg mstart;reg [1:0] mop;reg [47:0] ma,mb;wire mbusy,mdone;wire [47:0] mr;
- stage1_arith alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,);
- function [20:0] point;input [671:0] table_data;input [1:0] r;input [3:0] i;begin point=table_data[({r,3'b000}+i)*21+:21];end endfunction
- reg [20:0] va,vb;
- always @*begin va=point(vertices,region_id,edge_id);vb=point(vertices,region_id,edge_id+1==n?4'd0:edge_id+1'b1);end
- wire signed [47:0] cross_next=part-$signed(mr);
- task take_distance;input [47:0] value;begin
+ stage1_arith #(.DW(23)) alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,);
+ function [20:0] point;input [671:0] table_data;input [1:0] r;input [3:0] i;begin
+case({r,i[2:0]})
+5'd0:point=table_data[0+:21];
+5'd1:point=table_data[21+:21];
+5'd2:point=table_data[42+:21];
+5'd3:point=table_data[63+:21];
+5'd4:point=table_data[84+:21];
+5'd5:point=table_data[105+:21];
+5'd6:point=table_data[126+:21];
+5'd7:point=table_data[147+:21];
+5'd8:point=table_data[168+:21];
+5'd9:point=table_data[189+:21];
+5'd10:point=table_data[210+:21];
+5'd11:point=table_data[231+:21];
+5'd12:point=table_data[252+:21];
+5'd13:point=table_data[273+:21];
+5'd14:point=table_data[294+:21];
+5'd15:point=table_data[315+:21];
+5'd16:point=table_data[336+:21];
+5'd17:point=table_data[357+:21];
+5'd18:point=table_data[378+:21];
+5'd19:point=table_data[399+:21];
+5'd20:point=table_data[420+:21];
+5'd21:point=table_data[441+:21];
+5'd22:point=table_data[462+:21];
+5'd23:point=table_data[483+:21];
+5'd24:point=table_data[504+:21];
+5'd25:point=table_data[525+:21];
+5'd26:point=table_data[546+:21];
+5'd27:point=table_data[567+:21];
+5'd28:point=table_data[588+:21];
+5'd29:point=table_data[609+:21];
+5'd30:point=table_data[630+:21];
+5'd31:point=table_data[651+:21];
+endcase
+if(i[3])point=0;end endfunction
+ wire [3:0] read_index=state==8?(edge_id+1==n?4'd0:edge_id+1'b1):edge_id;
+ wire [20:0] vertex_q=point(vertices,region_id,read_index);
+ wire signed [23:0] cross_next=part-$signed(mr[23:0]);
+ task take_distance;input [21:0] value;begin
  if(value<best)best<=value;
  if(edge_id+1==n)begin ma<=value<best?value:best;mop<=2;mstart<=1;state<=7;end
  else begin edge_id<=edge_id+1'b1;state<=1;end
@@ -32,26 +69,27 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  case(state)
  0:if(start)begin busy<=region_count!=0;inside_mask<=0;near_mask<=0;distances<=0;
  total<=region_count;qx<=px;qy<=py;region_id<=0;edge_id<=0;n<=counts[3:0];
- best<=48'hffffffffffff;parity<=0;near_edge<=0;
+ best<=22'h3fffff;parity<=0;near_edge<=0;
  if(region_count==0)done<=1;else state<=1;end
- 1:begin ax<=va[10:0];ay<=va[20:11];bx<=vb[10:0];by<=vb[20:11];state<=2;end
+ 1:begin ax<=vertex_q[10:0];ay<=vertex_q[20:11];state<=8;end
+ 8:begin bx<=vertex_q[10:0];by<=vertex_q[20:11];state<=2;end
  2:begin
  dx<=$signed({1'b0,bx})-$signed({1'b0,ax});dy<=$signed({1'b0,by})-$signed({1'b0,ay});
  wx<=$signed({1'b0,qx})-$signed({1'b0,ax});wy<=$signed({1'b0,qy})-$signed({1'b0,ay});
  ex<=$signed({1'b0,qx})-$signed({1'b0,bx});ey<=$signed({1'b0,qy})-$signed({1'b0,by});phase<=0;state<=3;end
  3:begin mop<=0;mstart<=1;state<=4;
  case(phase)
- 0:begin ma<={{24{dx[23]}},dx};mb<={{24{dx[23]}},dx};end
- 1:begin ma<={{24{dy[23]}},dy};mb<={{24{dy[23]}},dy};end
- 2:begin ma<={{24{wx[23]}},wx};mb<={{24{dx[23]}},dx};end
- 3:begin ma<={{24{wy[23]}},wy};mb<={{24{dy[23]}},dy};end
- 4:begin ma<={{24{dx[23]}},dx};mb<={{24{wy[23]}},wy};end
- 5:begin ma<={{24{dy[23]}},dy};mb<={{24{wx[23]}},wx};end
+ 0:begin ma<={{36{dx[11]}},dx};mb<={{36{dx[11]}},dx};end
+ 1:begin ma<={{36{dy[11]}},dy};mb<={{36{dy[11]}},dy};end
+ 2:begin ma<={{36{wx[11]}},wx};mb<={{36{dx[11]}},dx};end
+ 3:begin ma<={{36{wy[11]}},wy};mb<={{36{dy[11]}},dy};end
+ 4:begin ma<={{36{dx[11]}},dx};mb<={{36{wy[11]}},wy};end
+ 5:begin ma<={{36{dy[11]}},dy};mb<={{36{wx[11]}},wx};end
  6:begin ma<=cross_value;mb<=cross_value;end
- 7:begin ma<=(dot<=0 || length2==0)?{{24{wx[23]}},wx}:{{24{ex[23]}},ex};
- mb<=(dot<=0 || length2==0)?{{24{wx[23]}},wx}:{{24{ex[23]}},ex};end
- default:begin ma<=(dot<=0 || length2==0)?{{24{wy[23]}},wy}:{{24{ey[23]}},ey};
- mb<=(dot<=0 || length2==0)?{{24{wy[23]}},wy}:{{24{ey[23]}},ey};end
+ 7:begin ma<=(dot<=0 || length2==0)?{{36{wx[11]}},wx}:{{36{ex[11]}},ex};
+ mb<=(dot<=0 || length2==0)?{{36{wx[11]}},wx}:{{36{ex[11]}},ex};end
+ default:begin ma<=(dot<=0 || length2==0)?{{36{wy[11]}},wy}:{{36{ey[11]}},ey};
+ mb<=(dot<=0 || length2==0)?{{36{wy[11]}},wy}:{{36{ey[11]}},ey};end
  endcase end
  4:if(mdone)begin
  case(phase)
@@ -62,7 +100,7 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  4:begin part<=$signed(mr);phase<=5;state<=3;end
  5:begin cross_value<=cross_next;
  if((ay>qy)!=(by>qy))if((dy>0 && cross_next>0)||(dy<0 && cross_next<0))parity<=~parity;
- phase<=(dot>0 && dot<$signed(length2) && length2!=0)?6:7;state<=3;end
+ phase<=(dot>0 && dot<$signed({1'b0,length2}) && length2!=0)?6:7;state<=3;end
  6:begin numerator<=mr;if(mr<=(length2<<2))near_edge<=1;state<=5;end
  7:begin endpoint_part<=mr;phase<=8;state<=3;end
  default:begin if(endpoint_part+mr<=4)near_edge<=1;take_distance(endpoint_part+mr);end
@@ -73,7 +111,7 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  distances[region_id*11+:11]<=mr[10:0];
  if({1'b0,region_id}+1==total)begin busy<=0;done<=1;state<=0;end
  else begin region_id<=region_id+1'b1;n<=counts[(region_id+1'b1)*4+:4];edge_id<=0;
- best<=48'hffffffffffff;parity<=0;near_edge<=0;state<=1;end end
+ best<=22'h3fffff;parity<=0;near_edge<=0;state<=1;end end
  default:state<=0;
  endcase end end
 endmodule

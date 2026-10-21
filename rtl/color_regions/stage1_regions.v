@@ -30,8 +30,10 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  reg [671:0] draw_data;reg [15:0] draw_counts;reg [3:0] draw_closed;
  integer j;
  always @*begin draw_data=vertices;draw_counts=counts;draw_closed=0;
- for(j=0;j<4;j=j+1)if(j<region_count)draw_closed[j]=1;
- if(region_count<4 && draft_count!=0)begin draw_data[region_count*168+:168]=draft;draw_counts[region_count*4+:4]=draft_count;end
+ for(j=0;j<4;j=j+1)begin
+ if(j<region_count)draw_closed[j]=1;
+ if(region_count==j && draft_count!=0)begin draw_data[j*168+:168]=draft;draw_counts[j*4+:4]=draft_count;end
+ end
  end
  assign render_vertices=draw_data;assign render_counts=draw_counts;assign closed_mask=draw_closed;
  stage1_validate validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error);
@@ -74,18 +76,21 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  edit_request<=0;edit_error<=0;
  case(edit_request)
  1:if(region_count==4)edit_error<=4;else if(draft_count==8)edit_error<=6;
- else begin draft[draft_count*21+:21]<=edit_point;draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;end
+ else begin for(j=0;j<8;j=j+1)if(draft_count==j)draft[j*21+:21]<=edit_point;
+ draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;end
  2:if(draft_count<3)edit_error<=1;else begin validate_start<=1;end
  3:begin
  if(draft_count!=0)begin draft_count<=draft_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;end
  else if(region_count!=0)begin
- region_count<=region_count-1'b1;counts[(region_count-1'b1)*4+:4]<=0;vertices[(region_count-1'b1)*168+:168]<=0;
+ region_count<=region_count-1'b1;
+ for(j=0;j<4;j=j+1)if(region_count==j+1)begin counts[j*4+:4]<=0;vertices[j*168+:168]<=0;end
  revision<=revision+1'b1;configuration_changed<=1;end else edit_error<=7;end
  default:begin end
  endcase end
  if(validated)begin
  if(passed)begin
- vertices[region_count*168+:168]<=draft;counts[region_count*4+:4]<=draft_count;region_count<=region_count+1'b1;
+ for(j=0;j<4;j=j+1)if(region_count==j)begin vertices[j*168+:168]<=draft;counts[j*4+:4]<=draft_count;end
+ region_count<=region_count+1'b1;
  draft_count<=0;draft<=0;revision<=revision+1'b1;configuration_changed<=1;edit_error<=0;
  end else edit_error<=validation_error;end
  if(cancel || (!down2 && (!tip_live || session!=point_session || meta[559:544]!=point_model)))point_pending<=0;

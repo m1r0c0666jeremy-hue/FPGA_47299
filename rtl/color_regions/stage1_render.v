@@ -12,8 +12,8 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  output reg ready,output reg underrun);
  localparam IDLE=0,MAP=1,ORDER=2,DIV_HALF=3,WAIT_HALF=4,MUL_START=5,WAIT_MUL=6,
  DIV_INITIAL=7,WAIT_INITIAL=8,WRITE_EDGE=9,ROW_BEGIN=10,READ_EDGE=11,ROW_EDGE=12,
- GEN=13,WAIT_ROW=14;
- reg [3:0] state;reg [4:0] edge_id;reg [3:0] field;
+ GEN=13,WAIT_ROW=14,LABEL_PLACE=15,MAP_FINISH=16;
+ reg [4:0] state;reg [4:0] edge_id;reg [3:0] field;
  reg [671:0] fv;reg [15:0] fc;reg [3:0] fclosed,fcompleted;reg [1:0] fmode;
  reg [10:0] fx0;reg [9:0] fy0;reg [2:0] fzoom,fexpected,factual;reg frotate;
  reg [3:0] fstate;
@@ -27,16 +27,51 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  reg [9:0] row;reg [7:0] word_index;reg [1:0] region_phase;reg [31:0] pending;
  reg [10:0] span_lo[0:31],span_hi[0:31];reg [31:0] span_valid;
  reg [10:0] labels_x[0:3];reg [9:0] labels_y[0:3];reg [3:0] labels_valid;
- reg signed [13:0] bounds_xmin[0:3],bounds_xmax[0:3],bounds_ymin[0:3],bounds_ymax[0:3];
+ reg [1:0] label_id;reg label_up;reg [5:0] label_attempt;reg label_collision;
+ reg [3:0] all_left,all_right,all_above,all_below;
  reg mstart;reg [1:0] mop;reg [47:0] ma,mb;wire mbusy,mdone;wire [47:0] mr,mrem;
- stage1_arith line_alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,mrem);
+ stage1_arith #(.DW(14)) line_alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,mrem);
  wire signed [47:0] initial_quotient=product_negative?-$signed(mr)-(mrem!=0?48'sd1:48'sd0):$signed(mr);
  wire signed [47:0] initial_x=($signed({{34{xa[13]}},xa})<<<1)+initial_quotient;
  wire [1:0] region_id=edge_id[4:3];wire [3:0] vi={1'b0,edge_id[2:0]};
  wire [3:0] n=fc[region_id*4+:4];
  wire [3:0] ni=vi+1==n?(fclosed[region_id]?4'd0:vi):vi+1'b1;
- wire [20:0] a=fv[({region_id,3'b000}+vi)*21+:21];
- wire [20:0] b=fv[({region_id,3'b000}+ni)*21+:21];
+ function [20:0] vertex_at;input [671:0] table_data;input [1:0] r;input [3:0] i;begin
+case({r,i[2:0]})
+5'd0:vertex_at=table_data[0+:21];
+5'd1:vertex_at=table_data[21+:21];
+5'd2:vertex_at=table_data[42+:21];
+5'd3:vertex_at=table_data[63+:21];
+5'd4:vertex_at=table_data[84+:21];
+5'd5:vertex_at=table_data[105+:21];
+5'd6:vertex_at=table_data[126+:21];
+5'd7:vertex_at=table_data[147+:21];
+5'd8:vertex_at=table_data[168+:21];
+5'd9:vertex_at=table_data[189+:21];
+5'd10:vertex_at=table_data[210+:21];
+5'd11:vertex_at=table_data[231+:21];
+5'd12:vertex_at=table_data[252+:21];
+5'd13:vertex_at=table_data[273+:21];
+5'd14:vertex_at=table_data[294+:21];
+5'd15:vertex_at=table_data[315+:21];
+5'd16:vertex_at=table_data[336+:21];
+5'd17:vertex_at=table_data[357+:21];
+5'd18:vertex_at=table_data[378+:21];
+5'd19:vertex_at=table_data[399+:21];
+5'd20:vertex_at=table_data[420+:21];
+5'd21:vertex_at=table_data[441+:21];
+5'd22:vertex_at=table_data[462+:21];
+5'd23:vertex_at=table_data[483+:21];
+5'd24:vertex_at=table_data[504+:21];
+5'd25:vertex_at=table_data[525+:21];
+5'd26:vertex_at=table_data[546+:21];
+5'd27:vertex_at=table_data[567+:21];
+5'd28:vertex_at=table_data[588+:21];
+5'd29:vertex_at=table_data[609+:21];
+5'd30:vertex_at=table_data[630+:21];
+5'd31:vertex_at=table_data[651+:21];
+endcase
+if(i[3])vertex_at=0;end endfunction
  wire edge_used=n!=0 && (n==1?vi==0:(fclosed[region_id]?vi<n:vi+1<n));
  function signed [13:0] mapped;input [10:0] source,origin;input [2:0] z;input flip,axis_y;
  reg signed [13:0] delta,l,r;reg signed [14:0] t,u;begin
@@ -51,10 +86,10 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  t=($signed({l[13],l})+$signed({r[13],r}))>>>1;
  mapped=flip?(axis_y?14'sd623:14'sd1279)-t:t;
  end endfunction
- wire signed [13:0] map_ax=mapped(a[10:0],fx0,fzoom,frotate,0);
- wire signed [13:0] map_ay=mapped({1'b0,a[20:11]},{1'b0,fy0},fzoom,frotate,1);
- wire signed [13:0] map_bx=mapped(b[10:0],fx0,fzoom,frotate,0);
- wire signed [13:0] map_by=mapped({1'b0,b[20:11]},{1'b0,fy0},fzoom,frotate,1);
+ reg signed [13:0] map_ax,map_ay,map_bx,map_by;
+ wire [20:0] map_point=vertex_at(fv,region_id,field[1]?ni:vi);
+ wire signed [13:0] map_value=mapped(field[0]?{1'b0,map_point[20:11]}:map_point[10:0],
+ field[0]?{1'b0,fy0}:fx0,fzoom,frotate,field[0]);
  reg [7:0] nibble;reg [10:0] base_x;reg [2:0] left_bit,right_bit;reg [7:0] edge_bits;
  wire [8:0] read_address=(y[0]?9'd160:9'd0)+{1'b0,x[10:3]};
  wire [8:0] write_address=(row[0]?9'd160:9'd0)+{1'b0,word_index};
@@ -123,18 +158,29 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  right_bit=span_hi[{region_phase,k[2:0]}]<base_x+7?span_hi[{region_phase,k[2:0]}][2:0]:3'd7;
  edge_bits=(8'hff<<left_bit)&(8'hff>>(7-right_bit));nibble=nibble|edge_bits;
  end end end
+ integer label_index;
+ always @*begin label_collision=0;
+ for(label_index=0;label_index<4;label_index=label_index+1)
+ if(label_index<label_id && labels_valid[label_index] && labels_valid[label_id] &&
+ labels_x[label_id]<labels_x[label_index]+50 && labels_x[label_id]+50>labels_x[label_index] &&
+ labels_y[label_id]<labels_y[label_index]+18 && labels_y[label_id]+18>labels_y[label_index])label_collision=1;
+ end
  task next_prepared_edge;begin field<=0;write_is_row<=0;state<=WRITE_EDGE;end endtask
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fv<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
  fx0<=0;fy0<=0;fzoom<=0;fexpected<=0;factual<=0;frotate<=0;fstate<=0;
  xa<=0;ya<=0;xb<=0;yb<=0;dx<=0;dy<=0;half_q<=0;half_r<=0;product<=0;product_negative<=0;work<=0;write_is_row<=0;
  bank_valid<=0;bank_row[0]<=0;bank_row[1]<=0;row<=0;word_index<=0;region_phase<=0;pending<=0;span_valid<=0;
- labels_valid<=0;mstart<=0;mop<=0;ma<=0;mb<=0;ready<=0;underrun<=0;
- for(j=0;j<4;j=j+1)begin labels_x[j]<=0;labels_y[j]<=0;bounds_xmin[j]<=8191;bounds_xmax[j]<=-8192;bounds_ymin[j]<=8191;bounds_ymax[j]<=-8192;end
+ labels_valid<=0;label_id<=0;label_up<=0;label_attempt<=0;mstart<=0;mop<=0;ma<=0;mb<=0;ready<=0;underrun<=0;
+ map_ax<=0;map_ay<=0;map_bx<=0;map_by<=0;all_left<=15;all_right<=15;all_above<=15;all_below<=15;
+ for(j=0;j<4;j=j+1)begin labels_x[j]<=0;labels_y[j]<=0;end
  end else begin mstart<=0;
  if(de && y<624 && fc!=0 && (!bank_valid[y[0]] || bank_row[y[0]]!=y))underrun<=1;
  case(state)
  MAP:begin
+ case(field[1:0])0:map_ax<=map_value;1:map_ay<=map_value;2:map_bx<=map_value;3:map_by<=map_value;endcase
+ if(field==3)begin field<=0;state<=MAP_FINISH;end else field<=field+1'b1;end
+ MAP_FINISH:begin
  xa<=map_by<map_ay?map_bx:map_ax;ya<=map_by<map_ay?map_by:map_ay;
  xb<=map_by<map_ay?map_ax:map_bx;yb<=map_by<map_ay?map_ay:map_by;
  if(vi==0)begin
@@ -142,8 +188,8 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  labels_y[region_id]<=map_ay>=18?(map_ay>626?608:map_ay-18):(map_ay< -3?0:map_ay+3);
  end
  if(vi<n)begin
- if(map_ax<bounds_xmin[region_id])bounds_xmin[region_id]<=map_ax;if(map_ax>bounds_xmax[region_id])bounds_xmax[region_id]<=map_ax;
- if(map_ay<bounds_ymin[region_id])bounds_ymin[region_id]<=map_ay;if(map_ay>bounds_ymax[region_id])bounds_ymax[region_id]<=map_ay;
+ all_left[region_id]<=all_left[region_id] && map_ax<0;all_right[region_id]<=all_right[region_id] && map_ax>=1280;
+ all_above[region_id]<=all_above[region_id] && map_ay<0;all_below[region_id]<=all_below[region_id] && map_ay>=624;
  end
  work<=0;state<=ORDER;end
  ORDER:begin
@@ -176,10 +222,21 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  if(field==7)begin field<=0;
  if(write_is_row)begin if(edge_id==31)begin word_index<=0;region_phase<=0;state<=GEN;end
  else begin edge_id<=edge_id+1'b1;state<=READ_EDGE;end end
- else if(edge_id==31)begin row<=0;state<=ROW_BEGIN;
- for(j=0;j<4;j=j+1)labels_valid[j]<=fc[j*4+:4]!=0 && bounds_xmax[j]>=0 && bounds_xmin[j]<1280 && bounds_ymax[j]>=0 && bounds_ymin[j]<624;
+ else if(edge_id==31)begin row<=0;state<=LABEL_PLACE;label_id<=0;label_attempt<=0;label_up<=labels_y[0]>304;
+ for(j=0;j<4;j=j+1)labels_valid[j]<=fc[j*4+:4]!=0 && !all_left[j] && !all_right[j] && !all_above[j] && !all_below[j];
  end else begin edge_id<=edge_id+1'b1;state<=MAP;end
  end else field<=field+1'b1;end
+ LABEL_PLACE:begin
+ if(!label_collision || !labels_valid[label_id])begin
+ if(label_id==3)state<=ROW_BEGIN;
+ else begin label_id<=label_id+1'b1;label_attempt<=0;label_up<=labels_y[label_id+1'b1]>304;end end
+ else if(label_attempt==35)begin underrun<=1;state<=ROW_BEGIN;end
+ else begin
+ label_attempt<=label_attempt+1'b1;
+ if(label_up && labels_y[label_id]>=18)labels_y[label_id]<=labels_y[label_id]-18;
+ else if(!label_up && labels_y[label_id]<=590)labels_y[label_id]<=labels_y[label_id]+18;
+ else begin label_up<=~label_up;labels_x[label_id]<=labels_x[label_id]>=64?labels_x[label_id]-64:labels_x[label_id]+64;end
+ end end
  ROW_BEGIN:begin edge_id<=0;field<=0;span_valid<=0;bank_valid[row[0]]<=0;state<=READ_EDGE;end
  READ_EDGE:begin
  if(field!=0)work[(field-1'b1)*16+:16]<=edge_q;
@@ -199,7 +256,7 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  fv<=vertices;fc<=counts;fclosed<=closed_mask;fcompleted<=completed;fmode<=ui_mode;fx0<=x0;fy0<=y0;fzoom<=zoom;frotate<=rotate;
  fstate<=run_state;fexpected<=expected_area;factual<=actual_area;
  state<=counts==0?IDLE:MAP;edge_id<=0;field<=0;bank_valid<=0;ready<=counts==0;underrun<=0;labels_valid<=0;
- for(j=0;j<4;j=j+1)begin bounds_xmin[j]<=8191;bounds_xmax[j]<=-8192;bounds_ymin[j]<=8191;bounds_ymax[j]<=-8192;end
+ all_left<=15;all_right<=15;all_above<=15;all_below<=15;
  end
  end end
 endmodule

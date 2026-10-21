@@ -1,12 +1,14 @@
 // Inclusive segment intersection and positive-length collinear overlap.
 `default_nettype none
 module stage1_segment(input wire clk,rst_n,start,input wire [20:0] a,b,c,d,
- output reg busy,done,hit,overlap);
+ output reg busy,done,hit,overlap,output wire ray_hit);
  reg [20:0] aa,bb,cc,dd;reg [2:0] state;reg [1:0] orient;reg half;
- reg signed [23:0] dx,dy,wx,wy;reg signed [47:0] first;
+ reg signed [11:0] dx,dy,wx,wy;reg signed [23:0] first;
  reg signed [23:0] o0,o1,o2,o3;
  reg mstart;wire mbusy,mdone;wire [47:0] mr;
- reg [47:0] ma,mb;stage1_arith alu(clk,rst_n,mstart,2'd0,ma,mb,mbusy,mdone,mr,);
+ reg [47:0] ma,mb;stage1_arith #(.MW(12)) alu(clk,rst_n,mstart,2'd0,ma,mb,mbusy,mdone,mr,);
+ assign ray_hit=(aa[20:11]>cc[20:11])!=(bb[20:11]>cc[20:11]) &&
+ ((bb[20:11]>aa[20:11] && !o0[23] && o0!=0) || (bb[20:11]<aa[20:11] && o0[23]));
  function [10:0] lo;input [10:0] x,y;begin lo=x<y?x:y;end endfunction
  function [10:0] hi;input [10:0] x,y;begin hi=x>y?x:y;end endfunction
  wire box_hit=lo(aa[10:0],bb[10:0])<=hi(cc[10:0],dd[10:0]) && lo(cc[10:0],dd[10:0])<=hi(aa[10:0],bb[10:0]) &&
@@ -32,8 +34,8 @@ module stage1_segment(input wire clk,rst_n,start,input wire [20:0] a,b,c,d,
  dy<=$signed({1'b0,v[20:11]})-$signed({1'b0,u[20:11]});
  wx<=$signed({1'b0,p[10:0]})-$signed({1'b0,u[10:0]});
  wy<=$signed({1'b0,p[20:11]})-$signed({1'b0,u[20:11]});half<=0;state<=2;end
- 2:begin mstart<=1;ma<=half?{{24{dy[23]}},dy}:{{24{dx[23]}},dx};
- mb<=half?{{24{wx[23]}},wx}:{{24{wy[23]}},wy};state<=3;end
+ 2:begin mstart<=1;ma<=half?{{36{dy[11]}},dy}:{{36{dx[11]}},dx};
+ mb<=half?{{36{wx[11]}},wx}:{{36{wy[11]}},wy};state<=3;end
  3:if(mdone)begin
  if(!half)begin first<=$signed(mr);half<=1;state<=2;end
  else begin
