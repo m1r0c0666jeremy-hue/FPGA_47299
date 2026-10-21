@@ -223,6 +223,11 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     project=project.replace('        </Verilog>',additions+'        </Verilog>')
     out['td_project/target_color_regions_stage1.al']=project
     build=(R/'scripts/run_refined_build.py').read_text(encoding='utf-8')
+    # Vendor AdderChainThresholdHigh uses min_ripple_len=18. Expose the same
+    # synthesis-only choice without enabling expensive extra gate mapping.
+    build=build.replace("ap.add_argument('--checkpoint',action='store_true')", "ap.add_argument('--min-ripple-len',type=int,choices=range(1,65))\nap.add_argument('--checkpoint',action='store_true')")
+    build=build.replace("if a.infer_fsm!='project':", "if a.min_ripple_len is not None:t=t.replace('    optimize_rtl',f'    set_param rtl min_ripple_len {a.min_ripple_len}\\n    optimize_rtl')\nif a.infer_fsm!='project':")
+    build=build.replace('infer_fsm=a.infer_fsm,','infer_fsm=a.infer_fsm,min_ripple_len=a.min_ripple_len,')
     build=build.replace('from osd_memory_branch import check_branch','from stage1_policy import check_branch')
     build=build.replace('from audit_refined import canonical_build_inputs','from stage1_policy import canonical_build_inputs')
     build=build.replace('target_color_regions_refined.al','target_color_regions_stage1.al')

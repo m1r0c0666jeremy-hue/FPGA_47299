@@ -15,6 +15,7 @@ ap.add_argument('--place-effort',choices=['medium','high'])
 ap.add_argument('--official-syn',choices=['AreaOptimizeMedium','AreaOptimizeHigh'])
 ap.add_argument('--official-phy',choices=['CongestionMedium','CongestionHigh','TimingHigh','TimingUltra'])
 ap.add_argument('--official-strategy-file',default='D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json')
+ap.add_argument('--min-ripple-len',type=int,choices=range(1,65))
 ap.add_argument('--checkpoint',action='store_true')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
@@ -75,6 +76,7 @@ frozen_project.write_text('<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring
 t=t.replace('set project [file join $root td_project target_color_regions_stage1.al]',f'set project {{{frozen_project.as_posix()}}}')
 t=t.replace('    legalize_phy_inst',f'    set_param place pr_strategy {a.strategy}\n    set_param route effort {a.route_effort}\n    legalize_phy_inst')
 t=t.replace('    optimize_gate -packarea',f'    set_param gate map_mode {a.map_mode}\n    set_param gate pack_effort {a.pack_effort}\n    optimize_gate -packarea')
+if a.min_ripple_len is not None:t=t.replace('    optimize_rtl',f'    set_param rtl min_ripple_len {a.min_ripple_len}\n    optimize_rtl')
 if a.infer_fsm!='project':t=t.replace('    optimize_rtl',f'    set_param rtl infer_fsm {a.infer_fsm}\n    optimize_rtl')
 if a.map_strategy is not None:t=t.replace('    optimize_gate -packarea',f'    set_param gate map_strategy {a.map_strategy}\n    optimize_gate -packarea')
 if a.macro_performance is not None:t=t.replace('    legalize_phy_inst',f'    set_param place macro_performance {a.macro_performance}\n    legalize_phy_inst')
@@ -119,7 +121,7 @@ log=out/'td.log';print('REFINED_TD_ATTEMPT',out,flush=True)
 with log.open('w',encoding='utf-8') as f:p=subprocess.run([str(td),script.as_posix()],cwd=out,env=env,stdout=f,stderr=subprocess.STDOUT)
 after={name:sha(frozen/name) for name in before}
 (out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
-summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
+summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,min_ripple_len=a.min_ripple_len,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
 summary['official_strategy']=official
 summary['checkpoints']={name:sha(out/name) for name in ('target_color_regions_gate.db','target_color_regions_placed.db') if (out/name).is_file()}
 if p.returncode==0:
