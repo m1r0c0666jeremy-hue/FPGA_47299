@@ -45,7 +45,7 @@ endmodule'''
 reg clk=0;always #5 clk=~clk;reg rst=0;reg [1:0] mode=2;reg [2:0] nr=3;reg [3:0] draft=0;
 reg sk=0,pk=0,mk=0,can=1,live=1,changed=0,sample=0;reg [3:0] im=0,nm=0;reg [43:0] ds=44'd100;
 wire [3:0] state,completed,occupied,se;wire [2:0] expected,actual;wire muted,alarm;wire [1:0] trend;
-wire [10:0] distance;wire [19:0] dwell;
+wire [10:0] distance;wire [19:0] dwell;reg [19:0] held_dwell;
 stage1_sequence #(.CYCLES_PER_MS(1)) dut(clk,rst,mode,nr,draft,sk,pk,mk,can,live,changed,sample,im,nm,ds,
 state,expected,actual,completed,occupied,muted,alarm,trend,distance,dwell,se);
 task frame;input [3:0] a,b;begin im=a;nm=b;sample=1;@(negedge clk);sample=0;repeat(9)@(negedge clk);end endtask
@@ -54,7 +54,9 @@ task start;begin sk=1;@(negedge clk);sk=0;frames(0);if(state!=2)$fatal(1,"not RU
 initial begin repeat(3)@(negedge clk);rst=1;@(negedge clk);
 start;frame(1,0);frame(1,0);if(expected!=0)$fatal(1,"less than three frames counted");
 frame(1,1);if(expected!=0)$fatal(1,"boundary counted");frames(1);if(expected!=1 || completed!=1)$fatal(1,"A not counted");
-frames(1);if(state!=2 || expected!=1)$fatal(1,"staying in A retriggered");frames(0);frames(1);
+frames(1);if(state!=2 || expected!=1)$fatal(1,"staying in A retriggered");frames(0);
+held_dwell=dwell;if(held_dwell==0)$fatal(1,"leaving A lost duration when target became B");
+frame(0,0);if(dwell!=held_dwell)$fatal(1,"last duration changed while outside");frames(1);
 if(state!=6 || !alarm || actual!=1)$fatal(1,"return to A did not fail");
 mk=1;@(negedge clk);mk=0;@(negedge clk);if(alarm || state!=6)$fatal(1,"mute erased fail");
 start;if(muted)$fatal(1,"new round remained muted");frames(4);if(state!=6 || actual!=3)$fatal(1,"skip C not failed");
