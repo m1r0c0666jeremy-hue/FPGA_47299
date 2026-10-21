@@ -1,0 +1,11 @@
+"""Inherited independent video oracle with the actual candidate OSD instantiated."""
+from refined_testlib import R
+from stage1_test_sources import OSD_ZERO_NAMED
+s=(R/'scripts/test_refined_video.py').read_text(encoding='utf-8')
+s=s.replace("s=s.replace('stable_osd osd','refined_osd osd')", "s=s.replace('stable_osd osd','stage1_osd osd')\ns=s.replace('stage1_osd osd(', 'stage1_osd osd('+"+repr(OSD_ZERO_NAMED)+")")
+s=s.replace('rtl/color_regions/refined_osd.v','rtl/color_regions/stage1_osd.v')
+s=s.replace('origins=[',"from stage1_test_sources import EXTRA_OSD\nmods += EXTRA_OSD\norigins=[")
+s=s.replace("f'{a.reader}_video_","f'stage1_video_")
+s=s.replace('build/sim/refined_video_{a.reader}','build/sim/stage1_video')
+s=s.replace('REFINED_VIDEO_ALL_PASS','STAGE1_VIDEO_ALL_PASS')
+exec(compile(s,str(R/'scripts/test_refined_video.py'),'exec'),{'__name__':'__main__','__file__':__file__})

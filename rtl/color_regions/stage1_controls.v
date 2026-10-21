@@ -17,6 +17,7 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  reg consumed,conflict,cal_ui,cal_seen;reg [6:0] target_gain,step_gain;
  reg [2:0] target_slot;reg gain_wait;reg [12:0] gain_age;
  wire tick=ms==CYCLES_PER_MS-1;wire [2:0] pressed=~keys;
+ wire accepting_mode=tick && s2==switch_candidate && sd==DEBOUNCE_MS-1 && O_ui_mode!=switch_candidate;
  wire valid_chord=pressed==3 || pressed==5 || pressed==6;
  wire camera_ready=I_camera[17];wire [6:0] applied_gain=I_camera[6:0];
  assign O_conflict=conflict || pressed==7;assign O_diag=0;
@@ -60,7 +61,7 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  if(cal_ui)begin O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end end end
  if(pressed!=previous)begin previous<=pressed;
  if(pressed==0)begin
- if(!consumed && chord==0 && held<LONG_PRESS_MS)begin
+ if(!consumed && chord==0 && held<LONG_PRESS_MS && !accepting_mode)begin
  if(cal_ui)begin
  if(gesture==1)begin O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end
  if(gesture==2)O_cal_sample<=~O_cal_sample;
@@ -78,14 +79,14 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  gesture<=0;chord<=0;held<=0;window_age<=0;consumed<=0;conflict<=0;
  end else if(previous==0 && !consumed)begin
  gesture<=pressed;held<=0;window_age<=0;chord<=valid_chord?pressed:0;
- if(pressed==1 && !cal_ui && O_ui_mode==1)O_down2<=1;
+ if(pressed==1 && !cal_ui && O_ui_mode==1 && !accepting_mode)O_down2<=1;
  if(pressed==7)begin consumed<=1;conflict<=1;O_cancel<=1;end
  end else if(!consumed && chord==0 && valid_chord && window_age<CHORD_WINDOW_MS)begin
  chord<=pressed;held<=0;O_cancel<=1;
  end else begin consumed<=1;O_cancel<=1;if(chord==0)conflict<=1;end
  end else if(pressed!=0)begin
  if(held<65535)held<=held+1'b1;if(window_age<CHORD_WINDOW_MS)window_age<=window_age+1'b1;end
- if(!consumed && held>=LONG_PRESS_MS-1 && pressed!=0)begin
+ if(!consumed && held>=LONG_PRESS_MS-1 && pressed!=0 && !accepting_mode)begin
  consumed<=1;O_cancel<=1;
  if(!cal_ui)begin
  if(chord!=0)begin

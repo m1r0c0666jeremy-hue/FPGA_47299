@@ -42,7 +42,8 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  always @*begin
  message_id=fbusy?8:fedit!=0?fedit:!ftip?5:0;
  if(fmode==2 || !fshow)begin
- if(fstart!=0)case(fstart)1:message_id=7;2:message_id=9;3:message_id=5;default:message_id=8;endcase
+ if(fbusy)message_id=8;
+ else if(fstart!=0)case(fstart)1:message_id=7;2:message_id=9;3:message_id=5;default:message_id=8;endcase
  else case(fstate)0:message_id=11;1,4:message_id=10;3:message_id=13;5:message_id=12;7:message_id=14;default:message_id=0;endcase
  end
  rom_addr=0;
@@ -95,10 +96,10 @@ function [7:0] edit_char;input [5:0] column;begin edit_char=0;case(column)
 6'd38:edit_char=rom_glyph;
 6'd39:edit_char=rom_glyph;
 6'd41:edit_char=8'd14;
-6'd42:edit_char=8'd1+distance_bcd[12+:4];
-6'd43:edit_char=8'd1+distance_bcd[8+:4];
-6'd44:edit_char=8'd1+distance_bcd[4+:4];
-6'd45:edit_char=8'd1+distance_bcd[0+:4];
+6'd42:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[12+:4]):8'd41;
+6'd43:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[8+:4]):8'd41;
+6'd44:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[4+:4]):8'd41;
+6'd45:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[0+:4]):8'd41;
 6'd46:edit_char=8'd26;
 6'd47:edit_char=8'd34;
 6'd49:edit_char=8'd19;
@@ -132,10 +133,10 @@ function [7:0] test_char;input [5:0] column;begin test_char=0;case(column)
 6'd17:test_char=8'd24;
 6'd19:test_char=foccupied[0]?8'd11:foccupied[1]?8'd12:foccupied[2]?8'd13:foccupied[3]?8'd14:8'd41;
 6'd22:test_char=8'd14;
-6'd23:test_char=8'd1+distance_bcd[12+:4];
-6'd24:test_char=8'd1+distance_bcd[8+:4];
-6'd25:test_char=8'd1+distance_bcd[4+:4];
-6'd26:test_char=8'd1+distance_bcd[0+:4];
+6'd23:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[12+:4]):8'd41;
+6'd24:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[8+:4]):8'd41;
+6'd25:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[4+:4]):8'd41;
+6'd26:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[0+:4]):8'd41;
 6'd27:test_char=8'd26;
 6'd28:test_char=8'd34;
 6'd30:test_char=8'd30;
@@ -214,15 +215,14 @@ function [7:0] failed_char;input [5:0] column;begin failed_char=0;case(column)
 6'd8:failed_char=8'd15;
 6'd9:failed_char=8'd14;
 6'd10:failed_char=8'd39;
-6'd12:failed_char=8'd21;
-6'd13:failed_char=8'd15;
-6'd14:failed_char=8'd35;
-6'd15:failed_char=8'd3;
-6'd17:failed_char=8'd28;
-6'd18:failed_char=8'd15;
-6'd19:failed_char=8'd30;
-6'd20:failed_char=8'd28;
-6'd21:failed_char=8'd35;
+6'd12:failed_char=8'd13;
+6'd13:failed_char=8'd18;
+6'd14:failed_char=8'd15;
+6'd15:failed_char=8'd13;
+6'd16:failed_char=8'd21;
+6'd18:failed_char=8'd13;
+6'd19:failed_char=8'd11;
+6'd20:failed_char=8'd23;
 endcase end endfunction
 function [7:0] reserved_char;input [5:0] column;begin reserved_char=0;case(column)
 6'd0:reserved_char=8'd28;
@@ -239,8 +239,75 @@ function [7:0] reserved_char;input [5:0] column;begin reserved_char=0;case(colum
 6'd12:reserved_char=8'd15;
 6'd13:reserved_char=8'd14;
 endcase end endfunction
+function [7:0] minimal_char;input [5:0] column;begin minimal_char=0;case(column)
+6'd0:minimal_char=fstate==6?(8'd16):fstate==3?(8'd26):fstate==7?(8'd19):(8'd33);
+6'd1:minimal_char=fstate==6?(8'd11):fstate==3?(8'd11):fstate==7?(8'd24):(8'd11);
+6'd2:minimal_char=fstate==6?(8'd19):fstate==3?(8'd31):fstate==7?(8'd26):(8'd19);
+6'd3:minimal_char=fstate==6?(8'd22):fstate==3?(8'd29):fstate==7?(8'd31):(8'd30);
+6'd4:minimal_char=fstate==6?(8'd0):fstate==3?(8'd15):fstate==7?(8'd30):(8'd0);
+6'd5:minimal_char=fstate==6?(8'd15):fstate==3?(8'd14):fstate==7?(8'd0):(8'd25);
+6'd6:minimal_char=fstate==6?(8'd34):fstate==3?(8'd39):fstate==7?(8'd22):(8'd31);
+6'd7:minimal_char=fstate==6?(8'd26):fstate==3?(8'd0):fstate==7?(8'd25):(8'd30);
+6'd8:minimal_char=fstate==6?(8'd0):fstate==3?(8'd21):fstate==7?(8'd29):(8'd39);
+6'd9:minimal_char=fstate==6?(8'd11+fexpected):fstate==3?(8'd15):fstate==7?(8'd30):(8'd0);
+6'd10:minimal_char=fstate==6?(8'd0):fstate==3?(8'd35):fstate==7?(8'd39):(8'd22);
+6'd11:minimal_char=fstate==6?(8'd17):fstate==3?(8'd4):fstate==7?(8'd0):(8'd15);
+6'd12:minimal_char=fstate==6?(8'd25):fstate==3?(8'd0):fstate==7?(8'd21):(8'd11);
+6'd13:minimal_char=fstate==6?(8'd30):fstate==3?(8'd28):fstate==7?(8'd15):(8'd32);
+6'd14:minimal_char=fstate==6?(8'd0):fstate==3?(8'd15):fstate==7?(8'd35):(8'd15);
+6'd15:minimal_char=fstate==6?(factual!=0?8'd10+factual:8'd41):fstate==3?(8'd29):fstate==7?(8'd3):(8'd0);
+6'd16:minimal_char=fstate==6?(8'd39):fstate==3?(8'd31):fstate==7?(8'd0):(8'd11);
+6'd17:minimal_char=fstate==6?(8'd0):fstate==3?(8'd23):fstate==7?(8'd28):(8'd22);
+6'd18:minimal_char=fstate==6?(8'd21):fstate==3?(8'd15):fstate==7?(8'd15):(8'd22);
+6'd19:minimal_char=fstate==6?(8'd15):fstate==3?(8'd0):fstate==7?(8'd30):(8'd0);
+6'd20:minimal_char=fstate==6?(8'd35):fstate==3?(8'd0):fstate==7?(8'd15):(8'd11);
+6'd21:minimal_char=fstate==6?(8'd3):fstate==3?(8'd0):fstate==7?(8'd29):(8'd28);
+6'd22:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd30):(8'd15);
+6'd23:minimal_char=fstate==6?(8'd28):fstate==3?(8'd0):fstate==7?(8'd0):(8'd11);
+6'd24:minimal_char=fstate==6?(8'd15):fstate==3?(8'd0):fstate==7?(8'd0):(8'd29);
+6'd25:minimal_char=fstate==6?(8'd30):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd26:minimal_char=fstate==6?(8'd15):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd27:minimal_char=fstate==6?(8'd29):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd28:minimal_char=fstate==6?(8'd30):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd29:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd30:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd31:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd32:minimal_char=fstate==6?(fmuted?8'd23:8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd33:minimal_char=fstate==6?(fmuted?8'd31:8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd34:minimal_char=fstate==6?(fmuted?8'd30:8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd35:minimal_char=fstate==6?(fmuted?8'd15:8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd36:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd37:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd38:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd39:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd40:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd41:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd42:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd43:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd44:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd45:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd46:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd47:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd48:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd49:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd50:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd51:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd52:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd53:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd54:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd55:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd56:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd57:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd58:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd59:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd60:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd61:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd62:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+6'd63:minimal_char=fstate==6?(8'd0):fstate==3?(8'd0):fstate==7?(8'd0):(8'd0);
+endcase end endfunction
 always @(col or fmode or fshow or fstate or fgain_failed or fgain or fn or fdraft or fexpected or factual or fmuted or fslot or foccupied or ftrend or distance_bcd or dwell_bcd or rom_glyph or force_footer)begin
- if(fmode==2 || (!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7)))glyph=test_char(col);
+ if(!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7))glyph=minimal_char(col);
+ else if(fmode==2)glyph=test_char(col);
  else if(fmode==1)glyph=edit_char(col);else if(fgain_failed)glyph=failed_char(col);
  else if(fgain)glyph=busy_char(col);else if(fmode==3)glyph=reserved_char(col);else glyph=normal_char(col);
  end

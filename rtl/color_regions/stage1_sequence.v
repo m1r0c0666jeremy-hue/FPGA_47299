@@ -70,7 +70,8 @@ module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200
  end end end
  end end
  if(mode==2 && pause_key)begin
- if(state==RUN)begin state<=PAUSED;trend_ready<=0;end
+ if(state==RUN && !(sample && live && entered!=0 &&
+ (multiple || entered!=expected_area+1'b1 || expected_area+1'b1==region_count)))begin state<=PAUSED;trend_ready<=0;end
  else if(state==PAUSED && live)begin state<=RESUME;outside_count<=0;occupied<=0;confirmations<=0;last_sample<=now_ms;end end
  if(mode==2 && start_key && state!=RUN && state!=ARM && state!=RESUME)begin
  start_error<=0;
@@ -80,7 +81,7 @@ module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200
  muted<=0;trend<=0;trend_ready<=0;last_fresh<=now_ms;last_sample<=now_ms;
  for(j=0;j<4;j=j+1)stays[j]<=0;end end
  if(mode==2 && (state==ARM || state==RUN || state==PAUSED || state==RESUME) &&
- (!live || now_ms-last_fresh>=STALE_MS))begin
+ (!live || (!sample && now_ms-last_fresh>=STALE_MS)))begin
  state<=INTERRUPTED;occupied<=0;confirmations<=0;trend_ready<=0;trend<=0;end
  end end
 endmodule

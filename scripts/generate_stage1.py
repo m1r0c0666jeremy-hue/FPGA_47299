@@ -26,6 +26,7 @@ def ui_assets():
     put(edit,7,'PTS ');edit[11]="8'd1+fdraft";put(edit,12,'/8 SAVE ');edit[20]="8'd1+fn";put(edit,21,'/4')
     for i in range(24,40):edit[i]='rom_glyph'
     put(edit,40,' D');digits(edit,42,'distance_bcd');put(edit,46,'PX IN ')
+    for i in range(42,46):edit[i]=f"fn!=0 && ftip && !fbusy?({edit[i]}):8'd41"
     edit[52]="foccupied[0]?8'd11:foccupied[1]?8'd12:foccupied[2]?8'd13:foccupied[3]?8'd14:8'd41"
     put(edit,54,'T');digits(edit,55,'dwell_bcd');edit[58]="8'd39";edit[59]="8'd1+dwell_bcd[3:0]";put(edit,60,'s')
     edit[62]="ftrend==1?8'd11:ftrend==2?8'd11:8'd29";edit[63]="ftrend==1?8'd26:ftrend==2?8'd33:8'd30"
@@ -33,6 +34,7 @@ def ui_assets():
     for i in range(8):test[i]='rom_glyph'
     put(test,9,'NEXT ');test[14]="fexpected<fn && fstate!=5?8'd11+fexpected:8'd41"
     put(test,16,'IN ');test[19]=edit[52];put(test,22,'D');digits(test,23,'distance_bcd');put(test,27,'PX T')
+    for i in range(23,27):test[i]=f"fn!=0 && ftip && !fbusy?({test[i]}):8'd41"
     test[31]="8'd1+dwell_bcd[15:12]";test[32]="8'd1+dwell_bcd[11:8]";test[33]="8'd1+dwell_bcd[7:4]";put(test,34,'.');test[35]="8'd1+dwell_bcd[3:0]";put(test,36,'s')
     for i in range(38,46):test[i]='rom_glyph'
     for i in range(47,63):test[i]='rom_glyph'
@@ -41,8 +43,14 @@ def ui_assets():
     for i,c in enumerate('MUTE'):test[60+i]=f"fmuted?8'd{ids[c]}:({test[60+i]})"
     normal=layout();put(normal,54,'BRT');normal[57]="8'd2+fslot";put(normal,58,'/7')
     busy=layout();put(busy,0,'BRIGHTNESS BUSY ');busy[16]="8'd2+fslot";put(busy,17,'/7 TO ');busy[23]="fslot==6?8'd2:8'd3+fslot";put(busy,24,'/7')
-    failed=layout();put(failed,0,'BRT FAILED. KEY2 RETRY')
+    failed=layout();put(failed,0,'BRT FAILED. CHECK CAM')
     reserved=layout();put(reserved,0,'ROUTE RESERVED')
+    hidden_fail=layout();put(hidden_fail,0,'FAIL EXP ');hidden_fail[9]="8'd11+fexpected";put(hidden_fail,10,' GOT ');hidden_fail[15]="factual!=0?8'd10+factual:8'd41";put(hidden_fail,16,'. KEY2 RETEST')
+    for i,c in enumerate('MUTE'):hidden_fail[32+i]=f"fmuted?8'd{ids[c]}:8'd0"
+    hidden_pause=layout();put(hidden_pause,0,'PAUSED. KEY3 RESUME')
+    hidden_lost=layout();put(hidden_lost,0,'INPUT LOST. KEY2 RETEST')
+    hidden_wait=layout();put(hidden_wait,0,'WAIT OUT. LEAVE ALL AREAS')
+    minimal=[f"fstate==6?({a}):fstate==3?({b}):fstate==7?({c}):({d})" for a,b,c,d in zip(hidden_fail,hidden_pause,hidden_lost,hidden_wait)]
     ui='''`default_nettype none
 module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  input wire [1:0] mode,input wire [3:0] run_state,input wire [2:0] area_count,draft_area,expected_area,actual_area,
@@ -87,7 +95,8 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  always @*begin
  message_id=fbusy?8:fedit!=0?fedit:!ftip?5:0;
  if(fmode==2 || !fshow)begin
- if(fstart!=0)case(fstart)1:message_id=7;2:message_id=9;3:message_id=5;default:message_id=8;endcase
+ if(fbusy)message_id=8;
+ else if(fstart!=0)case(fstart)1:message_id=7;2:message_id=9;3:message_id=5;default:message_id=8;endcase
  else case(fstate)0:message_id=11;1,4:message_id=10;3:message_id=13;5:message_id=12;7:message_id=14;default:message_id=0;endcase
  end
  rom_addr=0;
@@ -104,11 +113,12 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
         cond={'edit':'fmode==1','test':'fmode==2 || (!fshow && force_footer)','normal':'1\'b1','busy':'fgain','failed':'fgain_failed','reserved':'fmode==3'}[name]
         # Select layouts below with a function, avoiding priority surprises.
     ui+='end\n'
-    for name,line in [('edit',edit),('test',test),('normal',normal),('busy',busy),('failed',failed),('reserved',reserved)]:
+    for name,line in [('edit',edit),('test',test),('normal',normal),('busy',busy),('failed',failed),('reserved',reserved),('minimal',minimal)]:
         ui+=f'function [7:0] {name}_char;input [5:0] column;begin {name}_char=0;case(column)\n'
         ui+=''.join(f"6'd{i}:{name}_char={expr};\n" for i,expr in enumerate(line) if expr!="8'd0")+'endcase end endfunction\n'
     ui+='''always @(col or fmode or fshow or fstate or fgain_failed or fgain or fn or fdraft or fexpected or factual or fmuted or fslot or foccupied or ftrend or distance_bcd or dwell_bcd or rom_glyph or force_footer)begin
- if(fmode==2 || (!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7)))glyph=test_char(col);
+ if(!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7))glyph=minimal_char(col);
+ else if(fmode==2)glyph=test_char(col);
  else if(fmode==1)glyph=edit_char(col);else if(fgain_failed)glyph=failed_char(col);
  else if(fgain)glyph=busy_char(col);else if(fmode==3)glyph=reserved_char(col);else glyph=normal_char(col);
  end
@@ -145,19 +155,19 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     input wire I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,output wire O_area_alarm,
     input wire [31:0] I_source_id''')
     addition='''wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
-    wire [15:0] area_revision,area_counts;wire [671:0] area_vertices;wire area_muted,area_busy,area_tip;
+    wire [15:0] area_revision,area_counts;wire [671:0] area_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
     wire [1:0] area_trend;wire [10:0] area_distance;wire [19:0] area_dwell;
     stage1_regions area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
      .tracking(I_tracking),.video_ok(video_ok && stream_pixel_n),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
      .frame_commit(frame_commit),.detection_valid(detection_valid),.image_id(selected_frame_id),.meta(active_meta),
      .region_count(area_count),.draft_count(area_draft),.revision(area_revision),.render_vertices(area_vertices),.render_counts(area_counts),.closed_mask(area_closed),
      .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(O_area_alarm),
-     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip));
+     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid));
     stage1_osd u_osd (
      .I_ui_mode(I_ui_mode),.I_region_vertices(area_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
      .I_area_count(area_count),.I_draft_count(area_draft),.I_run_state(area_state),.I_completed(area_completed),.I_occupied(area_occupied),
      .I_expected_area(area_expected),.I_actual_area(area_actual),.I_area_muted(area_muted),.I_area_trend(area_trend),.I_area_distance(area_distance),.I_area_dwell(area_dwell),
-     .I_edit_error(area_edit_error),.I_start_error(area_start_error),.I_area_busy(area_busy),.I_tip_live(area_tip),
+     .I_edit_error(area_edit_error),.I_start_error(area_start_error),.I_area_busy(area_busy || (area_tip && area_count!=0 && !area_metrics_valid)),.I_tip_live(area_tip),
      .I_gain_busy(I_gain_busy),.I_gain_failed(I_gain_failed),.I_gain_slot(I_gain_slot),'''
     assert 'refined_osd u_osd (' in video
     video=video.replace('refined_osd u_osd (',addition)
@@ -176,7 +186,7 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
- I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,I_area_busy,I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
+ I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
  I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode);
 '''
     osd=osd.replace(' always @(posedge I_clk or negedge I_rst_n)begin\n if(!I_rst_n)begin\n flat_valid',hook+' always @(posedge I_clk or negedge I_rst_n)begin\n if(!I_rst_n)begin\n flat_valid',1)

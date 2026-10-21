@@ -7,10 +7,12 @@ reg clk=0;always #5 clk=~clk;reg rst=0;reg [2:0] keys=7;reg [1:0] sw=0;
 reg ack=0,pause=0;reg [7:0] cal=0;reg [17:0] camera={1'b1,4'd7,4'd0,2'd0,7'd90};
 wire req,up,tracking,show,conflict,pair,ce,cs,cc,rotate,down,c2,c3,c4,cancel,gb,gf;
 wire [2:0] zoom,slot;wire [7:0] session;wire [1:0] diag,mode;
+reg [1:0] last_mode=0;
 stage1_controls #(.CYCLES_PER_MS(2),.DEBOUNCE_MS(3),.LONG_PRESS_MS(20),.CHORD_WINDOW_MS(8)) dut(
 clk,rst,keys,sw,ack,cal,pause,camera,req,up,zoom,tracking,show,session,conflict,pair,ce,cs,cc,rotate,diag,mode,
 down,c2,c3,c4,cancel,gb,gf,slot);
 integer clicks2=0,clicks3=0,clicks4=0,downs=0,steps=0;reg [6:0] next_gain;integer delay_ack=0,delay_feedback=0;
+always @(posedge clk)begin #1;if(rst && mode!=last_mode && (down || c2 || c3 || c4))$fatal(1,"switch acceptance leaked a gesture");last_mode=mode;end
 always @(posedge clk)begin
 if(c2)clicks2=clicks2+1;if(c3)clicks3=clicks3+1;if(c4)clicks4=clicks4+1;if(down)downs=downs+1;
 if(rst)begin
@@ -56,11 +58,14 @@ frames(1);if(state!=2 || expected!=1)$fatal(1,"staying in A retriggered");frames
 if(state!=6 || !alarm || actual!=1)$fatal(1,"return to A did not fail");
 mk=1;@(negedge clk);mk=0;@(negedge clk);if(alarm || state!=6)$fatal(1,"mute erased fail");
 start;if(muted)$fatal(1,"new round remained muted");frames(4);if(state!=6 || actual!=3)$fatal(1,"skip C not failed");
-start;frames(1);frames(0);frames(2);frames(0);frames(4);if(state!=5 || completed!=7)$fatal(1,"ABC did not pass");
+start;frames(1);frames(0);frames(2);frames(0);frame(4,0);frame(4,0);pk=1;frame(4,0);pk=0;
+if(state!=5 || completed!=7)$fatal(1,"PASS must outrank simultaneous pause");
 live=0;repeat(5)@(negedge clk);if(state!=5)$fatal(1,"PASS not latched");live=1;
 start;frames(1);pk=1;@(negedge clk);pk=0;frames(0);if(state!=3 || expected!=1)$fatal(1,"pause lost progress");
 pk=1;@(negedge clk);pk=0;frames(0);if(state!=2 || expected!=1)$fatal(1,"resume did not require outside");
 live=0;@(negedge clk);if(state!=7 || alarm)$fatal(1,"tracking loss must interrupt without alarm");live=1;
+start;frames(1);frames(0);frame(4,0);frame(4,0);pk=1;frame(4,0);pk=0;
+if(state!=6)$fatal(1,"FAIL must outrank simultaneous pause");
 start;repeat(260)@(negedge clk);if(state!=7)$fatal(1,"stale frame watchdog");
 mode=1;@(negedge clk);frames(1);frames(1);if(occupied!=1 || dwell==0)$fatal(1,"dwell unavailable");
 frames(0);if(occupied!=0)$fatal(1,"leave failed");mode=2;@(negedge clk);start;
