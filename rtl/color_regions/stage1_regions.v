@@ -52,7 +52,10 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  validate_start<=0;evaluate_start<=0;observation<=0;configuration_changed<=0;commit_d<=frame_commit;mode_last<=mode;session_last<=session;
  if(job_revision!=revision || job_session!=session || job_epoch!=meta[719:704] || job_model!=meta[559:544])metrics_good<=0;
  if(subms==CYCLES_PER_MS-1)begin subms<=0;if(tip_age<250)tip_age<=tip_age+1'b1;end else subms<=subms+1'b1;
- if(commit_d && (!seen || image_id!=last_id || session!=last_session || meta[719:704]!=last_epoch || meta[559:544]!=last_model))begin
+ // A committed view may need several thousand clocks to prefetch image rows.
+ // Admit its result when video becomes ready, even if the commit pulse has
+ // already ended. Seen source identity still prevents counting a held frame.
+ if(!seen || image_id!=last_id || session!=last_session || meta[719:704]!=last_epoch || meta[559:544]!=last_model)begin
  if(source_ok && tracking && camera_ready && video_ok && !gain_busy)begin
  seen<=1;last_id<=image_id;last_session<=session;last_epoch<=meta[719:704];last_model<=meta[559:544];
  recent_tip<={meta[99:90],meta[89:79]};tip_age<=0;

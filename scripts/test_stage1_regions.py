@@ -25,8 +25,10 @@ initial begin
 meta[255]=1;meta[247]=1;meta[32]=1;meta[415:413]=4;meta[242:235]=1;meta[244]=1;meta[559:544]=16'h1234;
 repeat(3)@(negedge clk);rst=1;
 meta[255]=0;frame(100,100);if(live)$fatal(1,"invalid metadata accepted");
-meta[255]=1;commit=1;@(negedge clk);commit=0;repeat(10000)@(negedge clk);
-if(!live || !dut.seen)$fatal(1,"late valid metadata for same image did not recover");
+video_ok=0;meta[255]=1;commit=1;@(negedge clk);commit=0;repeat(10000)@(negedge clk);
+if(live || dut.seen)$fatal(1,"metadata admitted before video prefetch ready");
+video_ok=1;repeat(10000)@(negedge clk);
+if(!live || !dut.seen)$fatal(1,"same image did not recover after video became ready without another commit");
 record(100,100);if(nd!=1 || vertices[20:0]!={10'd100,11'd100})$fatal(1,"press-down capture changed on release nd%0d v%h error%0d",nd,vertices[20:0],ee);
 record(300,100);record(200,250);key(3);
 if(nr!=1 || nd!=0 || counts[3:0]!=3 || closed!=1)$fatal(1,"A save failed nr%0d nd%0d error%0d",nr,nd,ee);

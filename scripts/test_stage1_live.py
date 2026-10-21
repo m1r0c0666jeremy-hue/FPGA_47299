@@ -19,7 +19,7 @@ extra="2'd1,avs,anc,acl,an,ae,aa,ad,ast,ac,ao,am,atrend,adist,adwell,aerr,aserr,
 replacement="s=s.replace('stable_osd osd', 'stage1_osd osd')\ns=s.replace('stage1_osd osd(', "+repr(declarations)+"+'stage1_osd osd('+"+repr(extra)+")"
 s=s.replace("s=s.replace('stable_osd osd','refined_osd osd')",replacement)
 s=s.replace('rtl/color_regions/refined_osd.v','rtl/color_regions/stage1_osd.v')
-coverage='''if(ad!=1 || an!=0 || area_observations<3 || avs[20:0]===21'd0)$fatal(1,"live editor coverage");$display("STAGE1_LIVE_EDITOR_PASS observations%0d point%0d/%0d",area_observations,avs[10:0],avs[20:11]);$display("STABLE_LIVE_PASS'''
+coverage='''if(ad!=1 || an!=0 || area_observations<3 || avs[20:0]===21'd0)$fatal(1,"live editor coverage points%0d areas%0d observations%0d phase%0d live%b source%b age%0d",ad,an,area_observations,point_phase,at,regions.source_ok,regions.tip_age);$display("STAGE1_LIVE_EDITOR_PASS observations%0d point%0d/%0d",area_observations,avs[10:0],avs[20:11]);$display("STABLE_LIVE_PASS'''
 s=s.replace('\ndef execute(job):',"\nfrom stage1_test_sources import EXTRA_OSD\nmods += EXTRA_OSD+[R/'rtl/color_regions'/n for n in ('stage1_point.v','stage1_segment.v','stage1_validate.v','stage1_sequence.v','stage1_regions.v')]\n"+
 "s=s.replace("+repr('$display("STABLE_LIVE_PASS')+','+repr(coverage)+")\n\ndef execute(job):")
 s=s.replace("f'{a.reader}_v4_live_","f'stage1_v4_live_").replace('REFINED_LIVE_ALL_PASS','STAGE1_LIVE_ALL_PASS')
