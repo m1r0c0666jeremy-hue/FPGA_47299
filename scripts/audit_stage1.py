@@ -11,6 +11,7 @@ def old_modules():
     assert sha(ARCHIVE)=='9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3'
     old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={}
     with zipfile.ZipFile(ARCHIVE) as z:
+        assert BASE_AUDIT.read_bytes()==z.read(BASE_AUDIT.relative_to(R).as_posix())
         for name,e in old['regression'].items():
             rp=e['record'].replace('\\','/');lp=str(Path(rp).with_suffix('.log')).replace('\\','/')
             assert hashlib.sha256(z.read(rp)).hexdigest()==e['record_sha256'],name
@@ -32,8 +33,8 @@ def specs():
       'stage1_sequence':('STAGE1_SEQUENCE_PASS',('stage1_sequence',)),
       'stage1_regions':('STAGE1_REGIONS_PASS',('stage1_regions','stage1_point','stage1_validate','stage1_sequence')),
       'stage1_buzzer':('STAGE1_BUZZER_PASS',('stage1_buzzer',)),
-      'stage1_camera_0':('STAGE1_CAMERA_PASS',('stage1_controls','stage1_top')),
-      'stage1_camera_1':('STAGE1_CAMERA_PASS',('stage1_controls','stage1_top')),
+      'stage1_camera_0':('NACK=0 retries=0',('stage1_controls','stage1_top')),
+      'stage1_camera_1':('NACK=1 retries=1',('stage1_controls','stage1_top')),
       'stage1_render_14_624':('STAGE1_RENDER_PASS cases=14 pixels=11182080',('stage1_render','stage1_arith')),
       'stage1_render_guards':('STAGE1_RENDER_GUARDS_PASS',('stage1_render',)),
       'stage1_overlay':('STAGE1_OVERLAY_PASS cases=8 pixels=6389760',('stage1_osd','stage1_render')),
