@@ -6,7 +6,7 @@ module stage1_segment(input wire clk,rst_n,start,input wire [20:0] a,b,c,d,
  reg signed [23:0] dx,dy,wx,wy;reg signed [47:0] first;
  reg signed [23:0] o0,o1,o2,o3;
  reg mstart;wire mbusy,mdone;wire [47:0] mr;
- reg [47:0] ma,mb;stage1_arith alu(clk,rst_n,mstart,2'd0,ma,mb,mbusy,mdone,mr);
+ reg [47:0] ma,mb;stage1_arith alu(clk,rst_n,mstart,2'd0,ma,mb,mbusy,mdone,mr,);
  function [10:0] lo;input [10:0] x,y;begin lo=x<y?x:y;end endfunction
  function [10:0] hi;input [10:0] x,y;begin hi=x>y?x:y;end endfunction
  wire box_hit=lo(aa[10:0],bb[10:0])<=hi(cc[10:0],dd[10:0]) && lo(cc[10:0],dd[10:0])<=hi(aa[10:0],bb[10:0]) &&

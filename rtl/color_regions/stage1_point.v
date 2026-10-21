@@ -13,7 +13,7 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  reg [47:0] length2,best,endpoint_part,numerator;
  reg parity,near_edge;
  reg mstart;reg [1:0] mop;reg [47:0] ma,mb;wire mbusy,mdone;wire [47:0] mr;
- stage1_arith alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr);
+ stage1_arith alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,);
  function [20:0] point;input [671:0] table_data;input [1:0] r;input [3:0] i;begin point=table_data[({r,3'b000}+i)*21+:21];end endfunction
  reg [20:0] va,vb;
  always @*begin va=point(vertices,region_id,edge_id);vb=point(vertices,region_id,edge_id+1==n?4'd0:edge_id+1'b1);end
