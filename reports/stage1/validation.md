@@ -1,6 +1,6 @@
 # 区域示教与顺序报警第一阶段：验证与资源
 
-当前状态：4行区域绘制缓存109项当前源码软件检查通过，最近布局012438通过容量；013416在热点处理后又连续3轮回升，约46分钟后取消。此为取消诊断，无最终失败或通过结论。完整官方AreaOptimizeMedium/balance_explore布局022120已完成，20467 Slice/99 ERAM，资源高于下表历史较低面积布局；024814约30分钟后第8-13轮无新最低争用，主动取消，仍无最终布线结论；下一步复用原面积较低门级检查点尝试更强厂家物理策略。最终零冲突、建立/保持及同源复核通过前不交付，尚无本阶段可交付bit。
+当前状态：4行区域绘制缓存109项当前源码软件检查通过；最新032446复用门级重新布局为20211 Slice/99 ERAM，容量通过。新完整布线033019进行中。此前024814约30分钟后无新最低争用而主动取消，非最终失败/通过。最终零冲突、建立/保持及同源复核通过前不交付，尚无本阶段可交付bit。
 
 上一版功能源码提交：`199a45767161d2cde66573878d17e075d1494887`；8行结构提交`84c0607`；当前4行提交`9d52021`。分支：`feature/region-sequence-stage1`。
 
@@ -12,23 +12,23 @@
 
 当前结构将已保存顶点与草稿分别同拍冻结，在读取单个顶点时选择；点位判断与闭合校验共用保存顶点读取口。绘制采用串行写线和4行缓存，像素输出流水不增加。4行与8行相同连接局部门级比较少15 Slice、20 LUT6、4寄存器及2 ERAM，仅作采用依据。
 
-下表为当前4行版本历史较低面积正式布局`stage1_place_20261023_012438`，不是最终布线结果。308输入与编译提交707b117原始Git字节逐项一致，功能字节仍同9d52021；DB SHA256为74d97aac79baa4575b2725d57a1a28cd66b928827e2a932c9c819f8197340be0。
+下表为当前4行版本最新正式布局`stage1_place_20261023_032446`，不是最终布线结果。复用012438 legalized gate检查点，308输入逐项与编译提交707b117原始Git字节一致；实际布局启动提交c88b99a，功能仍9d52021。新放置DB SHA256为35a837aadcb8b160c4c517bd578de4fc7c59b43e4e8abc0f61db31ed7cafccf1。
 
 |项目|原英文交付版|本阶段正式布局|增加|器件上限|
 |---|---:|---:|---:|---:|
-|Slice|17555|20206|2651|21216|
-|LUT6|17044|19969|2925|—|
-|寄存器|19333|23833|4500|42432|
+|Slice|17555|20211|2656|21216|
+|LUT6|17044|19960|2916|—|
+|寄存器|19333|23832|4499|42432|
 |ERAM|95|99|4|108|
 |DSP|40|40|0|40|
 
-与相同308输入的上一4行布局231917相比，Slice少13、LUT6少44、寄存器增加5，ERAM/DSP不变；这是整组物理设置的差异，不能声称所有资源均减少。8行旧布局为101 ERAM，当前4行版本为99。原ADC/SDC不改，新增引脚仅蜂鸣器C12。旧失败、取消与备选全部保留，不作为候选交付。
+与同源012438相比，最新布局Slice增加5、LUT6少9、寄存器少1，ERAM/DSP不变；估计连线3528172→3449206、过载网格20→13、最拥塞1%平均利用98.11%→96.66%，仅用于选择新的完整布线，非最终DRC或时序。8行旧布局为101 ERAM，当前4行版本为99。原ADC/SDC不改，新增引脚仅蜂鸣器C12。旧失败、取消与备选全部保留，不作为候选交付。
 
 本版在该Git分支工作区通过随附脚本配置TD工具。复现布局使用以下命令；它设置了成功布局所需的紧凑状态编码等参数。`.al`是源码入口，直接使用GUI默认参数的旧尝试曾超容量。
 
 ```text
 python scripts/generate_stage1.py --check
-python scripts/run_stage1_build.py --stage place --checkpoint --map-mode area_prior --pack-effort high --strategy 2 --max-fanout 128 --pack-mode adaptive_pin_density --macro-performance macro_congestion --min-ripple-len 64 --infer-fsm sequential --official-phy CongestionMedium
+python scripts/run_stage1_build.py --stage place --checkpoint --map-mode area_prior --pack-effort high --strategy 10 --max-fanout 128 --pack-mode adaptive_pin_density --macro-performance macro_congestion --min-ripple-len 64 --infer-fsm sequential --official-phy CongestionHigh
 python scripts/run_stage1_route.py --parent <本次输出的布局目录> --route-effort routability --threads 16
 ```
 
@@ -61,3 +61,8 @@ python scripts/run_stage1_route.py --parent <本次输出的布局目录> --rout
 原297项编译输入保持原字节；旧中文/英文bit、旧同源ZIP及原工作区两份用户`.al`均通过SHA256保护。所有新构建使用新目录，未下载板卡、烧Flash或推送新功能分支。
 
 实物验收表全部仍为待测。既有假色、噪声框、打印材料E06及对焦/遮挡/冷启动问题不由本阶段修复，也不因软件通过而宣称解决。
+
+
+### 复用门级检查点的来源保护
+
+本地最新032446使用`--gate-parent build/stage1_place_20261023_012438`省去相同源的RTL/门级综合；此选项要求合成参数相同、308当前/父冻结/raw Git原字节和父DB哈希通过，保留原编译身份，另记实际布局提交。上方无复用参数的命令仍可从源码开始构建。最新placement_review_0330记录全部复核。交付审计会追溯原门级来源，ZIP会收入原检查点及所读约束快照。新6项routing_guards_032830、4项guards_032830与4项gate_reuse_guards_032953均通过；这些是人工破坏样本的保护检查，不增加109项功能计数。

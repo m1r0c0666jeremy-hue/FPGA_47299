@@ -101,6 +101,33 @@ def routing_audit(path):
     return dict(final_over_count=0,final_over=0,final_worst=0,routing_drc_pass=True,log_sha256=sha(Path(path)))
 
 
+def gate_reuse_audit(parent,before,commit):
+    """Verify the original compiler identity behind an optional gate reflow."""
+    context=json.loads((parent/'source_context.json').read_text())
+    reuse=context.get('reused_gate')
+    if not reuse:return None
+    ps=json.loads((parent/'summary.json').read_text())
+    assert ps['reused_gate']==reuse and ps['gate_input_unchanged']
+    assert reuse['git_blob_inputs_verified']==len(before)
+    creator=reuse['placement_created_commit'];assert re.fullmatch('[0-9a-f]{40}',creator)
+    subprocess.run(['git','-c','safe.directory='+R.as_posix(),'merge-base','--is-ancestor',creator,'HEAD'],cwd=R,check=True)
+    origin=(R/reuse['parent']).resolve();assert origin.is_relative_to(R/'build') and origin!=parent
+    assert sha(origin/'summary.json')==reuse['parent_summary_sha256']
+    assert sha(origin/'source_context.json')==reuse['parent_context_sha256']
+    assert sha(origin/'inputs.json')==reuse['parent_inputs_sha256']==sha(parent/'inputs.json')
+    original=json.loads((origin/'summary.json').read_text())
+    assert original['stage']=='place' and original['exit_code']==0 and original['inputs_unchanged']
+    original_context=json.loads((origin/'source_context.json').read_text())
+    assert original_context['compiled_source_commit']==commit==context['compiled_source_commit']
+    assert not original_context.get('reused_gate'),'Nested gate reuse requires its own provenance support'
+    assert before==json.loads((origin/'inputs_after.json').read_text())
+    assert all(sha(origin/'compiled_source'/n)==h for n,h in before.items())
+    db='target_color_regions_gate.db'
+    assert sha(parent/'input_gate.db')==sha(origin/db)==original['checkpoints'][db]==reuse['checkpoint_sha256']
+    return dict(parent=origin.relative_to(R).as_posix(),checkpoint_sha256=reuse['checkpoint_sha256'],
+                compiled_source_commit=commit,placement_created_commit=creator,inputs_verified=len(before))
+
+
 def build_audit(attempt):
     out=(R/attempt).resolve();assert out.is_relative_to(R/'build')
     s=json.loads((out/'summary.json').read_text());a=assess(out,'full')
@@ -131,6 +158,7 @@ def build_audit(attempt):
     assert before==json.loads((parent/'inputs_after.json').read_text())
     assert all(sha(parent/'compiled_source'/n)==h for n,h in before.items())
     assert json.loads((parent/'source_context.json').read_text())['compiled_source_commit']==commit
+    reused_gate=gate_reuse_audit(parent,before,commit)
     db=proof['checkpoint_name'];assert db=='target_color_regions_placed.db'
     assert sha(parent/db)==sha(out/db)==proof['checkpoint_sha256']==ps['checkpoints'][db]
     assert 'CHECKPOINT_CONSTRAINT_ROUNDTRIP_PASS' in (out/'td.log').read_text()
@@ -139,7 +167,7 @@ def build_audit(attempt):
     assert (out/'target_color_regions.bit').is_file()
     timing=(out/'target_color_regions_pr.timing').read_text()
     return dict(attempt=out.relative_to(R).as_posix(),summary=s,compiled_source_commit=commit,
-                git_blob_inputs_verified=len(before),bit_sha256=sha(out/'target_color_regions.bit'),routing=routing,
+                git_blob_inputs_verified=len(before),reused_gate=reused_gate,bit_sha256=sha(out/'target_color_regions.bit'),routing=routing,
                 sta_coverage_percent=float(re.search(r'STA coverage\s*:\s*([\d.]+)%',timing)[1]))
 
 def audit(attempt=None,progress=False):
