@@ -1,0 +1,2 @@
+STAGE1_ARITH_PASS width=12 divisor=48 cases=2049
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_bounded_point_math_12_48_48_24_20261023_040244_957007\tb.sv:14: $finish called at 478420 (1s)

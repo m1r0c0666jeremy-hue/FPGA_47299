@@ -1,0 +1,2 @@
+PRIVATE_BOUNDED_DEFAULT_EQ_PASS MW24 DW14 comparisons200932 resets931
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_bounded_default_24_14_20261023_040423_451239\tb.sv:20: $finish called at 2000030 (1s)

@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "build\\stage1_resetfree_arith_ungated_20261023_0101\\baseline_arith.v": "28585f6dd9561ceb39d42f75e1302c23e242a312029593ff2b905f3765f3c30a",
+    "build\\stage1_bounded_point_20261023_0404\\stage1_arith.v": "5634e6d4f0309439e62b290aa61740a22aecf1f8a864f2e80028a3b085c937e3"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_bounded_default_21_23_20261023_040421_392996",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}
