@@ -36,8 +36,11 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  end
  end
  assign render_vertices=draw_data;assign render_counts=draw_counts;assign closed_mask=draw_closed;
- stage1_validate validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error);
- stage1_point geometry(clk,rst_n,evaluate_start,region_count,counts,vertices,job_x,job_y,evaluating,evaluated,in_mask,near_mask,point_distances);
+ // Editor validation and live point evaluation are mutually exclusive. Reuse
+ // the exact point engine's cross product rather than a second multiplier.
+ wire os,od;wire [20:0] oa,ob,oc;wire signed [23:0] cross_q;
+ stage1_validate #(.SHARED(1)) validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error,os,oa,ob,oc,od,cross_q);
+ stage1_point geometry(clk,rst_n,evaluate_start,region_count,counts,vertices,job_x,job_y,evaluating,evaluated,in_mask,near_mask,point_distances,os,oa,ob,oc,od,cross_q);
  stage1_sequence #(.CYCLES_PER_MS(CYCLES_PER_MS)) sequence_controller(clk,rst_n,mode,region_count,draft_count,
  click2,click3,click4,!busy,tip_live,configuration_changed,observation,observed_in,observed_near,observed_dist,
  run_state,expected_area,actual_area,completed,occupied,muted,alarm,trend,distance,dwell_ms,start_error);

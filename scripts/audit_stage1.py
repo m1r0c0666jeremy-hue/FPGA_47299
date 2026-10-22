@@ -28,7 +28,10 @@ def old_modules():
 def specs():
     d={
       'stage1_point':('STAGE1_POINT_PASS cases=516',('stage1_point','stage1_arith')),
-      'stage1_validate':('STAGE1_VALIDATE_PASS cases=220',('stage1_validate','stage1_segment','stage1_arith')),
+      'stage1_validate':('STAGE1_VALIDATE_PASS cases=220',('stage1_validate','stage1_segment','stage1_arith','stage1_point')),
+      'stage1_arith_12_48':('STAGE1_ARITH_PASS width=12 divisor=48 cases=2049',('stage1_arith',)),
+      'stage1_arith_21_23':('STAGE1_ARITH_PASS width=21 divisor=23 cases=2049',('stage1_arith',)),
+      'stage1_arith_24_14':('STAGE1_ARITH_PASS width=24 divisor=14 cases=2049',('stage1_arith',)),
       'stage1_controls':('STAGE1_CONTROLS_PASS',('stage1_controls',)),
       'stage1_sequence':('STAGE1_SEQUENCE_PASS',('stage1_sequence',)),
       'stage1_age_equivalence_1':('STAGE1_AGE_EQUIVALENCE_PASS period=1 cycles=1284003',('stage1_sequence',)),

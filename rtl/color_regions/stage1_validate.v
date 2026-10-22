@@ -1,8 +1,10 @@
 // Validate a draft without changing saved regions. Touching is deliberately invalid.
 `default_nettype none
-module stage1_validate(input wire clk,rst_n,start,input wire [2:0] region_count,
+module stage1_validate #(parameter SHARED=0)(input wire clk,rst_n,start,input wire [2:0] region_count,
  input wire [15:0] counts,input wire [671:0] vertices,input wire [3:0] draft_count,
- input wire [167:0] draft,output reg busy,done,passed,output reg [3:0] error_code);
+ input wire [167:0] draft,output reg busy,done,passed,output reg [3:0] error_code,
+ output wire orientation_start,output wire [20:0] oa,ob,oc,
+ input wire orientation_done,input wire signed [23:0] orientation_cross);
  reg [3:0] state,i,j;reg [1:0] old_region;reg external_pairs,reverse;
  reg seg_start,parity;wire seg_busy,seg_done,hit,overlap,ray_hit;
  wire [3:0] old_n=counts[old_region*4+:4];
@@ -71,7 +73,7 @@ if(index[3])vp=0;end endfunction
  wire [20:0] vertex_q=read_draft?dp(draft,read_index):vp(vertices,old_region,read_index);
  // Validation already excludes every edge touch. Reuse its exact orientation
  // engine for half-open ray parity; no second distance/division engine is needed.
- stage1_segment segments(clk,rst_n,seg_start,a,b,c,d,seg_busy,seg_done,hit,overlap,ray_hit);
+ stage1_segment #(.SHARED(SHARED)) segments(clk,rst_n,seg_start,a,b,c,d,seg_busy,seg_done,hit,overlap,ray_hit,orientation_start,oa,ob,oc,orientation_done,orientation_cross);
  task finish;input ok;input [3:0] why;begin busy<=0;done<=1;passed<=ok;error_code<=why;state<=0;end endtask
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin state<=0;i<=0;j<=0;old_region<=0;external_pairs<=0;reverse<=0;

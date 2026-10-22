@@ -5,7 +5,10 @@ module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
  input wire [15:0] counts,input wire [671:0] vertices,
  input wire [10:0] px,input wire [9:0] py,
  output reg busy,done,output reg [3:0] inside_mask,near_mask,
- output reg [43:0] distances);
+ output reg [43:0] distances,
+ input wire orientation_start,input wire [20:0] oa,ob,oc,
+ output reg orientation_done,output reg signed [23:0] orientation_cross);
+ reg orientation_only;
  reg [3:0] state;reg [3:0] phase;reg [1:0] region_id;reg [3:0] edge_id,n;
  reg [2:0] total;reg [10:0] qx,ax,bx;reg [9:0] qy,ay,by;
  // Coordinates are bounded to 1280x720. Differences need signed 12 bits;
@@ -66,10 +69,13 @@ if(i[3])point=0;end endfunction
  if(!rst_n)begin state<=0;phase<=0;region_id<=0;edge_id<=0;n<=0;total<=0;
  qx<=0;qy<=0;ax<=0;ay<=0;bx<=0;by<=0;dx<=0;dy<=0;wx<=0;wy<=0;ex<=0;ey<=0;
  dot<=0;part<=0;cross_value<=0;length2<=0;best<=0;endpoint_part<=0;numerator<=0;parity<=0;near_edge<=0;
- mstart<=0;mop<=0;ma<=0;mb<=0;busy<=0;done<=0;inside_mask<=0;near_mask<=0;distances<=0;end
- else begin mstart<=0;done<=0;
+ mstart<=0;mop<=0;ma<=0;mb<=0;busy<=0;done<=0;inside_mask<=0;near_mask<=0;distances<=0;orientation_only<=0;orientation_done<=0;orientation_cross<=0;end
+ else begin mstart<=0;done<=0;orientation_done<=0;
  case(state)
- 0:if(start)begin busy<=region_count!=0;inside_mask<=0;near_mask<=0;distances<=0;
+ 0:if(orientation_start)begin
+ orientation_only<=1;busy<=1;ax<=oa[10:0];ay<=oa[20:11];bx<=ob[10:0];by<=ob[20:11];
+ qx<=oc[10:0];qy<=oc[20:11];state<=2;
+ end else if(start)begin orientation_only<=0;busy<=region_count!=0;inside_mask<=0;near_mask<=0;distances<=0;
  total<=region_count;qx<=px;qy<=py;region_id<=0;edge_id<=0;n<=counts[3:0];
  best<=22'h3fffff;parity<=0;near_edge<=0;
  if(region_count==0)done<=1;else state<=1;end
@@ -78,7 +84,7 @@ if(i[3])point=0;end endfunction
  2:begin
  dx<=$signed({1'b0,bx})-$signed({1'b0,ax});dy<=$signed({1'b0,by})-$signed({1'b0,ay});
  wx<=$signed({1'b0,qx})-$signed({1'b0,ax});wy<=$signed({1'b0,qy})-$signed({1'b0,ay});
- ex<=$signed({1'b0,qx})-$signed({1'b0,bx});ey<=$signed({1'b0,qy})-$signed({1'b0,by});phase<=0;state<=3;end
+ ex<=$signed({1'b0,qx})-$signed({1'b0,bx});ey<=$signed({1'b0,qy})-$signed({1'b0,by});phase<=orientation_only?4:0;state<=3;end
  3:begin mop<=0;mstart<=1;state<=4;
  case(phase)
  0:begin ma<={{36{dx[11]}},dx};mb<={{36{dx[11]}},dx};end
@@ -100,7 +106,8 @@ if(i[3])point=0;end endfunction
  2:begin dot<=$signed(mr);phase<=3;state<=3;end
  3:begin dot<=dot+$signed(mr);phase<=4;state<=3;end
  4:begin part<=$signed(mr);phase<=5;state<=3;end
- 5:begin cross_value<=cross_next;
+ 5:if(orientation_only)begin orientation_cross<=cross_next;orientation_done<=1;busy<=0;state<=0;end
+ else begin cross_value<=cross_next;
  if((ay>qy)!=(by>qy))if((dy>0 && cross_next>0)||(dy<0 && cross_next<0))parity<=~parity;
  phase<=(dot>0 && dot<$signed({1'b0,length2}) && length2!=0)?6:7;state<=3;end
  6:begin numerator<=mr;if(mr<=(length2<<2))near_edge<=1;state<=5;end
