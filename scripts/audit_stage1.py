@@ -80,11 +80,32 @@ def signature(path,parent,out):
     for p in (parent,out):text=text.replace(p.as_posix(),'<ATTEMPT>')
     return '\n'.join(x.rstrip() for x in text.splitlines() if not re.match(r'^(Generated[ \t]+:|[|][ \t]+Date[ \t]+:|Generated (on|at)|Date:|Time:)',x.strip())).strip()
 
+def routing_audit(path):
+    text=Path(path).read_text(encoding='utf-8')
+    start=text.rfind('RUN-1002 : start command "route"')
+    assert start>=0,'Missing route command'
+    final=text[start:]
+    drc=re.search(r'^PHY-1001 : Stage 5 \| Routing DRC\s*$',final,re.M)
+    end=re.search(r'^PHY-1001 : End Stage 5 \| Routing DRC;',final,re.M)
+    assert drc and end and end.start()>drc.end(),'Missing completed routing DRC'
+    congestion=re.findall(r'over cnt = (\d+)\([^)]*\), over = (\d+), worst = (\d+)',final[:drc.start()])
+    assert congestion and tuple(map(int,congestion[-1]))==(0,0,0),'Final routing conflicts remain or are unreported'
+    checks=final[drc.end():end.start()]
+    assert 'No multi-drive.' in checks and 'No abnormal timing path.' in checks
+    bound=re.search(r'Stage 5\.6 \| Bound Check(.*?)End Stage 5\.6',checks,re.S)
+    assert bound and 'Check Pass.' in bound[1],'Routing bound check did not pass'
+    finish=final.find('RUN-1003 : finish command "route"',end.end())
+    assert finish>=0 and final.find('REFINED_CHECKPOINT_FULL_COMPLETED',finish)>finish
+    assert 'BUILD_FAILED:' not in final
+    return dict(final_over_count=0,final_over=0,final_worst=0,routing_drc_pass=True,log_sha256=sha(Path(path)))
+
+
 def build_audit(attempt):
     out=(R/attempt).resolve();assert out.is_relative_to(R/'build')
     s=json.loads((out/'summary.json').read_text());a=assess(out,'full')
     assert s['stage']=='full' and s['exit_code']==0 and s['inputs_unchanged'] and s['resource_pass'] and s['timing_pass']
     assert a['resource_pass'] and a['timing_pass'] and a['resources']==s['resources'] and a['slack_ns']==s['slack_ns']
+    routing=routing_audit(out/'td.log')
     before=json.loads((out/'inputs.json').read_text());canonical_build_inputs(before)
     assert before==json.loads((out/'inputs_after.json').read_text())
     assert all(sha(out/'compiled_source'/n)==h for n,h in before.items())
@@ -117,7 +138,7 @@ def build_audit(attempt):
     assert (out/'target_color_regions.bit').is_file()
     timing=(out/'target_color_regions_pr.timing').read_text()
     return dict(attempt=out.relative_to(R).as_posix(),summary=s,compiled_source_commit=commit,
-                git_blob_inputs_verified=len(before),bit_sha256=sha(out/'target_color_regions.bit'),
+                git_blob_inputs_verified=len(before),bit_sha256=sha(out/'target_color_regions.bit'),routing=routing,
                 sta_coverage_percent=float(re.search(r'STA coverage\s*:\s*([\d.]+)%',timing)[1]))
 
 def audit(attempt=None,progress=False):

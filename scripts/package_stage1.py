@@ -8,12 +8,18 @@ def write_new(path,value):
 
 def package(attempt):
     proof=audit(attempt)
+    guard_report=R/'reports/stage1/routing_guards_20261022_182326.json'
+    guards=json.loads(guard_report.read_text(encoding='utf-8'))
+    assert guards['status']=='ROUTING_GUARDS_PASS' and len(guards['checks'])==6 and set(guards['checks'].values())=={'REJECTED'}
+    assert guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
+    assert guards['producer_sha256']==sha(R/'scripts/test_stage1_routing_guards.py')
+    assert all(sha(R/n)==h for n,h in guards['fixtures'].items())
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     report=R/'reports/stage1'/('final_audit_'+stamp+'.json');report.parent.mkdir(parents=True,exist_ok=True)
     write_new(report,proof)
     build=R/proof['build']['attempt'];compiled=json.loads((build/'inputs.json').read_text())
     dest=R/'build'/('target_region_sequence_stage1_'+stamp);dest.mkdir(exist_ok=False)
-    paths={R/n for n in compiled}|{build/'compiled_source'/n for n in compiled}|{report}
+    paths={R/n for n in compiled}|{build/'compiled_source'/n for n in compiled}|{report,guard_report}|{R/n for n in guards['fixtures']}
     for folder in ('scripts','sim','rtl'):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
