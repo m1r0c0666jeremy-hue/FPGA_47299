@@ -1,6 +1,6 @@
 # 区域示教与顺序报警第一阶段：验证与资源
 
-当前状态：4行区域绘制缓存109项当前源码软件检查通过，新厂家物理布局012438通过容量，完整布线013416正在运行。最终零冲突、建立/保持及同源复核通过前不交付，尚无本阶段可交付bit。
+当前状态：4行区域绘制缓存109项当前源码软件检查通过，最近布局012438通过容量；013416在热点处理后又连续3轮回升，约46分钟后取消。此为取消诊断，无最终失败或通过结论。现保持源码尝试完整官方AreaOptimizeMedium并明确balance_explore。最终零冲突、建立/保持及同源复核通过前不交付，尚无本阶段可交付bit。
 
 上一版功能源码提交：`199a45767161d2cde66573878d17e075d1494887`；8行结构提交`84c0607`；当前4行提交`9d52021`。分支：`feature/region-sequence-stage1`。
 
@@ -34,7 +34,7 @@ python scripts/run_stage1_route.py --parent <本次输出的布局目录> --rout
 
 每次运行创建新目录。实际冻结参数另保存在各构建目录的`flow_options.json`和`run.tcl`。
 
-新设置pr2、adaptive_pin_density、macro_congestion及官方CongestionMedium已通过正式布局容量；16线程routability布线继承post_route_opt=high，约束导入前后往返核对。此前正常布线233803约102分钟且连续4轮争用上升后取消，仅是取消诊断，无最终失败或通过结论。私有运算器复位备选比较无资源收益（局部Slice+3），未采用；正式算术源码保持原字节。
+此前设置pr2、adaptive_pin_density、macro_congestion及官方CongestionMedium已通过正式布局容量，16线程routability尝试无最终结果；当前新增完整AreaOptimizeMedium并明确balance_explore，其结果尚待。原约束不变。此前正常布线233803约102分钟且连续4轮争用上升后取消，仅是取消诊断，无最终失败或通过结论。私有运算器复位备选比较无资源收益（局部Slice+3），未采用；正式算术源码保持原字节。
 
 
 ## 当前源码软件证据
