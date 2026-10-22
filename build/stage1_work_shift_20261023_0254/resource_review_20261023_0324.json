@@ -1,0 +1,58 @@
+{
+  "status": "REJECTED_NO_RESOURCE_GAIN_NOT_ADOPTED",
+  "comparison": "build/stage1_work_shift_20261023_0254/gate_comparison_20261023_031907.json",
+  "comparison_sha256": "6a3be66186eca21e64e47ad30a90934bd591a465027e56f496eb1798a75b3198",
+  "resources": {
+    "indexed": {
+      "slice": 4054,
+      "lut6": 1756,
+      "reg": 4223,
+      "eram": 3,
+      "dsp": 0
+    },
+    "shifted": {
+      "slice": 4066,
+      "lut6": 1779,
+      "reg": 4223,
+      "eram": 3,
+      "dsp": 0
+    }
+  },
+  "delta": {
+    "slice": 12,
+    "lut6": 23,
+    "reg": 0,
+    "eram": 0,
+    "dsp": 0
+  },
+  "artifacts": {
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/inputs.json": "f63174fa1b43171a4378b5f19029755e66c23be0cb841e6712d8876093dfdbeb",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/isolated.area": "839870293a466465297da0d589c77c48576dba724e3bfec08bfa2dd28e098c96",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/run.tcl": "420f6e90a3a68f65fd3aef6ab9619066e9a4714e5080c8fce970fed5859ce92d",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/serial_wrapper.v": "604def53b2d9c23070b2d820bea3fef9061a8b33a782103b61ddf55dd620b670",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/target_color_regions_stage1.al": "55a2764dfbfde3bcced1bc0fff3fc823326f0e4e85368cb0fc5be0e70f2ab6c8",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/td.log": "eaef8f9e4005756fc9f195d3fa29f183f43918a5d79934a4fb440d905cbee87a",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build/stage1_work_shift_20261023_0254/gate_indexed_20261023_031907/sources/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/inputs.json": "8e7e7c25b9c06ff6cdd3c3979740750702384ff963ee121bc51c8f013f645321",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/isolated.area": "87042c4c8838f60291264e284c2a9ada884e24e6c4d776edab01f64b43b14c9c",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/run.tcl": "914377646465234445d4900f0581acb5c27d41f0742bb34cc6a73a57102f278e",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/serial_wrapper.v": "604def53b2d9c23070b2d820bea3fef9061a8b33a782103b61ddf55dd620b670",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/target_color_regions_stage1.al": "c49f1ecbcdf5626059eb4524df04b0d121dd91011c0ebf233ab131366ea5895c",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/td.log": "2872133570129bed310cf5af1a0771b9a9650d5ddc0ae58d123703e1ed2fc341",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_render.v": "e695577dbbe2dc38a2f50c1cd890d5dfcc32216172b83d287687efedccc8f2bf",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build/stage1_work_shift_20261023_0254/gate_shifted_20261023_031907/sources/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7"
+  },
+  "gate_producer_sha256": "24fb3d83099e1b6839d2f01dd184699763b0b012e47ad2123b051a8d803f5b69",
+  "scope": "CONNECTED LOCAL GATE ESTIMATES ONLY; formal 9d52021 remains unchanged"
+}

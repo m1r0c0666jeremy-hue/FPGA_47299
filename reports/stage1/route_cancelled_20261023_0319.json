@@ -1,0 +1,118 @@
+{
+  "status": "CANCELLED_TO_QUANTIFY_VERIFIED_WORK_TRANSFER_ALTERNATIVE_NOT_A_FINAL_ROUTE_FAILURE",
+  "time": "2026-10-23T03:19:06.545615+08:00",
+  "attempt": "build/stage1_route_20261023_024814_762295",
+  "reason": "About30minutes; iterations8-13 over22153/22264/22865/22667/23804/24237. No new minimum after8; latest iteration350.77s. Preserve all outputs and quantify separately validated fixed-word transfer alternative. No source or timing constraint changed during route.",
+  "td_pid": 60156,
+  "td_start": "2026-10-23T02:48:16+08:00",
+  "terminal_session": 60143,
+  "terminal_exit_code": 1,
+  "active_td_after_stop": 0,
+  "last_completed": {
+    "iteration": 13,
+    "over_count": 24114,
+    "over": 24237,
+    "worst": 2,
+    "seconds": 350.77
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 36864,
+      "over": 38044,
+      "worst": 4,
+      "seconds": 45.55
+    },
+    {
+      "iteration": 2,
+      "over_count": 31129,
+      "over": 31508,
+      "worst": 3,
+      "seconds": 35.4
+    },
+    {
+      "iteration": 3,
+      "over_count": 29186,
+      "over": 29500,
+      "worst": 3,
+      "seconds": 41.01
+    },
+    {
+      "iteration": 4,
+      "over_count": 24978,
+      "over": 25196,
+      "worst": 2,
+      "seconds": 57.79
+    },
+    {
+      "iteration": 5,
+      "over_count": 24017,
+      "over": 24205,
+      "worst": 2,
+      "seconds": 63.7
+    },
+    {
+      "iteration": 6,
+      "over_count": 22620,
+      "over": 22815,
+      "worst": 2,
+      "seconds": 80.72
+    },
+    {
+      "iteration": 7,
+      "over_count": 22571,
+      "over": 22736,
+      "worst": 2,
+      "seconds": 81.14
+    },
+    {
+      "iteration": 8,
+      "over_count": 21999,
+      "over": 22153,
+      "worst": 2,
+      "seconds": 167.71
+    },
+    {
+      "iteration": 9,
+      "over_count": 22122,
+      "over": 22264,
+      "worst": 3,
+      "seconds": 166.37
+    },
+    {
+      "iteration": 10,
+      "over_count": 22739,
+      "over": 22865,
+      "worst": 2,
+      "seconds": 154.91
+    },
+    {
+      "iteration": 11,
+      "over_count": 22566,
+      "over": 22667,
+      "worst": 2,
+      "seconds": 211.77
+    },
+    {
+      "iteration": 12,
+      "over_count": 23692,
+      "over": 23804,
+      "worst": 2,
+      "seconds": 237.69
+    },
+    {
+      "iteration": 13,
+      "over_count": 24114,
+      "over": 24237,
+      "worst": 2,
+      "seconds": 350.77
+    }
+  ],
+  "td_log_sha256_at_stop": "b54f447d23521b6f301524e29db77db7f1c0333b08f79dcd6d303c1d5594d075",
+  "formal_inputs_unchanged": 308,
+  "compiled_source_commit": "c0f842d89dd6627e9e034393a46828addc1dfcf1",
+  "software_proof": "reports/stage1/software_current_20261023_0002.json",
+  "software_proof_sha256": "3915e1c82df7a0e35067d48f9a6b82b05a6295b33439af06c375066703b32c8f",
+  "has_final_routing_or_timing_result": false,
+  "hardware_status": "PENDING"
+}

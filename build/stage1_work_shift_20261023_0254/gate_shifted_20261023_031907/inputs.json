@@ -1,0 +1,9 @@
+{
+  "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+  "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+  "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+  "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+  "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+  "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+  "build/stage1_work_shift_20261023_0254/stage1_render.v": "e695577dbbe2dc38a2f50c1cd890d5dfcc32216172b83d287687efedccc8f2bf"
+}

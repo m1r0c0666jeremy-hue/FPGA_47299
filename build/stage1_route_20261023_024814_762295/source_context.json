@@ -1,0 +1,17 @@
+{
+  "compiled_source_commit": "c0f842d89dd6627e9e034393a46828addc1dfcf1",
+  "creation_time": "20261023_024814_762295",
+  "input_count": 308,
+  "inputs_sha256": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f",
+  "placed_checkpoint": {
+    "parent": "build/stage1_place_20261023_022120",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "f350fdd91852462b9659fadb48fd1d3b6af890acf50d05ea58f15c367b3d5f77",
+    "parent_summary_sha256": "edc987464b19a2f2cb215a80d1cd10806eadcd9a075b7e2b20c240e5118e85f3",
+    "parent_context_sha256": "87c69351935ce80b186bb31c097b186ee7b0e9c6603655bc44cf646b04c92121",
+    "parent_inputs_sha256": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f"
+  },
+  "replaced_strategy": null,
+  "retry_routability": false,
+  "flow_threads": 16
+}

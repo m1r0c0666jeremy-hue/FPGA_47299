@@ -17,6 +17,7 @@ ap.add_argument('--official-phy',choices=['CongestionMedium','CongestionHigh','T
 ap.add_argument('--official-strategy-file',default='D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json')
 ap.add_argument('--min-ripple-len',type=int,choices=range(1,65))
 ap.add_argument('--checkpoint',action='store_true')
+ap.add_argument('--gate-parent',help='Reuse a verified, legalized gate checkpoint with identical current inputs; place only')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
@@ -52,8 +53,36 @@ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 before={p.relative_to(R).as_posix():sha(p) for p in sorted(paths)}
 from stage1_policy import canonical_build_inputs
 canonical_build_inputs(before)
+gate_proof=None
+if a.gate_parent:
+ assert a.stage=='place' and a.checkpoint,'Gate reuse requires --stage place --checkpoint'
+ assert not a.official_syn,'Gate reuse cannot apply synthesis presets'
+ parent=(R/a.gate_parent).resolve();assert parent.is_relative_to(R/'build')
+ prior=json.loads((parent/'summary.json').read_text(encoding='utf-8'))
+ context=json.loads((parent/'source_context.json').read_text(encoding='utf-8'))
+ checkpoint=parent/'target_color_regions_gate.db'
+ assert prior['stage']=='place' and prior['exit_code']==0 and prior['inputs_unchanged']
+ for key in ('map_mode','pack_effort','infer_fsm','min_ripple_len','map_strategy'):
+  assert getattr(a,key)==prior[key],f'Gate reuse cannot change synthesis option {key}'
+ assert prior['checkpoints'][checkpoint.name]==sha(checkpoint)
+ assert before==json.loads((parent/'inputs.json').read_text(encoding='utf-8'))==json.loads((parent/'inputs_after.json').read_text(encoding='utf-8'))
+ assert context['input_count']==len(before) and context['inputs_sha256']==sha(parent/'inputs.json')
+ assert all(sha(parent/'compiled_source'/name)==value for name,value in before.items())
+ parent_tcl=(parent/'run.tcl').read_text(encoding='utf-8')
+ assert parent_tcl.index('legalize_phy_inst')<parent_tcl.index('export_db target_color_regions_gate.db')
+ assert 'REFINED_PLACED_CHECKPOINT_READY' in (parent/'td.log').read_text(encoding='utf-8')
+ gate_proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'),placement_created_commit=created_head)
+ (out/'input_gate.db').write_bytes(checkpoint.read_bytes())
+ assert sha(out/'input_gate.db')==gate_proof['checkpoint_sha256']
+ # The netlist was compiled from this parent's commit; retain that identity.
+ created_head=context['compiled_source_commit']
+ subprocess.run(['git','merge-base','--is-ancestor',created_head,'HEAD'],cwd=R,check=True)
+ for name,value in before.items():
+  raw=subprocess.check_output(['git','show',created_head+':'+name],cwd=R)
+  assert hashlib.sha256(raw).hexdigest()==value,'Gate compilation commit differs: '+name
+ gate_proof['git_blob_inputs_verified']=len(before)
 (out/'inputs.json').write_text(json.dumps(before,indent=2),encoding='utf-8')
-(out/'source_context.json').write_text(json.dumps(dict(compiled_source_commit=created_head,creation_time=stamp,input_count=len(before),inputs_sha256=sha(out/'inputs.json')),indent=2),encoding='utf-8')
+(out/'source_context.json').write_text(json.dumps(dict(compiled_source_commit=created_head,creation_time=stamp,input_count=len(before),inputs_sha256=sha(out/'inputs.json'),reused_gate=gate_proof),indent=2),encoding='utf-8')
 with zipfile.ZipFile(out/'compiled_inputs.zip','w',zipfile.ZIP_DEFLATED) as z:
  for p in sorted(paths):z.write(p,p.relative_to(R))
 frozen=out/'compiled_source';frozen.mkdir()
@@ -114,6 +143,13 @@ elif a.stage=='place':t=t[:t.index('    route')]+'''    report_area -io_info -fi
 exit
 '''
 t=t.replace('td_project target_lock.adc','td_project stage1_pins.adc')
+if gate_proof:
+ # The parent exports this DB after legalize_phy_inst. Import its constraints
+ # and legalized netlist, then apply only the new physical settings.
+ start=t.index('    import_device ');end=t.index('    set_param place ',start)
+ t=t[:start]+f'    import_device ph1_35p.db -package PH1P35MDG324 -speed 3\n    import_db {{{(out/"input_gate.db").as_posix()}}}\n'+t[end:]
+ t=t.replace('    legalize_phy_inst\n','',1)
+ t=t.replace('    place\n','    puts "STAGE1_VERIFIED_GATE_REUSE"\n    place\n',1)
 script=out/'run.tcl';script.write_text(t,encoding='utf-8')
 td=Path('D:/26_software/TangDynasty/bin/td_commands_prompt.exe')
 env=os.environ.copy();env['PATH']=str(td.parent)+os.pathsep+env.get('PATH','')
@@ -123,6 +159,10 @@ after={name:sha(frozen/name) for name in before}
 (out/'inputs_after.json').write_text(json.dumps(after,indent=2),encoding='utf-8')
 summary=dict(stage=a.stage,head=created_head,head_after=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),route_effort=a.route_effort,placement_strategy=a.strategy,map_mode=a.map_mode,pack_effort=a.pack_effort,infer_fsm=a.infer_fsm,min_ripple_len=a.min_ripple_len,map_strategy=a.map_strategy,macro_performance=a.macro_performance,pack_mode=a.pack_mode,place_effort=a.place_effort,max_fanout=a.max_fanout,exit_code=p.returncode,inputs_unchanged=before==after,working_tree_matches=all((R/name).is_file() and sha(R/name)==value for name,value in before.items()))
 summary['official_strategy']=official
+summary['reused_gate']=gate_proof
+if gate_proof:
+ summary['gate_input_unchanged']=sha(out/'input_gate.db')==gate_proof['checkpoint_sha256']==sha(parent/'target_color_regions_gate.db')
+ assert summary['gate_input_unchanged']
 summary['checkpoints']={name:sha(out/name) for name in ('target_color_regions_gate.db','target_color_regions_placed.db') if (out/name).is_file()}
 if p.returncode==0:
  from refined_build_report import assess
