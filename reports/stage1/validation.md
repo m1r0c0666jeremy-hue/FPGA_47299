@@ -22,6 +22,16 @@
 
 最终建立/保持余量：等待完整布线。没有修改原ADC/SDC；新增引脚仅为蜂鸣器C12。状态机顺序编码及min_ripple_len=64为工具映射选择，功能源码仍为上述提交。旧失败构建均保留，不作为候选交付。
 
+本版在该Git分支工作区通过随附脚本配置TD工具。复现布局使用以下命令；它设置了成功布局所需的紧凑状态编码等参数。`.al`是源码入口，直接使用GUI默认参数的旧尝试曾超容量。
+
+```text
+python scripts/generate_stage1.py --check
+python scripts/run_stage1_build.py --stage place --checkpoint --map-mode area_prior --pack-effort high --strategy 5 --max-fanout 128 --pack-mode more_lut_pair --min-ripple-len 64 --infer-fsm sequential
+python scripts/run_stage1_route.py --parent <本次输出的布局目录> --route-effort normal
+```
+
+每次运行创建新目录。实际冻结参数另保存在各构建目录的`flow_options.json`和`run.tcl`。
+
 ## 当前源码软件证据
 
 109项全部通过，完整清单为[软件审计](software_current_20261022_1545.json)。该文件实际保存于15:55，1545是批次标签。原英文交付版的160项未变模块证据另按当前输入哈希及原ZIP重新核验，不当作新增功能检查。

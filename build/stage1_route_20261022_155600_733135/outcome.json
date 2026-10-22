@@ -1,0 +1,12 @@
+{
+  "status": "CANCELLED_DIAGNOSTIC_NOT_A_FINAL_ROUTING_OR_TIMING_RESULT",
+  "deliverable": false,
+  "reason": "Normal routing phase 1 remained highly congested through 22 iterations after about one hour; retain all evidence and try the vendor congestion placement strategy.",
+  "last_global_congestion_count": 12979,
+  "global_count_is_not_final_drc": true,
+  "last_iteration_seconds": 536.09,
+  "termination": "Owned session 92789 interrupted; TD PID 53104 checked against start time 2026-10-22 15:56:02 and no TD process remained before the next build.",
+  "source_changed": false,
+  "constraints_relaxed": false,
+  "parent": "build/stage1_place_20261022_152804"
+}
