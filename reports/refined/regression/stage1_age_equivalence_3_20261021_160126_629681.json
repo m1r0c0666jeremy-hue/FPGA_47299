@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "build\\stage1_age_equivalence\\baseline.v": "ad8f33915d54ed2d66848a500647967a1f1dee0a68f09fa0f3b1119896c0b398",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_age_equivalence_3_20261021_160126_629681",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_age_equivalence_3_20261021_160126_629681/tb.sv": "6d50fc81974ae3a694d945dbd1fbb7cde0584cfbae3f316f5cf04be5b78feb9a"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_age_equivalence.py": "e3c708ab9e98db739ab386dcee9d2c8770ccf1d0e61511b49c475ed187c6bd90",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

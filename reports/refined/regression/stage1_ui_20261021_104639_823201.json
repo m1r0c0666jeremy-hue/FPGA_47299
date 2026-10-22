@@ -1,0 +1,19 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_ui_text.v": "ca387078bd6e1272cec36043c0079615a351d29f51a20ceb76345806ede90ad4",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "ba5606a60b2e57240e1aab11c5a3a9a44ad1d7e24855fb9ea82851e30565bc0b",
+    "scripts/test_stage1_ui.py": "438bfdeafea9726daf383bad60ea6512e03bc6ef26abb74baecaafc1918d5afe"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_ui_20261021_104639_823201",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_ui_20261021_104639_823201/tb.sv": "d7e3f6bf1d955c93b4cc0b1b9aa19850e07972d2854f4dfc9d6c7058a5dbc1a7"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_ui.py": "438bfdeafea9726daf383bad60ea6512e03bc6ef26abb74baecaafc1918d5afe",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  },
+  "oracle_passed": true
+}

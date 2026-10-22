@@ -1,0 +1,32 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_render.v": "ae2d68ced066bacb04503ba0e97ce4d77f57cf6ce26950ec3a90fb0a42667464"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_render_14_624_20261022_203552_748947",
+  "fixture_inputs": {
+    "build/stage1_render_vectors/contexts.hex": "baf04d0f7afc749ed9fe8d230664237c5320142b19904e7203d275fbcff53563",
+    "build/stage1_render_vectors/expected_0.hex": "4acecc65ac1d4117e0834da6ebf422d4c115322cc0512458010b90611cfe735b",
+    "build/stage1_render_vectors/expected_1.hex": "894b431885e99e570af466e4fa3f2b16c1eb280033b728d0ec8825cdb10f9d3e",
+    "build/stage1_render_vectors/expected_10.hex": "65941fae4ce008d9b480f74494b105b30559fbd1f8023c9fc75733ca732b388c",
+    "build/stage1_render_vectors/expected_11.hex": "777072900237806884a3f6541c2636b6379deee422da3d46cc594a3788b8e8e7",
+    "build/stage1_render_vectors/expected_12.hex": "81a6fe4ec8dbe79147cd7003d8f14002ac46346b9d3e3735b7647d711c1b949a",
+    "build/stage1_render_vectors/expected_13.hex": "bcea37e34dc06996d74289fdcd7b2cee2057a8024d7f52cf0c6fd2d2ce8f58f5",
+    "build/stage1_render_vectors/expected_2.hex": "2d71f8daee0d134bb392b4691d3c6d1bbc212e6dbba837a7a534e5c8363f403f",
+    "build/stage1_render_vectors/expected_3.hex": "789ba8eae2a8e5dbe00a4c42580c4e22bbf2cd2876831ece1a2aa40a2bcdcf4e",
+    "build/stage1_render_vectors/expected_4.hex": "517bc5afaad731deb36fca93e16670a8b748b1dd1e5c1cdb037b75350d574b6b",
+    "build/stage1_render_vectors/expected_5.hex": "181566b530618ec23ffc3da021e00fabcdd0d6833bbe239dbf378207cf0be786",
+    "build/stage1_render_vectors/expected_6.hex": "a0678d501255ba5d90765e2b7fb5d5d4a55b2dab846218dd7274c38082f39c4a",
+    "build/stage1_render_vectors/expected_7.hex": "6aadf96b22eff328de842e1b74d4e491cb6c7b6c11833e9bdb443050bc26cc02",
+    "build/stage1_render_vectors/expected_8.hex": "b091abfec99fde544896f78e489e8b577e5b698abc41dfcb53a06044b6fb7b5c",
+    "build/stage1_render_vectors/expected_9.hex": "05cf8ae4206b189b8165d6ff52aff7fb6f1553f89fc7c485971f26a5d6c39792",
+    "build/sim/refined/stage1_render_14_624_20261022_203552_748947/tb.sv": "1c5413681472e8bbe80084c1e520beb14319ea2e2b408b6a65bb7526d316ee69"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_render.py": "7ac07351103f173213ac458ad9ae924a0b9bcaec073f50ee2072fc7e92abdedf",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

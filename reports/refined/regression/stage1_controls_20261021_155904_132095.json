@@ -1,0 +1,16 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_controls.v": "ea030a549df92a29faee44c027d80e6dc9dddc957cf7294dd5b77dd04f598932"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_controls_20261021_155904_132095",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_controls_20261021_155904_132095/tb.sv": "e7a1ad9751cfb3ab0fc608e8d561868f862cdc310b7fb57d1ecf78a4367e430d"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_controls_sequence.py": "31c3bd0f6e803247bff6366dc6cd5f41527fcef78a9b2b70987961217436ca3a",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}
