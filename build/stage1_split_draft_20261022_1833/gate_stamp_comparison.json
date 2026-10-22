@@ -1,0 +1,15 @@
+{
+  "scope": "CONNECTED EDITOR/RENDER ESTIMATES ONLY; no board candidate",
+  "outputs": {
+    "split_shared_stamp": {
+      "directory": "build/stage1_split_draft_20261022_1833/gate_split_shared_stamp_20261022_192541",
+      "resources": {
+        "slice": 4069,
+        "lut6": 1776,
+        "reg": 4227,
+        "eram": 5,
+        "dsp": 0
+      }
+    }
+  }
+}

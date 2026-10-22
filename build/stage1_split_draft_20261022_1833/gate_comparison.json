@@ -1,0 +1,35 @@
+{
+  "scope": "CONNECTED EDITOR/RENDER ESTIMATES ONLY; no board candidate",
+  "outputs": {
+    "baseline": {
+      "directory": "build/stage1_split_draft_20261022_1833/gate_baseline_20261022_191438",
+      "resources": {
+        "slice": 4713,
+        "lut6": 2165,
+        "reg": 4104,
+        "eram": 2,
+        "dsp": 0
+      }
+    },
+    "split": {
+      "directory": "build/stage1_split_draft_20261022_1833/gate_split_20261022_191438",
+      "resources": {
+        "slice": 4556,
+        "lut6": 2237,
+        "reg": 4275,
+        "eram": 2,
+        "dsp": 0
+      }
+    },
+    "split_shared": {
+      "directory": "build/stage1_split_draft_20261022_1833/gate_split_shared_20261022_191438",
+      "resources": {
+        "slice": 4374,
+        "lut6": 2036,
+        "reg": 4275,
+        "eram": 2,
+        "dsp": 0
+      }
+    }
+  }
+}

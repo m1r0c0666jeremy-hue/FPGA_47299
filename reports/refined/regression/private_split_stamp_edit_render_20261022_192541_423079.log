@@ -1,0 +1,3 @@
+PRIVATE_EDIT_RENDER_POINT_PASS pixels=134400
+STAGE1_REGIONS_PASS press-position/edit/concavity-validation/undo/modes/actual-geometry/order/stale/reset
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_split_stamp_edit_render_20261022_192541_423079\tb.sv:65: $finish called at 9633930 (1s)

@@ -1,0 +1,2 @@
+STAGE1_VALIDATE_PASS cases=220 max_cycles=56768
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_shared_vertex_validate_20261022_171714_180798\tb.sv:16: $finish called at 22535190 (1s)

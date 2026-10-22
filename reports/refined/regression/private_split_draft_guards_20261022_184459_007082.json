@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "build\\stage1_split_draft_20261022_1833\\stage1_render.v": "a790dad3842a35492237d5d5a4e73586ec4d2acb550d385c3a6b75fcae741c5f",
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_split_draft_guards_20261022_184459_007082",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}
