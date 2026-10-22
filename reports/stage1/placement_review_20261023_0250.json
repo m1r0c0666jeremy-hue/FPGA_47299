@@ -1,0 +1,35 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261023_022120",
+  "compiled_source_commit": "c0f842d89dd6627e9e034393a46828addc1dfcf1",
+  "functional_source_commit": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20467,
+    "lut6": 20138,
+    "reg": 23808,
+    "eram": 99,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "22783ea5dfb75615b52e00ed5eb8ac5b889c99cf197d1fa70eab2153c435f6fa",
+    "target_color_regions_placed.db": "f350fdd91852462b9659fadb48fd1d3b6af890acf50d05ea58f15c367b3d5f77"
+  },
+  "previous_same_source_place": "build/stage1_place_20261023_012438",
+  "delta_from_previous_same_source": {
+    "slice": 261,
+    "lut6": 169,
+    "reg": -25,
+    "eram": 0,
+    "dsp": 0
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "placement_estimates": {
+    "wire_length": 3497096,
+    "overloaded_tiles": 17,
+    "top_one_percent_average_utilization": 97.84
+  },
+  "hardware_status": "PENDING"
+}

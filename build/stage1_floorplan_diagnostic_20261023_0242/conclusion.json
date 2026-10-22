@@ -1,0 +1,16 @@
+{
+  "status": "READ_ONLY_DIAGNOSTIC_NO_CONSTRAINT_CHANGE",
+  "parent": "build/stage1_place_20261023_012438",
+  "parent_db_sha256": "74d97aac79baa4575b2725d57a1a28cd66b928827e2a932c9c819f8197340be0",
+  "parent_db_unchanged": true,
+  "conclusion": "Saved and frame snapshot registers already occupy similar nearby locations; no evidence to add grouping constraints. New area-mapped placement has higher Slice use but slightly smaller estimated wire length and fewer overloaded tiles; a new complete route is started without source or timing-constraint changes.",
+  "positions": "position_summary.json",
+  "manual": "D:/26_software/TangDynasty/doc/TD_User_Guide_V6.2.pdf",
+  "manual_pages": [
+    186,
+    187,
+    188,
+    195,
+    283
+  ]
+}
