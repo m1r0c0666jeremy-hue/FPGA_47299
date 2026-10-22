@@ -1,4 +1,4 @@
-// Incremental supercover edges. Packed state RAM + eight scanlines with serial stamps.
+// Incremental supercover edges. Packed state RAM + four scanlines with serial stamps.
 // No full-frame bitmap, per-pixel multiply, or extra video pipeline stage.
 `default_nettype none
 module stage1_render #(parameter SPLIT_DRAFT=0)(input wire clk,rst_n,commit,input wire [671:0] vertices,
@@ -22,9 +22,9 @@ module stage1_render #(parameter SPLIT_DRAFT=0)(input wire clk,rst_n,commit,inpu
  reg [13:0] half_r;reg signed [47:0] product;reg product_negative;
  reg [127:0] work;reg write_is_row;
  (* ram_style="bram" *)reg [15:0] edge_mem[0:255];
- (* ram_style="bram" *)reg [31:0] line_mem[0:1279];
+ (* ram_style="bram" *)reg [31:0] line_mem[0:639];
  reg [15:0] edge_q;reg [31:0] line_q;
- reg [7:0] bank_valid;reg [9:0] bank_row[0:7];reg mask_valid_q;reg [2:0] offset_q;
+ reg [3:0] bank_valid;reg [9:0] bank_row[0:3];reg mask_valid_q;reg [2:0] offset_q;
  reg [9:0] row;reg [7:0] word_index;reg [31:0] stamp_q;reg [10:0] stamp_lo,stamp_hi;reg stamp_valid;
  reg [10:0] labels_x[0:3];reg [9:0] labels_y[0:3];reg [3:0] labels_valid;
  reg [1:0] label_id;reg label_up;reg [5:0] label_attempt;reg label_collision;
@@ -102,8 +102,8 @@ if(index[3])draft_at=0;end endfunction
  wire signed [13:0] map_value=mapped(field[0]?{1'b0,map_point[20:11]}:map_point[10:0],
  field[0]?{1'b0,fy0}:fx0,fzoom,frotate,field[0]);
  reg [2:0] left_bit,right_bit;reg [7:0] edge_bits;reg [31:0] stamp_mask;
- wire [10:0] read_address=y[2:0]*11'd160+{3'd0,x[10:3]};
- wire [10:0] write_address=row[2:0]*11'd160+{3'd0,word_index};
+ wire [9:0] read_address=y[1:0]*10'd160+{2'd0,x[10:3]};
+ wire [9:0] write_address=row[1:0]*10'd160+{2'd0,word_index};
  always @(posedge clk)begin
  edge_q<=edge_mem[{edge_id,3'b000}+field[2:0]];
  if(state==WRITE_EDGE)edge_mem[{edge_id,3'b000}+field[2:0]]<=work[field*16+:16];
@@ -114,7 +114,7 @@ if(index[3])draft_at=0;end endfunction
  end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin mask_valid_q<=0;offset_q<=0;end
- else begin mask_valid_q<=de && y<624 && bank_valid[y[2:0]] && bank_row[y[2:0]]==y && ready && !underrun;
+ else begin mask_valid_q<=de && y<624 && bank_valid[y[1:0]] && bank_row[y[1:0]]==y && ready && !underrun;
  offset_q<=x[2:0];end end
  assign pixel_mask=mask_valid_q?(line_q>>(offset_q*4)):4'd0;
  function [23:0] color_for;input [1:0] r;input [3:0] status,done_mask;input [2:0] target,actual;input closed;
@@ -185,7 +185,7 @@ if(index[3])draft_at=0;end endfunction
  map_ax<=0;map_ay<=0;map_bx<=0;map_by<=0;all_left<=15;all_right<=15;all_above<=15;all_below<=15;
  for(j=0;j<4;j=j+1)begin labels_x[j]<=0;labels_y[j]<=0;end
  end else begin mstart<=0;
- if(de && y<624 && fc!=0 && (!bank_valid[y[2:0]] || bank_row[y[2:0]]!=y))underrun<=1;
+ if(de && y<624 && fc!=0 && (!bank_valid[y[1:0]] || bank_row[y[1:0]]!=y))underrun<=1;
  case(state)
  MAP:begin
  case(field[1:0])0:map_ax<=map_value;1:map_ay<=map_value;2:map_bx<=map_value;3:map_by<=map_value;endcase
@@ -246,7 +246,7 @@ if(index[3])draft_at=0;end endfunction
  else if(!label_up && labels_y[label_id]<=590)labels_y[label_id]<=labels_y[label_id]+18;
  else begin label_up<=~label_up;labels_x[label_id]<=labels_x[label_id]>=64?labels_x[label_id]-64:labels_x[label_id]+64;end
  end end
- ROW_BEGIN:begin edge_id<=0;field<=0;word_index<=0;bank_valid[row[2:0]]<=0;state<=CLEAR;end
+ ROW_BEGIN:begin edge_id<=0;field<=0;word_index<=0;bank_valid[row[1:0]]<=0;state<=CLEAR;end
  CLEAR:if(word_index==159)begin word_index<=0;state<=READ_EDGE;end else word_index<=word_index+1'b1;
  READ_EDGE:begin
  if(field!=0)work[(field-1'b1)*16+:16]<=edge_q;
@@ -258,9 +258,9 @@ if(index[3])draft_at=0;end endfunction
  STAMP_READ:state<=STAMP_WRITE;
  STAMP_WRITE:if(word_index==stamp_hi[10:3])state<=NEXT_EDGE;
  else begin word_index<=word_index+1'b1;state<=STAMP_READ;end
- NEXT_EDGE:if(edge_id==31)begin bank_valid[row[2:0]]<=1;bank_row[row[2:0]]<=row;ready<=1;state<=WAIT_ROW;end
+ NEXT_EDGE:if(edge_id==31)begin bank_valid[row[1:0]]<=1;bank_row[row[1:0]]<=row;ready<=1;state<=WAIT_ROW;end
  else begin edge_id<=edge_id+1'b1;state<=READ_EDGE;end
- WAIT_ROW:if(row<623 && (row<7 || {1'b0,y}+11'd6>={1'b0,row}))begin row<=row+1'b1;state<=ROW_BEGIN;end
+ WAIT_ROW:if(row<623 && (row<3 || {1'b0,y}+11'd2>={1'b0,row}))begin row<=row+1'b1;state<=ROW_BEGIN;end
  default:begin end
  endcase
  if(commit)begin
