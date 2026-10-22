@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "build\\stage1_work_shift_20261023_0254\\stage1_render.v": "e695577dbbe2dc38a2f50c1cd890d5dfcc32216172b83d287687efedccc8f2bf"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_work_shift_stage1_render_guards_20261023_025214_204984",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}

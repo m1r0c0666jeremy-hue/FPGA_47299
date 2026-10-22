@@ -1,0 +1,2 @@
+STAGE1_RENDER_GUARDS_PASS late-commit/no-stale-overlay/recovery/frozen-vertices
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_work_shift_stage1_render_guards_20261023_025214_204984\tb.sv:19: $finish called at 300140 (1s)
