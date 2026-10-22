@@ -1,6 +1,12 @@
 # 摄像头、图像处理与 HDMI 显示工程
 Maintainer: Fle & Jeremy
 
+## 当前实施：区域示教与顺序报警第一阶段（2026-10-22）
+
+工作分支`feature/region-sequence-stage1`，独立入口`td_project/target_color_regions_stage1.al`。支持十字准心示教A–D四区、撤销/删除、顺序测试、乱序/回访蜂鸣报警、暂停、静音和重测；原有四模式、两配色、五倍率与校准/跟踪继续保留。
+
+当前109项源码软件检查及正式布局通过，完整布线进行中，尚无本阶段可交付bit。见[验证与资源对比](reports/stage1/validation.md)、[中文操作与实测表](docs/区域顺序_第一阶段_操作与实测.md)、[执行记录](docs/区域顺序_第一阶段_执行记录.md)。旧版交付与原工程保留，以下章节为历史版本。
+
 ## 当前实施：颜色识别、视频稳定性与显示功能改进
 
 分支 `release/transparent-ring-stability-20261015`，基线 `2f79847`。本轮入口为 **`td_project/target_color_regions_refined.al`**：独立DDR握手/恢复与相机应答监督、定向背景校准、五档倍率、透明官方Logo、默认底栏及校准提示和v4板内延迟。原工程、历史bit及源码包保留。
