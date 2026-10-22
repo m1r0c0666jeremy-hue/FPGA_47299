@@ -1,0 +1,27 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "ba5606a60b2e57240e1aab11c5a3a9a44ad1d7e24855fb9ea82851e30565bc0b",
+    "rtl\\color_regions\\stage1_ui_text.v": "ca387078bd6e1272cec36043c0079615a351d29f51a20ceb76345806ede90ad4"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_english_wait_20261022_232400_802638",
+  "fixture_inputs": {
+    "build/sim/stage1_footer_pixels/wait_0.hex": "772b3f3a52249cbd6f8be38a065281d6e44c395a77f9b4224c17896243487c98",
+    "build/sim/refined/stage1_english_wait_20261022_232400_802638/tb.sv": "8a99841593b7e13054b2476fd42299a359ea6a315be8963411a589a57d50ccfe"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_footer.py": "9b2d9ebd5a6038923c4bae7192a6c5be6c7dee1828a766e48234555f39d14e61",
+    "scripts/test_osd_memory_ui.py": "43f4050797105a4d523bbac240920db1f16e2f2c76f45744676c430466c0b280",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

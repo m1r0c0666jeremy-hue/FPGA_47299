@@ -1,0 +1,100 @@
+{
+  "stage": "place",
+  "head": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "head_after": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "route_effort": "normal",
+  "placement_strategy": 4,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "sequential",
+  "min_ripple_len": 64,
+  "map_strategy": null,
+  "macro_performance": null,
+  "pack_mode": "more_lut_pair",
+  "place_effort": null,
+  "max_fanout": 128,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": {
+    "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+    "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+    "selected": {
+      "CongestionMedium": {
+        "description": "Makes some placement optimization to reduce congestion for easier routing.",
+        "is_syn": "phy",
+        "params": [
+          {
+            "step": "place",
+            "param": "opt_timing",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "ofv",
+            "val": "70"
+          },
+          {
+            "step": "place",
+            "param": "opt_max_density",
+            "val": "50"
+          },
+          {
+            "step": "place",
+            "param": "target_density",
+            "val": "0.7"
+          },
+          {
+            "step": "place",
+            "param": "target_density_pp",
+            "val": "0.75"
+          },
+          {
+            "step": "place",
+            "param": "aggressive_opt",
+            "val": "20"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_beeline_opt",
+            "val": "2"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_gp",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "non_crit_opt",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "post_place_opt",
+            "val": "high"
+          },
+          {
+            "step": "route",
+            "param": "post_route_opt",
+            "val": "high"
+          }
+        ]
+      }
+    }
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "4b08553b95c970c4d6d0e3d200a210da396adc9fa072f011e3bd3a8231597020",
+    "target_color_regions_placed.db": "415075b6e662b00efc7067e0ecc1f1c25766eb1664a57a6aa912c6a28eb24699"
+  },
+  "resources": {
+    "slice": 20219,
+    "lut6": 20013,
+    "reg": 23828,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

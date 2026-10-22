@@ -1,0 +1,22 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261022_231917",
+  "compiled_source_commit": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20219,
+    "lut6": 20013,
+    "reg": 23828,
+    "eram": 99,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "4b08553b95c970c4d6d0e3d200a210da396adc9fa072f011e3bd3a8231597020",
+    "target_color_regions_placed.db": "415075b6e662b00efc7067e0ecc1f1c25766eb1664a57a6aa912c6a28eb24699"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "comparison_note": "Previous eight-row placement used different physical settings; ERAM101 to99, Slice20203 to20219. Not a same-setting whole-device attribution.",
+  "hardware_status": "PENDING"
+}
