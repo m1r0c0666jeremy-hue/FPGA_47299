@@ -1,10 +1,10 @@
 // Validate a draft without changing saved regions. Touching is deliberately invalid.
 `default_nettype none
-module stage1_validate #(parameter SHARED=0)(input wire clk,rst_n,start,input wire [2:0] region_count,
+module stage1_validate #(parameter SHARED=0,SHARED_VERTEX=0)(input wire clk,rst_n,start,input wire [2:0] region_count,
  input wire [15:0] counts,input wire [671:0] vertices,input wire [3:0] draft_count,
  input wire [167:0] draft,output reg busy,done,passed,output reg [3:0] error_code,
  output wire orientation_start,output wire [20:0] oa,ob,oc,
- input wire orientation_done,input wire signed [23:0] orientation_cross);
+ input wire orientation_done,input wire signed [23:0] orientation_cross,output wire [4:0] vertex_address,input wire [20:0] vertex_data);
  reg [3:0] state,i,j;reg [1:0] old_region;reg external_pairs,reverse;
  reg seg_start,parity;wire seg_busy,seg_done,hit,overlap,ray_hit;
  wire [3:0] old_n=counts[old_region*4+:4];
@@ -70,7 +70,8 @@ if(index[3])vp=0;end endfunction
  2:begin read_draft=!external_pairs;read_index=j;end
  3:begin read_draft=!external_pairs;read_index=j+1==(external_pairs?old_n:draft_count)?4'd0:j+1'b1;end
  endcase end end
- wire [20:0] vertex_q=read_draft?dp(draft,read_index):vp(vertices,old_region,read_index);
+ assign vertex_address={old_region,read_index[2:0]};
+ wire [20:0] vertex_q=read_draft?dp(draft,read_index):SHARED_VERTEX?(read_index[3]?21'd0:vertex_data):vp(vertices,old_region,read_index);
  // Validation already excludes every edge touch. Reuse its exact orientation
  // engine for half-open ray parity; no second distance/division engine is needed.
  stage1_segment #(.SHARED(SHARED)) segments(clk,rst_n,seg_start,a,b,c,d,seg_busy,seg_done,hit,overlap,ray_hit,orientation_start,oa,ob,oc,orientation_done,orientation_cross);

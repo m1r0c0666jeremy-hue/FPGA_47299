@@ -58,7 +58,7 @@ def main():
     src=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,commit=0,de=0,vs=0,show=1,rot=0;reg [2:0] zoom=0;reg [3:0] state=2;
 reg [23:0] raw=0;wire ovs,ohs,ode;wire [23:0] rgb;
-stage1_osd dut(2'd2,672'hVERTICES,16'h3333,4'hf,3'd4,3'd1,3'd1,4'd0,state,4'd1,4'd0,1'b0,2'd0,11'd0,20'd0,4'd0,4'd0,1'b0,1'b1,1'b0,1'b0,3'd5,
+stage1_osd dut(2'd2,672'hVERTICES,168'd0,16'h3333,4'hf,3'd4,3'd1,3'd1,4'd0,state,4'd1,4'd0,1'b0,2'd0,11'd0,20'd0,4'd0,4'd0,1'b0,1'b1,1'b0,1'b0,3'd5,
 clk,rst,vs,1'b0,de,raw,768'd0,11'd0,10'd0,zoom,2'd0,3'd0,1'b0,show,1'b1,1'b0,1'b0,1'b0,
 ovs,ohs,ode,rgb,rot,2'd0,32'd0,commit,1'b0,32'd0,32'd0,128'd0,128'd0,39'd0,18'd0);
 reg [23:0] expected[0:798719];reg [23:0] e0=0,e1=0;reg v0=0,v1=0,checking=0;integer c,y,h,index=0,pixels=0;

@@ -36,7 +36,7 @@ def specs():
       'stage1_sequence':('STAGE1_SEQUENCE_PASS',('stage1_sequence',)),
       'stage1_age_equivalence_1':('STAGE1_AGE_EQUIVALENCE_PASS period=1 cycles=1284003',('stage1_sequence',)),
       'stage1_age_equivalence_3':('STAGE1_AGE_EQUIVALENCE_PASS period=3 cycles=3452003',('stage1_sequence',)),
-      'stage1_regions':('STAGE1_REGIONS_PASS',('stage1_regions','stage1_point','stage1_validate','stage1_sequence')),
+      'stage1_regions':('STAGE1_EDIT_RENDER_PASS point_pixels=134400',('stage1_regions','stage1_point','stage1_validate','stage1_sequence','stage1_render')),
       'stage1_buzzer':('STAGE1_BUZZER_PASS',('stage1_buzzer',)),
       'stage1_camera_0':('NACK=0 retries=0',('stage1_controls','stage1_top')),
       'stage1_camera_1':('NACK=1 retries=1',('stage1_controls','stage1_top')),
@@ -68,6 +68,7 @@ def evidence(prefix,marker,modules):
             if not fixtures or not producers:continue
             if not all((R/n).is_file() and sha(R/n)==h for group in (inputs,fixtures,producers) for n,h in group.items()):continue
             if marker not in p.with_suffix('.log').read_text(encoding='utf-8'):continue
+            if prefix=='stage1_regions' and 'STAGE1_REGIONS_PASS' not in p.with_suffix('.log').read_text():continue
             if prefix=='stage1_ui' and not d.get('oracle_passed'):continue
             if prefix.startswith('stage1_v4_live_') and 'STABLE_LIVE_PASS' not in p.with_suffix('.log').read_text():continue
             return dict(record=p.relative_to(R).as_posix(),record_sha256=sha(p),log_sha256=sha(p.with_suffix('.log')),

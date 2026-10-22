@@ -1,7 +1,7 @@
-// Incremental supercover edges. Packed state RAM + two 8-pixel scanline buffers.
+// Incremental supercover edges. Packed state RAM + eight scanlines with serial stamps.
 // No full-frame bitmap, per-pixel multiply, or extra video pipeline stage.
 `default_nettype none
-module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
+module stage1_render #(parameter SPLIT_DRAFT=0)(input wire clk,rst_n,commit,input wire [671:0] vertices,
  input wire [15:0] counts,input wire [3:0] closed_mask,input wire [1:0] ui_mode,
  input wire [10:0] x0,input wire [9:0] y0,input wire [2:0] zoom,input wire rotate,
  input wire [3:0] run_state,completed,input wire [2:0] expected_area,actual_area,
@@ -9,11 +9,12 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  output wire [3:0] pixel_mask,output reg [23:0] pixel_color,
  output reg label_on,output reg [7:0] label_glyph,output reg [2:0] label_gx,
  output reg [3:0] label_gy,output reg [23:0] label_color,
- output reg ready,output reg underrun);
+ output reg ready,output reg underrun,input wire [167:0] draft_vertices,input wire [2:0] draft_region,input wire draft_visible);
  localparam IDLE=0,MAP=1,ORDER=2,DIV_HALF=3,WAIT_HALF=4,MUL_START=5,WAIT_MUL=6,
  DIV_INITIAL=7,WAIT_INITIAL=8,WRITE_EDGE=9,ROW_BEGIN=10,READ_EDGE=11,ROW_EDGE=12,
- GEN=13,WAIT_ROW=14,LABEL_PLACE=15,MAP_FINISH=16;
+ GEN=13,WAIT_ROW=14,LABEL_PLACE=15,MAP_FINISH=16,CLEAR=17,STAMP_READ=18,STAMP_WRITE=19,NEXT_EDGE=20;
  reg [4:0] state;reg [4:0] edge_id;reg [3:0] field;
+ reg [167:0] fd;reg [1:0] fd_region;reg fd_visible;
  reg [671:0] fv;reg [15:0] fc;reg [3:0] fclosed,fcompleted;reg [1:0] fmode;
  reg [10:0] fx0;reg [9:0] fy0;reg [2:0] fzoom,fexpected,factual;reg frotate;
  reg [3:0] fstate;
@@ -21,11 +22,10 @@ module stage1_render(input wire clk,rst_n,commit,input wire [671:0] vertices,
  reg [13:0] half_r;reg signed [47:0] product;reg product_negative;
  reg [127:0] work;reg write_is_row;
  (* ram_style="bram" *)reg [15:0] edge_mem[0:255];
- (* ram_style="bram" *)reg [31:0] line_mem[0:319];
+ (* ram_style="bram" *)reg [31:0] line_mem[0:1279];
  reg [15:0] edge_q;reg [31:0] line_q;
- reg [1:0] bank_valid;reg [9:0] bank_row[0:1];reg mask_valid_q;reg [2:0] offset_q;
- reg [9:0] row;reg [7:0] word_index;reg [1:0] region_phase;reg [31:0] pending;
- reg [10:0] span_lo[0:31],span_hi[0:31];reg [31:0] span_valid;
+ reg [7:0] bank_valid;reg [9:0] bank_row[0:7];reg mask_valid_q;reg [2:0] offset_q;
+ reg [9:0] row;reg [7:0] word_index;reg [31:0] stamp_q;reg [10:0] stamp_lo,stamp_hi;reg stamp_valid;
  reg [10:0] labels_x[0:3];reg [9:0] labels_y[0:3];reg [3:0] labels_valid;
  reg [1:0] label_id;reg label_up;reg [5:0] label_attempt;reg label_collision;
  reg [3:0] all_left,all_right,all_above,all_below;
@@ -87,23 +87,34 @@ if(i[3])vertex_at=0;end endfunction
  mapped=flip?(axis_y?14'sd623:14'sd1279)-t:t;
  end endfunction
  reg signed [13:0] map_ax,map_ay,map_bx,map_by;
- wire [20:0] map_point=vertex_at(fv,region_id,field[1]?ni:vi);
+ function [20:0] draft_at;input [167:0] data;input [3:0] index;begin case(index[2:0])
+3'd0:draft_at=data[0+:21];
+3'd1:draft_at=data[21+:21];
+3'd2:draft_at=data[42+:21];
+3'd3:draft_at=data[63+:21];
+3'd4:draft_at=data[84+:21];
+3'd5:draft_at=data[105+:21];
+3'd6:draft_at=data[126+:21];
+3'd7:draft_at=data[147+:21];
+endcase
+if(index[3])draft_at=0;end endfunction
+ wire [20:0] map_point=SPLIT_DRAFT && fd_visible && region_id==fd_region?draft_at(fd,field[1]?ni:vi):vertex_at(fv,region_id,field[1]?ni:vi);
  wire signed [13:0] map_value=mapped(field[0]?{1'b0,map_point[20:11]}:map_point[10:0],
  field[0]?{1'b0,fy0}:fx0,fzoom,frotate,field[0]);
- reg [7:0] nibble;reg [10:0] base_x;reg [2:0] left_bit,right_bit;reg [7:0] edge_bits;
- wire [8:0] read_address=(y[0]?9'd160:9'd0)+{1'b0,x[10:3]};
- wire [8:0] write_address=(row[0]?9'd160:9'd0)+{1'b0,word_index};
- wire [31:0] generated_word={nibble[7],pending[30:28],nibble[6],pending[26:24],nibble[5],pending[22:20],nibble[4],pending[18:16],
- nibble[3],pending[14:12],nibble[2],pending[10:8],nibble[1],pending[6:4],nibble[0],pending[2:0]};
+ reg [2:0] left_bit,right_bit;reg [7:0] edge_bits;reg [31:0] stamp_mask;
+ wire [10:0] read_address=y[2:0]*11'd160+{3'd0,x[10:3]};
+ wire [10:0] write_address=row[2:0]*11'd160+{3'd0,word_index};
  always @(posedge clk)begin
  edge_q<=edge_mem[{edge_id,3'b000}+field[2:0]];
  if(state==WRITE_EDGE)edge_mem[{edge_id,3'b000}+field[2:0]]<=work[field*16+:16];
  line_q<=line_mem[read_address];
- if(state==GEN && region_phase==3)line_mem[write_address]<=generated_word;
+ stamp_q<=line_mem[write_address];
+ if(state==CLEAR)line_mem[write_address]<=0;
+ else if(state==STAMP_WRITE)line_mem[write_address]<=stamp_q|stamp_mask;
  end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin mask_valid_q<=0;offset_q<=0;end
- else begin mask_valid_q<=de && y<624 && bank_valid[y[0]] && bank_row[y[0]]==y && ready && !underrun;
+ else begin mask_valid_q<=de && y<624 && bank_valid[y[2:0]] && bank_row[y[2:0]]==y && ready && !underrun;
  offset_q<=x[2:0];end end
  assign pixel_mask=mask_valid_q?(line_q>>(offset_q*4)):4'd0;
  function [23:0] color_for;input [1:0] r;input [3:0] status,done_mask;input [2:0] target,actual;input closed;
@@ -151,13 +162,12 @@ if(i[3])vertex_at=0;end endfunction
  if(valid_edge && row>=first_y && row<last_y && !horizontal)begin advanced[15:0]=next_f[15:0];advanced[29:16]=rr[13:0];end
  end
  integer k;
- always @*begin nibble=0;base_x={word_index,3'b000};left_bit=0;right_bit=7;edge_bits=0;
- for(k=0;k<8;k=k+1)begin
- if(span_valid[{region_phase,k[2:0]}] && span_hi[{region_phase,k[2:0]}]>=base_x && span_lo[{region_phase,k[2:0]}]<=base_x+7)begin
- left_bit=span_lo[{region_phase,k[2:0]}]>base_x?span_lo[{region_phase,k[2:0]}][2:0]:3'd0;
- right_bit=span_hi[{region_phase,k[2:0]}]<base_x+7?span_hi[{region_phase,k[2:0]}][2:0]:3'd7;
- edge_bits=(8'hff<<left_bit)&(8'hff>>(7-right_bit));nibble=nibble|edge_bits;
- end end end
+ always @*begin
+ left_bit=word_index==stamp_lo[10:3]?stamp_lo[2:0]:3'd0;
+ right_bit=word_index==stamp_hi[10:3]?stamp_hi[2:0]:3'd7;
+ edge_bits=(8'hff<<left_bit)&(8'hff>>(7-right_bit));stamp_mask=0;
+ for(k=0;k<8;k=k+1)if(edge_bits[k])stamp_mask[k*4+:4]=4'b0001<<edge_id[4:3];
+ end
  integer label_index;
  always @*begin label_collision=0;
  for(label_index=0;label_index<4;label_index=label_index+1)
@@ -167,15 +177,15 @@ if(i[3])vertex_at=0;end endfunction
  end
  task next_prepared_edge;begin field<=0;write_is_row<=0;state<=WRITE_EDGE;end endtask
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fv<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
+ if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fd<=0;fd_region<=0;fd_visible<=0;fv<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
  fx0<=0;fy0<=0;fzoom<=0;fexpected<=0;factual<=0;frotate<=0;fstate<=0;
  xa<=0;ya<=0;xb<=0;yb<=0;dx<=0;dy<=0;half_q<=0;half_r<=0;product<=0;product_negative<=0;work<=0;write_is_row<=0;
- bank_valid<=0;bank_row[0]<=0;bank_row[1]<=0;row<=0;word_index<=0;region_phase<=0;pending<=0;span_valid<=0;
+ bank_valid<=0;row<=0;word_index<=0;stamp_lo<=0;stamp_hi<=0;stamp_valid<=0;
  labels_valid<=0;label_id<=0;label_up<=0;label_attempt<=0;mstart<=0;mop<=0;ma<=0;mb<=0;ready<=0;underrun<=0;
  map_ax<=0;map_ay<=0;map_bx<=0;map_by<=0;all_left<=15;all_right<=15;all_above<=15;all_below<=15;
  for(j=0;j<4;j=j+1)begin labels_x[j]<=0;labels_y[j]<=0;end
  end else begin mstart<=0;
- if(de && y<624 && fc!=0 && (!bank_valid[y[0]] || bank_row[y[0]]!=y))underrun<=1;
+ if(de && y<624 && fc!=0 && (!bank_valid[y[2:0]] || bank_row[y[2:0]]!=y))underrun<=1;
  case(state)
  MAP:begin
  case(field[1:0])0:map_ax<=map_value;1:map_ay<=map_value;2:map_bx<=map_value;3:map_by<=map_value;endcase
@@ -220,8 +230,7 @@ if(i[3])vertex_at=0;end endfunction
  next_prepared_edge();end
  WRITE_EDGE:begin
  if(field==7)begin field<=0;
- if(write_is_row)begin if(edge_id==31)begin word_index<=0;region_phase<=0;state<=GEN;end
- else begin edge_id<=edge_id+1'b1;state<=READ_EDGE;end end
+ if(write_is_row)state<=stamp_valid?STAMP_READ:NEXT_EDGE;
  else if(edge_id==31)begin row<=0;state<=LABEL_PLACE;label_id<=0;label_attempt<=0;label_up<=labels_y[0]>304;
  for(j=0;j<4;j=j+1)labels_valid[j]<=fc[j*4+:4]!=0 && !all_left[j] && !all_right[j] && !all_above[j] && !all_below[j];
  end else begin edge_id<=edge_id+1'b1;state<=MAP;end
@@ -237,23 +246,25 @@ if(i[3])vertex_at=0;end endfunction
  else if(!label_up && labels_y[label_id]<=590)labels_y[label_id]<=labels_y[label_id]+18;
  else begin label_up<=~label_up;labels_x[label_id]<=labels_x[label_id]>=64?labels_x[label_id]-64:labels_x[label_id]+64;end
  end end
- ROW_BEGIN:begin edge_id<=0;field<=0;span_valid<=0;bank_valid[row[0]]<=0;state<=READ_EDGE;end
+ ROW_BEGIN:begin edge_id<=0;field<=0;word_index<=0;bank_valid[row[2:0]]<=0;state<=CLEAR;end
+ CLEAR:if(word_index==159)begin word_index<=0;state<=READ_EDGE;end else word_index<=word_index+1'b1;
  READ_EDGE:begin
  if(field!=0)work[(field-1'b1)*16+:16]<=edge_q;
  if(field==8)begin field<=0;state<=ROW_EDGE;end else field<=field+1'b1;end
  ROW_EDGE:begin
- span_valid[edge_id]<=span_ok;span_lo[edge_id]<=lo_pixel<0?0:lo_pixel[10:0];span_hi[edge_id]<=hi_pixel>1279?1279:hi_pixel[10:0];
+ stamp_valid<=span_ok;stamp_lo<=lo_pixel<0?0:lo_pixel[10:0];stamp_hi<=hi_pixel>1279?1279:hi_pixel[10:0];
+ word_index<=lo_pixel<0?0:lo_pixel[10:3];
  work<=advanced;field<=0;write_is_row<=1;state<=WRITE_EDGE;end
- GEN:begin
- for(j=0;j<8;j=j+1)pending[j*4+region_phase]<=nibble[j];
- if(region_phase==3)begin region_phase<=0;
- if(word_index==159)begin bank_valid[row[0]]<=1;bank_row[row[0]]<=row;ready<=1;state<=WAIT_ROW;end
- else word_index<=word_index+1'b1;end else region_phase<=region_phase+1'b1;end
- WAIT_ROW:if(row<623 && (row==0 || y>=row))begin row<=row+1'b1;state<=ROW_BEGIN;end
+ STAMP_READ:state<=STAMP_WRITE;
+ STAMP_WRITE:if(word_index==stamp_hi[10:3])state<=NEXT_EDGE;
+ else begin word_index<=word_index+1'b1;state<=STAMP_READ;end
+ NEXT_EDGE:if(edge_id==31)begin bank_valid[row[2:0]]<=1;bank_row[row[2:0]]<=row;ready<=1;state<=WAIT_ROW;end
+ else begin edge_id<=edge_id+1'b1;state<=READ_EDGE;end
+ WAIT_ROW:if(row<623 && (row<7 || {1'b0,y}+11'd6>={1'b0,row}))begin row<=row+1'b1;state<=ROW_BEGIN;end
  default:begin end
  endcase
  if(commit)begin
- fv<=vertices;fc<=counts;fclosed<=closed_mask;fcompleted<=completed;fmode<=ui_mode;fx0<=x0;fy0<=y0;fzoom<=zoom;frotate<=rotate;
+ fv<=vertices;fd<=draft_vertices;fd_region<=draft_region[1:0];fd_visible<=draft_visible && draft_region<4;fc<=counts;fclosed<=closed_mask;fcompleted<=completed;fmode<=ui_mode;fx0<=x0;fy0<=y0;fzoom<=zoom;frotate<=rotate;
  fstate<=run_state;fexpected<=expected_area;factual<=actual_area;
  state<=counts==0?IDLE:MAP;edge_id<=0;field<=0;bank_valid<=0;ready<=counts==0;underrun<=0;labels_valid<=0;
  all_left<=15;all_right<=15;all_above<=15;all_below<=15;

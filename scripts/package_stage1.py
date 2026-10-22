@@ -8,7 +8,7 @@ def write_new(path,value):
 
 def package(attempt):
     proof=audit(attempt)
-    guard_report=R/'reports/stage1/routing_guards_20261022_182326.json'
+    guard_report=R/'reports/stage1/routing_guards_20261022_203243.json'
     guards=json.loads(guard_report.read_text(encoding='utf-8'))
     assert guards['status']=='ROUTING_GUARDS_PASS' and len(guards['checks'])==6 and set(guards['checks'].values())=={'REJECTED'}
     assert guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')

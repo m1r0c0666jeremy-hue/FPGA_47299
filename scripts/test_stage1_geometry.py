@@ -43,7 +43,9 @@ def main():
     src='''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,start=0;reg [2:0] nr;reg [15:0] counts;
 reg [671:0] vertices;reg [10:0] px;reg [9:0] py;wire busy,done;wire [3:0] im,nm;wire [43:0] ds;
-stage1_point dut(clk,rst,start,nr,counts,vertices,px,py,busy,done,im,nm,ds,1'b0,21'd0,21'd0,21'd0,,);
+wire [4:0] address;wire [20:0] value=vertices>>(address*21);
+stage1_point #(.SHARED_VERTEX(1)) dut(.clk(clk),.rst_n(rst),.start(start),.region_count(nr),.counts(counts),.vertices(vertices),
+.px(px),.py(py),.busy(busy),.done(done),.inside_mask(im),.near_mask(nm),.distances(ds),.orientation_start(1'b0),.oa(21'd0),.ob(21'd0),.oc(21'd0),.vertex_address(address),.vertex_data(value));
 reg [763:0] vectors[0:N-1];reg [3:0] ei,en;reg [43:0] ed;integer i,t,max_cycles=0;
 initial begin $readmemh("FILE",vectors);repeat(3)@(negedge clk);rst=1;
 for(i=0;i<N;i=i+1)begin
@@ -104,7 +106,8 @@ reg [3:0] nd;reg [167:0] draft;wire busy,done,passed;wire [3:0] error_code;
 wire os,od;wire [20:0] oa,ob,oc;wire signed [23:0] oq;
 stage1_point shared(.clk(clk),.rst_n(rst),.start(1'b0),.region_count(3'd0),.counts(16'd0),.vertices(672'd0),
 .px(11'd0),.py(10'd0),.orientation_start(os),.oa(oa),.ob(ob),.oc(oc),.orientation_done(od),.orientation_cross(oq));
-stage1_validate #(.SHARED(1)) dut(clk,rst,start,nr,counts,vertices,nd,draft,busy,done,passed,error_code,os,oa,ob,oc,od,oq);
+wire [4:0] address;wire [20:0] value=vertices>>(address*21);
+stage1_validate #(.SHARED(1),.SHARED_VERTEX(1)) dut(clk,rst,start,nr,counts,vertices,nd,draft,busy,done,passed,error_code,os,oa,ob,oc,od,oq,address,value);
 reg [863:0] vectors[0:N-1];reg ep;integer i,t,max_cycles=0;
 initial begin $readmemh("FILE",vectors);repeat(3)@(negedge clk);rst=1;
 for(i=0;i<N;i=i+1)begin

@@ -10,8 +10,9 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  output wire [3:0] run_state,completed,occupied,output wire [2:0] expected_area,actual_area,
  output wire muted,alarm,output wire [1:0] trend,output wire [10:0] distance,
  output wire [19:0] dwell_ms,output reg [3:0] edit_error,output wire [3:0] start_error,
- output wire busy,tip_live,metrics_valid);
+ output wire busy,tip_live,metrics_valid,output wire [671:0] saved_vertices,output wire [167:0] draft_vertices);
  reg [671:0] vertices;reg [15:0] counts;reg [167:0] draft;
+ assign saved_vertices=vertices;assign draft_vertices=draft;
  reg commit_d,seen;reg [31:0] last_id,job_id;reg [7:0] session_last,job_session,point_session;
  reg [15:0] job_revision,point_model;reg [1:0] mode_last;reg [16:0] subms;reg [8:0] tip_age;
  reg [15:0] last_epoch,last_model,job_epoch,job_model;reg [7:0] last_session;
@@ -39,8 +40,45 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  // Editor validation and live point evaluation are mutually exclusive. Reuse
  // the exact point engine's cross product rather than a second multiplier.
  wire os,od;wire [20:0] oa,ob,oc;wire signed [23:0] cross_q;
- stage1_validate #(.SHARED(1)) validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error,os,oa,ob,oc,od,cross_q);
- stage1_point geometry(clk,rst_n,evaluate_start,region_count,counts,vertices,job_x,job_y,evaluating,evaluated,in_mask,near_mask,point_distances,os,oa,ob,oc,od,cross_q);
+ wire [4:0] point_address,validate_address;
+ wire [4:0] vertex_address=validating || validate_start?validate_address:point_address;
+ function [20:0] read_vertex;input [671:0] data;input [4:0] index;begin case(index)
+5'd0:read_vertex=data[0+:21];
+5'd1:read_vertex=data[21+:21];
+5'd2:read_vertex=data[42+:21];
+5'd3:read_vertex=data[63+:21];
+5'd4:read_vertex=data[84+:21];
+5'd5:read_vertex=data[105+:21];
+5'd6:read_vertex=data[126+:21];
+5'd7:read_vertex=data[147+:21];
+5'd8:read_vertex=data[168+:21];
+5'd9:read_vertex=data[189+:21];
+5'd10:read_vertex=data[210+:21];
+5'd11:read_vertex=data[231+:21];
+5'd12:read_vertex=data[252+:21];
+5'd13:read_vertex=data[273+:21];
+5'd14:read_vertex=data[294+:21];
+5'd15:read_vertex=data[315+:21];
+5'd16:read_vertex=data[336+:21];
+5'd17:read_vertex=data[357+:21];
+5'd18:read_vertex=data[378+:21];
+5'd19:read_vertex=data[399+:21];
+5'd20:read_vertex=data[420+:21];
+5'd21:read_vertex=data[441+:21];
+5'd22:read_vertex=data[462+:21];
+5'd23:read_vertex=data[483+:21];
+5'd24:read_vertex=data[504+:21];
+5'd25:read_vertex=data[525+:21];
+5'd26:read_vertex=data[546+:21];
+5'd27:read_vertex=data[567+:21];
+5'd28:read_vertex=data[588+:21];
+5'd29:read_vertex=data[609+:21];
+5'd30:read_vertex=data[630+:21];
+5'd31:read_vertex=data[651+:21];
+endcase end endfunction
+ wire [20:0] shared_vertex=read_vertex(vertices,vertex_address);
+ stage1_validate #(.SHARED(1),.SHARED_VERTEX(1)) validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error,os,oa,ob,oc,od,cross_q,validate_address,shared_vertex);
+ stage1_point #(.SHARED_VERTEX(1)) geometry(clk,rst_n,evaluate_start,region_count,counts,vertices,job_x,job_y,evaluating,evaluated,in_mask,near_mask,point_distances,os,oa,ob,oc,od,cross_q,point_address,shared_vertex);
  stage1_sequence #(.CYCLES_PER_MS(CYCLES_PER_MS)) sequence_controller(clk,rst_n,mode,region_count,draft_count,
  click2,click3,click4,!busy,tip_live,configuration_changed,observation,observed_in,observed_near,observed_dist,
  run_state,expected_area,actual_area,completed,occupied,muted,alarm,trend,distance,dwell_ms,start_error);

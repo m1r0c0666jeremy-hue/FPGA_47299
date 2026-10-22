@@ -155,16 +155,16 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     input wire I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,output wire O_area_alarm,
     input wire [31:0] I_source_id''')
     addition='''wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
-    wire [15:0] area_revision,area_counts;wire [671:0] area_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
+    wire [15:0] area_revision,area_counts;wire [671:0] area_vertices,area_saved_vertices;wire [167:0] area_draft_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
     wire [1:0] area_trend;wire [10:0] area_distance;wire [19:0] area_dwell;
     stage1_regions area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
      .tracking(I_tracking),.video_ok(video_ok && stream_pixel_n),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
      .frame_commit(frame_commit),.detection_valid(detection_valid),.image_id(selected_frame_id),.meta(active_meta),
      .region_count(area_count),.draft_count(area_draft),.revision(area_revision),.render_vertices(area_vertices),.render_counts(area_counts),.closed_mask(area_closed),
      .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(O_area_alarm),
-     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid));
+     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices));
     stage1_osd u_osd (
-     .I_ui_mode(I_ui_mode),.I_region_vertices(area_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
+     .I_ui_mode(I_ui_mode),.I_region_vertices(area_saved_vertices),.I_region_draft(area_draft_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
      .I_area_count(area_count),.I_draft_count(area_draft),.I_run_state(area_state),.I_completed(area_completed),.I_occupied(area_occupied),
      .I_expected_area(area_expected),.I_actual_area(area_actual),.I_area_muted(area_muted),.I_area_trend(area_trend),.I_area_distance(area_distance),.I_area_dwell(area_dwell),
      .I_edit_error(area_edit_error),.I_start_error(area_start_error),.I_area_busy(area_busy || (area_tip && area_count!=0 && !area_metrics_valid)),.I_tip_live(area_tip),
@@ -173,7 +173,7 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     video=video.replace('refined_osd u_osd (',addition)
     out['rtl/color_regions/stage1_memory_video_out.v']=video
     osd=(R/'rtl/color_regions/refined_osd.v').read_text(encoding='utf-8').replace('module refined_osd(','module stage1_osd(')
-    osd=osd.replace('input wire I_clk,I_rst_n,I_vs','''input wire [1:0] I_ui_mode,input wire [671:0] I_region_vertices,input wire [15:0] I_region_counts,input wire [3:0] I_region_closed,
+    osd=osd.replace('input wire I_clk,I_rst_n,I_vs','''input wire [1:0] I_ui_mode,input wire [671:0] I_region_vertices,input wire [167:0] I_region_draft,input wire [15:0] I_region_counts,input wire [3:0] I_region_closed,
  input wire [2:0] I_area_count,I_expected_area,I_actual_area,input wire [3:0] I_draft_count,I_run_state,I_completed,I_occupied,
  input wire I_area_muted,input wire [1:0] I_area_trend,input wire [10:0] I_area_distance,input wire [19:0] I_area_dwell,
  input wire [3:0] I_edit_error,I_start_error,input wire I_area_busy,I_tip_live,I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,
@@ -182,9 +182,9 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
  wire [23:0] region_color,region_label_color;wire region_label_on,region_ready,region_underrun;
  wire [7:0] region_label_glyph,stage_glyph;wire [2:0] region_label_gx;wire [3:0] region_label_gy;
  wire stage_override,stage_force_footer;
- stage1_render region_render(I_clk,I_rst_n,I_geometry_commit,I_region_vertices,I_region_counts,I_region_closed,I_ui_mode,
+ stage1_render #(.SPLIT_DRAFT(1)) region_render(I_clk,I_rst_n,I_geometry_commit,I_region_vertices,I_region_counts,I_region_closed,I_ui_mode,
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
- region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun);
+ region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
  I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode);

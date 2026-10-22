@@ -1,13 +1,13 @@
 // Exact source-coordinate containment, boundary band and floor Euclidean distance.
 // The caller keeps vertices/counts stable until done. One request per new frame.
 `default_nettype none
-module stage1_point(input wire clk,rst_n,start,input wire [2:0] region_count,
+module stage1_point #(parameter SHARED_VERTEX=0)(input wire clk,rst_n,start,input wire [2:0] region_count,
  input wire [15:0] counts,input wire [671:0] vertices,
  input wire [10:0] px,input wire [9:0] py,
  output reg busy,done,output reg [3:0] inside_mask,near_mask,
  output reg [43:0] distances,
  input wire orientation_start,input wire [20:0] oa,ob,oc,
- output reg orientation_done,output reg signed [23:0] orientation_cross);
+ output reg orientation_done,output reg signed [23:0] orientation_cross,output wire [4:0] vertex_address,input wire [20:0] vertex_data);
  reg orientation_only;
  reg [3:0] state;reg [3:0] phase;reg [1:0] region_id;reg [3:0] edge_id,n;
  reg [2:0] total;reg [10:0] qx,ax,bx;reg [9:0] qy,ay,by;
@@ -58,7 +58,8 @@ case({r,i[2:0]})
 endcase
 if(i[3])point=0;end endfunction
  wire [3:0] read_index=state==8?(edge_id+1==n?4'd0:edge_id+1'b1):edge_id;
- wire [20:0] vertex_q=point(vertices,region_id,read_index);
+ assign vertex_address={region_id,read_index[2:0]};
+ wire [20:0] vertex_q=SHARED_VERTEX?(read_index[3]?21'd0:vertex_data):point(vertices,region_id,read_index);
  wire signed [23:0] cross_next=part-$signed(mr[23:0]);
  task take_distance;input [21:0] value;begin
  if(value<best)best<=value;
