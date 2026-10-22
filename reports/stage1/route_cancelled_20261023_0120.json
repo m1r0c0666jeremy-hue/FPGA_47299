@@ -1,0 +1,195 @@
+{
+  "status": "CANCELLED_FOR_RESOURCE_COMPARISON_NOT_A_FINAL_ROUTE_FAILURE",
+  "time": "2026-10-23T01:20:38.698898+08:00",
+  "reason": "About 102 minutes; four consecutive completed rises after best iteration20: 11147,12071,13312,13998,15122. Preserving all outputs and comparing an already-validated private alternative before another fresh physical attempt.",
+  "attempt": "build/stage1_route_20261022_233803_659926",
+  "td_pid": 58720,
+  "td_start": "2026-10-22T23:38:06+08:00",
+  "terminal_session": 56115,
+  "terminal_exit_code": 1,
+  "active_td_after_stop": 0,
+  "last_completed": {
+    "iteration": 24,
+    "over_count": 15077,
+    "over": 15122,
+    "worst": 2,
+    "seconds": 824.89
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 49242,
+      "over": 52366,
+      "worst": 5,
+      "seconds": 45.02
+    },
+    {
+      "iteration": 2,
+      "over_count": 42725,
+      "over": 44502,
+      "worst": 3,
+      "seconds": 31.3
+    },
+    {
+      "iteration": 3,
+      "over_count": 38733,
+      "over": 39887,
+      "worst": 3,
+      "seconds": 28.44
+    },
+    {
+      "iteration": 4,
+      "over_count": 32242,
+      "over": 32824,
+      "worst": 3,
+      "seconds": 34.99
+    },
+    {
+      "iteration": 5,
+      "over_count": 29263,
+      "over": 29643,
+      "worst": 3,
+      "seconds": 30.55
+    },
+    {
+      "iteration": 6,
+      "over_count": 27365,
+      "over": 27620,
+      "worst": 3,
+      "seconds": 27.65
+    },
+    {
+      "iteration": 7,
+      "over_count": 25807,
+      "over": 26047,
+      "worst": 3,
+      "seconds": 22.71
+    },
+    {
+      "iteration": 8,
+      "over_count": 19751,
+      "over": 19805,
+      "worst": 2,
+      "seconds": 87.68
+    },
+    {
+      "iteration": 9,
+      "over_count": 17976,
+      "over": 18014,
+      "worst": 2,
+      "seconds": 72.87
+    },
+    {
+      "iteration": 10,
+      "over_count": 18907,
+      "over": 18969,
+      "worst": 2,
+      "seconds": 92.26
+    },
+    {
+      "iteration": 11,
+      "over_count": 19376,
+      "over": 19470,
+      "worst": 2,
+      "seconds": 76.29
+    },
+    {
+      "iteration": 12,
+      "over_count": 16115,
+      "over": 16187,
+      "worst": 2,
+      "seconds": 194.78
+    },
+    {
+      "iteration": 13,
+      "over_count": 14833,
+      "over": 14891,
+      "worst": 2,
+      "seconds": 206.58
+    },
+    {
+      "iteration": 14,
+      "over_count": 12950,
+      "over": 12991,
+      "worst": 2,
+      "seconds": 189.37
+    },
+    {
+      "iteration": 15,
+      "over_count": 12901,
+      "over": 12954,
+      "worst": 2,
+      "seconds": 183.52
+    },
+    {
+      "iteration": 16,
+      "over_count": 12239,
+      "over": 12277,
+      "worst": 2,
+      "seconds": 391.21
+    },
+    {
+      "iteration": 17,
+      "over_count": 12792,
+      "over": 12847,
+      "worst": 2,
+      "seconds": 489.67
+    },
+    {
+      "iteration": 18,
+      "over_count": 12485,
+      "over": 12527,
+      "worst": 2,
+      "seconds": 537.33
+    },
+    {
+      "iteration": 19,
+      "over_count": 12875,
+      "over": 12914,
+      "worst": 2,
+      "seconds": 246.25
+    },
+    {
+      "iteration": 20,
+      "over_count": 11113,
+      "over": 11147,
+      "worst": 2,
+      "seconds": 391.9
+    },
+    {
+      "iteration": 21,
+      "over_count": 12037,
+      "over": 12071,
+      "worst": 3,
+      "seconds": 400.4
+    },
+    {
+      "iteration": 22,
+      "over_count": 13270,
+      "over": 13312,
+      "worst": 2,
+      "seconds": 426.66
+    },
+    {
+      "iteration": 23,
+      "over_count": 13962,
+      "over": 13998,
+      "worst": 2,
+      "seconds": 428.69
+    },
+    {
+      "iteration": 24,
+      "over_count": 15077,
+      "over": 15122,
+      "worst": 2,
+      "seconds": 824.89
+    }
+  ],
+  "td_log_sha256_at_stop": "7f71abda0b4224a43e1e10ce5e0d0ed27bdd64d686f5fd504bb492519581ff1e",
+  "formal_inputs_unchanged": 308,
+  "compiled_source_commit": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "software_proof": "reports/stage1/software_current_20261023_0002.json",
+  "software_proof_sha256": "3915e1c82df7a0e35067d48f9a6b82b05a6295b33439af06c375066703b32c8f",
+  "has_final_routing_or_timing_result": false,
+  "hardware_status": "PENDING"
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "CONNECTED LOCAL ESTIMATES ONLY; NOT ADOPTED OR A WHOLE-DEVICE RESULT",
+  "outputs": {
+    "with_reset": {
+      "directory": "build/stage1_resetfree_arith_ungated_20261023_0101/gate_with_reset_20261023_012039",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+        "rtl/color_regions/stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6"
+      },
+      "resources": {
+        "slice": 4054,
+        "lut6": 1756,
+        "reg": 4223,
+        "eram": 3,
+        "dsp": 0
+      }
+    },
+    "resetfree": {
+      "directory": "build/stage1_resetfree_arith_ungated_20261023_0101/gate_resetfree_20261023_012039",
+      "inputs": {
+        "build/stage1_resetfree_arith_ungated_20261023_0101/stage1_arith.v": "3ceb34f995c7b87e4ec6b42fd95210979d10a84f32b286d3a1334a05c236d464",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+        "rtl/color_regions/stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6"
+      },
+      "resources": {
+        "slice": 4057,
+        "lut6": 1756,
+        "reg": 4223,
+        "eram": 3,
+        "dsp": 0
+      }
+    }
+  },
+  "producer_sha256": "12c73b92bd5739e3c97c3f7796f39ec98f1bb0af99481f3873303df4ef7b58aa",
+  "wrapper_sha256": "604def53b2d9c23070b2d820bea3fef9061a8b33a782103b61ddf55dd620b670"
+}
