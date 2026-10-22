@@ -1,6 +1,6 @@
 # 区域示教与顺序报警第一阶段：验证与资源
 
-当前状态：4行区域绘制缓存109项当前源码软件检查通过。上一布局适配容量，布线因约102分钟且连续4轮争用上升而取消；不是完整失败或通过。现保持功能源码，调整厂家物理设置重新布局。最终布线/时序及同源复核通过前不交付。尚无本阶段可交付bit。
+当前状态：4行区域绘制缓存109项当前源码软件检查通过，新厂家物理布局012438通过容量，完整布线013416正在运行。最终零冲突、建立/保持及同源复核通过前不交付，尚无本阶段可交付bit。
 
 上一版功能源码提交：`199a45767161d2cde66573878d17e075d1494887`；8行结构提交`84c0607`；当前4行提交`9d52021`。分支：`feature/region-sequence-stage1`。
 
@@ -12,29 +12,30 @@
 
 当前结构将已保存顶点与草稿分别同拍冻结，在读取单个顶点时选择；点位判断与闭合校验共用保存顶点读取口。绘制采用串行写线和4行缓存，像素输出流水不增加。4行与8行相同连接局部门级比较少15 Slice、20 LUT6、4寄存器及2 ERAM，仅作采用依据。
 
-下表为最近通过容量的4行版本正式布局`stage1_place_20261022_231917`，不是本轮新设置的结果或最终布线报告。308输入已与编译提交9d52021逐项原始字节核验；DB SHA256为415075b6e662b00efc7067e0ecc1f1c25766eb1664a57a6aa912c6a28eb24699。
+下表为当前4行版本新正式布局`stage1_place_20261023_012438`，不是最终布线结果。308输入与编译提交707b117原始Git字节逐项一致，功能字节仍同9d52021；DB SHA256为74d97aac79baa4575b2725d57a1a28cd66b928827e2a932c9c819f8197340be0。
 
 |项目|原英文交付版|本阶段正式布局|增加|器件上限|
 |---|---:|---:|---:|---:|
-|Slice|17555|20219|2664|21216|
-|LUT6|17044|20013|2969|—|
-|寄存器|19333|23828|4495|42432|
+|Slice|17555|20206|2651|21216|
+|LUT6|17044|19969|2925|—|
+|寄存器|19333|23833|4500|42432|
 |ERAM|95|99|4|108|
 |DSP|40|40|0|40|
 
-对上一8行布局203511，ERAM101→99、Slice20203→20219、LUT620005→20013、reg23676→23828；本次还改变了物理设置，不能把全部差异归于缓存，也不能声称全部指标减少。最终建立/保持余量等待完整布线。原ADC/SDC不改，新增引脚仅蜂鸣器C12。旧失败、取消与备选均保留，不作为候选交付。
+与相同308输入的上一4行布局231917相比，Slice少13、LUT6少44、寄存器增加5，ERAM/DSP不变；这是整组物理设置的差异，不能声称所有资源均减少。8行旧布局为101 ERAM，当前4行版本为99。原ADC/SDC不改，新增引脚仅蜂鸣器C12。旧失败、取消与备选全部保留，不作为候选交付。
 
 本版在该Git分支工作区通过随附脚本配置TD工具。复现布局使用以下命令；它设置了成功布局所需的紧凑状态编码等参数。`.al`是源码入口，直接使用GUI默认参数的旧尝试曾超容量。
 
 ```text
 python scripts/generate_stage1.py --check
-python scripts/run_stage1_build.py --stage place --checkpoint --map-mode area_prior --pack-effort high --strategy 4 --max-fanout 128 --pack-mode more_lut_pair --min-ripple-len 64 --infer-fsm sequential --official-phy CongestionMedium
-python scripts/run_stage1_route.py --parent <本次输出的布局目录> --route-effort normal --threads 8 --retry-routability
+python scripts/run_stage1_build.py --stage place --checkpoint --map-mode area_prior --pack-effort high --strategy 2 --max-fanout 128 --pack-mode adaptive_pin_density --macro-performance macro_congestion --min-ripple-len 64 --infer-fsm sequential --official-phy CongestionMedium
+python scripts/run_stage1_route.py --parent <本次输出的布局目录> --route-effort routability --threads 16
 ```
 
 每次运行创建新目录。实际冻结参数另保存在各构建目录的`flow_options.json`和`run.tcl`。
 
-01:23开始的新物理尝试保留全部源码和约束，改用pr_strategy=2、adaptive_pin_density及macro_congestion，继承官方CongestionMedium；以上表格和复现命令仍属于上一次已通过布局。新设置尚未通过，不当作交付配置。私有运算器复位备选比较无资源收益（局部Slice+3），未采用。
+新设置pr2、adaptive_pin_density、macro_congestion及官方CongestionMedium已通过正式布局容量；16线程routability布线继承post_route_opt=high，约束导入前后往返核对。此前正常布线233803约102分钟且连续4轮争用上升后取消，仅是取消诊断，无最终失败或通过结论。私有运算器复位备选比较无资源收益（局部Slice+3），未采用；正式算术源码保持原字节。
+
 
 ## 当前源码软件证据
 
