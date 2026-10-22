@@ -1,0 +1,2 @@
+PRIVATE_RESETFREE_EQ_PASS MW24 DW14 comparisons200932 resets931
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\stage1_private_resetfree_equivalence_24_14_20261023_005604_236992\tb.sv:20: $finish called at 2000030 (1s)
