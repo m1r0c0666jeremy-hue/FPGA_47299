@@ -1,0 +1,8 @@
+{
+  "status": "PRIVATE_NOT_ADOPTED_NO_CAD_STARTED",
+  "baseline_source": "rtl/color_regions/stage1_render.v",
+  "baseline_sha256": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97",
+  "candidate_sha256": "7bd5f472cfb41a01ab04d99ffb2f15ec53acfda9ed1fb3f7e75a421e8e89b269",
+  "intent": "Quantify localized valid-lane snapshot enables after software proof; no functional/control/pipeline changes",
+  "native_fanout_reference": "build/stage1_valid_storage_20261024_0027/gate_valid_storage_20261024_003416/td.log"
+}

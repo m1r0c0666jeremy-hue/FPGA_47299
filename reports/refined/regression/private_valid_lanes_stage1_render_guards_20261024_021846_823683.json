@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "build\\stage1_snapshot_valid_lanes_20261024_0219\\stage1_render.v": "7bd5f472cfb41a01ab04d99ffb2f15ec53acfda9ed1fb3f7e75a421e8e89b269"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_valid_lanes_stage1_render_guards_20261024_021846_823683",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}
