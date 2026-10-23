@@ -150,6 +150,7 @@ if gate_proof:
  t=t[:start]+f'    import_device ph1_35p.db -package PH1P35MDG324 -speed 3\n    import_db {{{(out/"input_gate.db").as_posix()}}}\n'+t[end:]
  t=t.replace('    legalize_phy_inst\n','',1)
  t=t.replace('    place\n','    puts "STAGE1_VERIFIED_GATE_REUSE"\n    place\n',1)
+t=t.replace('    place\n','    report_param -detail -stage place -file effective_place.txt\n    report_param -detail -stage route -file effective_route.txt\n    place\n',1)
 script=out/'run.tcl';script.write_text(t,encoding='utf-8')
 td=Path('D:/26_software/TangDynasty/bin/td_commands_prompt.exe')
 env=os.environ.copy();env['PATH']=str(td.parent)+os.pathsep+env.get('PATH','')

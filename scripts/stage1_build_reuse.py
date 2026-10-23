@@ -61,6 +61,13 @@ REPLACEMENTS = (("ap.add_argument('--checkpoint',action='store_true')\n",
   " assert summary['gate_input_unchanged']\n"))
 
 
+# Capture actual inherited/overridden settings immediately before placement.
+REPLACEMENTS += ((
+    "script=out/'run.tcl';script.write_text(t,encoding='utf-8')",
+    "t=t.replace('    place\\n','    report_param -detail -stage place -file effective_place.txt\\n    report_param -detail -stage route -file effective_route.txt\\n    place\\n',1)\nscript=out/'run.tcl';script.write_text(t,encoding='utf-8')",
+),)
+
+
 def add_gate_reuse(source):
     for old,new in REPLACEMENTS:
         assert source.count(old)==1, 'Stage-one gate reuse generator anchor changed: '+old[:80]
