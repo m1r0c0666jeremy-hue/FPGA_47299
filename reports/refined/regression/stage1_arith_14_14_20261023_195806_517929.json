@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_arith_14_14_20261023_195806_517929",
+  "fixture_inputs": {
+    "build/stage1_arith_vectors/math_14_14.hex": "1264db6dd84ae1af14cea5bde47b0c86994ab1496dec6e60036a15e7a47f6194",
+    "build/sim/refined/stage1_arith_14_14_20261023_195806_517929/tb.sv": "9d812d361d6f6a55ce1dc51b148cd1d2e544be7e86695809f7b17f6fdc5dc770"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_arith.py": "fb90b862d513f988738f404c5cc18ca3174ae9a7419f7f0ae5ce8fafdf0c98cf",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "FROZEN_BUILD_INPUTS_VERIFIED_PHYSICAL_PENDING",
+  "attempt": "build/stage1_place_20261023_200045",
+  "compiled_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "scope": "No final resource/timing result yet"
+}
