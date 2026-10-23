@@ -1,0 +1,13 @@
+{
+  "status": "CHECKPOINT_PARAMETER_REPORT_ONLY_NO_BUILD",
+  "parent": "build/stage1_place_20261024_062426",
+  "checkpoint_sha256": "dd9c12eaeb159c410989f5541db22d6fc2346a5ead8e6a53549f2ef318089087",
+  "reports": {
+    "inherited_flow.txt": "f549b3eb45a4db8e987c328167a727063ff59ae2ef1008cf1c044ab0db2e223c",
+    "inherited_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "inherited_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "log_sha256": "29e9d391bd370ae1748355da9ee11d0265175078fe64c4e8b026dc3c1ac22a2d",
+  "producer_sha256": "81e14837e56eb44119892339cc19778d48d59ef8ebe05c082f7036509b68d2f1",
+  "source_inputs_unchanged": true
+}
