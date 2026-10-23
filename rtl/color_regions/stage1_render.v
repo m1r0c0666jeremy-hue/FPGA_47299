@@ -178,18 +178,15 @@ if(index[3])draft_at=0;end endfunction
  task next_prepared_edge;begin field<=0;write_is_row<=0;state<=WRITE_EDGE;end endtask
  // Snapshot data are consumed only after a committed, valid geometry job.
  // Control/valid state retains the original asynchronous reset.
- // Payload lanes beyond the committed point counts are invalid. Capture
- // each valid 21-bit lane with its own enable; control timing is unchanged.
- genvar capture_region,capture_vertex;
- generate for(capture_region=0;capture_region<4;capture_region=capture_region+1)begin: snapshot_region
- for(capture_vertex=0;capture_vertex<8;capture_vertex=capture_vertex+1)begin: snapshot_vertex
- always @(posedge clk)if(commit && counts[capture_region*4+:4]>capture_vertex)
- fv[capture_region*168+capture_vertex*21+:21]<=vertices[capture_region*168+capture_vertex*21+:21];
- end end
- for(capture_vertex=0;capture_vertex<8;capture_vertex=capture_vertex+1)begin: snapshot_draft_vertex
- always @(posedge clk)if(commit && draft_visible && draft_region<4 && counts[draft_region*4+:4]>capture_vertex)
- fd[capture_vertex*21+:21]<=draft_vertices[capture_vertex*21+:21];
+ // Capture whole banks only when their committed point count is nonzero.
+ // This keeps the same valid coordinates with five payload enable groups.
+ genvar capture_bank;
+ generate for(capture_bank=0;capture_bank<4;capture_bank=capture_bank+1)begin: snapshot_bank
+ always @(posedge clk)if(commit && counts[capture_bank*4+:4]!=0)
+ fv[capture_bank*168+:168]<=vertices[capture_bank*168+:168];
  end endgenerate
+ always @(posedge clk)if(commit && draft_visible && draft_region<4 && counts[draft_region*4+:4]!=0)
+ fd<=draft_vertices;
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fd_region<=0;fd_visible<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
  fx0<=0;fy0<=0;fzoom<=0;fexpected<=0;factual<=0;frotate<=0;fstate<=0;

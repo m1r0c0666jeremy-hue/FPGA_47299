@@ -1,0 +1,112 @@
+{
+  "status": "CANCELLED_BY_AGENT_NOT_DELIVERABLE",
+  "time": "2026-10-24T04:35:40.965414+08:00",
+  "reason": "D routability about52 minutes. Iterations5-10 over24554/24279/24123/24216/24017/24153: about half an hour near24000 without material reduction; last iteration656.81s. Quantify proven private five-bank snapshot alternative rather than repeat long blind routing. Incomplete cancellation is not final native failure or pass.",
+  "attempt": "build/stage1_route_20261024_034232_885451",
+  "process_id": 34796,
+  "process_started": "2026-10-24T03:42:35.0573496+08:00",
+  "session_exit_code": 1,
+  "route_result": "CANCELLED_INCOMPLETE_NO_FINAL_ROUTING_OR_TIMING_RESULT",
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 38141,
+      "over": 39371,
+      "worst": 4,
+      "seconds": 132.15
+    },
+    {
+      "iteration": 2,
+      "over_count": 33393,
+      "over": 34088,
+      "worst": 3,
+      "seconds": 88.51
+    },
+    {
+      "iteration": 3,
+      "over_count": 30528,
+      "over": 30980,
+      "worst": 3,
+      "seconds": 120.5
+    },
+    {
+      "iteration": 4,
+      "over_count": 25911,
+      "over": 26184,
+      "worst": 2,
+      "seconds": 234.15
+    },
+    {
+      "iteration": 5,
+      "over_count": 24326,
+      "over": 24554,
+      "worst": 2,
+      "seconds": 265.17
+    },
+    {
+      "iteration": 6,
+      "over_count": 24088,
+      "over": 24279,
+      "worst": 2,
+      "seconds": 161.44
+    },
+    {
+      "iteration": 7,
+      "over_count": 23956,
+      "over": 24123,
+      "worst": 2,
+      "seconds": 214.02
+    },
+    {
+      "iteration": 8,
+      "over_count": 24020,
+      "over": 24216,
+      "worst": 3,
+      "seconds": 535.68
+    },
+    {
+      "iteration": 9,
+      "over_count": 23866,
+      "over": 24017,
+      "worst": 3,
+      "seconds": 362.82
+    },
+    {
+      "iteration": 10,
+      "over_count": 23985,
+      "over": 24153,
+      "worst": 2,
+      "seconds": 656.81
+    }
+  ],
+  "td_log_sha256": "78650f03394169a07a19f18344f9fad7c27f461c5e3d129e3a0b9f6916df2a4a",
+  "source_context": {
+    "compiled_source_commit": "d61da977b7cfff8f8e09dca8fd623e1ccd5ad0fa",
+    "creation_time": "20261024_034232_885451",
+    "input_count": 308,
+    "inputs_sha256": "a8d7ea2bb624b5f6a44cd237a019fac4bbfa75e3a5c85aa9c8af8f8e38887857",
+    "reused_gate": null,
+    "placed_checkpoint": {
+      "parent": "build/stage1_place_20261024_032009",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "515774af92ee37e7f14b21a28436299e05b341207c4d0274e7652bff3f35f807",
+      "parent_summary_sha256": "d24e1e390370b0280ddc3b767d0caa9707894dfd1a6982afd8b2923b8a57d35a",
+      "parent_context_sha256": "a81b1221cf35a9c2760746483e62dae29a6e6b5c7f89fa14d6f30f833400cbf9",
+      "parent_inputs_sha256": "a8d7ea2bb624b5f6a44cd237a019fac4bbfa75e3a5c85aa9c8af8f8e38887857"
+    },
+    "replaced_strategy": null,
+    "retry_routability": false,
+    "flow_threads": 16
+  },
+  "input_count": 308,
+  "inputs_unchanged": true,
+  "placed_checkpoint_unchanged": true,
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "final_timing_available": false,
+  "deliverable": false,
+  "software_report": "reports/stage1/software_current_20261024_0406.json",
+  "software_checks": 110,
+  "continuing_authorized_task": true,
+  "new_timer_created": false
+}
