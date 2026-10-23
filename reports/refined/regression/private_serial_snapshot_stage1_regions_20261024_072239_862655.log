@@ -1,0 +1,6 @@
+D:\aaa_FPGA\region-sequence-stage1\build\stage1_serial_snapshot_20261024_0721\stage1_regions.v:34: error: Unable to bind wire/reg/memory `draw_counts' in `tb.dut'
+D:\aaa_FPGA\region-sequence-stage1\build\stage1_serial_snapshot_20261024_0721\stage1_regions.v:47:      : A symbol with that name was declared here. Check for declaration after use.
+D:\aaa_FPGA\region-sequence-stage1\build\stage1_serial_snapshot_20261024_0721\stage1_regions.v:34: error: Unable to elaborate r-value: (frame_commit)?((draw_counts)!=('sd0)):((snapshot_count)!=('sd0))
+D:\aaa_FPGA\region-sequence-stage1\build\stage1_serial_snapshot_20261024_0721\stage1_regions.v:41: error: Unable to bind wire/reg/memory `draw_counts' in `tb.dut'
+D:\aaa_FPGA\region-sequence-stage1\build\stage1_serial_snapshot_20261024_0721\stage1_regions.v:47:      : A symbol with that name was declared here. Check for declaration after use.
+3 error(s) during elaboration.

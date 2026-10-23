@@ -1,0 +1,18 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build\\stage1_serial_snapshot_20261024_0723\\stage1_regions.v": "bc0a58c4c3c8cd0dcc22933a41b7d4fef071a8a66b18b6b6eacc910e36858fd6",
+    "build\\stage1_serial_snapshot_20261024_0723\\stage1_render.v": "77e811b1282f145710231a80865b257cece5b870c30306b5830db62c653ca235",
+    "build\\stage1_valid_storage_20261024_0027\\stage1_regions_reference.v": "c65dad62fab30bc551c134eb374a78d41c8d29fdc4eb847623cc4a59e14e9173",
+    "build\\stage1_serial_snapshot_20261024_0723\\stage1_render_reference.v": "9e1d5b20c8bc982d013448f10bed0e40f43024d3813531fc345faee9dbf63491"
+  },
+  "exit_code": 1,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_serial_snapshot_v2_stage1_regions_20261024_072320_249298",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}
