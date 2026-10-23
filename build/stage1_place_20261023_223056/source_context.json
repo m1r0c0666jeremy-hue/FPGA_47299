@@ -1,0 +1,15 @@
+{
+  "compiled_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "creation_time": "20261023_223056",
+  "input_count": 308,
+  "inputs_sha256": "ff577677b766f7761d0905c14a69bde93667d4e8f7ac9485442a29e355482117",
+  "reused_gate": {
+    "parent": "build/stage1_place_20261023_200045",
+    "checkpoint_sha256": "302f6674e12b591019c0cc8b87c6c2e2cb98df4249a7bbf64e39e8634f5d4e4b",
+    "parent_summary_sha256": "3dd0ed91c1672a732d644b3fc15ae67e5ef8346b22cd288487bc3ac11c2ece1f",
+    "parent_context_sha256": "cb0bd6454769511d8f57c44a684684fdd3bfb38889f59e6861d08fcde7514082",
+    "parent_inputs_sha256": "ff577677b766f7761d0905c14a69bde93667d4e8f7ac9485442a29e355482117",
+    "placement_created_commit": "773866d1ba4eb2229494c9a6cc9604a33e540ed6",
+    "git_blob_inputs_verified": 308
+  }
+}
