@@ -1,0 +1,4 @@
+STAGE1_EDIT_RENDER_PASS point_pixels=134400
+STAGE1_REGIONS_CAPACITY_PASS areas=4 points=32 ninth_vertex_rejected fifth_area_rejected reset_empty_frame samples=4312843 full_frames=2
+STAGE1_REGIONS_PASS press-position/edit/concavity-validation/undo/modes/actual-geometry/order/stale/reset
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_shared_region_ram_stage1_regions_20261024_051801_698333\tb.sv:147: $finish called at 43128510 (1s)
