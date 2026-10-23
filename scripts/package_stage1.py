@@ -23,7 +23,7 @@ def package(attempt):
     for folder in ('scripts','sim','rtl'):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
-    paths|={R/'README.md',R/'reports/stage1/validation.md',R/'reports/stage1/software_current_20261024_0131.json',
+    paths|={R/'README.md',R/'reports/stage1/validation.md',R/'reports/stage1/software_current_20261024_0406.json',
             R/'reports/stage1/guards_20261023_195919.json',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/proof['baseline']['archive']}

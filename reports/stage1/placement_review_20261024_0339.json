@@ -1,0 +1,74 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261024_032009",
+  "compiled_source_commit": "d61da977b7cfff8f8e09dca8fd623e1ccd5ad0fa",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 19974,
+    "lut6": 19729,
+    "reg": 23711,
+    "eram": 99,
+    "dsp": 40
+  },
+  "previous_C_004652": {
+    "slice": 19819,
+    "lut6": 19633,
+    "reg": 23765,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta": {
+    "slice": 155,
+    "lut6": 96,
+    "reg": -54,
+    "eram": 0,
+    "dsp": 0
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "8cc04ea840a84b432c4f4e9e398c14a731f58c334f8d61fd106c65bcc7072c74",
+    "target_color_regions_placed.db": "515774af92ee37e7f14b21a28436299e05b341207c4d0274e7652bff3f35f807"
+  },
+  "reused_gate": null,
+  "actual_parameters": {
+    "effective_place.txt": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "999999",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "effective_route.txt": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "parameter_reports": {
+    "effective_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "effective_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING",
+  "previous_pre_C_223056": {
+    "slice": 20252,
+    "lut6": 19950,
+    "reg": 23706,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_pre_C_223056": {
+    "slice": -278,
+    "lut6": -221,
+    "reg": 5,
+    "eram": 0,
+    "dsp": 0
+  }
+}
