@@ -1,0 +1,2 @@
+PRIVATE_SNAPSHOT_RESETFREE_EQUIVALENCE_PASS checks=300000 writes=47997 commits=90 reset_cycles=30
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_snapshot_resetfree_equivalence_20261023_210017_538772\tb.sv:33: $finish called at 3000030 (1s)
