@@ -1,0 +1,43 @@
+{
+  "status": "RENDER_MULTIPLIER_ONLY_ADOPTED_FORMAL_VALIDATION_PENDING",
+  "time": "2026-10-23T04:58:50.077966+08:00",
+  "private_directory": "build/stage1_render_mw14_only_20261023_0440",
+  "private_proof_sha256": "6caec35048397ff9a68ea8f1817c32ebf9985f3095830d5b0b0e627142c96223",
+  "private_gate_comparison": "build/stage1_render_mw14_only_20261023_0440/gate_comparison_20261023_044923.json",
+  "private_gate_comparison_sha256": "5faa8467a1b6276d9580b6ad58a16dfe43b0044bb5838a3db32daf15b755026e",
+  "scope": "One renderer multiplier parameter; original point and arithmetic module unchanged. Compiler input count308. Source line endings preserved.",
+  "before": {
+    "rtl/color_regions/stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+    "scripts/test_stage1_arith.py": "d40c9423df506771836bdc76a7c01c007c13f5922aa9b1aec35b19f98a9d4f4d",
+    "scripts/audit_stage1.py": "239fcb7b7cc339dbc70daec17a59cdf602f5504affbe64672913400ac9a646ab",
+    "scripts/package_stage1.py": "41d56ed43cf76c8114105a4307a97f4203300e2ca97bba47dafadb622da06cda",
+    "README.md": "5ddad365485f49fb6cf761246384f5d0a73143cf7fefae2bf35502c8b7c3d9ac",
+    "reports/stage1/validation.md": "6a8cdc89bc0b9426f6b24225597d887de9a868171b20c06f002562c925f86fd1"
+  },
+  "before_zip": "build/stage1_render_mw14_adoption_20261023_045849/before.zip",
+  "before_zip_sha256": "f11d50dbcbdf5e5c8181e95ff1b60f89885c88ff84dc89fdb5a76cb81f96a777",
+  "changed_compiler_inputs": [
+    "rtl/color_regions/stage1_render.v"
+  ],
+  "renderer_sha256": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c",
+  "local_resources": {
+    "indexed": {
+      "slice": 4054,
+      "lut6": 1756,
+      "reg": 4223,
+      "eram": 3,
+      "dsp": 0
+    },
+    "renderer_only": {
+      "slice": 4017,
+      "lut6": 1745,
+      "reg": 4191,
+      "eram": 3,
+      "dsp": 0
+    }
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "formal_software_required": 110,
+  "final_physical_status": "PENDING; no candidate bit"
+}

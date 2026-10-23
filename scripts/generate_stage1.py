@@ -234,7 +234,8 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     build=build.replace("R/'td_project/target_lock.adc'","R/'td_project/stage1_pins.adc'")
     build=build.replace("f'refined_{a.stage}_{stamp}'","f'stage1_{a.stage}_{stamp}'")
     build=build.replace("script=out/'run.tcl';script.write_text(t,encoding='utf-8')","t=t.replace('td_project target_lock.adc','td_project stage1_pins.adc')\nscript=out/'run.tcl';script.write_text(t,encoding='utf-8')")
-    out['scripts/run_stage1_build.py']=build
+    from stage1_build_reuse import add_gate_reuse
+    out['scripts/run_stage1_build.py']=add_gate_reuse(build)
     route=(R/'scripts/run_refined_route.py').read_text(encoding='utf-8')
     route=route.replace('from osd_memory_branch import check_branch','from stage1_policy import check_branch')
     route=route.replace("f'refined_route_{stamp}'","f'stage1_route_{stamp}'")

@@ -30,7 +30,7 @@ module stage1_render #(parameter SPLIT_DRAFT=0)(input wire clk,rst_n,commit,inpu
  reg [1:0] label_id;reg label_up;reg [5:0] label_attempt;reg label_collision;
  reg [3:0] all_left,all_right,all_above,all_below;
  reg mstart;reg [1:0] mop;reg [47:0] ma,mb;wire mbusy,mdone;wire [47:0] mr,mrem;
- stage1_arith #(.DW(14)) line_alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,mrem);
+ stage1_arith #(.MW(14),.DW(14)) line_alu(clk,rst_n,mstart,mop,ma,mb,mbusy,mdone,mr,mrem);
  wire signed [47:0] initial_quotient=product_negative?-$signed(mr)-(mrem!=0?48'sd1:48'sd0):$signed(mr);
  wire signed [47:0] initial_x=($signed({{34{xa[13]}},xa})<<<1)+initial_quotient;
  wire [1:0] region_id=edge_id[4:3];wire [3:0] vi={1'b0,edge_id[2:0]};

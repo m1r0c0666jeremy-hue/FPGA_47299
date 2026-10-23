@@ -5,7 +5,7 @@ from refined_testlib import R,run
 def main():
     rng=random.Random(102121)
     out=R/'build/stage1_arith_vectors';out.mkdir(exist_ok=True)
-    for mw,dw in ((12,48),(21,23),(24,14)):
+    for mw,dw in ((12,48),(21,23),(24,14),(14,14)):
         values=[]
         bounds=[0,1,-1,2,-2,-(1<<(mw-1)),(1<<(mw-1))-1]
         for a in bounds:
