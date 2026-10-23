@@ -21,11 +21,13 @@ module stage1_render #(parameter SPLIT_DRAFT=0)(input wire clk,rst_n,commit,inpu
  reg signed [13:0] xa,ya,xb,yb;reg signed [15:0] dx,dy,half_q;
  reg [13:0] half_r;reg signed [47:0] product;reg product_negative;
  reg [127:0] work;reg write_is_row;
- (* ram_style="bram" *)reg [15:0] edge_mem[0:255];
- (* ram_style="bram" *)reg [31:0] line_mem[0:639];
- reg [15:0] edge_q;reg [31:0] line_q;
+ // Low 0..639 are four pixel-mask rows. Edge states use 768..1023.
+ // Reserved 640..767 keep even inactive x addresses away from edge states.
+ (* ram_style="bram" *)reg [31:0] state_line_mem[0:1023];
+ reg [31:0] ram_q,line_q;
+ wire [15:0] edge_q=ram_q[15:0];wire [31:0] stamp_q=ram_q;
  reg [3:0] bank_valid;reg [9:0] bank_row[0:3];reg mask_valid_q;reg [2:0] offset_q;
- reg [9:0] row;reg [7:0] word_index;reg [31:0] stamp_q;reg [10:0] stamp_lo,stamp_hi;reg stamp_valid;
+ reg [9:0] row;reg [7:0] word_index;reg [10:0] stamp_lo,stamp_hi;reg stamp_valid;
  reg [10:0] labels_x[0:3];reg [9:0] labels_y[0:3];reg [3:0] labels_valid;
  reg [1:0] label_id;reg label_up;reg [5:0] label_attempt;reg label_collision;
  reg [3:0] all_left,all_right,all_above,all_below;
@@ -104,13 +106,16 @@ if(index[3])draft_at=0;end endfunction
  reg [2:0] left_bit,right_bit;reg [7:0] edge_bits;reg [31:0] stamp_mask;
  wire [9:0] read_address=y[1:0]*10'd160+{2'd0,x[10:3]};
  wire [9:0] write_address=row[1:0]*10'd160+{2'd0,word_index};
+ wire [7:0] edge_address={edge_id,3'b000}+field[2:0];
+ wire line_port_a=state==CLEAR || state==STAMP_READ || state==STAMP_WRITE;
+ wire [9:0] ram_address_a=line_port_a?write_address:{2'b11,edge_address};
+ wire ram_write_a=state==WRITE_EDGE || state==CLEAR || state==STAMP_WRITE;
+ wire [31:0] ram_data_a=state==WRITE_EDGE?{16'd0,work[field*16+:16]}:
+ state==CLEAR?32'd0:stamp_q|stamp_mask;
  always @(posedge clk)begin
- edge_q<=edge_mem[{edge_id,3'b000}+field[2:0]];
- if(state==WRITE_EDGE)edge_mem[{edge_id,3'b000}+field[2:0]]<=work[field*16+:16];
- line_q<=line_mem[read_address];
- stamp_q<=line_mem[write_address];
- if(state==CLEAR)line_mem[write_address]<=0;
- else if(state==STAMP_WRITE)line_mem[write_address]<=stamp_q|stamp_mask;
+ ram_q<=state_line_mem[ram_address_a];
+ line_q<=state_line_mem[read_address];
+ if(ram_write_a)state_line_mem[ram_address_a]<=ram_data_a;
  end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin mask_valid_q<=0;offset_q<=0;end

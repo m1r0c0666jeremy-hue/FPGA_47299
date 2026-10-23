@@ -1,3 +1,11 @@
+## 2026-10-24 06:24：量化并采用新增区域内部共享RAM
+
+E normal051241运行约67分钟，20轮最低10714后连续11260/12274/13085，约22分钟无新低；按预先停止线核对PID21588/路径/start后Ctrl-C结束77179，exit1主动取消未完成诊断，非工具最终失败或通过，也不是用户暂停。outcome及route_cancelled_0620绑定308当前/冻结、parentDB87bfd9...、原297/5及E当前110/0532全部不变。
+
+确认无TD后，F唯一局部门级29408已exit0：E3756 Slice/1766 LUT6/4191reg/3ERAM/0DSP→F3767/1783/4191/2/0，即少1个ERAM、Slice多11、LUT多17，寄存器/DSP不变。只合并新增renderer的边状态和四行掩码到1024×32双口RAM，像素读取仍一拍，接口、状态机及周期不变，不动旧图像缓存或FIFO。guard、实际容量双控制/双renderer4312843拍/4区32点/拒绝9点5区/2整帧、14边线11182080、8RGB6389760均通过；baseline_refresh证明所选E0504四项与E0532最终110相同并核验全部依赖。局部结果不能当作整机ERAM98或拥塞已解决。
+
+shared_region_ram_adoption_0624绑定原renderer及test_stage1_render.py的before.zip/哈希、全部私有证明和门级。正式renderer与已验证私有候选LF字节相同；正式测试只改8个失败时EDGE诊断数组地址，全部断言、向量和像素oracle保持。E0532全110现为历史，新F正式110及完整整机物理必须刷新，package旧指针待新110后更新。生成9检查通过；保留全部旧功能与旧/用户/取消/私有文件，尚无本阶段bit/ZIP，不推送/上板/Flash，不重复定时。
+
 ## 2026-10-24 05:34：E整机资源与当前110项软件通过
 
 E完整综合/布局044722已exit0，源69a8e69的308输入当前/冻结/rawGit、原297/5及门级/布局DB均核验，placedDB87bfd90dac7a07862313e6f9fe0ec1adda9acfca9b2c7b78442e3863142f8b76。实际19848 Slice/19690 LUT6/23730寄存器/99 ERAM/40 DSP；比D少126 Slice/39 LUT、多19寄存器，比C多29 Slice/57 LUT、少35寄存器，比优化前223056少404 Slice/260 LUT、多24寄存器。设置仍pr2/maxfan999999/area_prior/high/sequential/min64/ConHigh/macro_congestion，hold/timing均on。只读HFN报告19项最小257，capture_reset2642、process_rst_n2310，commit未列出，不能给出精确全局commit扇出。放置线长估计5.35592e6，不能代替最终布线。placement_review_20261024_0508保存来源和比较。

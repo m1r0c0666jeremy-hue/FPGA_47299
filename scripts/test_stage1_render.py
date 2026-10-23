@@ -80,7 +80,7 @@ for(h=0;h<1650;h=h+1)begin
 @(posedge clk);#1;
 if(de)begin want=expected[yy][h*4+:4];
 if(mask!==want || underrun)begin
-for(dbg=8;dbg<16;dbg=dbg+1)begin ew={dut.edge_mem[dbg*8+7],dut.edge_mem[dbg*8+6],dut.edge_mem[dbg*8+5],dut.edge_mem[dbg*8+4],dut.edge_mem[dbg*8+3],dut.edge_mem[dbg*8+2],dut.edge_mem[dbg*8+1],dut.edge_mem[dbg*8]};
+for(dbg=8;dbg<16;dbg=dbg+1)begin ew={dut.state_line_mem[768+(dbg*8+7)][15:0],dut.state_line_mem[768+(dbg*8+6)][15:0],dut.state_line_mem[768+(dbg*8+5)][15:0],dut.state_line_mem[768+(dbg*8+4)][15:0],dut.state_line_mem[768+(dbg*8+3)][15:0],dut.state_line_mem[768+(dbg*8+2)][15:0],dut.state_line_mem[768+(dbg*8+1)][15:0],dut.state_line_mem[768+(dbg*8)][15:0]};
 $display("EDGE%0d cur%d rem%0d q%d r%0d den%0d ys%0d..%0d end%d flags%b",dbg,$signed(ew[15:0]),ew[29:16],$signed(ew[45:30]),ew[59:46],ew[73:60],ew[83:74],ew[93:84],$signed(ew[109:94]),ew[114:110]);end
 $fatal(1,"render c%0d z%0d r%b xy%0d/%0d mask%h/%h state%0d row%0d ready%b bank%b tag%0d underrun%b",c,zoom,rotate,h,yy,mask,want,dut.state,dut.row,ready,dut.bank_valid,dut.bank_row[yy%4],underrun);end
 end end end
