@@ -1,0 +1,12 @@
+Print Global Property
+-------------------------------------------------------------
+    Parameters    |   Settings   |  Default Values  |  Note  
+-------------------------------------------------------------
+   enable_seed    |     off      |       off        |        
+   hfn_to_clock   |  1000000000  |    1000000000    |        
+     message      |   standard   |     standard     |        
+   qor_monitor    |      on      |        on        |        
+  speedup_effort  |      0       |        0         |        
+   syn_ip_flow    |     off      |       off        |        
+      thread      |     auto     |       auto       |        
+-------------------------------------------------------------
