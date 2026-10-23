@@ -1,0 +1,88 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261024_044722",
+  "compiled_source_commit": "69a8e6993424ea822e42b55380f9eb4ef67de7b8",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 19848,
+    "lut6": 19690,
+    "reg": 23730,
+    "eram": 99,
+    "dsp": 40
+  },
+  "previous_C_004652": {
+    "slice": 19819,
+    "lut6": 19633,
+    "reg": 23765,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta": {
+    "slice": 29,
+    "lut6": 57,
+    "reg": -35,
+    "eram": 0,
+    "dsp": 0
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "d81e69676aa71720a79400fe552067d33e41e1e8f42d4ca7ef1b423ddbb38ec5",
+    "target_color_regions_placed.db": "87bfd90dac7a07862313e6f9fe0ec1adda9acfca9b2c7b78442e3863142f8b76"
+  },
+  "reused_gate": null,
+  "actual_parameters": {
+    "effective_place.txt": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "999999",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "effective_route.txt": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "parameter_reports": {
+    "effective_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "effective_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING",
+  "previous_pre_C_223056": {
+    "slice": 20252,
+    "lut6": 19950,
+    "reg": 23706,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_pre_C_223056": {
+    "slice": -404,
+    "lut6": -260,
+    "reg": 24,
+    "eram": 0,
+    "dsp": 0
+  },
+  "previous_D_032009": {
+    "slice": 19974,
+    "lut6": 19729,
+    "reg": 23711,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_D_032009": {
+    "slice": -126,
+    "lut6": -39,
+    "reg": 19,
+    "eram": 0,
+    "dsp": 0
+  }
+}

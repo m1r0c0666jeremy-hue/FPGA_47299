@@ -1,0 +1,10 @@
+Print Route Property
+---------------------------------------------------------------
+      Parameters      |  Settings  |  Default Values  |  Note  
+---------------------------------------------------------------
+        effort        |   normal   |      normal      |        
+       fix_hold       |     on     |        on        |        
+  hold_fix_iteration  |     5      |        5         |        
+    post_route_opt    |    high    |       auto       |   *    
+        timing        |     on     |        on        |        
+---------------------------------------------------------------
