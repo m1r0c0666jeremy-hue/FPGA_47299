@@ -1,0 +1,68 @@
+{
+  "status": "ADOPTED_FOR_CURRENT_SOURCE_REVALIDATION_NOT_DELIVERABLE",
+  "time": "2026-10-24T00:45:56.430922",
+  "previous_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "before": {
+    "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+    "rtl/color_regions/stage1_render.v": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c"
+  },
+  "after": {
+    "rtl/color_regions/stage1_regions.v": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+    "rtl/color_regions/stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97"
+  },
+  "before_zip": "build/stage1_valid_storage_adoption_20261024_0044/before.zip",
+  "before_zip_sha256": "e66e90e906394ff15fea29dc30cbabc82a91b41aeb207ac0858ed1a38e5bd039",
+  "private_candidate": "build/stage1_valid_storage_20261024_0027",
+  "private_proof_sha256": "1edc399bdc38ff9b843780ba136e69c928280ce67070a0f07047f71ccf5968b8",
+  "private_comparison_sha256": "a4708fe4a3984555fdad01197209dab25b3d083e9eb9ec131714da963e20281a",
+  "normalization": "Only original file EOL conventions restored; source text equal after universal-newline decoding",
+  "local_resources": {
+    "baseline": {
+      "directory": "build/stage1_valid_data_resetfree_20261024_0014/gate_baseline_20261024_002930",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+        "rtl/color_regions/stage1_render.v": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c"
+      },
+      "resources": {
+        "slice": 4017,
+        "lut6": 1745,
+        "reg": 4191,
+        "eram": 3,
+        "dsp": 0
+      },
+      "netlist_sha256": "e9dbf62f98de0fcf1728382666ffebd714a9fb085caed971023a756fb2d3ddf0",
+      "checkpoint_sha256": "5088d6c4a03a0e42e7521f4553f4d3cbaa72973c4d3d4c81c52ba71faa08d5fc",
+      "log_sha256": "1ce05f368fb2a5e21fec1cbc1c0d1cfae21184960e39185baed56a4b3652b1ad"
+    },
+    "valid_storage": {
+      "directory": "build/stage1_valid_storage_20261024_0027/gate_valid_storage_20261024_003416",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "build/stage1_valid_storage_20261024_0027/stage1_regions.v": "e23775297eb9ae5cb7a349c153706be36a8c6ce8caa06c9a9965a8bef48e4874",
+        "build/stage1_valid_storage_20261024_0027/stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97"
+      },
+      "resources": {
+        "slice": 3796,
+        "lut6": 1767,
+        "reg": 4212,
+        "eram": 3,
+        "dsp": 0
+      },
+      "netlist_sha256": "25e57acd24e561a73dc328863a70b6e1f6434446097d52991817a225f678fe0c",
+      "checkpoint_sha256": "34c9f6beaf906d2d4c29810e555d3b0289de9e90522d4d40eac60bb2ff498cd6",
+      "log_sha256": "58a6df0a261a963646bca5fe1a6b005dd19e04bfdcadb941577ed9edcd159363"
+    }
+  },
+  "scope": "Connected local estimate only; whole-device build, current software and final route still pending",
+  "interfaces_and_cycles_unchanged": true,
+  "control_and_count_reset_retained": true
+}

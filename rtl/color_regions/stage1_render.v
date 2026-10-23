@@ -176,8 +176,11 @@ if(index[3])draft_at=0;end endfunction
  labels_y[label_id]<labels_y[label_index]+18 && labels_y[label_id]+18>labels_y[label_index])label_collision=1;
  end
  task next_prepared_edge;begin field<=0;write_is_row<=0;state<=WRITE_EDGE;end endtask
+ // Snapshot data are consumed only after a committed, valid geometry job.
+ // Control/valid state retains the original asynchronous reset.
+ always @(posedge clk)if(commit)begin fv<=vertices;fd<=draft_vertices;end
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fd<=0;fd_region<=0;fd_visible<=0;fv<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
+ if(!rst_n)begin state<=IDLE;edge_id<=0;field<=0;fd_region<=0;fd_visible<=0;fc<=0;fclosed<=0;fcompleted<=0;fmode<=0;
  fx0<=0;fy0<=0;fzoom<=0;fexpected<=0;factual<=0;frotate<=0;fstate<=0;
  xa<=0;ya<=0;xb<=0;yb<=0;dx<=0;dy<=0;half_q<=0;half_r<=0;product<=0;product_negative<=0;work<=0;write_is_row<=0;
  bank_valid<=0;row<=0;word_index<=0;stamp_lo<=0;stamp_hi<=0;stamp_valid<=0;
@@ -264,7 +267,7 @@ if(index[3])draft_at=0;end endfunction
  default:begin end
  endcase
  if(commit)begin
- fv<=vertices;fd<=draft_vertices;fd_region<=draft_region[1:0];fd_visible<=draft_visible && draft_region<4;fc<=counts;fclosed<=closed_mask;fcompleted<=completed;fmode<=ui_mode;fx0<=x0;fy0<=y0;fzoom<=zoom;frotate<=rotate;
+ fd_region<=draft_region[1:0];fd_visible<=draft_visible && draft_region<4;fc<=counts;fclosed<=closed_mask;fcompleted<=completed;fmode<=ui_mode;fx0<=x0;fy0<=y0;fzoom<=zoom;frotate<=rotate;
  fstate<=run_state;fexpected<=expected_area;factual<=actual_area;
  state<=counts==0?IDLE:MAP;edge_id<=0;field<=0;bank_valid<=0;ready<=counts==0;underrun<=0;labels_valid<=0;
  all_left<=15;all_right<=15;all_above<=15;all_below<=15;

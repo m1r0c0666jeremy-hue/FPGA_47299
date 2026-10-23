@@ -1,0 +1,28 @@
+{
+  "status": "PRIVATE_CONTROL_EQUIVALENCE_PASSED_NOT_ADOPTED",
+  "record": "reports/refined/regression/private_valid_data_no_clear_equivalence_20261024_002210_128390.json",
+  "record_sha256": "88350ee8530183edaedae827a0e1588642e1122a8d420fbb929772eb38a584f9",
+  "log_sha256": "266fac1b179c7c056fa505575becf1e6c687b95f800e9575bc572137bc1f1066",
+  "bench": "build/sim/refined/private_valid_data_no_clear_equivalence_20261024_002210_128390/tb.sv",
+  "bench_sha256": "971f683ace6156ce1bb864924ed94b53d0355bc86a97144964b2a7a9727f2914",
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build\\stage1_valid_data_no_clear_20261024_0021\\stage1_regions.v": "6467049978907499908b8d69f570f80513b2897263a635c21bd4c84ecac3c465",
+    "build\\stage1_valid_data_no_clear_20261024_0021\\stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97",
+    "build\\stage1_valid_data_no_clear_20261024_0021\\stage1_regions_reference.v": "c65dad62fab30bc551c134eb374a78d41c8d29fdc4eb847623cc4a59e14e9173"
+  },
+  "fixtures": {
+    "build/sim/refined/stage1_regions_20261023_195807_094520/tb.sv": "91012f20b2bc613f96792e293f2efbe766c3f0de1b2ad4cb5bffb1dc0b76a532"
+  },
+  "producers": {
+    "scripts/test_stage1_regions.py": "8a6eee76a38c4b3bdc717275c5a446346b91405b2df0989c295a6e6e1bc7f557",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  },
+  "producer_sha256": "c259377d7d10a7876123468853d075e3f1b1beb4c1cea16fde62cfdd2f747755",
+  "reference_sha256": "ee5caf2a6c1191e1172dba7131b3597953cfc3917001175bb82864826f0ae094"
+}
