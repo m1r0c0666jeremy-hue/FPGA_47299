@@ -2,7 +2,8 @@
 `default_nettype none
 module stage1_buzzer #(parameter CLOCK_HZ=50000000)(input wire clk,rst_n,alarm_async,output wire buzzer);
  (* async_reg="true" *)reg [1:0] enable_sync;
- reg [25:0] period_count;reg [14:0] tone_count;reg tone;
+ localparam PERIOD_W=CLOCK_HZ>1?$clog2(CLOCK_HZ):1;
+ reg [PERIOD_W-1:0] period_count;reg [14:0] tone_count;reg tone;
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin enable_sync<=0;period_count<=0;tone_count<=0;tone<=1;end
  else begin enable_sync<={enable_sync[0],alarm_async};

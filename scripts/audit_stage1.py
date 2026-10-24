@@ -33,6 +33,7 @@ def specs():
       'stage1_age_equivalence_3':('STAGE1_AGE_EQUIVALENCE_PASS period=3 cycles=3452003',('stage1_sequence',)),
       'stage1_regions':('STAGE1_EDIT_RENDER_PASS point_pixels=134400',('stage1_regions','stage1_sequence','stage1_render')),
       'stage1_buzzer':('STAGE1_BUZZER_PASS',('stage1_buzzer',)),
+      'stage1_buzzer_75m':('STAGE1_BUZZER_75M_PASS',('stage1_buzzer','stage1_top')),
       'stage1_camera_0':('NACK=0 retries=0',('stage1_controls','stage1_top')),
       'stage1_camera_1':('NACK=1 retries=1',('stage1_controls','stage1_top')),
       'stage1_render_14_624':('STAGE1_RENDER_PASS cases=14 pixels=11182080',('stage1_render',)),

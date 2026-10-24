@@ -147,7 +147,7 @@ stage1_controls u_controls(.I_clk(S_hdmi_pixel_clk),.I_rst_n(process_rst_n),.I_k
  .O_conflict(ui_conflict),.O_pair(ui_pair),.O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),
  .O_rotate(ui_rotate),.O_diag(ui_diag),.O_ui_mode(stage_mode),.O_down2(stage_down),.O_click2(stage_k2),.O_click3(stage_k3),
  .O_click4(stage_k4),.O_cancel(stage_cancel),.O_gain_busy(stage_gain_busy),.O_gain_failed(stage_gain_failed),.O_gain_slot(stage_gain_slot));
-stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
+stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_n,stage_alarm,O_buzzer);
 '''+top[b:]
     top=top.replace('stable_memory_video_out #','stage1_memory_video_out #')
     top=top.replace('u_video (','''u_video (

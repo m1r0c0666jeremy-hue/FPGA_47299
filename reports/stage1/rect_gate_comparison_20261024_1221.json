@@ -1,0 +1,56 @@
+{
+  "status": "SAME_STAGE_GATE_ESTIMATES_ONLY_FINAL_PLACEMENT_ROUTE_PENDING",
+  "scope": "User approved rectangle simplification; precise distance/trend deferred",
+  "reports": {
+    "G3": {
+      "attempt": "build/stage1_place_20261024_090145",
+      "gate_area_sha256": "0107312d1a509aa49f15156d855833d72039095497420b8be823f99161374e81",
+      "resources": {
+        "slice_estimate": 21437,
+        "raw_lut": 28887,
+        "reg": 23067,
+        "eram": 98,
+        "dsp": 40
+      },
+      "modules": {
+        "stage1_regions": {
+          "logic_lut": 1873,
+          "reg": 2315
+        },
+        "stage1_render": {
+          "logic_lut": 1541,
+          "reg": 850
+        }
+      }
+    },
+    "rect": {
+      "attempt": "build/stage1_place_20261024_121048",
+      "gate_area_sha256": "80b3e0f010f6904a58c56a837a45aa48aa72392727814c9d80c357bb31568c7f",
+      "resources": {
+        "slice_estimate": 19405,
+        "raw_lut": 26336,
+        "reg": 20961,
+        "eram": 96,
+        "dsp": 40
+      },
+      "modules": {
+        "stage1_regions": {
+          "logic_lut": 829,
+          "reg": 517
+        },
+        "stage1_render": {
+          "logic_lut": 935,
+          "reg": 608
+        }
+      }
+    }
+  },
+  "delta": {
+    "slice_estimate": -2032,
+    "raw_lut": -2551,
+    "reg": -2106,
+    "eram": -2,
+    "dsp": 0
+  },
+  "no_final_timing_or_candidate": true
+}

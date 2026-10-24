@@ -8,7 +8,7 @@ def write_new(path,value):
 
 def package(attempt):
     proof=audit(attempt)
-    guard_report=R/'reports/stage1/routing_guards_20261024_120718.json'
+    guard_report=R/'reports/stage1/routing_guards_20261024_123949.json'
     guards=json.loads(guard_report.read_text(encoding='utf-8'))
     assert guards['status']=='ROUTING_GUARDS_PASS' and len(guards['checks'])==6 and set(guards['checks'].values())=={'REJECTED'}
     assert guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
@@ -24,7 +24,7 @@ def package(attempt):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
     paths|={R/'README.md',R/'reports/stage1/validation.md',R/'reports/stage1/software_current_20261024_0944.json',
-            R/'reports/stage1/guards_20261024_120719.json',
+            R/'reports/stage1/guards_20261024_123949.json',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/proof['baseline']['archive']}
     for e in proof['regression'].values():
@@ -37,7 +37,7 @@ def package(attempt):
         paths|={origin/'compiled_source'/n for n in compiled}
         paths|={origin/n for n in ('summary.json','source_context.json','inputs.json','inputs_after.json',
                                   'flow_options.json','run.tcl','td.log','target_color_regions_gate.db')}
-        gate_guard_report=R/'reports/stage1/gate_reuse_guards_20261024_120719.json'
+        gate_guard_report=R/'reports/stage1/gate_reuse_guards_20261024_123949.json'
         gate_guards=json.loads(gate_guard_report.read_text(encoding='utf-8'))
         assert gate_guards['status']=='GATE_REUSE_GUARDS_PASS' and len(gate_guards['checks'])==4
         assert set(gate_guards['checks'].values())=={'REJECTED'}
@@ -61,7 +61,7 @@ def package(attempt):
         if (build/n).is_file():shutil.copy2(build/n,dest/n)
     write_new(dest/'source_files.json',manifest)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name='区域示教与顺序报警第一阶段候选',branch=proof['branch'],head=proof['head'],
+      archive_name='矩形区域顺序报警第一阶段候选',branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),
