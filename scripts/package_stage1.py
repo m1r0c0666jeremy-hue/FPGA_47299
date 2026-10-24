@@ -8,9 +8,10 @@ def write_new(path,value):
 
 def package(attempt):
     proof=audit(attempt)
-    guard_report=R/'reports/stage1/routing_guards_20261024_123949.json'
+    guard_report=R/'reports/stage1/routing_guards_20261024_130333.json'
     guards=json.loads(guard_report.read_text(encoding='utf-8'))
     assert guards['status']=='ROUTING_GUARDS_PASS' and len(guards['checks'])==6 and set(guards['checks'].values())=={'REJECTED'}
+    assert len(guards['current_checks'])==8 and set(guards['current_checks'].values())=={'REJECTED'}
     assert guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
     assert guards['producer_sha256']==sha(R/'scripts/test_stage1_routing_guards.py')
     assert all(sha(R/n)==h for n,h in guards['fixtures'].items())
@@ -24,7 +25,7 @@ def package(attempt):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
     paths|={R/'README.md',R/'reports/stage1/validation.md',R/'reports/stage1/software_current_20261024_1246.json',
-            R/'reports/stage1/guards_20261024_123949.json',
+            R/'reports/stage1/guards_20261024_130406.json',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/proof['baseline']['archive']}
     for e in proof['regression'].values():
@@ -37,7 +38,7 @@ def package(attempt):
         paths|={origin/'compiled_source'/n for n in compiled}
         paths|={origin/n for n in ('summary.json','source_context.json','inputs.json','inputs_after.json',
                                   'flow_options.json','run.tcl','td.log','target_color_regions_gate.db')}
-        gate_guard_report=R/'reports/stage1/gate_reuse_guards_20261024_123950.json'
+        gate_guard_report=R/'reports/stage1/gate_reuse_guards_20261024_130407.json'
         gate_guards=json.loads(gate_guard_report.read_text(encoding='utf-8'))
         assert gate_guards['status']=='GATE_REUSE_GUARDS_PASS' and len(gate_guards['checks'])==4
         assert set(gate_guards['checks'].values())=={'REJECTED'}

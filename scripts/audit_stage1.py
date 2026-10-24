@@ -84,14 +84,18 @@ def routing_audit(path):
     start=text.rfind('RUN-1002 : start command "route"')
     assert start>=0,'Missing route command'
     final=text[start:]
-    drc=re.search(r'^PHY-1001 : Stage 5 \| Routing DRC\s*$',final,re.M)
-    end=re.search(r'^PHY-1001 : End Stage 5 \| Routing DRC;',final,re.M)
+    # TD's DRC stage number changes when post-route optimization adds stages.
+    # Bind the actual start/end and its Bound Check to the same stage number.
+    drcs=list(re.finditer(r'^PHY-1001 : Stage (\d+) \| Routing DRC\s*$',final,re.M))
+    assert len(drcs)==1,'Missing or ambiguous routing DRC'
+    drc=drcs[0];stage=drc.group(1)
+    end=re.search(r'^PHY-1001 : End Stage '+re.escape(stage)+r' \| Routing DRC;',final,re.M)
     assert drc and end and end.start()>drc.end(),'Missing completed routing DRC'
     congestion=re.findall(r'over cnt = (\d+)\([^)]*\), over = (\d+), worst = (\d+)',final[:drc.start()])
     assert congestion and tuple(map(int,congestion[-1]))==(0,0,0),'Final routing conflicts remain or are unreported'
     checks=final[drc.end():end.start()]
     assert 'No multi-drive.' in checks and 'No abnormal timing path.' in checks
-    bound=re.search(r'Stage 5\.6 \| Bound Check(.*?)End Stage 5\.6',checks,re.S)
+    bound=re.search(r'Stage '+re.escape(stage)+r'\.6 \| Bound Check(.*?)End Stage '+re.escape(stage)+r'\.6',checks,re.S)
     assert bound and 'Check Pass.' in bound[1],'Routing bound check did not pass'
     finish=final.find('RUN-1003 : finish command "route"',end.end())
     assert finish>=0 and final.find('REFINED_CHECKPOINT_FULL_COMPLETED',finish)>finish
