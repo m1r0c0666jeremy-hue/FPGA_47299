@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_video_in.v": "a1f91176452c60d415e69d640da78c77f1507a81be0bcb0dd4469b80b1cfb251",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\04_tracking\\target_frame_store.v": "f98bb674a2ea0de1d4355156ae57be70e64dea7d6d7eaf12b7e2c5d655d2821d",
+    "user_source\\ip_source\\w128_d512_fifo\\w128_d512_fifo.v": "5cd5f8e2216dd8989dc1e54d42b4da348dbb09f130bbe92deaa205db53a96bb4",
+    "user_source\\ip_source\\w128_d512_fifo\\soft_fifo_al_4057d6b76aa6.v": "75e5785ae0733b4ef7ce9a80d09f68419ceb0a6a5143baf866c5442ca310cb5e"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_ingress_11_5_20261024_152850_352266",
+  "fixture_sha256": "8638fd1868ffe5494d64eb00c61e71e51a8265eaef9aad6afccae2cf62a3ac1d",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}

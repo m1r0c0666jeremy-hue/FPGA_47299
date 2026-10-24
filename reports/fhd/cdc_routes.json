@@ -1,0 +1,7 @@
+{
+  "report_created": true,
+  "exit_code": 0,
+  "log": "E:\\codex\\FPGAco\\1080p30\\build\\fhd_full_20261024_154649_618619\\cdc_routes.log",
+  "log_sha256": "58e999a91768033e27f6e2e413be229085b16edf0f132f99b25efe6df5094a29",
+  "note": "Physical net diagnostics; not a substitute for CDC protocol reasoning or board validation."
+}

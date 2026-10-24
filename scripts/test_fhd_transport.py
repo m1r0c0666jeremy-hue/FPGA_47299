@@ -13,6 +13,7 @@ ap.add_argument('--workers',type=int,default=3)
 ap.add_argument('--color',action='store_true',help='Independent full-hue saturated model: every supported source mask is A=1.')
 ap.add_argument('--mode',type=int,choices=range(4))
 ap.add_argument('--pair',type=int,choices=(0,1))
+ap.add_argument('--video-backend',choices=['iverilog','native'],default='iverilog')
 a=ap.parse_args()
 rtl=R/'rtl/color_regions'
 inc=('-I',str(rtl))
@@ -211,6 +212,9 @@ if a.suite in ('all','ingress'):
     for cp,dp in ([(8,7),(5,11),(11,5)] if a.full else [(8,7)]):
         run(f'fhd_ingress_{cp}_{dp}',s,modules,top='tb_robust_ingress',compile_args=[*inc,f'-Ptb_robust_ingress.CP={cp}',f'-Ptb_robust_ingress.DP={dp}'])
 if a.suite in ('all','video'):
+    video_run=run
+    if a.video_backend=='native':
+        from refined_native_testlib import run_native as video_run
     modules=[rtl/f'{n}.v' for n in ('refined_line_reader','stable_model_lane','stable_filter4','stable_preprocess','refined_osd',
         'refined_footer_program_rom','refined_english_font_rom','refined_english_text_rom','refined_overlay_geometry','refined_zoom_geometry','refined_reset_bridge','refined_logo_rom')]
     modules += [R/'rtl/04_tracking/target_mailbox.v']
@@ -229,6 +233,6 @@ if a.suite in ('all','video'):
         video=video.replace('mask!==0','mask!==1').replace("1:page={8'(g/4),8'(g/4),8'(g/4)}", "1:page=parg?24'hffff40:24'hff6060").replace('default:page=0',"default:page=24'hffffff")
     def execute(job):
         pair,z,r,m=job
-        run(f'fhd_{"color_" if a.color else ""}video_p{pair}_{z}_{r}_{m}',video,modules,args=[f'+PAIR={pair}',f'+ZOOM={z}',f'+ROTATE={r}',f'+MODE={m}'],compile_args=inc)
+        video_run(f'fhd_{"color_" if a.color else ""}video_p{pair}_{z}_{r}_{m}',video,modules,args=[f'+PAIR={pair}',f'+ZOOM={z}',f'+ROTATE={r}',f'+MODE={m}'],compile_args=inc)
     with ThreadPoolExecutor(max_workers=a.workers) as pool:list(pool.map(execute,jobs))
 print('FHD_TRANSPORT_SUITE_PASS',a.suite,flush=True)

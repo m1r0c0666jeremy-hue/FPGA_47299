@@ -11,9 +11,12 @@ from refined_testlib import R,run
 # Reuse the EN test's fixture construction, not its old 720p execution/results.
 code=(R/'scripts/test_refined_live.py').read_text(encoding='utf-8')
 code=code[:code.index('def execute(job):')]
+code=code.replace('a=ap.parse_args()',"ap.add_argument('--backend',choices=['iverilog','native'],default='native');a=ap.parse_args()")
 code=code.replace('default=160','default=1295')
 ns={};exec(compile(code,'EN oracle fixture','exec'),ns)
 s,mods,a=ns['s'],ns['mods'],ns['a']
+if a.backend=='native':
+    from refined_native_testlib import run_native as run
 edits={
  'always #6.667 pc':'always #6.734006734 pc',
  'integer h=0,v=725':'integer h=0,v=1084',

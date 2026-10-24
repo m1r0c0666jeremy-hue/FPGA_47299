@@ -1,0 +1,14 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_display.v": "778927e269bb02e8cf9dd1ae9de7027a1c163a5d4fcab0e065b8d39eab6812e9",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "dc8b94fd7e5a3509dcf8280a370858add3f344ada95062c629026669213b52e8"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_display_20261024_152508_310721",
+  "fixture_sha256": "6d7d6eb7e55656451678e7490f53b3ced11a4a67c9ebed418fbc97cdaff7cd3f",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}

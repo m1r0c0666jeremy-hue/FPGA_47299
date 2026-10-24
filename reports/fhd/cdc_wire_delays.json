@@ -1,0 +1,31 @@
+{
+  "units": "ps",
+  "groups": {
+    "FHD_CDC_GROUP u_camera/u_raw_bridge/rd_gray*": {
+      "load_pins": 65,
+      "max_net_delay_ps": 997,
+      "worst_pin": "u_camera/u_raw_bridge/sub0_syn_62.ie"
+    },
+    "FHD_CDC_GROUP u_camera/u_raw_bridge/desc_wr_gray*": {
+      "load_pins": 7,
+      "max_net_delay_ps": 446,
+      "worst_pin": "u_camera/u_raw_bridge/desc_wr_r1_reg[1]_syn_2.ima"
+    },
+    "FHD_CDC_GROUP u_camera/u_raw_bridge/desc_rd_gray*": {
+      "load_pins": 9,
+      "max_net_delay_ps": 745,
+      "worst_pin": "u_camera/u_raw_bridge/abort_id_reg[21]_syn_2.ie"
+    },
+    "FHD_CDC_GROUP u_camera/u_raw_bridge/abort_gray*": {
+      "load_pins": 35,
+      "max_net_delay_ps": 1011,
+      "worst_pin": "u_camera/u_raw_bridge/abort_sync0_reg[6]_syn_2.ima"
+    },
+    "FHD_CDC_GROUP_VENDOR_GRAY": {
+      "load_pins": 36,
+      "max_net_delay_ps": 1461,
+      "worst_pin": "u_video/u_video_in/U_w128_d512_fifo/soft_fifo_al_4057d6b76aa6_Inst/sub0_syn_57.id"
+    }
+  },
+  "note": "Routed wire delays only; CDC synchronizer/protocol review is still required."
+}

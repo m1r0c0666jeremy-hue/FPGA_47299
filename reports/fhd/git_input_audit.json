@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "build_inputs": 319,
+  "note": "Staged Git blobs preserve the exact raw frozen FPGA/IP/build-tool input bytes; no checkout line-ending conversion."
+}

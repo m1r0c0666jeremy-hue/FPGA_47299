@@ -1,0 +1,35 @@
+{
+  "inputs": {
+    "rtl/color_regions/refined_line_reader.v": "e7a27442595de3fb77e90cf225a37731a468e24e15b7ce688c6c09cea9853dc4",
+    "rtl/color_regions/stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl/color_regions/stable_filter4.v": "69e3f4f89219ed28e822e30dca2d86b97633a68f65410bddc68a30fa322193ee",
+    "rtl/color_regions/stable_preprocess.v": "022a23602c48cf28644f15e7d72e50ca46b77d7f172310c951cb4bc99fff4d4b",
+    "rtl/color_regions/refined_osd.v": "28eed435b66d9fca557b082d0cd013ef94284a3811e0a60e05d5e51c0cc2b3e3",
+    "rtl/color_regions/refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl/color_regions/refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl/color_regions/refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl/color_regions/refined_overlay_geometry.v": "483af66174a81545385fac92308598904fc47fd4e830c83bb052960200b855c0",
+    "rtl/color_regions/refined_zoom_geometry.v": "dc8b94fd7e5a3509dcf8280a370858add3f344ada95062c629026669213b52e8",
+    "rtl/color_regions/refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl/04_tracking/target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6"
+  },
+  "exit_code": 0,
+  "passed": true,
+  "timed_out": false,
+  "stage": "simulate",
+  "inputs_unchanged": true,
+  "backend": "Verilator 5.050 two-state/timing; GCC 16.2",
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\native\\fhd_video_p0_4_0_1_20261024_153258_128858",
+  "fixture_sha256": "fc97fd0f7b5edfdb033ef4313a4ba431a2a5db011762b4135950a38da5c025ec",
+  "tool_manifest_sha256": "8e96ff51c8b098533512196f0b5bec9dfacd2c9263f78aa4253936bed4344eb3",
+  "compiled_from": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\native\\fhd_video_p0_0_0_0_20261024_153148_228041",
+  "reused_compilation": true,
+  "binary_sha256": "3ce4ca4dbce0a11a5c22833dbbff3a79782b7ad49e290e04dab6c36f8e45d106",
+  "arguments": [
+    "+PAIR=0",
+    "+ZOOM=4",
+    "+ROTATE=0",
+    "+MODE=1"
+  ]
+}

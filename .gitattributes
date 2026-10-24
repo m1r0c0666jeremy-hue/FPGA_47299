@@ -1,0 +1,2 @@
+# Preserve the exact frozen FPGA/IP bytes, including existing line endings.
+* -text

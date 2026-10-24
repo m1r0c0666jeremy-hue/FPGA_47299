@@ -1,0 +1,205 @@
+{
+  "created_local": "2026-10-24T15:45:04.833610",
+  "passed": true,
+  "inputs_unchanged": true,
+  "inputs_sha256": "878dcbd711c56abfde3e1a3fdba174740c4ac3b0e0eb46bb09a2778d886a99d5",
+  "jobs": [
+    {
+      "name": "timebase",
+      "arguments": [
+        "test_fhd_timebase.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.156,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\timebase.log",
+      "log_sha256": "4da141baf9507530e2355a9a5fa688dd6c79e62975612dfab64382d9b9958f90"
+    },
+    {
+      "name": "sim_cli",
+      "arguments": [
+        "test_fhd_sim_cli.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.281,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\sim_cli.log",
+      "log_sha256": "5ffc0e8a8cceb3c5c36509c92028648efa6b9e7d76f41bafd94a150fb76aa8b5"
+    },
+    {
+      "name": "camera_bridge",
+      "arguments": [
+        "test_fhd_camera_bridge.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.469,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\camera_bridge.log",
+      "log_sha256": "a06f6c0f325e77714169d975d3f0eb3987f13c92dd3a788b2db31db13e618a5b"
+    },
+    {
+      "name": "csi_bridge",
+      "arguments": [
+        "test_fhd_csi_bridge.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.422,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\csi_bridge.log",
+      "log_sha256": "ef403b2850b0f81254af057d6c5d970b5fe274e8278bfc7e8b553f156da405f0"
+    },
+    {
+      "name": "sensor_config",
+      "arguments": [
+        "test_fhd_camera_config.py"
+      ],
+      "exit_code": 0,
+      "seconds": 41.218,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\sensor_config.log",
+      "log_sha256": "ec07b78fa0650294af636c666a9cefa082f57076f17491b0005eb8b6096e0597"
+    },
+    {
+      "name": "isp",
+      "arguments": [
+        "test_fhd_isp.py"
+      ],
+      "exit_code": 0,
+      "seconds": 229.156,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\isp.log",
+      "log_sha256": "b40674e5ccd73dc7415831bbdcfbac1f9c7f034b2cfc3f6eb0093766a65b78ef"
+    },
+    {
+      "name": "calibration_replay",
+      "arguments": [
+        "test_fhd_calibration_replay.py"
+      ],
+      "exit_code": 0,
+      "seconds": 75.063,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\calibration_replay.log",
+      "log_sha256": "a6888e9f1cfd47a0a62c0dd6e7d5ded1cba24520042854c73c0473866f6985b4"
+    },
+    {
+      "name": "controls",
+      "arguments": [
+        "test_refined_controls.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.375,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\controls.log",
+      "log_sha256": "e2254c64bd285682ee9ca429bf405264c8e8e7a8b08cb9c3d051a9d17cbfd43f"
+    },
+    {
+      "name": "camera",
+      "arguments": [
+        "test_fhd_camera_integration.py"
+      ],
+      "exit_code": 0,
+      "seconds": 317.203,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\camera.log",
+      "log_sha256": "620785b4d732ac0642eef6e8163706fb02bb6671e49f95560a3e22dd723901fb"
+    },
+    {
+      "name": "four_state_video",
+      "arguments": [
+        "test_fhd_transport.py",
+        "--suite",
+        "video",
+        "--zoom",
+        "0",
+        "--rotate",
+        "0",
+        "--mode",
+        "0"
+      ],
+      "exit_code": 0,
+      "seconds": 411.078,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\four_state_video.log",
+      "log_sha256": "ec4d1f23c823b1099267af01fc9c96e0208a951a8ac7a130d610f7799725836c"
+    },
+    {
+      "name": "transport",
+      "arguments": [
+        "test_fhd_transport.py",
+        "--full",
+        "--video-backend",
+        "native",
+        "--workers",
+        "3"
+      ],
+      "exit_code": 0,
+      "seconds": 573.125,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\transport.log",
+      "log_sha256": "afbc6f1d1b2110f32a5e9496c6af54d1ed3a840bc45f10cc3c23396a86c2c897"
+    },
+    {
+      "name": "processing",
+      "arguments": [
+        "test_fhd_processing.py"
+      ],
+      "exit_code": 0,
+      "seconds": 930.735,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\processing.log",
+      "log_sha256": "f1db0c6c7a4055530c13914fb02727d0ab8b16ddccc0e3ac4675bbe99f27c595"
+    },
+    {
+      "name": "four_state_highlight",
+      "arguments": [
+        "test_fhd_transport.py",
+        "--suite",
+        "video",
+        "--zoom",
+        "1",
+        "--rotate",
+        "0",
+        "--mode",
+        "1",
+        "--color",
+        "--pair",
+        "1"
+      ],
+      "exit_code": 0,
+      "seconds": 409.125,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\four_state_highlight.log",
+      "log_sha256": "5e1d0414959b6496e6ad4a78a2953d89902ad818012adf6edce9f069c0244742"
+    },
+    {
+      "name": "four_state_binary",
+      "arguments": [
+        "test_fhd_transport.py",
+        "--suite",
+        "video",
+        "--zoom",
+        "4",
+        "--rotate",
+        "1",
+        "--mode",
+        "3",
+        "--color"
+      ],
+      "exit_code": 0,
+      "seconds": 357.234,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\four_state_binary.log",
+      "log_sha256": "c034844a52f1493ef3dfbbb4a0a8d6d279ce09190eb01e2dfe11a89883d950bd"
+    },
+    {
+      "name": "joint_video",
+      "arguments": [
+        "test_fhd_live.py",
+        "--backend",
+        "native",
+        "--workers",
+        "2"
+      ],
+      "exit_code": 0,
+      "seconds": 263.359,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\joint_video.log",
+      "log_sha256": "c58fcc9134fcaffde9a8c99ca8c84fc9c63f9371b94afa81875ad401518f0b8b"
+    },
+    {
+      "name": "camera_hdmi_recovery",
+      "arguments": [
+        "test_fhd_camera_hdmi.py"
+      ],
+      "exit_code": 0,
+      "seconds": 422.36,
+      "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\regression\\20261024_151901_718092\\camera_hdmi_recovery.log",
+      "log_sha256": "cc7eff4dac5767b5a5b0cfc79bfdcb32a12e44dc6574ec552564c937b70770b5"
+    }
+  ]
+}

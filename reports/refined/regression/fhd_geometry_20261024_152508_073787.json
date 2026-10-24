@@ -1,0 +1,14 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_overlay_geometry.v": "483af66174a81545385fac92308598904fc47fd4e830c83bb052960200b855c0",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "dc8b94fd7e5a3509dcf8280a370858add3f344ada95062c629026669213b52e8"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_geometry_20261024_152508_073787",
+  "fixture_sha256": "dadcf648f242e4321c0763626149bee1d1c357b39941f8495105b21221b2dc9e",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}

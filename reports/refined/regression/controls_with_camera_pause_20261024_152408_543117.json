@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_controls.v": "eeff5dffe122363b8daf38266642249d178d67af60651c789a3e1d9b78f80c2a"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\controls_with_camera_pause_20261024_152408_543117",
+  "fixture_sha256": "543cf98594290aab3d0278e97781047786462ca832bf113703208bca4237e4e3",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}

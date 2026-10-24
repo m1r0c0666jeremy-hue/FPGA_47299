@@ -1,0 +1,26 @@
+{
+  "bit_sha256": "73e71d4ac30d67a40b91a66bb09bcd59348a8ddd631c1268fc4aef0835f70c61",
+  "build": "build\\fhd_full_20261024_154649_618619",
+  "stage": "full",
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "td": "E:/TD 6.2.1/bin/td_commands_prompt.exe",
+  "resources": {
+    "slice": 18791,
+    "lut6": 17821,
+    "reg": 20357,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false,
+  "slack_ns": {
+    "SWNS": 0.118,
+    "HWNS": 0.02
+  },
+  "timing_pass": true,
+  "completed": true,
+  "deliverable": true
+}

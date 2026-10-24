@@ -56,6 +56,16 @@ wire [15:0] stream_epoch,recovery_count;wire [1:0] recovery_retries;wire [3:0] r
 wire [127:0] ddr_diagnostics,pixel_diagnostics;
 refined_ddr_recovery #(.CYCLES_PER_MS(50000)) recover_ddr(.clk(I_sys_clk),.rst_n(I_rst_n),.init_ready(S_init_calib_complete),.fault_toggle(read_fault_toggle),
  .controller_n(controller_reset_n),.pipeline_n(stream_async_n),.epoch(stream_epoch),.recoveries(recovery_count),.retries(recovery_retries),.reason(recovery_reason),.failed(recovery_failed));
+// The supervisor survives stream resets. Transfer its generation as registered
+// Gray code, using global reset for the synchronizer: a recovery holds the
+// capture pipeline in reset for >=1 ms, long enough for the new generation to
+// settle before any source SOF can be admitted. Never sample the binary bus.
+reg [15:0] stream_epoch_gray;
+always @(posedge I_sys_clk or negedge I_rst_n)
+ if(!I_rst_n)stream_epoch_gray<=0;
+ else stream_epoch_gray<=stream_epoch^(stream_epoch>>1);
+wire [31:0] capture_epoch_sync_value;
+refined_gray_sync capture_epoch_sync(I_capture_clk,I_rst_n,{16'd0,stream_epoch_gray},capture_epoch_sync_value);
 refined_reset_bridge pixel_stream_reset(I_pixel_clk,stream_async_n,stream_pixel_n);
 wire        S_hdmi_de;
 wire[3:0]   S_hdmi_debug_status;
@@ -180,7 +190,7 @@ refined_video_in u_video_in(
     wire capture_result,ddr_result,result_ready;
     wire [767:0] capture_meta,ddr_meta;
     stable_capture #(.V4(1)) u_detection(
-        .I_source_id(I_source_id),.I_source_us(I_source_us),.I_now_us(I_capture_us),.I_epoch(stream_epoch),
+        .I_source_id(I_source_id),.I_source_us(I_source_us),.I_now_us(I_capture_us),.I_epoch(capture_epoch_sync_value[15:0]),
         .I_time_valid(I_source_time_valid),.I_model_state(I_model_state),.I_quality(I_quality),
         .O_frame_us(capture_frame_us),.O_epoch(capture_epoch),.O_time_valid(capture_time_valid),
         .I_models(I_models),.I_revision(I_revision),.I_gains(I_gains),.I_cal_status(I_cal_status),.I_cal_active(I_cal_active),.I_needs_cal(I_needs_cal),

@@ -22,16 +22,22 @@ def run(name,source,modules,top='tb',args=(),expected_failure=False,timeout=1800
                 if candidate.is_file():
                     dependencies.append(candidate);break
     hashes={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in dependencies}
-    log_path=report/f'{name}_{stamp}.log';code=0
-    for cmd in ([IV,'-g2012',*compile_args,'-s',top,'-o',out/'test.vvp',tb,*modules],[IV.with_name('vvp.exe'),out/'test.vvp',*args]):
+    log_path=report/f'{name}_{stamp}.log';code=0;timed_out=False
+    commands=([IV,'-g2012',*compile_args,'-s',top,'-o',out/'test.vvp',tb,*modules],[IV.with_name('vvp.exe'),out/'test.vvp',*args])
+    for stage,cmd in zip(('compile','simulate'),commands):
         # Persist output during long simulations as well as after completion.
         with log_path.open('a',encoding='utf-8') as output:
-            p=subprocess.run(list(map(str,cmd)),cwd=R,env=ENV,stdout=output,stderr=subprocess.STDOUT,text=True,timeout=timeout)
-        code=p.returncode
+            try:
+                p=subprocess.run(list(map(str,cmd)),cwd=R,env=ENV,stdout=output,stderr=subprocess.STDOUT,text=True,timeout=timeout)
+                code=p.returncode
+            except subprocess.TimeoutExpired:
+                timed_out=True;code=124
+                output.write(f'\nVERIFICATION_TIMEOUT stage={stage} limit={timeout}s\n')
         if code:break
-    assert all(hashlib.sha256(p.read_bytes()).hexdigest()==hashes[str(p.relative_to(R))] for p in dependencies),'Inputs changed during simulation'
+    unchanged=all(hashlib.sha256(p.read_bytes()).hexdigest()==hashes[str(p.relative_to(R))] for p in dependencies)
+    passed=unchanged and not timed_out and (not code or (stage=='simulate' and expected_failure)) and bool(code)==expected_failure
     name=f'{name}_{stamp}'
-    (report/(name+'.json')).write_text(json.dumps(dict(inputs=hashes,exit_code=code,expected_failure=expected_failure,output=str(out),fixture_sha256=hashlib.sha256(tb.read_bytes()).hexdigest()),indent=2),encoding='utf-8')
+    (report/(name+'.json')).write_text(json.dumps(dict(inputs=hashes,exit_code=code,expected_failure=expected_failure,output=str(out),fixture_sha256=hashlib.sha256(tb.read_bytes()).hexdigest(),stage=stage,timed_out=timed_out,inputs_unchanged=unchanged,passed=passed),indent=2),encoding='utf-8')
     print(log_path.read_text(encoding='utf-8'),flush=True)
-    if bool(code)!=expected_failure:raise SystemExit(f'{name}: unexpected exit {code}')
+    if not passed:raise SystemExit(f'{name}: verification rejected (stage={stage}, exit={code}, timeout={timed_out}, inputs_unchanged={unchanged})')
     return out

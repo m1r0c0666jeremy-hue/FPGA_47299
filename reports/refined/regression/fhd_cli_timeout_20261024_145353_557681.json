@@ -1,0 +1,11 @@
+{
+  "inputs": {},
+  "exit_code": 124,
+  "expected_failure": true,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_cli_timeout_20261024_145353_557681",
+  "fixture_sha256": "578c0fc217c55d804f353fedbfb445f95884fee657d53c97b6be7e19b90498cc",
+  "stage": "simulate",
+  "timed_out": true,
+  "inputs_unchanged": true,
+  "passed": false
+}

@@ -7,12 +7,15 @@ SHA=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--stage',choices=['elaborate','synth','place','full'],default='synth')
-    ap.add_argument('--td',default='E:/TD 6.2.1/bin/td_commands_prompt.exe');a=ap.parse_args()
+    ap.add_argument('--td',default='E:/TD 6.2.1/bin/td_commands_prompt.exe')
+    ap.add_argument('--timing-high',action='store_true',help='apply installed TD official TimingHigh physical strategy')
+    a=ap.parse_args()
     project=create();root=load(project)
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
     out=R/'build'/f'fhd_{a.stage}_{stamp}';out.mkdir(parents=True,exist_ok=False)
     frozen=out/'compiled_source';frozen.mkdir()
-    paths={project,R/'td_project/target_lock.adc',R/'td_project/target_1080p30.sdc'}
+    paths={project,R/'td_project/target_lock.adc',R/'td_project/target_1080p30.sdc',
+           R/'scripts/run_fhd_build.py',R/'scripts/create_fhd_project.py',R/'scripts/refined_build_report.py'}
     for node in root.findall('./Source_Files/*/File'):
         p=(project.parent/node.attrib['Path']).resolve()
         if p.is_file():paths.add(p)
@@ -42,9 +45,18 @@ def main():
                 ' report_timing_summary -file target_color_regions_gate.timing']
     if a.stage in ('place','full'):
         lines+=[' set_param place pr_strategy 5',' set_param place max_fanout 128',' set_param route effort normal',
-                ' legalize_phy_inst',' place',' report_area -io_info -file target_color_regions_phy.area']
+                ]
+        physical_settings=dict(name='default')
+        if a.timing_high:
+            strategy_file=Path(a.td).parent.parent/'doc/strategies/official_strategy_ph1.json'
+            physical_settings=dict(name='TimingHigh',source=str(strategy_file),source_sha256=SHA(strategy_file),
+                                   params=json.loads(strategy_file.read_text(encoding='utf-8'))['TimingHigh']['params'])
+            lines += [f" set_param {p['step']} {p['param']} {p['val']}" for p in physical_settings['params']]
+        (out/'physical_settings.json').write_text(json.dumps(physical_settings,indent=2),encoding='utf-8')
+        lines+=[' legalize_phy_inst',' place',' report_area -io_info -file target_color_regions_phy.area']
     if a.stage=='full':
         lines+=[' route',' report_area -io_info -file target_color_regions_phy.area',' update_timing -mode final',
+                ' export_db target_color_regions_pr.db',
                 ' report_timing_status -file target_color_regions_phy.ts',' report_timing_summary -file target_color_regions_pr.timing',
                 ' report_timing_exception -file target_color_regions_exception.timing',' report_clock_utilization -file fhd_clocks.txt',
                 ' set tf [open target_color_regions_phy.ts r]',' set timing [read $tf]',' close $tf',

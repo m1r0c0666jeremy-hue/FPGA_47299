@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_frame_store.v": "3ee4efae7e9ba8c7d45767db6621fc044c24a50afaa1468333e7695db7585bd0"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_store_20261024_152426_189384",
+  "fixture_sha256": "10666345a3332287ea905b07653965ad7632cecd54c309fb96b88adc98659cb2",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}

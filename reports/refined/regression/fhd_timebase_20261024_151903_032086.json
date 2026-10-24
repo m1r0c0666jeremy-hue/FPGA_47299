@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_timebase.v": "44a1d6a475f492a1ae7eb1e2ffd59692ebe482394916a3ff57123e6f569551a5"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_timebase_20261024_151903_032086",
+  "fixture_sha256": "d3e377ecf0627f14c3454619c3f577feae631b94e9eefb7afffb4619d67492c7",
+  "stage": "simulate",
+  "timed_out": false,
+  "inputs_unchanged": true,
+  "passed": true
+}
