@@ -1,0 +1,27 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+    "rtl\\color_regions\\stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_english_abort_20261024_121038_538112",
+  "fixture_inputs": {
+    "build/sim/stage1_footer_pixels/abort_0.hex": "cfb42e2f8b428f754b44cea7fdbf75ddb8918ef039d4b05adc67a7936c9c0d64",
+    "build/sim/stage1_footer_pixels/abort_1.hex": "cfb42e2f8b428f754b44cea7fdbf75ddb8918ef039d4b05adc67a7936c9c0d64",
+    "build/sim/refined/stage1_english_abort_20261024_121038_538112/tb.sv": "e4be2d149d7d8d7e552dcf1464bcdf849f7a2c9be3f97b935757e687e6e4cc04"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_footer.py": "9b2d9ebd5a6038923c4bae7192a6c5be6c7dee1828a766e48234555f39d14e61",
+    "scripts/test_osd_memory_ui.py": "43f4050797105a4d523bbac240920db1f16e2f2c76f45744676c430466c0b280",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+  }
+}

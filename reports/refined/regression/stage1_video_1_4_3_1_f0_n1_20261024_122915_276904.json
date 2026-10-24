@@ -1,0 +1,37 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_line_reader.v": "6359e2a2bc68e4c5f1c274569522f2fc154b1659e7295769664d24a137f1b9fd",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "4de60a15ddfe5e56b561f423025ebe6f52365070b0535f3d5ba82a7bec6b16ce",
+    "rtl\\color_regions\\stable_preprocess.v": "022a23602c48cf28644f15e7d72e50ca46b77d7f172310c951cb4bc99fff4d4b",
+    "rtl\\color_regions\\stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+    "rtl\\color_regions\\stable_glyph_rom.v": "f84cf7d7770532c83872a00a8c9bc02ffc5a55a6d947ef6211002faa36c677a0",
+    "rtl\\color_regions\\stable_footer_glyph_rom.v": "7c7da05c622cafc58cb2f646f8af15f518e6f7486add622c2005eaafc5e4b615",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\stable_footer_text_rom.v": "740bede43a2cd79173dcfff21365e95981089824d928b5e710e532e9c5489be9",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6",
+    "rtl\\09_osd_ui\\scaling_logo_rom.v": "4efbb9d3f18cf7d8c9d63fd45e75615765c1581826689baa3fca3e7aa8d573a0",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+    "rtl\\color_regions\\stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_video_1_4_3_1_f0_n1_20261024_122915_276904",
+  "fixture_inputs": {
+    "build/sim/stage1_video/masks_1.hex": "0311ec2f34e1ea3ec9a111613ce3253ec5265c1e2271d95013da53b059290ab1",
+    "build/sim/refined/stage1_video_1_4_3_1_f0_n1_20261024_122915_276904/tb.sv": "d7deea83d2a3763d57ce4a151b51695d44e062aad1c6b6ce3063d5932baa34ce"
+  },
+  "producer_inputs": {
+    "scripts/test_refined_video.py": "05637055b28ec7f185ef7e4fc8cd20c74f7946b3c31e24f1343861c6e76cc67e",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b",
+    "scripts/test_stage1_video.py": "78cf070525b6954f2838bfb4946273bfb66c83eb1a70bab667773e31fac6b079"
+  }
+}
