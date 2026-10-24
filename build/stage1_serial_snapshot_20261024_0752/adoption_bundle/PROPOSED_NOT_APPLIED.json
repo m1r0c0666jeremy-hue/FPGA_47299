@@ -1,0 +1,51 @@
+{
+  "status": "PROPOSED_ONLY_NOT_APPLIED_REQUIRE_ACTUAL_LOCAL_RESOURCE_GAIN_FIRST",
+  "files": {
+    "rtl/color_regions/stage1_regions.v": {
+      "proposed_sha256": "4128f283f47664f50955d57a25df2ac595c398eaaa57819ea85ff6f739ae1754",
+      "before_sha256": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92"
+    },
+    "rtl/color_regions/stage1_render.v": {
+      "proposed_sha256": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a",
+      "before_sha256": "bb261e888134ff18a2ef4cb35b0da1c495915aecc87901af5a72189d94d81af1"
+    },
+    "scripts/test_stage1_render_guards.py": {
+      "proposed_sha256": "b0e9966cfd3bed7c85dfb5d09c67c38d12ecd0343e576fe9586bb7163ee0f551",
+      "before_sha256": "ee79dae48eaa8642a3aaaf7ddf0b86e97bb6e1069477e1652f7ffb94fa92a475"
+    },
+    "sim/stage1_snapshot_protocol_tb.sv": {
+      "proposed_sha256": "253f0c5acb430163602aaaebad62cd774f99ad088615034b5aa2d608e161e5dd",
+      "before_sha256": null
+    },
+    "sim/stage1_snapshot_abort_tb.sv": {
+      "proposed_sha256": "73be44029520eb5d810a0db60bafc197521d9dbadd617c714d6c2720560d1e0a",
+      "before_sha256": null
+    },
+    "sim/stage1_snapshot_frozen_regions.v": {
+      "proposed_sha256": "1bebfdb0de4e72976a0ce1f30676c4f2a473cfcb5d694252404691f959c74c43",
+      "before_sha256": null
+    },
+    "sim/stage1_snapshot_frozen_render.v": {
+      "proposed_sha256": "9e1d5b20c8bc982d013448f10bed0e40f43024d3813531fc345faee9dbf63491",
+      "before_sha256": null
+    },
+    "scripts/test_stage1_snapshot_protocol.py": {
+      "proposed_sha256": "3ba820cf90dba74c66b7a42cb6cfa24226ecf402a6edabbb52f7affca6c9f916",
+      "before_sha256": null
+    },
+    "scripts/test_stage1_snapshot_abort.py": {
+      "proposed_sha256": "20d057971ebf876951a6083176a3be4cb58f2bed34f1433cae4f8e8960a392f0",
+      "before_sha256": null
+    },
+    "scripts/audit_stage1.py": {
+      "proposed_sha256": "5f60c97990e0294c000915e014affd8d8a77c061292264d9e3300538b523192b",
+      "before_sha256": "ff8a7ba2a7ab7c991f934bf825d3ae0ca33d56d1c44c47ae2f39b4f3c6b548ff"
+    }
+  },
+  "proof_sha256": "9bbd2489ed1332aac4f18b90a10e05d90be56df27fd509ac7a08209e1b92a23e",
+  "baseline_full_software": "reports/stage1/software_current_20261024_0708.json",
+  "baseline_sha256": "6e34a9c4a4cc5a8b978ddceeadf5372f236baf69367e1120be6469a662930ae2",
+  "expected_required_checks": 112,
+  "normalization": "Private controller LF restored to original formal CRLF; lines text-identical. Renderer bytes unchanged. All active-pixel/deadline/assertion values retained; actual formal capacity generator is unchanged. New formal tests use actual RTL and self-contained frozen references, no private failed fixture dependency.",
+  "next": "Only after native local resource comparison and no active formal CAD, back up current files, recheck all before hashes, apply proposed files, regenerate/check9, refresh112 functional checks and14 negative release/routing/reuse guards and package pointers, then fresh whole physical build and independent delivery verification."
+}

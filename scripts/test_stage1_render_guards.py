@@ -18,7 +18,7 @@ repeat(10000)@(negedge clk);if(mask!==0 || !underrun)$fatal(1,"fault did not rem
 de=0;commit=1;@(negedge clk);commit=0;repeat(10000)@(negedge clk);
 if(!ready || underrun)$fatal(1,"clean next frame did not recover");
 // The working input may change while the current displayed snapshot is frozen.
-vertices=0;split_region=3;split_visible=0;repeat(5)@(negedge clk);if(dut.fv[189:168]!=={10'd77,11'd88} || !dut.fd_visible || dut.fd_region!==0 || dut.fd[20:0]!=={10'd10,11'd10})$fatal(1,"frame geometry not frozen");
+vertices=0;split_region=3;split_visible=0;repeat(5)@(negedge clk);if({dut.state_line_mem[649][0],dut.state_line_mem[648][20:0]}!=={10'd77,11'd88} || !dut.fd_visible || dut.fd_region!==0 || dut.state_line_mem[672][20:0]!=={10'd10,11'd10})$fatal(1,"frame geometry not frozen");
 $display("STAGE1_RENDER_GUARDS_PASS late-commit/no-stale-overlay/recovery/frozen-vertices");$finish;end
 endmodule'''
 run('stage1_render_guards',src,[R/'rtl/color_regions/stage1_arith.v',R/'rtl/color_regions/stage1_render.v'],timeout=60)

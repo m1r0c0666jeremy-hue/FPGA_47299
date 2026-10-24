@@ -27,8 +27,24 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  meta[89:79]<1280 && meta[99:90]<720;
  assign tip_live=tracking && camera_ready && video_ok && source_ok && tip_age<250 && !gain_busy;
  assign metrics_valid=metrics_good && tip_live && job_revision==revision && job_session==session && job_epoch==meta[719:704] && job_model==meta[559:544];
- assign busy=validating || edit_request!=0;
  reg [671:0] draw_data;reg [15:0] draw_counts;reg [3:0] draw_closed;
+ // Private serial RAM snapshot: payload writes wait at most 40 clocks.
+ // frame_commit is the same signal used by the actual renderer.
+ reg [5:0] snapshot_count;
+ reg validation_pending,pending_passed;reg [3:0] pending_error;
+ wire snapshot_lock=frame_commit?(draw_counts!=0):(snapshot_count!=0);
+ wire validation_apply=!snapshot_lock && (validated || validation_pending);
+ wire validation_passed=validation_pending?pending_passed:passed;
+ wire [3:0] validation_reason=validation_pending?pending_error:validation_error;
+ always @(posedge clk or negedge rst_n)begin
+ if(!rst_n)begin snapshot_count<=0;validation_pending<=0;pending_passed<=0;pending_error<=0;end
+ else begin
+ if(frame_commit)snapshot_count<=draw_counts!=0?6'd40:6'd0;
+ else if(snapshot_count!=0)snapshot_count<=snapshot_count-1'b1;
+ if(validation_apply)validation_pending<=0;
+ if(validated && snapshot_lock)begin validation_pending<=1;pending_passed<=passed;pending_error<=validation_error;end
+ end end
+ assign busy=validating || edit_request!=0 || validation_pending;
  integer j;
  always @*begin draw_data=vertices;draw_counts=counts;draw_closed=0;
  for(j=0;j<4;j=j+1)begin
@@ -86,7 +102,7 @@ endcase end endfunction
  // vertex is written before its count is committed. Control reset is unchanged.
  integer data_index;
  always @(posedge clk)begin
- if(edit_request!=0 && !evaluating && !validating && !evaluate_start)begin
+ if(edit_request!=0 && !evaluating && !validating && !evaluate_start && !snapshot_lock && !validation_pending)begin
  case(edit_request)
  1:if(region_count<4 && draft_count<8)begin
  for(data_index=0;data_index<8;data_index=data_index+1)
@@ -95,7 +111,7 @@ endcase end endfunction
  // Deleted regions are excluded by count/closed flags and overwritten on reuse.
  default:begin end
  endcase end
- if(validated && passed)begin
+ if(validation_apply && validation_passed)begin
  for(data_index=0;data_index<4;data_index=data_index+1)
  if(region_count==data_index)vertices[data_index*168+:168]<=draft;
  // Empty draft is invalid; each subsequently valid point is overwritten.
@@ -119,7 +135,7 @@ endcase end endfunction
  if(source_ok && tracking && camera_ready && video_ok && !gain_busy)begin
  seen<=1;last_id<=image_id;last_session<=session;last_epoch<=meta[719:704];last_model<=meta[559:544];
  recent_tip<={meta[99:90],meta[89:79]};tip_age<=0;
- if(!evaluating && !validating && edit_request==0 && !validate_start)begin
+ if(!evaluating && !validating && edit_request==0 && !validate_start && !validation_pending)begin
  job_x<=meta[89:79];job_y<=meta[99:90];job_id<=image_id;job_session<=session;job_revision<=revision;
  job_epoch<=meta[719:704];job_model<=meta[559:544];evaluate_start<=1;
  end end end
@@ -135,7 +151,7 @@ endcase end endfunction
  else edit_error<=5;point_pending<=0;end
  else if(click3)edit_request<=2;else if(click4)edit_request<=3;
  end
- if(edit_request!=0 && !evaluating && !validating && !evaluate_start)begin
+ if(edit_request!=0 && !evaluating && !validating && !evaluate_start && !snapshot_lock && !validation_pending)begin
  edit_request<=0;edit_error<=0;
  case(edit_request)
  1:if(region_count==4)edit_error<=4;else if(draft_count==8)edit_error<=6;
@@ -150,12 +166,12 @@ endcase end endfunction
  revision<=revision+1'b1;configuration_changed<=1;end else edit_error<=7;end
  default:begin end
  endcase end
- if(validated)begin
- if(passed)begin
+ if(validation_apply)begin
+ if(validation_passed)begin
  for(j=0;j<4;j=j+1)if(region_count==j)counts[j*4+:4]<=draft_count;
  region_count<=region_count+1'b1;
  draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;edit_error<=0;
- end else edit_error<=validation_error;end
+ end else edit_error<=validation_reason;end
  if(cancel || (!down2 && (!tip_live || session!=point_session || meta[559:544]!=point_model)))point_pending<=0;
  if(mode!=mode_last || session!=session_last)begin point_pending<=0;configuration_changed<=1;
  if(mode!=1)edit_request<=0;end

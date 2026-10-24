@@ -42,6 +42,8 @@ def specs():
       'stage1_camera_0':('NACK=0 retries=0',('stage1_controls','stage1_top')),
       'stage1_camera_1':('NACK=1 retries=1',('stage1_controls','stage1_top')),
       'stage1_render_14_624':('STAGE1_RENDER_PASS cases=14 pixels=11182080',('stage1_render','stage1_arith')),
+      'stage1_snapshot_protocol':('SERIAL_SNAPSHOT_OVERLAP_PASS cases=7 pixels=1597440',('stage1_regions','stage1_render','stage1_point','stage1_validate','stage1_sequence')),
+      'stage1_snapshot_abort':('SERIAL_SNAPSHOT_MID_LAUNCH_RECOMMIT_PASS cases=8 words=7168',('stage1_render','stage1_arith')),
       'stage1_render_guards':('STAGE1_RENDER_GUARDS_PASS',('stage1_render',)),
       'stage1_overlay':('STAGE1_OVERLAY_PASS cases=8 pixels=6389760',('stage1_osd','stage1_render')),
       'stage1_ui':('STAGE1_UI_CONTRACT_PASS',('stage1_ui_formatter','stage1_ui_text')),
