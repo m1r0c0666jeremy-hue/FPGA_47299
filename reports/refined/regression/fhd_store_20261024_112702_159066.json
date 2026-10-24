@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_frame_store.v": "3ee4efae7e9ba8c7d45767db6621fc044c24a50afaa1468333e7695db7585bd0"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_store_20261024_112702_159066"
+}

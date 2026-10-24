@@ -1,0 +1,18 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_isp.v": "5a3d80deb9686c706008e9b0b4dc4a403ecf382b93f0a2ac72726693fe1c37ae",
+    "rtl\\color_regions\\stable_awb.v": "23d822472a1d49b27dddaac02a5e1ed5ca2d7bfb8190f2e7a7752c88565087bf",
+    "rtl\\color_regions\\stable_packer.v": "d321fd9740e28608f7082337af1050a6b0999f404bce9b0f89be8880a34b7908",
+    "rtl\\color_regions\\refined_demosaic.v": "e9556fb7eb8c3555ce7932cfef9b712b235926d04ff5144ba4b65cef4cbe4a51",
+    "rtl\\color_regions\\refined_raw_matrix_3x3_buffer.v": "1b366c861b45a30b18f36f1903c5e045e9673be130332bfa3044b02bbd4528e7",
+    "rtl\\color_regions\\refined_zhenghe.v": "9fe1a464e5e516b1bdd60d6c6dd6782857eb420c3e6c3961bfcbcfe7bf7d83b3",
+    "rtl\\color_regions\\fhd_line_buffer_demosaic.v": "ead6e7176e3ce8e5d9e07ab51973c7861a19e19213be45e8d7bb1ab566c31bd6",
+    "rtl\\color_regions\\fhd_isp_line_ram.v": "d07e4cbc3348bf2b8c2a1b7768b1a54fde7937568fc8e775b55a9d455b31d546",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\mipi_to_raw_converter.v": "b77e678034af9968d0969655f403cac3b992412b109dba889e8ccb3f6f224975",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\bilinear_interpolation.v": "53a4fc3dea805d59cee9bdab1a090c26c03eb555ab612a1a4698d810c1991baf",
+    "user_source\\hdl_source\\isp\\data128_96\\data128_96.v": "b6acceb73cc76058d4afe6ec593360bae6701646fdda780a9264ada3befd5318"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_actual_isp_20261024_113455_928036"
+}

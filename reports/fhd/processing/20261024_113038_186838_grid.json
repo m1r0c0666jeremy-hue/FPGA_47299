@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_grid.v": "4d522df46c94e29a992c6aa2d83fb947514c537862d5286df8ee430bea265940",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729",
+    "rtl\\color_regions\\fhd_metadata.vh": "46c4d5f52bcf90b0695cd369c9c00645f4540ef5d76f8605fae300bbd98cd172"
+  },
+  "exit_code": 0,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\fhd_processing\\20261024_113038_186838",
+  "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\processing\\20261024_113038_186838_grid.log"
+}

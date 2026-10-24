@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_tracker.v": "02394eb318bf8097a8574cc8a1a9f61c311450da74f5f3454abaa7a475fcd016",
+    "rtl\\color_regions\\fhd_metadata.vh": "46c4d5f52bcf90b0695cd369c9c00645f4540ef5d76f8605fae300bbd98cd172"
+  },
+  "exit_code": 1,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\fhd_processing\\20261024_112819_635722",
+  "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\processing\\20261024_112819_635722_tracker.log"
+}

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
+<rect width="297" height="210" fill="white"/>
+<text x="148.5" y="24" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="7" fill="black">黄紫双色锁定测试图</text>
+<text x="148.5" y="36" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="4" fill="black">紫色后标记 B  →  黄色前标记 A  →  尖端参考 T</text>
+<text x="148.5" y="46" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.8" fill="black">L = 40 mm     D = 20 mm     K = 0.500     色块直径 10 mm</text>
+<circle cx="118.5" cy="97" r="5" fill="#C020E0"/>
+<circle cx="158.5" cy="97" r="5" fill="#FFFF00"/>
+<line x1="176.0" y1="97" x2="181.0" y2="97" stroke="black" stroke-width="0.4"/>
+<line x1="178.5" y1="94.5" x2="178.5" y2="99.5" stroke="black" stroke-width="0.4"/>
+<text x="118.5" y="109" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">紫色 B</text>
+<text x="158.5" y="109" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">黄色 A</text>
+<text x="178.5" y="109" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">参考 T</text>
+<line x1="118.5" y1="116" x2="118.5" y2="126" stroke="black" stroke-width="0.15"/>
+<line x1="158.5" y1="116" x2="158.5" y2="126" stroke="black" stroke-width="0.15"/>
+<line x1="178.5" y1="116" x2="178.5" y2="126" stroke="black" stroke-width="0.15"/>
+<line x1="118.5" y1="124" x2="158.5" y2="124" stroke="black" stroke-width="0.25"/>
+<line x1="118.5" y1="122" x2="118.5" y2="126" stroke="black" stroke-width="0.25"/>
+<line x1="158.5" y1="122" x2="158.5" y2="126" stroke="black" stroke-width="0.25"/>
+<text x="138.5" y="129" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">L = 40 mm</text>
+<line x1="158.5" y1="124" x2="178.5" y2="124" stroke="black" stroke-width="0.25"/>
+<line x1="158.5" y1="122" x2="158.5" y2="126" stroke="black" stroke-width="0.25"/>
+<line x1="178.5" y1="122" x2="178.5" y2="126" stroke="black" stroke-width="0.25"/>
+<text x="168.5" y="129" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">D = 20 mm</text>
+<text x="148.5" y="149" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">A4 横向，按 100%／实际大小打印；关闭“适应页面”。</text>
+<text x="148.5" y="158" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.5" fill="black">贴在同一块硬卡片上整体移动；SW3 拨至 1（下），短按 KEY3 开始。</text>
+<text x="148.5" y="167" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.5" fill="black">锁定后比较黄色准心与黑色 T 中心；先在无黄紫干扰的背景测试。</text>
+<line x1="123.5" y1="183" x2="173.5" y2="183" stroke="black" stroke-width="0.25"/>
+<line x1="123.5" y1="181" x2="123.5" y2="185" stroke="black" stroke-width="0.25"/>
+<line x1="173.5" y1="181" x2="173.5" y2="185" stroke="black" stroke-width="0.25"/>
+<text x="148.5" y="188" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3.6" fill="black">打印后用尺核对：50 mm</text>
+<text x="148.5" y="199" text-anchor="middle" dominant-baseline="central" font-family="SimHei,Microsoft YaHei,sans-serif" font-size="3" fill="black">打印颜色会受纸张、墨水和光照影响；本图不代表实物识别已经验收。</text>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\fhd_raw_bridge.v": "d7294329156c71e889c232bbab746d2fe45e88b84888af348866bae351ad64b4",
+    "rtl\\color_regions\\fhd_isp_line_ram.v": "d07e4cbc3348bf2b8c2a1b7768b1a54fde7937568fc8e775b55a9d455b31d546",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_raw_bridge_20261024_112848_512865"
+}

@@ -1,0 +1,25 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_camera_capture.v": "bac10a6c5ba2fa2094446eafd7de67351f5361e43db59f37b9073a747fc4c0ba",
+    "rtl\\color_regions\\stable_isp.v": "5a3d80deb9686c706008e9b0b4dc4a403ecf382b93f0a2ac72726693fe1c37ae",
+    "rtl\\color_regions\\stable_awb.v": "23d822472a1d49b27dddaac02a5e1ed5ca2d7bfb8190f2e7a7752c88565087bf",
+    "rtl\\color_regions\\stable_packer.v": "d321fd9740e28608f7082337af1050a6b0999f404bce9b0f89be8880a34b7908",
+    "rtl\\color_regions\\refined_demosaic.v": "e9556fb7eb8c3555ce7932cfef9b712b235926d04ff5144ba4b65cef4cbe4a51",
+    "rtl\\color_regions\\refined_raw_matrix_3x3_buffer.v": "1b366c861b45a30b18f36f1903c5e045e9673be130332bfa3044b02bbd4528e7",
+    "rtl\\color_regions\\refined_zhenghe.v": "9fe1a464e5e516b1bdd60d6c6dd6782857eb420c3e6c3961bfcbcfe7bf7d83b3",
+    "rtl\\color_regions\\fhd_line_buffer_demosaic.v": "ead6e7176e3ce8e5d9e07ab51973c7861a19e19213be45e8d7bb1ab566c31bd6",
+    "rtl\\color_regions\\fhd_isp_line_ram.v": "d07e4cbc3348bf2b8c2a1b7768b1a54fde7937568fc8e775b55a9d455b31d546",
+    "rtl\\color_regions\\fhd_raw_bridge.v": "d7294329156c71e889c232bbab746d2fe45e88b84888af348866bae351ad64b4",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\color_regions\\refined_timebase.v": "44a1d6a475f492a1ae7eb1e2ffd59692ebe482394916a3ff57123e6f569551a5",
+    "user_source\\hdl_source\\isp\\csi_unpacket_2lane.v": "b7e093e1e377f5a61a22216e9a4ec404068a3346923758297867b465679dacdd",
+    "user_source\\hdl_source\\isp\\raw10_unpacket_2lane.v": "83f89d7f8e2b19322a7f6a8ddc0cae64fcbd83fed6b742c10f5d2339f59d30fd",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\mipi_to_raw_converter.v": "b77e678034af9968d0969655f403cac3b992412b109dba889e8ccb3f6f224975",
+    "user_source\\hdl_source\\isp\\demosaic_4x_2_0\\bilinear_interpolation.v": "53a4fc3dea805d59cee9bdab1a090c26c03eb555ab612a1a4698d810c1991baf",
+    "user_source\\hdl_source\\isp\\data128_96\\data128_96.v": "b6acceb73cc76058d4afe6ec593360bae6701646fdda780a9264ada3befd5318",
+    "rtl\\01_camera\\camera_status.v": "4e791d6e16a2b001406489f9d03932b9145dc6d052eed1ef0faa8f57dee9e660"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_camera_actual_full_frame_20261024_113545_410146"
+}

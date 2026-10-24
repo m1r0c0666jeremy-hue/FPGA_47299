@@ -1,0 +1,23 @@
+{
+  "profile": "sc500cs_native_1080p30",
+  "source": "E:/FPGA/FPGA26/FPGA_47299-EN_Project_1020",
+  "width": 1920,
+  "height": 1080,
+  "footer_height": 96,
+  "grid": [80, 45],
+  "cell_size": 24,
+  "calibration_roi_size": 32,
+  "calibration_samples_per_frame": 256,
+  "confirmation_frames": 3,
+  "identity_frames": 15,
+  "calibration_frames_per_step": 8,
+  "processing_clock_MHz": 60,
+  "pixel_clock_MHz": 74.25,
+  "serial_clock_MHz": 371.25,
+  "camera_reference_MHz": 24,
+  "receiver_budget_Mbps_per_lane": 960,
+  "source_frame_rate_requires_hardware_measurement": true,
+  "sensor_view": "central_crop_approximately_75_percent_of_720_view_width_and_height",
+  "physical_linear_threshold_scale": 2,
+  "physical_area_threshold_scale": 4
+}

@@ -1,0 +1,184 @@
+{
+  "schema": "fhd_transport_validation_v1",
+  "generated_at": "2026-10-24T11:51:16.389168+08:00",
+  "status": "PASS",
+  "root": "E:\\codex\\FPGAco\\1080p30",
+  "cases": [
+    {
+      "case": "fhd_timing",
+      "record": "reports/refined/regression/fhd_timing_20261024_112701_116152.json",
+      "record_sha256": "58c7988415cd221b649de3de5dd6feca695fdaedcd1d986986f3f2f1b2c10411",
+      "log_sha256": "c1b27b45be00075a457e7b25ed1145706e5335d4b339e88bb341a6908e1250d3",
+      "bench_sha256": "2d4c12cc25548118721bcd0e1ebac7b065d5394d5da7efd101021209b018bdef"
+    },
+    {
+      "case": "fhd_store",
+      "record": "reports/refined/regression/fhd_store_20261024_114956_124922.json",
+      "record_sha256": "0826cd9ee2c8854b183f03e2ee30455a24cbc3b965b1bd89b25b6f0d2fe575ca",
+      "log_sha256": "7002024e94eaf78a5ddf08f5cb899609c4d519a7712a61d46342380091261100",
+      "bench_sha256": "10666345a3332287ea905b07653965ad7632cecd54c309fb96b88adc98659cb2"
+    },
+    {
+      "case": "fhd_geometry",
+      "record": "reports/refined/regression/fhd_geometry_20261024_115017_467379.json",
+      "record_sha256": "9b4a331eeedc64f8af49e5494317cf091af56bf3ba7557bdaa25db0f556652c7",
+      "log_sha256": "9e7cf0162484737311104a01f02cb4295b66ad8d7b9fb7c588220a497889bc07",
+      "bench_sha256": "dadcf648f242e4321c0763626149bee1d1c357b39941f8495105b21221b2dc9e"
+    },
+    {
+      "case": "fhd_display",
+      "record": "reports/refined/regression/fhd_display_20261024_115017_675110.json",
+      "record_sha256": "edc3ab0db1261c51337a977a805f1098dd408b70c2d08e14a8ed79b2cebb0f26",
+      "log_sha256": "61134589bce08c5f90663fa82b34736d167d7415caa3ed84ad2c43d84cfb307b",
+      "bench_sha256": "6d7d6eb7e55656451678e7490f53b3ced11a4a67c9ebed418fbc97cdaff7cd3f"
+    },
+    {
+      "case": "fhd_recovery",
+      "record": "reports/refined/regression/fhd_recovery_20261024_113333_336226.json",
+      "record_sha256": "647791aca7262bcce89d4031314259bf3884398f669c7ba85836f1f5c5dafe7c",
+      "log_sha256": "c260f984aaa2fb2092cc60f7982aa1a23c75560211691461fe68d753c1d3ea4f",
+      "bench_sha256": "bcb2f9f271be9a84b814d19a3980d90840e71df518a781fb888e08fc66ebf674"
+    },
+    {
+      "case": "fhd_ingress_8_7",
+      "record": "reports/refined/regression/fhd_ingress_8_7_20261024_113118_330532.json",
+      "record_sha256": "008bdc5a5c2e9e23f3a075f8cdec7e961efeb066791f6fc24571c430d871b7b2",
+      "log_sha256": "3c1ad9ffd22bb40247a37f26a1de0dffb28f676a0db724f9d18b07f6b8e6ed15",
+      "bench_sha256": "8638fd1868ffe5494d64eb00c61e71e51a8265eaef9aad6afccae2cf62a3ac1d"
+    },
+    {
+      "case": "fhd_ingress_5_11",
+      "record": "reports/refined/regression/fhd_ingress_5_11_20261024_113252_757808.json",
+      "record_sha256": "0153c1a87f47f9203fee8f5dbaa9f6dd838ab66ceb037832f7c82438faa4d02a",
+      "log_sha256": "573a3b62e07844fee9a88a9b0d638110d2e4b5f64307511baa717bc8c6ccf11a",
+      "bench_sha256": "8638fd1868ffe5494d64eb00c61e71e51a8265eaef9aad6afccae2cf62a3ac1d"
+    },
+    {
+      "case": "fhd_ingress_11_5",
+      "record": "reports/refined/regression/fhd_ingress_11_5_20261024_113405_671499.json",
+      "record_sha256": "900bf00d15c1a92cea291a9200d42348c2f09071a4af81aa8178de55a24be9ec",
+      "log_sha256": "f41235c588f082a3ef8dc35841629cd522813ae887084748d3e8f935ba4eac20",
+      "bench_sha256": "8638fd1868ffe5494d64eb00c61e71e51a8265eaef9aad6afccae2cf62a3ac1d"
+    },
+    {
+      "case": "fhd_video_0_0_0",
+      "record": "reports/refined/regression/fhd_video_0_0_0_20261024_113106_889542.json",
+      "record_sha256": "5a56915e2178f973943b04e819d333bd962504a361ae68c5f642bf4db7edd871",
+      "log_sha256": "647db491885619f76aa190b8d537f0b2435052d3e80659bdc83f0119aa25a765",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_0_1_1",
+      "record": "reports/refined/regression/fhd_video_0_1_1_20261024_113106_889542.json",
+      "record_sha256": "731a681890d8d492156dc454e4c9c0ec8596af6d02bb631e463395d3fcc52487",
+      "log_sha256": "26ac8b3a982720f6115ef645f706107761ffbc440a944bb09e518e88140edfed",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_1_0_1",
+      "record": "reports/refined/regression/fhd_video_1_0_1_20261024_113106_889542.json",
+      "record_sha256": "1fe04b71e5ef11dcfb572202ea5251c1e2ada2c786a19dc08f1f334ea5d2491b",
+      "log_sha256": "917a249954c3865b249904edb54582b5039940acfd08ee200ea36ab414927cd7",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_1_1_2",
+      "record": "reports/refined/regression/fhd_video_1_1_2_20261024_113541_681767.json",
+      "record_sha256": "1dde23b63adc7395071011eef1a8cc4bee48c9bfe652ced72315da34f9d850cc",
+      "log_sha256": "0b9a5badc71aba8a39823fe23c949b512a57c2e22d336dd7ee40d5f3a90fe098",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_2_0_2",
+      "record": "reports/refined/regression/fhd_video_2_0_2_20261024_113613_776762.json",
+      "record_sha256": "d5051d029655d9e60ceeb744891f0e231a032112bcd0161bd1fb6a1bfdd6c3eb",
+      "log_sha256": "1155bbd43423413488cdabe75cd0624c6f1c15c90ab39b29ba4cb99f8297af42",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_2_1_3",
+      "record": "reports/refined/regression/fhd_video_2_1_3_20261024_113616_619195.json",
+      "record_sha256": "40e766ce81ae54db568b0ebf00ac98ff87817990aab388a161ad1fb83ce8deb9",
+      "log_sha256": "c153c48be0c98d494f32820ef4ffb88798ea4a2c6f6d1f04b2f26006a3b94d76",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_3_0_3",
+      "record": "reports/refined/regression/fhd_video_3_0_3_20261024_114041_478414.json",
+      "record_sha256": "e9342408866d0b2376605d1caac588af929e0a7894d70e08596f7dcf304061e7",
+      "log_sha256": "c6a9150648af2bd635747477dd191a995ad84ccd30a1c882401d7a0b7cd6a044",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_3_1_0",
+      "record": "reports/refined/regression/fhd_video_3_1_0_20261024_114058_786592.json",
+      "record_sha256": "b38eacb37b67b286e9d691cfb2c3bc2a8592e3f9300d22477f3f7bd7be38f32d",
+      "log_sha256": "4110708e284e1ce8b927aa84409c32eeb6dc66a49ba841b4c800200a8fb11423",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_4_0_0",
+      "record": "reports/refined/regression/fhd_video_4_0_0_20261024_114102_375966.json",
+      "record_sha256": "5c1e2367e39bdafddc28e5b58a01ed24826b26a93b9a52ab529d004aa5f926b8",
+      "log_sha256": "4d4f1a05e305f19cf667f0d2f4195ee36a2a591b441cf6b50ac5050270285276",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_video_4_1_1",
+      "record": "reports/refined/regression/fhd_video_4_1_1_20261024_114444_778645.json",
+      "record_sha256": "5b8d81160c39f8228f9598e2b33c505b2dc488b9b89eb40e2cc0032b0a5e4b7b",
+      "log_sha256": "29d3043e20f7ceefbab9a5e480f3618b252a48b663c5db3ff14cf741496118ca",
+      "bench_sha256": "a4889fbff6c69e4c0eec8f2125b497a8e67dd6b4c5c2a52de8b9bdcf27e591e6"
+    },
+    {
+      "case": "fhd_color_video_0_1_1",
+      "record": "reports/refined/regression/fhd_color_video_0_1_1_20261024_113646_151656.json",
+      "record_sha256": "825f3369089130faef71e11c54e79e0de4bbc028733277105b9fa89e55f9b02a",
+      "log_sha256": "284e1945c96d672c5aa153db7acffafdab73506962783758edb46c51ac33de8f",
+      "bench_sha256": "c8d07b9121235ad29eb80c4013f7ea0d92fba483b51e046019b41e6d83f9c698"
+    },
+    {
+      "case": "fhd_color_video_4_1_3",
+      "record": "reports/refined/regression/fhd_color_video_4_1_3_20261024_113911_548373.json",
+      "record_sha256": "d54de20b16b5a360fd3ac1b6b37ea677f498973b7124f91dbd7a52cc88bebde0",
+      "log_sha256": "9c3fe8b4a8ddc7cde5b2fcee8edcc0436a5b1aefd8b5a5e3da6ffa7385c4c33c",
+      "bench_sha256": "c8d07b9121235ad29eb80c4013f7ea0d92fba483b51e046019b41e6d83f9c698"
+    }
+  ],
+  "case_count": 20,
+  "native_video_cases": 12,
+  "checked_image_pixels": 22671360,
+  "checked_footer_pixels": 2211840,
+  "coverage": [
+    "1920x1080 RGB888;388800 packed128-bit words;360 words per source row",
+    "exact2200x1125 positive44/5 sync and88/4 front148/36 back porches",
+    "all5 zooms and0/180degrees;four display pages represented across10 full native cases",
+    "two full native valid-color model cases;expected supported mask A=1,highlight and binary output",
+    "native source row1079 and rows>=1024 checked in every video case",
+    "concurrent240-word write bursts with independent DDR request stalls and delayed ordered returns",
+    "three asynchronous camera/DDR clock ratios;full frame,SOF overlap,short frame,overflow,reset recovery",
+    "exact full bank3 last address24110392;short and extra writes rejected;v5 source provenance",
+    "v5 tipY1079 and bboxY1024/1079 preserved;8pixel deadband and48pixel follow step",
+    "bounded DDR timeout recovery preserves free-running HDMI sync and diagnostic evidence",
+    "footer starts984;latency and frame age captured at985"
+  ],
+  "hdmi_static_parameters": {
+    "HTOTAL": 2200,
+    "HSA": 44,
+    "HFP": 88,
+    "HBP": 148,
+    "HACTIVE": 1920,
+    "VTOTAL": 1125,
+    "VSA": 5,
+    "VFP": 4,
+    "VBP": 36,
+    "VACTIVE": 1080,
+    "VIDEO_VIC": 34
+  },
+  "hdmi_source_sha256": "877c4d7f1a32c7002087d3df852fb4f6f3fdf94aaa72c0ea1757fa3e6f151491",
+  "limitations": [
+    "Synthetic ordered DDR responder,not physical DDR controller/PHY verification.",
+    "Encrypted MIPI/HDMI physical IP and hardware monitor compatibility require board tests.",
+    "The12 video cases cover all features but are not the full40-way Cartesian mode/zoom/rotation matrix."
+  ]
+}

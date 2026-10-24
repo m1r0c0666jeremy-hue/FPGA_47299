@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\fhd_vtc.v": "7b2ed0cfebbdac793ef8a8158a5b5df1dd821f6ffbc109e7999eb8012f104e0f"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_timing_20261024_112701_116152"
+}

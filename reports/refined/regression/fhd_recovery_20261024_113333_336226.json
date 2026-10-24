@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\refined_line_reader.v": "e7a27442595de3fb77e90cf225a37731a468e24e15b7ce688c6c09cea9853dc4",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "69e3f4f89219ed28e822e30dca2d86b97633a68f65410bddc68a30fa322193ee",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "dc8b94fd7e5a3509dcf8280a370858add3f344ada95062c629026669213b52e8",
+    "rtl\\color_regions\\refined_reset_bridge.v": "1b0ba339e2e992e80875148c1c3e81d4a4099133ab1b54fdb2bdc4e7727f184e",
+    "rtl\\04_tracking\\target_mailbox.v": "8df1103530d658840ece3672e0a03baf71d059c328c579f3f8452c5dc0af8ca6"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\refined\\fhd_recovery_20261024_113333_336226"
+}

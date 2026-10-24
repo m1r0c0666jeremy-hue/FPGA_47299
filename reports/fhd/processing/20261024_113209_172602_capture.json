@@ -1,0 +1,14 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_capture.v": "76c621a553a20c6d37a743ce4f57ea4031827aaafba49402eb11deab111c10ed",
+    "rtl\\color_regions\\stable_model_lane.v": "5e5c983b253067f9f71dc8f7b94d219f20b0a46eb132960d3a731dc1854559a0",
+    "rtl\\color_regions\\stable_filter4.v": "69e3f4f89219ed28e822e30dca2d86b97633a68f65410bddc68a30fa322193ee",
+    "rtl\\color_regions\\stable_grid.v": "4d522df46c94e29a992c6aa2d83fb947514c537862d5286df8ee430bea265940",
+    "rtl\\color_regions\\stable_tracker.v": "02394eb318bf8097a8574cc8a1a9f61c311450da74f5f3454abaa7a475fcd016",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729",
+    "rtl\\color_regions\\fhd_metadata.vh": "46c4d5f52bcf90b0695cd369c9c00645f4540ef5d76f8605fae300bbd98cd172"
+  },
+  "exit_code": 0,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\fhd_processing\\20261024_113209_172602",
+  "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\processing\\20261024_113209_172602_capture.log"
+}

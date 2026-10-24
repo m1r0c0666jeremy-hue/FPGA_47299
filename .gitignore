@@ -1,0 +1,7 @@
+/build/
+/tools/
+*.log
+*.logw
+__pycache__/
+*.pyc
+/td_project/*.al.backup

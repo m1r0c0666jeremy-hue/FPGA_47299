@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_calibration.v": "33fd4993392037fd977579bdef0df5eaaac4a454afcf7481f3d3cd24ab431683",
+    "rtl\\color_regions\\regions_divide.v": "494d97cf9ce375bbb5f5cd920b9c1ed993ab9984b8496cdd8a59f337e4f1b729",
+    "rtl\\color_regions\\fhd_metadata.vh": "46c4d5f52bcf90b0695cd369c9c00645f4540ef5d76f8605fae300bbd98cd172"
+  },
+  "fixture_sha256": "76a02b72808be48c0a0e995b516f3453f80a89f438dae3956ed08359dc68995d",
+  "exit_code": 1,
+  "output": "E:\\codex\\FPGAco\\1080p30\\build\\sim\\fhd_processing\\20261024_114541_818562",
+  "log": "E:\\codex\\FPGAco\\1080p30\\reports\\fhd\\processing\\20261024_114541_818562_calibration_models.log"
+}
