@@ -1,0 +1,131 @@
+{
+  "status": "ONLY_SELECTED_FOUR_PASSED; ADDITIONAL_DEFERRED_EDIT_PROOF_REQUIRED_BEFORE_GATE_OR_ADOPTION",
+  "checks": {
+    "stage1_render_guards": {
+      "record": "reports/refined/regression/private_serial_snapshot_safe_stage1_render_guards_20261024_075359_487121.json",
+      "record_sha256": "2c0435ade6907a7184ddd3e345062ea5e84e29ee085f4f8710251e3945ff8fb2",
+      "log_sha256": "7b893a25fb10b77992d95828cd9d5965b6b29c3721219e10b0b13c57b43e6912",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a"
+      },
+      "bench": "build/sim/refined/private_serial_snapshot_safe_stage1_render_guards_20261024_075359_487121/tb.sv",
+      "bench_sha256": "fbcd973515987fc14bda7bb5e52f9f5e5568ee2aef8e957e13e28c40f6975d0f",
+      "fixtures": {
+        "build/sim/refined/stage1_render_guards_20261024_062428_147678/tb.sv": "01651665a7d562cd903e72b722a935b68fddd3a8fbabae645b95b1d34422a667"
+      },
+      "producers": {
+        "scripts/test_stage1_render_guards.py": "ee79dae48eaa8642a3aaaf7ddf0b86e97bb6e1069477e1652f7ffb94fa92a475",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "private_fixture_adjustment": "Exact same22-bit frozen B coordinate spans snapshot RAM words648/649;21-bit draft point is word672. All existing assertions, commits, resets and deadlines retained."
+    },
+    "stage1_regions": {
+      "record": "reports/refined/regression/private_serial_snapshot_safe_stage1_regions_20261024_075359_752192.json",
+      "record_sha256": "6ab740428576a2d9ffac6a625017bb6333bc12339fe6089b89322b4530c6928c",
+      "log_sha256": "535086ec5c246597bb577fee1d6afa986b307e67eecbc163497dfe621a04d647",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_regions.v": "bc0a58c4c3c8cd0dcc22933a41b7d4fef071a8a66b18b6b6eacc910e36858fd6",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a",
+        "build/stage1_valid_storage_20261024_0027/stage1_regions_reference.v": "c65dad62fab30bc551c134eb374a78d41c8d29fdc4eb847623cc4a59e14e9173",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_render_reference.v": "9e1d5b20c8bc982d013448f10bed0e40f43024d3813531fc345faee9dbf63491"
+      },
+      "bench": "build/sim/refined/private_serial_snapshot_safe_stage1_regions_20261024_075359_752192/tb.sv",
+      "bench_sha256": "94476d635896ed07a758b3e30500f79563a475ec097af3cc97b5e5ec1b8b81ab",
+      "fixtures": {
+        "build/sim/refined/stage1_regions_capacity_20261024_062428_918357/tb.sv": "6db0c4201913d078e7d591cef17ab8a6a36068d60407ee42582aa7e9e7ba2cc8"
+      },
+      "producers": {
+        "scripts/test_stage1_regions_capacity.py": "e333d5c2b5b2479461badb53380e7f16853a267e5765869f9c89581af1b36933",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9",
+        "scripts/test_stage1_regions.py": "8a6eee76a38c4b3bdc717275c5a446346b91405b2df0989c295a6e6e1bc7f557"
+      },
+      "private_fixture_adjustment": "Golden old-controller/F renderer vs private G. All controller cycle/coordinate/capacity and original editor assertions retained. Coupled display comparison covers every active pixel; blanking-only ready/preparation may differ by40 copy clocks plus1 fetch/edge. Existing10000-clock readiness deadlines remain; extra adversarial deferral/recommit proof is mandatory."
+    },
+    "stage1_render_14_624": {
+      "record": "reports/refined/regression/private_serial_snapshot_safe_stage1_render_14_624_20261024_075907_049985.json",
+      "record_sha256": "5f1099f17999d3292bf1f49f8888dc47e7d7780fa7c6c235bcd86c6aab61ac89",
+      "log_sha256": "afbc9f10a996be037df08942a66de03e3e82faeda42e9d446fdf51631601be3f",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a"
+      },
+      "bench": "build/sim/refined/private_serial_snapshot_safe_stage1_render_14_624_20261024_075907_049985/tb.sv",
+      "bench_sha256": "2caddac53951f2a4ba168bd1aa2f3c88dc0fe703e9d84fbe90c9e40ac308180d",
+      "fixtures": {
+        "build/stage1_render_vectors/contexts.hex": "baf04d0f7afc749ed9fe8d230664237c5320142b19904e7203d275fbcff53563",
+        "build/stage1_render_vectors/expected_0.hex": "4acecc65ac1d4117e0834da6ebf422d4c115322cc0512458010b90611cfe735b",
+        "build/stage1_render_vectors/expected_1.hex": "894b431885e99e570af466e4fa3f2b16c1eb280033b728d0ec8825cdb10f9d3e",
+        "build/stage1_render_vectors/expected_10.hex": "65941fae4ce008d9b480f74494b105b30559fbd1f8023c9fc75733ca732b388c",
+        "build/stage1_render_vectors/expected_11.hex": "777072900237806884a3f6541c2636b6379deee422da3d46cc594a3788b8e8e7",
+        "build/stage1_render_vectors/expected_12.hex": "81a6fe4ec8dbe79147cd7003d8f14002ac46346b9d3e3735b7647d711c1b949a",
+        "build/stage1_render_vectors/expected_13.hex": "bcea37e34dc06996d74289fdcd7b2cee2057a8024d7f52cf0c6fd2d2ce8f58f5",
+        "build/stage1_render_vectors/expected_2.hex": "2d71f8daee0d134bb392b4691d3c6d1bbc212e6dbba837a7a534e5c8363f403f",
+        "build/stage1_render_vectors/expected_3.hex": "789ba8eae2a8e5dbe00a4c42580c4e22bbf2cd2876831ece1a2aa40a2bcdcf4e",
+        "build/stage1_render_vectors/expected_4.hex": "517bc5afaad731deb36fca93e16670a8b748b1dd1e5c1cdb037b75350d574b6b",
+        "build/stage1_render_vectors/expected_5.hex": "181566b530618ec23ffc3da021e00fabcdd0d6833bbe239dbf378207cf0be786",
+        "build/stage1_render_vectors/expected_6.hex": "a0678d501255ba5d90765e2b7fb5d5d4a55b2dab846218dd7274c38082f39c4a",
+        "build/stage1_render_vectors/expected_7.hex": "6aadf96b22eff328de842e1b74d4e491cb6c7b6c11833e9bdb443050bc26cc02",
+        "build/stage1_render_vectors/expected_8.hex": "b091abfec99fde544896f78e489e8b577e5b698abc41dfcb53a06044b6fb7b5c",
+        "build/stage1_render_vectors/expected_9.hex": "05cf8ae4206b189b8165d6ff52aff7fb6f1553f89fc7c485971f26a5d6c39792",
+        "build/sim/refined/stage1_render_14_624_20261024_062428_756469/tb.sv": "2caddac53951f2a4ba168bd1aa2f3c88dc0fe703e9d84fbe90c9e40ac308180d"
+      },
+      "producers": {
+        "scripts/test_stage1_render.py": "9f254aae0ee8402bd426944567159aef0f3c96724a0883878adbf207336afce1",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "private_fixture_adjustment": null
+    },
+    "stage1_overlay": {
+      "record": "reports/refined/regression/private_serial_snapshot_safe_stage1_overlay_20261024_080456_004832.json",
+      "record_sha256": "35d1b7a36c72214b3c7c36f0218aa862ee4bb13474aec37400d1e6a9f1454a7d",
+      "log_sha256": "79415a23ac0bff9c7d68aa49c43039c9181b955c91c8fbc4359486b99986707d",
+      "inputs": {
+        "rtl/color_regions/stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+        "rtl/color_regions/refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+        "rtl/color_regions/refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+        "rtl/color_regions/refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+        "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+        "rtl/color_regions/refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "build/stage1_serial_snapshot_20261024_0752/stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a",
+        "rtl/color_regions/stage1_ui_formatter.v": "ba5606a60b2e57240e1aab11c5a3a9a44ad1d7e24855fb9ea82851e30565bc0b",
+        "rtl/color_regions/stage1_ui_text.v": "ca387078bd6e1272cec36043c0079615a351d29f51a20ceb76345806ede90ad4"
+      },
+      "bench": "build/sim/refined/private_serial_snapshot_safe_stage1_overlay_20261024_080456_004832/tb.sv",
+      "bench_sha256": "7b8506e01e8beddbc2e351efa3e13679d6107c49f6dd7b5d80e100d234b67d9a",
+      "fixtures": {
+        "build/stage1_overlay_vectors/0.hex": "815f451f8b34993464e67436750352b28d868c10a277a6d0adaf6e53673faad2",
+        "build/stage1_overlay_vectors/1.hex": "b3caeb7653ec2e538b5abf80ff4032ebbd46596f62faa50bb3afe5f7de31eb6b",
+        "build/stage1_overlay_vectors/2.hex": "0883145267f0d8697980eec755b291ca0117f7ddf170a966d28ab71ca90e984f",
+        "build/stage1_overlay_vectors/3.hex": "d42e6eff38e5c91ada584e97ad5aad3b79be18e7c95a38812d50e7550ab24710",
+        "build/stage1_overlay_vectors/4.hex": "fab59cea164544ed0656b08fd70543b61e9f07f0328388480ea4cc2d84e962e1",
+        "build/stage1_overlay_vectors/5.hex": "2dadaff1abaca969881649a9e3821a570526fad3e04ae7cd9f2a029d5cb6c6d4",
+        "build/stage1_overlay_vectors/6.hex": "adfda4f4cb3e042962305ae110d56a8d116df87e91c87f66f16053a0bd9a3dc9",
+        "build/stage1_overlay_vectors/7.hex": "ed62f0ce486f259db8491eff4a5c9bd258fc704284bda8dbff13d13a955ff245",
+        "build/sim/refined/stage1_overlay_20261024_063202_851537/tb.sv": "7b8506e01e8beddbc2e351efa3e13679d6107c49f6dd7b5d80e100d234b67d9a"
+      },
+      "producers": {
+        "scripts/test_stage1_overlay.py": "067b5f5526d6fa2a3308e7ac70146774d47b70e5d53aa33de523983263cc6dae",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "private_fixture_adjustment": null
+    }
+  },
+  "candidates": {
+    "stage1_regions.v": "bc0a58c4c3c8cd0dcc22933a41b7d4fef071a8a66b18b6b6eacc910e36858fd6",
+    "stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a"
+  },
+  "source_sha256": "968226ab3546337905dd0f0c992886a445c3fcb7bf9a4b1e71c4c69861ad2400",
+  "producer_sha256": "76962eb27ee107828e29f4d05cf9dd55961bf24e8e1ff26c9dc1c1926f76e964",
+  "formal_inputs_unchanged": true
+}

@@ -5,6 +5,7 @@ O=Path(__file__).resolve().parent;R=O.parents[1];sys.path.insert(0,str(R/'script
 from stage1_policy import canonical_build_inputs
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert subprocess.check_output(['powershell','-NoProfile','-Command','@(Get-Process -Name td_commands_prompt -ErrorAction SilentlyContinue).Count'],text=True).strip()=='0','Wait for formal TD; never run a second TD'
+assert not (O/'known_abort_failure.json').exists(),'Known mid-launch abort failure: use a separately proven fixed candidate'
 proof=json.loads((O/'validation_all.json').read_text());assert len(proof['checks'])==5
 assert sha(O/'seal.py')==proof['producer_sha256'] and sha(O/'source.json')==proof['source_sha256']
 assert all(sha(O/n)==h for k in ('candidates','references','individual_producers') for n,h in proof[k].items())

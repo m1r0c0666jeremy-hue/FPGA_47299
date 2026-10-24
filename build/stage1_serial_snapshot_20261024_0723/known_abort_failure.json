@@ -1,0 +1,7 @@
+{
+  "status": "DISQUALIFIED_PENDING_ABORT_FIX_NO_ADOPTION",
+  "record": "reports/refined/regression/private_serial_snapshot_mid_launch_20261024_075122_962822.json",
+  "record_sha256": "d19c80de18a45897dd72d264ad7a63074b8eae59f2a634daceba52f1e86f0228",
+  "log_sha256": "41ff4d2d3d719badcbe64f58ccb48ecb4a4f79cdb07b64633332c3367afae046",
+  "scope": "Additional standalone mid-divider-launch recommit differs from clean latest-job result. Actual video frame cadence is much slower, but G2 must not be adopted with this known robustness issue."
+}
