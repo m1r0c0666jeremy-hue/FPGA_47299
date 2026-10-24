@@ -1,0 +1,6 @@
+{
+  "commit": "28aaa0cf68d54b8871dcaa6e75a9dfae0026ae0a",
+  "branch": "main",
+  "local_only": true,
+  "note": "Verified source/evidence commit; subsequent artifact-index commits do not change FPGA inputs."
+}
