@@ -1,5 +1,7 @@
+from pathlib import Path
 """Complete 96-row pixel oracle for region-mode and hidden critical messages."""
 from refined_testlib import R,run
+import hashlib
 from stage1_test_sources import EXTRA_OSD
 import re,json
 
@@ -14,11 +16,11 @@ def main():
     def add(name,line,**kw):
         d=dict(name=name,mode=2,state=2,n=2,expected=1,actual=0,nd=0,occupied=1,distance=86,dwell=2500,trend=0,error=0,tip=1,show=1,muted=0,busy=0,line=line)
         d.update(kw);assert len(line)<=64,(name,len(line));cases.append(d)
-    def edit(msg='TIP READY',dist='1234',n=2):return f"EDIT {'ABCD-'[n]} PTS 3/8 SAVE {n}/4 {msg:<16} D{dist}PX IN - T012.3s ST"
-    def test(state,detail,occupied='A',dist='0086',target='B'):return f'{state:<8} NEXT {target} IN {occupied}  D{dist}PX T002.5s {"STABLE":<8} {detail:<17}'
-    add('edit',edit(),mode=1,nd=3,occupied=0,distance=1234,dwell=12345,state=0)
-    add('edit_cross',edit('SELF CROSS/ZERO'),mode=1,nd=3,occupied=0,distance=1234,dwell=12345,state=0,error=2)
-    add('edit_no_area',edit('TIP READY','----',0),mode=1,n=0,nd=3,occupied=0,distance=0,dwell=12345,state=0)
+    def edit(msg='TIP READY',dist='1234',n=2):return f"EDIT {'ABCD-'[n]} PTS 2/2 SAVE {n}/4 {msg:<16}              T012.3s   "
+    def test(state,detail,occupied='A',dist='0086',target='B'):return f'{state:<8} NEXT {target} IN {occupied}          T002.5s {"":<8} {detail:<17}'
+    add('edit',edit(),mode=1,nd=2,occupied=0,distance=1234,dwell=12345,state=0)
+    add('edit_cross',edit('RECT TOO SMALL'),mode=1,nd=2,occupied=0,distance=1234,dwell=12345,state=0,error=2)
+    add('edit_no_area',edit('TIP READY','----',0),mode=1,n=0,nd=2,occupied=0,distance=0,dwell=12345,state=0)
     add('running',test('RUN','TIP READY'))
     add('waiting_geometry',test('RUN','BUSY',dist='----'),busy=1)
     add('wait_out',test('WAIT OUT','LEAVE ALL AREAS'),state=1)
@@ -29,7 +31,7 @@ def main():
     add('hidden_pause','PAUSED. KEY3 RESUME',state=3,show=0)
     add('hidden_lost','INPUT LOST. KEY2 RETEST',state=7,show=0,tip=0)
     add('hidden_run','',state=2,show=0)
-    out=R/'build/stage1_region_footer_vectors';out.mkdir(parents=True,exist_ok=True)
+    out=R/'build'/('stage1_rect_region_footer_vectors_'+hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]);out.mkdir(parents=True,exist_ok=True)
     paths=[]
     for i,d in enumerate(cases):
         pixels=[0x101824]*(1280*96)
@@ -45,7 +47,7 @@ def main():
         path=out/f'{i}.hex';path.write_text(''.join(f'{p:06x}\n' for p in pixels));paths.append(path)
     source=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,de=0;reg [767:0] meta=0;
-reg [1:0] umode=1,trend=0;reg [3:0] state=0,nd=3,occupied=0,error=0;
+reg [1:0] umode=1,trend=0;reg [3:0] state=0,nd=2,occupied=0,error=0;
 reg [2:0] n=2,target=1,actual=0;reg [10:0] distance=1234;reg [19:0] dwell=12345;reg tip=1,show=1,muted=0,busy=0;
 wire vs,hs,ode;wire [23:0] rgb;
 stage1_osd dut(umode,672'd0,168'd0,16'd0,4'd0,n,target,actual,nd,state,4'd0,occupied,muted,trend,distance,dwell,error,4'd0,busy,tip,1'b0,1'b0,3'd5,

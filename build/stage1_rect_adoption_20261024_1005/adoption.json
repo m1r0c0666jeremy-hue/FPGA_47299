@@ -1,0 +1,215 @@
+{
+  "status": "RECTANGLE_CORE_SOFTWARE_PASSED_FULL_REGRESSION_AND_PHYSICAL_PENDING",
+  "previous_compiler": "555020828e32058ec6b7a3c7f61045b4c5cbbcab",
+  "before_archive_sha256": "4e5b5335b6b4d75d3b39177eefeb8c2053aa917cc3b98dc031f65ad0e9fbc23e",
+  "before_manifest_sha256": "48522d597c04fe8aeb2e8b5c9fdf5bcc52df68df856a55875a66664e4eaaeb32",
+  "active_compiler_input_count": 304,
+  "old_baseline_input_count": 297,
+  "protected_files": 5,
+  "regions": 4,
+  "corners_per_region": 2,
+  "minimum_coordinate_extent": 6,
+  "guard_band_pixels": 2,
+  "deferred": [
+    "arbitrary polygons",
+    "precise Euclidean distance",
+    "approach/away display"
+  ],
+  "current_core_checks": {
+    "stage1_regions": {
+      "record": "reports/refined/regression/stage1_regions_20261024_120716_128466.json",
+      "record_sha256": "e4ccc12fc7227b313d87304e71575b62d8013bfe9bef1720ed70993bc728b33f",
+      "log_sha256": "335a7b8b0b15e0cec3cf8d4b2653c1e23bb8fdaeef6b059efe8c6232c570009e",
+      "inputs": {
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_regions.v": "4657c8d15f6aa186b986daef646da8717c33f4a2a56a2c24a93cbededf1a4156",
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+      },
+      "fixture_inputs": {
+        "build/sim/refined/stage1_regions_20261024_120716_128466/tb.sv": "673692c5cdaea6ae05753a33833c23bee926581a89c69f1372f3f583206d337b"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_regions.py": "da766d11c67dc510e844ead781774529397d5c2f1acfb33d6cb634a52cb7494b",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_render_14_624": {
+      "record": "reports/refined/regression/stage1_render_14_624_20261024_120454_324836.json",
+      "record_sha256": "116204c3240ce9f3121b8a24dfa45051f031b0bc52d10d7cb7f8837366adb2ab",
+      "log_sha256": "364e657412289b480d369e77c5c7342d9444442af90820b5e55666489d350342",
+      "inputs": {
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+      },
+      "fixture_inputs": {
+        "build/stage1_rect_render_vectors_653f39289bc1/contexts.hex": "1500ec401a61c4b92dc3e3e950bf6ff15b6761c045c2e2ddfecc54b2e9bc9e0a",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_0.hex": "8e18fc34388c1358ef19f8f34290480ad71bd287c60585b4caf0194dba6bb161",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_1.hex": "7c2dd27a9d636443fb19cebe5bef043dc18d5057f62ed8f51f0a599c05d953c9",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_10.hex": "495e8b21095c1b9d08ce07a128ca267684f0aa403cf142764e9a62f56d26d221",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_11.hex": "a4217a0fa46f999f40224fb5c00e830fa24fc1b3c4989f784d46eb1f4aec54a5",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_12.hex": "81a6fe4ec8dbe79147cd7003d8f14002ac46346b9d3e3735b7647d711c1b949a",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_13.hex": "d908842f8344f307aa2543860ba57b34089021d1d1725651abf90862bd9c8d59",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_2.hex": "520f7561dd65670cad42bd62c9b0bc0730fafeb95b27ac49e4eb671cfda19be2",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_3.hex": "cb0b361ddde987d7234e738cfd6c526a16d822d1cb0b78def99ac9bbd0c92570",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_4.hex": "10f614b478d2c98dd474d3d1f532d5f0a7301d2cbb5d527405ce7d76e36724f1",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_5.hex": "910304dc3e16a8f3507684f396fe88ba8b404772367b27de4a060c0846ac4180",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_6.hex": "9a82e8803b34f69786422ec12d12225fae5d2834e988d856d6d6bc7cf9cfc9ca",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_7.hex": "2717fcaff57ecd1edbe6efd0a6dce300e0ced3869cfb56e43e459e511ea94539",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_8.hex": "05ed98ed8f8f6b0a61219aa773bb0573d92fa4770509a4590330a32f57535a0f",
+        "build/stage1_rect_render_vectors_653f39289bc1/expected_9.hex": "d311dc26bb07b02fc4ca7aa6ee06e1ba0802009606c768688842ce360ae4064b",
+        "build/sim/refined/stage1_render_14_624_20261024_120454_324836/tb.sv": "9e74d7b385b33109f8dcf5c404dd7efafaff3b7894db4373df4a1ea9b63eac42"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_render.py": "653f39289bc1baedc050a3ac0d29f3f92df7c840de5120f97e9d6fb69f1a709f",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_rect_capacity": {
+      "record": "reports/refined/regression/stage1_rect_capacity_20261024_120724_883156.json",
+      "record_sha256": "ccb5ffbc9d94e17113ce2d31e3252dbba0a3f64afa82c564187314e9f2fa498d",
+      "log_sha256": "7f3c7544eec05725f292f32912664a632378061a6972b06972432e0aa7d03dc8",
+      "inputs": {
+        "rtl/color_regions/stage1_regions.v": "4657c8d15f6aa186b986daef646da8717c33f4a2a56a2c24a93cbededf1a4156",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+      },
+      "fixture_inputs": {
+        "build/sim/refined/stage1_rect_capacity_20261024_120724_883156/tb.sv": "41a76b12c9e41147c5428e89a5dd90003e4bec89e87b5356a987ac037e097157"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_rect.py": "7a037978f6d702db34c8a73d601e706d417a3485948dc97935e1e9926c0fd6df",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_rect_geometry": {
+      "record": "reports/refined/regression/stage1_rect_geometry_20261024_120725_170458.json",
+      "record_sha256": "3cc2d0581e7ab536b9cadbb7bf217c9fdb35d8f98b85916206b8f49fb7279854",
+      "log_sha256": "1825fe913b64ed0be2e4e34b467a86bbd5fbbf75a32241d292b06d4895b5c7da",
+      "inputs": {
+        "rtl/color_regions/stage1_regions.v": "4657c8d15f6aa186b986daef646da8717c33f4a2a56a2c24a93cbededf1a4156",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+      },
+      "fixture_inputs": {
+        "build/sim/refined/stage1_rect_geometry_20261024_120725_170458/tb.sv": "82f42c2abab6bc24b49b25028f7a5d0ced0d8daa9013c36e0efe3fe41198d070"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_rect.py": "7a037978f6d702db34c8a73d601e706d417a3485948dc97935e1e9926c0fd6df",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_render_guards": {
+      "record": "reports/refined/regression/stage1_render_guards_20261024_120724_605827.json",
+      "record_sha256": "b1eecb175ca4869886a791e648287832ef0f7301e524389c41b49e4f6a0b6857",
+      "log_sha256": "e584d7f3f552be9852cf05d35b7a17127e5933043024b3ad6b228f1a57eb152f",
+      "inputs": {
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+      },
+      "fixture_inputs": {
+        "build/sim/refined/stage1_render_guards_20261024_120724_605827/tb.sv": "4aa759d1ae9e75924ec84e56c944e88c474a19a6ad1a39ecfbc6e31c198a5fa6"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_render_guards.py": "1f4ecafa7d93a00b66c4d7c215684344cd9062f3c6c97a796c7529c90ce5356e",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_overlay": {
+      "record": "reports/refined/regression/stage1_overlay_20261024_120455_907533.json",
+      "record_sha256": "80195ea2651a8d50345adffbf403b6345ecbda24105c9ac7d6a8efa1a7e01fd4",
+      "log_sha256": "a9d5db08788651b609519994346ef1db843c9cce5c80a7f1abfa27ffef89e2aa",
+      "inputs": {
+        "rtl/color_regions/stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+        "rtl/color_regions/refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+        "rtl/color_regions/refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+        "rtl/color_regions/refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+        "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+        "rtl/color_regions/refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+        "rtl/color_regions/stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+        "rtl/color_regions/stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+      },
+      "fixture_inputs": {
+        "build/stage1_rect_overlay_vectors_8531590602f0/0.hex": "2a5aeb0baa2ecd1aeea39e9ffbc8e26633c27beeb8ee46ba06314a7da257f60e",
+        "build/stage1_rect_overlay_vectors_8531590602f0/1.hex": "819999422380bec25b541e16cd5e4fe10c0a903b0b6b7fea7020f69ff8c4aa2b",
+        "build/stage1_rect_overlay_vectors_8531590602f0/2.hex": "50088837e38f676ea71dfdbb4b91b8c9eb5dcae7f211032434a1e13c7e5884ee",
+        "build/stage1_rect_overlay_vectors_8531590602f0/3.hex": "c6fc8e2a26131f77be00836588d79fa8d2429aedca9d27904cee5b2e3d869103",
+        "build/stage1_rect_overlay_vectors_8531590602f0/4.hex": "d29aa117898694f7f79a1781018338603ef0f7f30a90bfcafea5135e83b9b26e",
+        "build/stage1_rect_overlay_vectors_8531590602f0/5.hex": "db9f348f379390d959913afbe1c5b388884d9537f1bff82bc5f1c8cbab035ae5",
+        "build/stage1_rect_overlay_vectors_8531590602f0/6.hex": "5a0af0890f0595452549fcd76537c8b63f672bbdb342d125a46263aa42dc997f",
+        "build/stage1_rect_overlay_vectors_8531590602f0/7.hex": "ed62f0ce486f259db8491eff4a5c9bd258fc704284bda8dbff13d13a955ff245",
+        "build/sim/refined/stage1_overlay_20261024_120455_907533/tb.sv": "a106bc465d90bc8afb59d493751d3f290706be741949f68dcc7b494187d0722c"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_overlay.py": "8531590602f08d59fc63040b34aa33879614a459736905291fd70d65f5240d8c",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_ui": {
+      "record": "reports/refined/regression/stage1_ui_20261024_120724_291500.json",
+      "record_sha256": "dac09598f130847df4d1b15c5be8c735af714dd650633f985a060eaac48b98fe",
+      "log_sha256": "bfb9b4451b9477ee138c08e6db4885037e6cdb28a4d27d776dc0b879077518fd",
+      "inputs": {
+        "rtl/color_regions/stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9",
+        "rtl/color_regions/stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+        "scripts/test_stage1_ui.py": "00cc52607d30ef5a6abb83128dc5e964266ff4ed26e79e5356c8161c8851d658"
+      },
+      "fixture_inputs": {
+        "build/sim/refined/stage1_ui_20261024_120724_291500/tb.sv": "67e07bf286bd84c1be7947d4f4078ee0da6a016874535c267d5965ebf6a2167e"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_ui.py": "00cc52607d30ef5a6abb83128dc5e964266ff4ed26e79e5356c8161c8851d658",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    },
+    "stage1_region_footer": {
+      "record": "reports/refined/regression/stage1_region_footer_20261024_120454_571112.json",
+      "record_sha256": "c8964eb5d02fc4b87ce2aeba607c415f3288295434135a77457506fee547fce7",
+      "log_sha256": "7c8c2860de86991e088fc300aea9e11ab67f8f4f7d88d1f009b31b9daa1e2eab",
+      "inputs": {
+        "rtl/color_regions/stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+        "rtl/color_regions/refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+        "rtl/color_regions/refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+        "rtl/color_regions/refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+        "rtl/color_regions/refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+        "rtl/color_regions/refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+        "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+        "rtl/color_regions/stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+        "rtl/color_regions/stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+      },
+      "fixture_inputs": {
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/0.hex": "5014f666bfd2a3805d8470a78b6bdffde66f79cc23403709fbab043257b0a74c",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/1.hex": "e0a82b671e920e292d7a41e8c35a78d3f267434f0dd2ab5c261f49d7e7321000",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/2.hex": "9e396f58916c370cdb848e1bdf728a135fcf6c5594844f269e5b4ae548178161",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/3.hex": "5b89988f0fc839224f841f60c9b76df72c343a9f9e87d7da8eaa2093687de911",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/4.hex": "73d2af806e05d33d9f59b66c01cb0aaad1168d883620d0f203b0d83ec3e6e0e7",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/5.hex": "e28ba3ef0da9ea95cda4ccb63fee091b16e8ada3b4cd7cbbd217327b5b0e296b",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/6.hex": "0226b66ecd70961e24642c80d1d8bf4afca1e9a17aa0a91e6892923d2d69cf2d",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/7.hex": "40d5963ad4674ce73becae708e10f25c0fb51378ef95a5f86499e3049ba3c5e0",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/8.hex": "02701bd9800ed5deda9e4e1723e6b5fcfb7887cb6cec8cba36abc28185a0dd2b",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/9.hex": "7456d3e27adbf0abf17ec85480a1b7245ca46e9e96c703385e3c8c2d556bf96c",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/10.hex": "0ff8e97435a308f092c2bf680046c56dcc6a4f6fd90ed8456a4634f65aa10076",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/11.hex": "e19b7ebbcfdb4280e58db67b594b0f9b999a6e6c01348a7721ee74fa68ff698d",
+        "build/stage1_rect_region_footer_vectors_042ccc84d10b/12.hex": "63829c572ec196bd976573a656abe7189e0727679ef2f396d5f5579ac51e3011",
+        "build/sim/refined/stage1_region_footer_20261024_120454_571112/tb.sv": "af4eea42ae84b5b5fc33e2405f5434a736f70a7ec62087ab3cc781564f540f9a"
+      },
+      "producer_inputs": {
+        "scripts/test_stage1_region_footer.py": "042ccc84d10b77d78077f7dfa65cb94bb8afdf2ff9f9b0386f164093997d381c",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+      }
+    }
+  },
+  "modified_rtl": {
+    "rtl/color_regions/stage1_regions.v": "4657c8d15f6aa186b986daef646da8717c33f4a2a56a2c24a93cbededf1a4156",
+    "rtl/color_regions/stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+    "rtl/color_regions/stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+    "rtl/color_regions/stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+  },
+  "no_push_board_or_flash": true
+}

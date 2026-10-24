@@ -71,7 +71,7 @@ function [7:0] edit_char;input [5:0] column;begin edit_char=0;case(column)
 6'd9:edit_char=8'd29;
 6'd11:edit_char=8'd1+fdraft;
 6'd12:edit_char=8'd42;
-6'd13:edit_char=8'd9;
+6'd13:edit_char=8'd3;
 6'd15:edit_char=8'd29;
 6'd16:edit_char=8'd11;
 6'd17:edit_char=8'd32;
@@ -95,16 +95,6 @@ function [7:0] edit_char;input [5:0] column;begin edit_char=0;case(column)
 6'd37:edit_char=rom_glyph;
 6'd38:edit_char=rom_glyph;
 6'd39:edit_char=rom_glyph;
-6'd41:edit_char=8'd14;
-6'd42:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[12+:4]):8'd41;
-6'd43:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[8+:4]):8'd41;
-6'd44:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[4+:4]):8'd41;
-6'd45:edit_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[0+:4]):8'd41;
-6'd46:edit_char=8'd26;
-6'd47:edit_char=8'd34;
-6'd49:edit_char=8'd19;
-6'd50:edit_char=8'd24;
-6'd52:edit_char=foccupied[0]?8'd11:foccupied[1]?8'd12:foccupied[2]?8'd13:foccupied[3]?8'd14:8'd41;
 6'd54:edit_char=8'd30;
 6'd55:edit_char=8'd1+dwell_bcd[12+:4];
 6'd56:edit_char=8'd1+dwell_bcd[8+:4];
@@ -112,8 +102,6 @@ function [7:0] edit_char;input [5:0] column;begin edit_char=0;case(column)
 6'd58:edit_char=8'd39;
 6'd59:edit_char=8'd1+dwell_bcd[3:0];
 6'd60:edit_char=8'd38;
-6'd62:edit_char=ftrend==1?8'd11:ftrend==2?8'd11:8'd29;
-6'd63:edit_char=ftrend==1?8'd26:ftrend==2?8'd33:8'd30;
 endcase end endfunction
 function [7:0] test_char;input [5:0] column;begin test_char=0;case(column)
 6'd0:test_char=rom_glyph;
@@ -132,13 +120,6 @@ function [7:0] test_char;input [5:0] column;begin test_char=0;case(column)
 6'd16:test_char=8'd19;
 6'd17:test_char=8'd24;
 6'd19:test_char=foccupied[0]?8'd11:foccupied[1]?8'd12:foccupied[2]?8'd13:foccupied[3]?8'd14:8'd41;
-6'd22:test_char=8'd14;
-6'd23:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[12+:4]):8'd41;
-6'd24:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[8+:4]):8'd41;
-6'd25:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[4+:4]):8'd41;
-6'd26:test_char=fn!=0 && ftip && !fbusy?(8'd1+distance_bcd[0+:4]):8'd41;
-6'd27:test_char=8'd26;
-6'd28:test_char=8'd34;
 6'd30:test_char=8'd30;
 6'd31:test_char=8'd1+dwell_bcd[15:12];
 6'd32:test_char=8'd1+dwell_bcd[11:8];
@@ -146,14 +127,6 @@ function [7:0] test_char;input [5:0] column;begin test_char=0;case(column)
 6'd34:test_char=8'd39;
 6'd35:test_char=8'd1+dwell_bcd[3:0];
 6'd36:test_char=8'd38;
-6'd38:test_char=rom_glyph;
-6'd39:test_char=rom_glyph;
-6'd40:test_char=rom_glyph;
-6'd41:test_char=rom_glyph;
-6'd42:test_char=rom_glyph;
-6'd43:test_char=rom_glyph;
-6'd44:test_char=rom_glyph;
-6'd45:test_char=rom_glyph;
 6'd47:test_char=fstate==6?(8'd15):(rom_glyph);
 6'd48:test_char=fstate==6?(8'd34):(rom_glyph);
 6'd49:test_char=fstate==6?(8'd26):(rom_glyph);

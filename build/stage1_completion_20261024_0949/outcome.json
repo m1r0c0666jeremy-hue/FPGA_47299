@@ -1,0 +1,7 @@
+{
+  "status": "CANCELLED_BY_USER_PAUSE_NO_PACKAGING",
+  "time": "2026-10-24T10:00:33.906066+08:00",
+  "pid": 2512,
+  "session_exit_code": 1,
+  "pause_record": "reports/stage1/pause_20261024_0958.json"
+}

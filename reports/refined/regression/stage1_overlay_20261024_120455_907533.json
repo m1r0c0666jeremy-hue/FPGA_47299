@@ -1,0 +1,32 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "b61000a690b255bfdc6de75d77214bfda7c6161a2c17ae4f3ec6b7fa4047af71",
+    "rtl\\color_regions\\stage1_ui_text.v": "a91d8161c6d83717b77954dbdca373bccbb622f208053494a2c92d8236fd6be9"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_overlay_20261024_120455_907533",
+  "fixture_inputs": {
+    "build/stage1_rect_overlay_vectors_8531590602f0/0.hex": "2a5aeb0baa2ecd1aeea39e9ffbc8e26633c27beeb8ee46ba06314a7da257f60e",
+    "build/stage1_rect_overlay_vectors_8531590602f0/1.hex": "819999422380bec25b541e16cd5e4fe10c0a903b0b6b7fea7020f69ff8c4aa2b",
+    "build/stage1_rect_overlay_vectors_8531590602f0/2.hex": "50088837e38f676ea71dfdbb4b91b8c9eb5dcae7f211032434a1e13c7e5884ee",
+    "build/stage1_rect_overlay_vectors_8531590602f0/3.hex": "c6fc8e2a26131f77be00836588d79fa8d2429aedca9d27904cee5b2e3d869103",
+    "build/stage1_rect_overlay_vectors_8531590602f0/4.hex": "d29aa117898694f7f79a1781018338603ef0f7f30a90bfcafea5135e83b9b26e",
+    "build/stage1_rect_overlay_vectors_8531590602f0/5.hex": "db9f348f379390d959913afbe1c5b388884d9537f1bff82bc5f1c8cbab035ae5",
+    "build/stage1_rect_overlay_vectors_8531590602f0/6.hex": "5a0af0890f0595452549fcd76537c8b63f672bbdb342d125a46263aa42dc997f",
+    "build/stage1_rect_overlay_vectors_8531590602f0/7.hex": "ed62f0ce486f259db8491eff4a5c9bd258fc704284bda8dbff13d13a955ff245",
+    "build/sim/refined/stage1_overlay_20261024_120455_907533/tb.sv": "a106bc465d90bc8afb59d493751d3f290706be741949f68dcc7b494187d0722c"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_overlay.py": "8531590602f08d59fc63040b34aa33879614a459736905291fd70d65f5240d8c",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+  }
+}

@@ -675,17 +675,13 @@
                     <Attr Name="CompileOrder" Val="81" />
                 </FileInfo>
             </File>
-            <File Path="../rtl/color_regions/stage1_arith.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="100" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_buzzer.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="101" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_controls.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="102" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_point.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="103" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_regions.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="104" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_render.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="105" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_segment.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="106" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_sequence.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="107" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_ui_formatter.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="108" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_ui_text.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="109" /></FileInfo></File>
-            <File Path="../rtl/color_regions/stage1_validate.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="110" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_buzzer.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="100" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_controls.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="101" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_regions.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="102" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_render.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="103" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_sequence.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="104" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_ui_formatter.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="105" /></FileInfo></File>
+            <File Path="../rtl/color_regions/stage1_ui_text.v"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="106" /></FileInfo></File>
         </Verilog>
         <System_Verilog>
             <File Path="../user_source/hdl_source/mipi_dphy_rx/mipi_dphy_rx_ph1p_mipiio_wrapper.sv">

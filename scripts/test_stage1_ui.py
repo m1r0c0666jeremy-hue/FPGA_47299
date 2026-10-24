@@ -1,12 +1,14 @@
+from pathlib import Path
 """Check complete user-visible messages and numeric boundaries against actual RTL."""
 from refined_testlib import R,run
+import hashlib
 import re,json,hashlib
 CHARS=' 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZms.:-/()'
 
 def main():
     cases=[]
     def case(**kw):
-        d=dict(mode=1,state=0,n=2,expected=1,actual=0,nd=3,occupied=0,distance=1234,dwell=12345,trend=0,error=0,start_error=0,busy=0,tip=1,muted=0,gb=0,gf=0,slot=5,show=1)
+        d=dict(mode=1,state=0,n=2,expected=1,actual=0,nd=2,occupied=0,distance=1234,dwell=12345,trend=0,error=0,start_error=0,busy=0,tip=1,muted=0,gb=0,gf=0,slot=5,show=1)
         d.update(kw);cases.append(d)
     for error in range(9):case(error=error)
     case(busy=1);case(tip=0)
@@ -30,7 +32,7 @@ busy,tip,muted,gb,gf,slot,show,glyph,override_line,force_footer,ss,sm);
 integer fd,c;reg [359:0] chars="CHARS";
 initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
 '''.replace('CHARS',CHARS)
-    out=R/'build/stage1_ui_vectors';out.mkdir(parents=True,exist_ok=True);capture=out/'captured.txt'
+    out=R/'build'/('stage1_rect_ui_vectors_'+hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]);out.mkdir(parents=True,exist_ok=True);capture=out/'captured.txt'
     for c,d in enumerate(cases):
         source+='@(negedge clk);'+''.join(f'{k}={v};' for k,v in d.items())
         source+='latch=1;@(negedge clk);latch=0;repeat(50)@(negedge clk);\n'
@@ -39,14 +41,14 @@ initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
     source=source.replace('OUTPUT',capture.as_posix())
     attempt=run('stage1_ui',source,[R/'rtl/color_regions'/n for n in ('stage1_ui_text.v','stage1_ui_formatter.v')],timeout=120)
     lines=capture.read_text().splitlines();assert len(lines)==len(cases)
-    errors=['TIP READY','TOO FEW POINTS','SELF CROSS/ZERO','AREA TOUCH/OVER','MAX 4 AREAS','TIP NOT READY','MAX 8 POINTS','NO SAVED AREAS','BUSY']
+    errors=['TIP READY','SET TWO CORNERS','RECT TOO SMALL','AREA TOUCH/OVER','MAX 4 AREAS','TIP NOT READY','MAX 2 CORNERS','NO SAVED AREAS','BUSY']
     states=['IDLE','WAIT OUT','RUN','PAUSED','MOVE OUT','PASS','FAIL','STOPPED']
     for d,line in zip(cases,lines):
         assert len(line)==64,(d,line)
         if d['mode']==1:
             message='BUSY' if d['busy'] else errors[d['error']] if d['error'] else 'TIP NOT READY' if not d['tip'] else 'TIP READY'
             assert message in line,(d,line)
-            assert ('D'+(f"{d['distance']:04d}" if d['n'] and d['tip'] and not d['busy'] else '----')+'PX') in line,(d,line)
+            assert 'PX' not in line and 'APPROACH' not in line and 'AWAY' not in line,(d,line)
         elif d['mode']==2 and not d['show']:
             assert 'D1234PX' not in line and 'T012.3s' not in line,line
             if d['state']==6:assert line.startswith('FAIL EXP B GOT C. KEY2 RETEST'),line
@@ -55,7 +57,7 @@ initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
             else:assert line.startswith('WAIT OUT. LEAVE ALL AREAS'),line
         elif d['mode']==2:
             assert line.startswith(states[d['state']]),(d,line)
-            assert ('D'+(f"{d['distance']:04d}" if d['n'] and d['tip'] and not d['busy'] else '----')+'PX') in line,(d,line)
+            assert 'PX' not in line and 'APPROACH' not in line and 'AWAY' not in line,(d,line)
             deci=d['dwell']//100
             assert f'T{deci//10:03d}.{deci%10}s' in line,(d,line)
             if d['state']==6:assert 'EXP B GOT C' in line,(d,line)

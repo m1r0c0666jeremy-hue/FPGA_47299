@@ -1,9 +1,11 @@
+from pathlib import Path
 """Independent full RGB oracle: region edges, font, label avoidance and hide.
 
 Only archived font bitmaps and rational source geometry form the expected pixels;
 no candidate internal signals are used to calculate the oracle.
 """
 from refined_testlib import R,run
+import hashlib
 from stage1_test_sources import EXTRA_OSD
 from test_stage1_render import mapped,ceil
 from fractions import Fraction
@@ -14,15 +16,15 @@ def main():
     historical=json.loads((R/'assets/osd/anlogic/refined_ui_manifest.json').read_text(encoding='utf-8'))['characters']
     old={int(i):int(v,16) for i,v in re.findall(r"rom\[(\d+)\]=16'h([0-9a-f]+);",(R/'rtl/color_regions/stable_footer_glyph_rom.v').read_text())}
     font={c:[old[historical.index(c)*16+y]>>8 for y in range(16)] for c in chars}
-    polys=[[(10,10),(30,10),(20,40)],[(35,10),(55,10),(45,40)],
-           [(60,10),(80,10),(70,40)],[(1230,600),(1250,600),(1240,620)]]
+    polys=[[(10,10),(30,40)],[(35,10),(55,40)],[(60,10),(80,40)],[(1230,600),(1250,620)]]
     packed=sum((x|(y<<11))<<(21*(8*r+k)) for r,p in enumerate(polys) for k,(x,y) in enumerate(p))
     cases=[(0,0,2,1),(0,1,2,1),(1,0,2,1),(1,1,2,1),(4,0,2,1),(4,1,2,1),(0,0,6,1),(0,1,6,0)]
-    out=R/'build/stage1_overlay_vectors';out.mkdir(parents=True,exist_ok=True)
+    out=R/'build'/('stage1_rect_overlay_vectors_'+hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]);out.mkdir(parents=True,exist_ok=True)
     labels=[]
     for case,(zoom,rot,state,show) in enumerate(cases):
         rgb=[0x203040|(y%256)<<8|(x%256) for y in range(624) for x in range(1280)]
         mapped_polys=[[(mapped(x,0,zoom,rot,1280),mapped(y,0,zoom,rot,624)) for x,y in p] for p in polys]
+        mapped_polys=[[(min(x for x,y in p),min(y for x,y in p)),(max(x for x,y in p),min(y for x,y in p)),(max(x for x,y in p),max(y for x,y in p)),(min(x for x,y in p),max(y for x,y in p))] for p in mapped_polys]
         colors=[0xff4050 if state==6 and r==0 else 0x40ff90 if r==0 else 0xffe040 if state==2 and r==1 else 0x9098a0 for r in range(4)]
         positions=[]
         for r,p in enumerate(mapped_polys):
@@ -58,7 +60,7 @@ def main():
     src=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,commit=0,de=0,vs=0,show=1,rot=0;reg [2:0] zoom=0;reg [3:0] state=2;
 reg [23:0] raw=0;wire ovs,ohs,ode;wire [23:0] rgb;
-stage1_osd dut(2'd2,672'hVERTICES,168'd0,16'h3333,4'hf,3'd4,3'd1,3'd1,4'd0,state,4'd1,4'd0,1'b0,2'd0,11'd0,20'd0,4'd0,4'd0,1'b0,1'b1,1'b0,1'b0,3'd5,
+stage1_osd dut(2'd2,672'hVERTICES,168'd0,16'h2222,4'hf,3'd4,3'd1,3'd1,4'd0,state,4'd1,4'd0,1'b0,2'd0,11'd0,20'd0,4'd0,4'd0,1'b0,1'b1,1'b0,1'b0,3'd5,
 clk,rst,vs,1'b0,de,raw,768'd0,11'd0,10'd0,zoom,2'd0,3'd0,1'b0,show,1'b1,1'b0,1'b0,1'b0,
 ovs,ohs,ode,rgb,rot,2'd0,32'd0,commit,1'b0,32'd0,32'd0,128'd0,128'd0,39'd0,18'd0);
 reg [23:0] expected[0:798719];reg [23:0] e0=0,e1=0;reg v0=0,v1=0,checking=0;integer c,y,h,index=0,pixels=0;

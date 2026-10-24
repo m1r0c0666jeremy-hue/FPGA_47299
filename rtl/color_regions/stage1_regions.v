@@ -11,138 +11,87 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  output wire muted,alarm,output wire [1:0] trend,output wire [10:0] distance,
  output wire [19:0] dwell_ms,output reg [3:0] edit_error,output wire [3:0] start_error,
  output wire busy,tip_live,metrics_valid,output wire [671:0] saved_vertices,output wire [167:0] draft_vertices);
- reg [671:0] vertices;reg [15:0] counts;reg [167:0] draft;
- assign saved_vertices=vertices;assign draft_vertices=draft;
- reg commit_d,seen;reg [31:0] last_id,job_id;reg [7:0] session_last,job_session,point_session;
- reg [15:0] job_revision,point_model;reg [1:0] mode_last;reg [16:0] subms;reg [8:0] tip_age;
- reg [15:0] last_epoch,last_model,job_epoch,job_model;reg [7:0] last_session;
- reg [20:0] recent_tip,edit_point;reg point_pending;reg [1:0] edit_request;
- reg validate_start,evaluate_start;wire validating,validated,passed,evaluating,evaluated;
- wire [3:0] validation_error,in_mask,near_mask;wire [43:0] point_distances;
- reg observation;reg [3:0] observed_in,observed_near;reg [43:0] observed_dist;
- reg [10:0] job_x;reg [9:0] job_y;reg configuration_changed;
- reg metrics_good;
+
+ // Only two corners per area are stored. Wide legacy ports are zero padded;
+ // no arbitrary polygon, iterative multiplier/divider or bitmap is instantiated.
+ reg [41:0] rectangles[0:3];reg [41:0] draft;
+ reg seen;reg [31:0] last_id;reg [15:0] last_epoch,last_model;
+ reg [7:0] last_session,session_last,point_session;reg [1:0] mode_last;
+ reg [16:0] subms;reg [8:0] tip_age;reg [20:0] edit_point;
+ reg [15:0] point_model;reg point_pending;reg [1:0] edit_request;
+ reg observation,configuration_changed,metrics_good;
+ reg [3:0] observed_in,observed_near;
  wire source_ok=detection_valid && meta[255] && meta[247] && meta[32] && meta[415:413]==4 &&
  meta[31:0]==image_id && meta[242:235]==session && meta[243]==pair && meta[244] &&
  meta[89:79]<1280 && meta[99:90]<720;
  assign tip_live=tracking && camera_ready && video_ok && source_ok && tip_age<250 && !gain_busy;
- assign metrics_valid=metrics_good && tip_live && job_revision==revision && job_session==session && job_epoch==meta[719:704] && job_model==meta[559:544];
- reg [671:0] draw_data;reg [15:0] draw_counts;reg [3:0] draw_closed;
- // Private serial RAM snapshot: payload writes wait at most 40 clocks.
- // frame_commit is the same signal used by the actual renderer.
- reg [5:0] snapshot_count;
- reg validation_pending,pending_passed;reg [3:0] pending_error;
- wire snapshot_lock=frame_commit?(draw_counts!=0):(snapshot_count!=0);
- wire validation_apply=!snapshot_lock && (validated || validation_pending);
- wire validation_passed=validation_pending?pending_passed:passed;
- wire [3:0] validation_reason=validation_pending?pending_error:validation_error;
- always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin snapshot_count<=0;validation_pending<=0;pending_passed<=0;pending_error<=0;end
- else begin
- if(frame_commit)snapshot_count<=draw_counts!=0?6'd40:6'd0;
- else if(snapshot_count!=0)snapshot_count<=snapshot_count-1'b1;
- if(validation_apply)validation_pending<=0;
- if(validated && snapshot_lock)begin validation_pending<=1;pending_passed<=passed;pending_error<=validation_error;end
- end end
- assign busy=validating || edit_request!=0 || validation_pending;
- integer j;
- always @*begin draw_data=vertices;draw_counts=counts;draw_closed=0;
+ assign metrics_valid=metrics_good && tip_live && seen && image_id==last_id && session==last_session &&
+ meta[719:704]==last_epoch && meta[559:544]==last_model;
+ assign busy=edit_request!=0;
+ assign trend=2'd0;assign distance=11'd0;
+ reg [671:0] saved_data,draw_data;reg [15:0] draw_counts;reg [3:0] draw_closed;
+ integer j,ov_index,data_index,obs_index;
+ always @*begin
+ saved_data=0;draw_data=0;draw_counts=0;draw_closed=0;
  for(j=0;j<4;j=j+1)begin
- if(j<region_count)draw_closed[j]=1;
- if(region_count==j && draft_count!=0)begin draw_data[j*168+:168]=draft;draw_counts[j*4+:4]=draft_count;end
- end
- end
+ saved_data[j*168+:42]=rectangles[j];draw_data[j*168+:42]=rectangles[j];
+ if(j<region_count)begin draw_counts[j*4+:4]=2;draw_closed[j]=1;end
+ else if(j==region_count && draft_count!=0)begin draw_data[j*168+:42]=draft;draw_counts[j*4+:4]=draft_count;end
+ end end
+ assign saved_vertices=saved_data;assign draft_vertices={126'd0,draft};
  assign render_vertices=draw_data;assign render_counts=draw_counts;assign closed_mask=draw_closed;
- // Editor validation and live point evaluation are mutually exclusive. Reuse
- // the exact point engine's cross product rather than a second multiplier.
- wire os,od;wire [20:0] oa,ob,oc;wire signed [23:0] cross_q;
- wire [4:0] point_address,validate_address;
- wire [4:0] vertex_address=validating || validate_start?validate_address:point_address;
- function [20:0] read_vertex;input [671:0] data;input [4:0] index;begin case(index)
-5'd0:read_vertex=data[0+:21];
-5'd1:read_vertex=data[21+:21];
-5'd2:read_vertex=data[42+:21];
-5'd3:read_vertex=data[63+:21];
-5'd4:read_vertex=data[84+:21];
-5'd5:read_vertex=data[105+:21];
-5'd6:read_vertex=data[126+:21];
-5'd7:read_vertex=data[147+:21];
-5'd8:read_vertex=data[168+:21];
-5'd9:read_vertex=data[189+:21];
-5'd10:read_vertex=data[210+:21];
-5'd11:read_vertex=data[231+:21];
-5'd12:read_vertex=data[252+:21];
-5'd13:read_vertex=data[273+:21];
-5'd14:read_vertex=data[294+:21];
-5'd15:read_vertex=data[315+:21];
-5'd16:read_vertex=data[336+:21];
-5'd17:read_vertex=data[357+:21];
-5'd18:read_vertex=data[378+:21];
-5'd19:read_vertex=data[399+:21];
-5'd20:read_vertex=data[420+:21];
-5'd21:read_vertex=data[441+:21];
-5'd22:read_vertex=data[462+:21];
-5'd23:read_vertex=data[483+:21];
-5'd24:read_vertex=data[504+:21];
-5'd25:read_vertex=data[525+:21];
-5'd26:read_vertex=data[546+:21];
-5'd27:read_vertex=data[567+:21];
-5'd28:read_vertex=data[588+:21];
-5'd29:read_vertex=data[609+:21];
-5'd30:read_vertex=data[630+:21];
-5'd31:read_vertex=data[651+:21];
-endcase end endfunction
- wire [20:0] shared_vertex=read_vertex(vertices,vertex_address);
- stage1_validate #(.SHARED(1),.SHARED_VERTEX(1)) validator(clk,rst_n,validate_start,region_count,counts,vertices,draft_count,draft,validating,validated,passed,validation_error,os,oa,ob,oc,od,cross_q,validate_address,shared_vertex);
- stage1_point #(.SHARED_VERTEX(1)) geometry(clk,rst_n,evaluate_start,region_count,counts,vertices,job_x,job_y,evaluating,evaluated,in_mask,near_mask,point_distances,os,oa,ob,oc,od,cross_q,point_address,shared_vertex);
+ wire [10:0] dx0=draft[10:0],dx1=draft[31:21];wire [9:0] dy0=draft[20:11],dy1=draft[41:32];
+ wire [10:0] xmin=dx0<dx1?dx0:dx1,xmax=dx0>dx1?dx0:dx1;
+ wire [9:0] ymin=dy0<dy1?dy0:dy1,ymax=dy0>dy1?dy0:dy1;
+ wire [41:0] normalized={ymax,xmax,ymin,xmin};
+ reg overlap;
+ always @*begin overlap=0;
+ for(ov_index=0;ov_index<4;ov_index=ov_index+1)if(ov_index<region_count &&
+ xmin<=rectangles[ov_index][31:21] && xmax>=rectangles[ov_index][10:0] &&
+ ymin<=rectangles[ov_index][41:32] && ymax>=rectangles[ov_index][20:11])overlap=1;
+ end
+ function contains;input [41:0] r;input [10:0] px;input [9:0] py;
+ begin contains=px>=r[10:0] && px<=r[31:21] && py>=r[20:11] && py<=r[41:32];end endfunction
+ function border_band;input [41:0] r;input [10:0] px;input [9:0] py;
+ reg signed [12:0] l,t,h,b,sx,sy;
+ begin l=$signed({2'd0,r[10:0]});h=$signed({2'd0,r[31:21]});
+ t=$signed({3'd0,r[20:11]});b=$signed({3'd0,r[41:32]});
+ sx=$signed({2'd0,px});sy=$signed({3'd0,py});
+ // A two-source-pixel rectangular guard band. No Euclidean distance is claimed.
+ border_band=sx>=l-13'sd2 && sx<=h+13'sd2 && sy>=t-13'sd2 && sy<=b+13'sd2 &&
+ !(sx>l+13'sd2 && sx<h-13'sd2 && sy>t+13'sd2 && sy<b-13'sd2);
+ end endfunction
  stage1_sequence #(.CYCLES_PER_MS(CYCLES_PER_MS)) sequence_controller(clk,rst_n,mode,region_count,draft_count,
- click2,click3,click4,!busy,tip_live,configuration_changed,observation,observed_in,observed_near,observed_dist,
- run_state,expected_area,actual_area,completed,occupied,muted,alarm,trend,distance,dwell_ms,start_error);
-// Private: data is valid only below reset region/point counts. Every live
- // vertex is written before its count is committed. Control reset is unchanged.
- integer data_index;
+ click2,click3,click4,!busy,tip_live,configuration_changed,observation,observed_in,observed_near,44'd0,
+ run_state,expected_area,actual_area,completed,occupied,muted,alarm,,,dwell_ms,start_error);
+ // Payload is invalid above region/draft counts and is overwritten before reuse.
  always @(posedge clk)begin
- if(edit_request!=0 && !evaluating && !validating && !evaluate_start && !snapshot_lock && !validation_pending)begin
- case(edit_request)
- 1:if(region_count<4 && draft_count<8)begin
- for(data_index=0;data_index<8;data_index=data_index+1)
- if(draft_count==data_index)draft[data_index*21+:21]<=edit_point;
- end
- // Deleted regions are excluded by count/closed flags and overwritten on reuse.
- default:begin end
- endcase end
- if(validation_apply && validation_passed)begin
- for(data_index=0;data_index<4;data_index=data_index+1)
- if(region_count==data_index)vertices[data_index*168+:168]<=draft;
- // Empty draft is invalid; each subsequently valid point is overwritten.
- end
- end
+ if(edit_request==1 && mode==1 && region_count<4 && draft_count<2)begin
+ if(draft_count==0)draft[20:0]<=edit_point;else draft[41:21]<=edit_point;end
+ if(edit_request==2 && mode==1 && draft_count==2 && region_count<4 &&
+ xmax-xmin>=6 && ymax-ymin>=6 && !overlap)begin
+ for(data_index=0;data_index<4;data_index=data_index+1)if(region_count==data_index)rectangles[data_index]<=normalized;
+ end end
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin counts<=0;region_count<=0;draft_count<=0;revision<=0;
- commit_d<=0;seen<=0;last_id<=0;job_id<=0;session_last<=0;job_session<=0;point_session<=0;
- job_revision<=0;point_model<=0;mode_last<=0;subms<=0;tip_age<=250;recent_tip<=0;edit_point<=0;
- last_epoch<=0;last_model<=0;job_epoch<=0;job_model<=0;last_session<=0;
- point_pending<=0;edit_request<=0;validate_start<=0;evaluate_start<=0;observation<=0;
- observed_in<=0;observed_near<=0;observed_dist<=0;job_x<=0;job_y<=0;configuration_changed<=0;edit_error<=0;metrics_good<=0;end
- else begin
- validate_start<=0;evaluate_start<=0;observation<=0;configuration_changed<=0;commit_d<=frame_commit;mode_last<=mode;session_last<=session;
- if(job_revision!=revision || job_session!=session || job_epoch!=meta[719:704] || job_model!=meta[559:544])metrics_good<=0;
- if(subms==CYCLES_PER_MS-1)begin subms<=0;if(tip_age<250)tip_age<=tip_age+1'b1;end else subms<=subms+1'b1;
- // A committed view may need several thousand clocks to prefetch image rows.
- // Admit its result when video becomes ready, even if the commit pulse has
- // already ended. Seen source identity still prevents counting a held frame.
+ if(!rst_n)begin
+ region_count<=0;draft_count<=0;revision<=0;seen<=0;last_id<=0;last_epoch<=0;last_model<=0;last_session<=0;
+ session_last<=0;point_session<=0;point_model<=0;mode_last<=0;subms<=0;tip_age<=250;
+ edit_point<=0;point_pending<=0;edit_request<=0;observation<=0;configuration_changed<=0;
+ observed_in<=0;observed_near<=0;metrics_good<=0;edit_error<=0;
+ end else begin
+ observation<=0;configuration_changed<=0;mode_last<=mode;session_last<=session;
+ if(subms==CYCLES_PER_MS-1)begin subms<=0;if(tip_age<250)tip_age<=tip_age+1'b1;end
+ else subms<=subms+1'b1;
  if(!seen || image_id!=last_id || session!=last_session || meta[719:704]!=last_epoch || meta[559:544]!=last_model)begin
  if(source_ok && tracking && camera_ready && video_ok && !gain_busy)begin
- seen<=1;last_id<=image_id;last_session<=session;last_epoch<=meta[719:704];last_model<=meta[559:544];
- recent_tip<={meta[99:90],meta[89:79]};tip_age<=0;
- if(!evaluating && !validating && edit_request==0 && !validate_start && !validation_pending)begin
- job_x<=meta[89:79];job_y<=meta[99:90];job_id<=image_id;job_session<=session;job_revision<=revision;
- job_epoch<=meta[719:704];job_model<=meta[559:544];evaluate_start<=1;
- end end end
- if(evaluated && tip_live && job_id==image_id && job_session==session && job_revision==revision && job_epoch==meta[719:704] && job_model==meta[559:544])begin
- observed_in<=in_mask;observed_near<=near_mask;observed_dist<=point_distances;observation<=1;metrics_good<=1;end
- if(mode==1 && down2)begin
- point_pending<=tip_live && !busy;
+ seen<=1;last_id<=image_id;last_session<=session;last_epoch<=meta[719:704];last_model<=meta[559:544];tip_age<=0;
+ for(obs_index=0;obs_index<4;obs_index=obs_index+1)begin
+ observed_in[obs_index]<=obs_index<region_count && contains(rectangles[obs_index],meta[89:79],meta[99:90]);
+ observed_near[obs_index]<=obs_index<region_count && border_band(rectangles[obs_index],meta[89:79],meta[99:90]);end
+ observation<=1;metrics_good<=1;
+ if(seen && (meta[719:704]!=last_epoch || meta[559:544]!=last_model))begin configuration_changed<=1;observation<=0;end
+ end end
+ if(mode==1 && down2)begin point_pending<=tip_live && !busy;
  if(tip_live && !busy)begin edit_point<={meta[99:90],meta[89:79]};point_session<=session;point_model<=meta[559:544];end
  else edit_error<=busy?4'd8:4'd5;end
  if(mode==1 && !busy)begin
@@ -151,29 +100,20 @@ endcase end endfunction
  else edit_error<=5;point_pending<=0;end
  else if(click3)edit_request<=2;else if(click4)edit_request<=3;
  end
- if(edit_request!=0 && !evaluating && !validating && !evaluate_start && !snapshot_lock && !validation_pending)begin
- edit_request<=0;edit_error<=0;
- case(edit_request)
- 1:if(region_count==4)edit_error<=4;else if(draft_count==8)edit_error<=6;
- else begin
- draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;end
- 2:if(draft_count<3)edit_error<=1;else begin validate_start<=1;end
- 3:begin
- if(draft_count!=0)begin draft_count<=draft_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;end
- else if(region_count!=0)begin
- region_count<=region_count-1'b1;
- for(j=0;j<4;j=j+1)if(region_count==j+1)counts[j*4+:4]<=0;
- revision<=revision+1'b1;configuration_changed<=1;end else edit_error<=7;end
- default:begin end
- endcase end
- if(validation_apply)begin
- if(validation_passed)begin
- for(j=0;j<4;j=j+1)if(region_count==j)counts[j*4+:4]<=draft_count;
- region_count<=region_count+1'b1;
- draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;edit_error<=0;
- end else edit_error<=validation_reason;end
+ if(edit_request!=0)begin edit_request<=0;edit_error<=0;
+ if(mode==1)case(edit_request)
+ 1:if(region_count==4)edit_error<=4;else if(draft_count==2)edit_error<=6;
+ else begin draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
+ 2:if(draft_count!=2)edit_error<=1;else if(region_count==4)edit_error<=4;
+ else if(xmax-xmin<6 || ymax-ymin<6)edit_error<=2;
+ else if(overlap)edit_error<=3;
+ else begin region_count<=region_count+1'b1;draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
+ 3:if(draft_count!=0)begin draft_count<=draft_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
+ else if(region_count!=0)begin region_count<=region_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
+ else edit_error<=7;
+ default:begin end endcase end
  if(cancel || (!down2 && (!tip_live || session!=point_session || meta[559:544]!=point_model)))point_pending<=0;
- if(mode!=mode_last || session!=session_last)begin point_pending<=0;configuration_changed<=1;
+ if(mode!=mode_last || session!=session_last)begin point_pending<=0;configuration_changed<=1;observation<=0;
  if(mode!=1)edit_request<=0;end
  end end
 endmodule

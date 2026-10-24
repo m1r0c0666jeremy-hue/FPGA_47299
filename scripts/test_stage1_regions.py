@@ -48,14 +48,14 @@ if(pmask!==expected_mask || under)$fatal(1,"actual editor/draft render xy%0d/%0d
 end end end
 @(negedge clk);rde=0;
 $display("STAGE1_EDIT_RENDER_PASS point_pixels=134400");
-record(300,100);record(200,250);key(3);
-if(nr!=1 || nd!=0 || counts[3:0]!=3 || closed!=1)$fatal(1,"A save failed nr%0d nd%0d error%0d",nr,nd,ee);
+record(300,250);key(3);
+if(nr!=1 || nd!=0 || counts[3:0]!=2 || closed!=1)$fatal(1,"A save failed nr%0d nd%0d error%0d",nr,nd,ee);
 if(metrics_valid)$fatal(1,"new geometry exposed old distance as valid");
-record(500,100);record(700,100);record(600,250);key(3);
+record(500,100);record(700,250);key(3);
 if(nr!=2 || nd!=0 || closed!=3)$fatal(1,"B save failed nr%0d nd%0d err%0d",nr,nd,ee);
-record(140,140);record(160,140);record(150,160);key(3);repeat(10000)@(negedge clk);
-if(nr!=2 || nd!=3 || ee!=3)$fatal(1,"contained region accepted nr%0d nd%0d err%0d",nr,nd,ee);
-key(4);key(4);key(4);if(nd!=0 || nr!=2)$fatal(1,"draft undo");
+record(140,140);record(160,160);key(3);repeat(10000)@(negedge clk);
+if(nr!=2 || nd!=2 || ee!=3)$fatal(1,"contained region accepted nr%0d nd%0d err%0d",nr,nd,ee);
+key(4);key(4);if(nd!=0 || nr!=2)$fatal(1,"draft undo");
 mode=0;repeat(3)@(negedge clk);if(nr!=2)$fatal(1,"switch erased regions");mode=2;frame(900,400);key(2);three(900,400);
 if(state!=2)$fatal(1,"editor connected to sequence state%0d err%0d",state,se);
 three(200,150);if(expected!=1 || completed!=1)$fatal(1,"actual geometry did not confirm A state%0d in%h d%0d",state,occupied,distance);
@@ -66,9 +66,9 @@ mode=1;repeat(3)@(negedge clk);key(4);if(nr!=1 || closed!=1)$fatal(1,"delete las
 down=1;@(negedge clk);down=0;cancel=1;@(negedge clk);cancel=0;key(2);if(nd!=0)$fatal(1,"cancelled gesture recorded point");
 down=1;cancel=1;@(negedge clk);down=0;cancel=0;key(2);if(nd!=0)$fatal(1,"simultaneous cancel/down recorded point");
 rst=0;@(negedge clk);if(nr!=0 || nd!=0 || alarm)$fatal(1,"reset did not clear");
-$display("STAGE1_REGIONS_PASS press-position/edit/concavity-validation/undo/modes/actual-geometry/order/stale/reset");$finish;end
+$display("STAGE1_REGIONS_PASS press-position/rectangles/overlap-reject/undo/modes/actual-geometry/order/stale/reset");$finish;end
 endmodule'''
-    names=['stage1_arith.v','stage1_point.v','stage1_segment.v','stage1_validate.v','stage1_sequence.v','stage1_regions.v','stage1_render.v']
+    names=['stage1_sequence.v','stage1_regions.v','stage1_render.v']
     run('stage1_regions',src,[R/'rtl/color_regions'/n for n in names],timeout=180)
     buzzer=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,enable=0;wire buzzer;

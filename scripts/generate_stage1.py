@@ -3,8 +3,8 @@ from pathlib import Path
 import argparse,re,json,hashlib
 R=Path(__file__).resolve().parents[1]
 CHARS=' 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZms.:-/()'
-MESSAGES=['TIP READY','TOO FEW POINTS','SELF CROSS/ZERO','AREA TOUCH/OVER','MAX 4 AREAS','TIP NOT READY',
-          'MAX 8 POINTS','NO SAVED AREAS','BUSY','FINISH DRAFT','LEAVE ALL AREAS','KEY2 START','KEY2 RETEST',
+MESSAGES=['TIP READY','SET TWO CORNERS','RECT TOO SMALL','AREA TOUCH/OVER','MAX 4 AREAS','TIP NOT READY',
+          'MAX 2 CORNERS','NO SAVED AREAS','BUSY','FINISH DRAFT','LEAVE ALL AREAS','KEY2 START','KEY2 RETEST',
           'KEY3 RESUME','TRACK LOST','BRT FAILED']
 RUN_NAMES=['IDLE','WAIT OUT','RUN','PAUSED','MOVE OUT','PASS','FAIL','STOPPED']
 
@@ -23,7 +23,7 @@ def ui_assets():
     def digits(line,start,word):
         for i in range(4):line[start+i]=f"8'd1+{word}[{(3-i)*4}+:4]"
     edit=layout();put(edit,0,'EDIT ');edit[5]="fn<4?8'd11+fn:8'd41"
-    put(edit,7,'PTS ');edit[11]="8'd1+fdraft";put(edit,12,'/8 SAVE ');edit[20]="8'd1+fn";put(edit,21,'/4')
+    put(edit,7,'PTS ');edit[11]="8'd1+fdraft";put(edit,12,'/2 SAVE ');edit[20]="8'd1+fn";put(edit,21,'/4')
     for i in range(24,40):edit[i]='rom_glyph'
     put(edit,40,' D');digits(edit,42,'distance_bcd');put(edit,46,'PX IN ')
     for i in range(42,46):edit[i]=f"fn!=0 && ftip && !fbusy?({edit[i]}):8'd41"
@@ -41,6 +41,10 @@ def ui_assets():
     fail=layout();put(fail,47,'EXP ');fail[51]="8'd11+fexpected";put(fail,52,' GOT ');fail[57]="factual!=0?8'd10+factual:8'd41"
     for i in range(47,64):test[i]=f"fstate==6?({fail[i]}):({test[i]})"
     for i,c in enumerate('MUTE'):test[60+i]=f"fmuted?8'd{ids[c]}:({test[60+i]})"
+    # Rectangle release: distance and trend are deliberately not displayed.
+    for i in range(40,54):edit[i]="8'd0"
+    edit[62]=edit[63]="8'd0"
+    for i in list(range(22,30))+list(range(38,46)):test[i]="8'd0"
     normal=layout();put(normal,54,'BRT');normal[57]="8'd2+fslot";put(normal,58,'/7')
     busy=layout();put(busy,0,'BRIGHTNESS BUSY ');busy[16]="8'd2+fslot";put(busy,17,'/7 TO ');busy[23]="fslot==6?8'd2:8'd3+fslot";put(busy,24,'/7')
     failed=layout();put(failed,0,'BRT FAILED. CHECK CAM')
@@ -216,7 +220,7 @@ stage1_buzzer buzzer_driver(I_sys_clk,I_rst_n && S_rst_n,stage_alarm,O_buzzer);
     project=project.replace('Path="target_lock.adc"','Path="stage1_pins.adc"')
     stage_files=sorted(p.name for p in (R/'rtl/color_regions').glob('stage1_*.v'))
     stage_files=sorted(set(stage_files)|{Path(k).name for k in out if k.endswith('.v')})
-    stage_files=[p for p in stage_files if p not in ('stage1_top.v','stage1_memory_video_out.v','stage1_osd.v')]
+    stage_files=[p for p in stage_files if p not in ('stage1_top.v','stage1_memory_video_out.v','stage1_osd.v','stage1_arith.v','stage1_point.v','stage1_segment.v','stage1_validate.v')]
     additions=''
     for i,name in enumerate(stage_files,100):
         additions+=f'''            <File Path="../rtl/color_regions/{name}"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&amp;R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="{i}" /></FileInfo></File>\n'''.replace('P&amp;R','P&R')
