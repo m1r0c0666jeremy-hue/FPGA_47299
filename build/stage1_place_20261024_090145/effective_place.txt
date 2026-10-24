@@ -1,0 +1,14 @@
+Print Place Property
+-----------------------------------------------------------------------
+      Parameters      |      Settings      |  Default Values  |  Note  
+-----------------------------------------------------------------------
+        effort        |       medium       |      medium      |        
+    hfn_opt_effort    |       medium       |      medium      |        
+   logic_level_opt    |        off         |       off        |        
+  macro_performance   |  macro_congestion  |       auto       |   *    
+      max_fanout      |       999999       |      999999      |        
+      opt_timing      |        high        |      medium      |   *    
+    post_place_opt    |        high        |       auto       |   *    
+     pr_strategy      |         2          |        1         |   *    
+  preplace_floorplan  |        off         |       off        |        
+-----------------------------------------------------------------------

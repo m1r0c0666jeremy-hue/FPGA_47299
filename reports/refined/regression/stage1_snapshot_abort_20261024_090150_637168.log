@@ -1,0 +1,10 @@
+SERIAL_ABORT_CASE_PASS case0 words896 wait8
+SERIAL_ABORT_CASE_PASS case1 words896 wait7
+SERIAL_ABORT_CASE_PASS case2 words896 wait6
+SERIAL_ABORT_CASE_PASS case3 words896 wait0
+SERIAL_ABORT_CASE_PASS case4 words896 wait0
+SERIAL_ABORT_CASE_PASS case5 words896 wait0
+SERIAL_ABORT_CASE_PASS case6 words896 wait0
+SERIAL_ABORT_CASE_PASS case7 words896 wait0
+SERIAL_SNAPSHOT_MID_LAUNCH_RECOMMIT_PASS cases=8 words=7168 max_wait=8
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\stage1_snapshot_abort_20261024_090150_637168\tb.sv:33: $finish called at 966710 (1s)

@@ -1,0 +1,116 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261024_090145",
+  "compiled_source_commit": "555020828e32058ec6b7a3c7f61045b4c5cbbcab",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 19906,
+    "lut6": 19667,
+    "reg": 22907,
+    "eram": 98,
+    "dsp": 40
+  },
+  "previous_C_004652": {
+    "slice": 19819,
+    "lut6": 19633,
+    "reg": 23765,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta": {
+    "slice": 87,
+    "lut6": 34,
+    "reg": -858,
+    "eram": -1,
+    "dsp": 0
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "d0bf30716b2a38cac45f91b4a93bd9c9a5628bcaa3f6aa70988b2ae8dfaf302c",
+    "target_color_regions_placed.db": "3ab519782c26569356f0c7cf4a0b79d1f0f3eb119e9e2f83eab5b30ab05ab749"
+  },
+  "reused_gate": null,
+  "actual_parameters": {
+    "effective_place.txt": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "999999",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "effective_route.txt": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "parameter_reports": {
+    "effective_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "effective_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING",
+  "previous_pre_C_223056": {
+    "slice": 20252,
+    "lut6": 19950,
+    "reg": 23706,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_pre_C_223056": {
+    "slice": -346,
+    "lut6": -283,
+    "reg": -799,
+    "eram": -1,
+    "dsp": 0
+  },
+  "previous_D_032009": {
+    "slice": 19974,
+    "lut6": 19729,
+    "reg": 23711,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_D_032009": {
+    "slice": -68,
+    "lut6": -62,
+    "reg": -804,
+    "eram": -1,
+    "dsp": 0
+  },
+  "previous_E_044722": {
+    "slice": 19848,
+    "lut6": 19690,
+    "reg": 23730,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_E_044722": {
+    "slice": 58,
+    "lut6": -23,
+    "reg": -823,
+    "eram": -1,
+    "dsp": 0
+  },
+  "previous_F_062426": {
+    "slice": 19899,
+    "lut6": 19650,
+    "reg": 23722,
+    "eram": 98,
+    "dsp": 40
+  },
+  "delta_vs_F_062426": {
+    "slice": 7,
+    "lut6": 17,
+    "reg": -815,
+    "eram": 0,
+    "dsp": 0
+  }
+}
