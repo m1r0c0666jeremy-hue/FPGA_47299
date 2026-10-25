@@ -110,6 +110,9 @@ initial begin
  endcase
  ms(f==2 || f==3?300:40);keys=7;ms(50);
  if(nd!=0 || regions.point_pending || reason==0)$fatal(1,"fault accepted point%0d nd%0d reason%0d",f,nd,reason);
+ case(f)0:if(reason!=2)$fatal(1,"camera reason");1:if(reason!=4)$fatal(1,"no tip reason");
+ 2,3:if(reason!=5)$fatal(1,"stale reason");4,5:if(reason!=3)$fatal(1,"reader/stream reason");
+ 6,7:if(reason!=8)$fatal(1,"context reason");8:if(reason!=9)$fatal(1,"metadata reason");9:if(reason!=6)$fatal(1,"gain reason");endcase
  saved_reason=reason;camera_ready=1;tip_exists=1;frames=1;same_id=0;stream_n=1;reader_active=0;bad_packet=0;inject_busy=0;ms(50);
  if(reason!=saved_reason)$fatal(1,"cancel reason disappeared after recovery%0d",f);
  location(100,100);short_key(1,50);if(nd!=1 || reason!=0)$fatal(1,"recovery did not require a fresh press%0d nd%0d reason%0d",f,nd,reason);

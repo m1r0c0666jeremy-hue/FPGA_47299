@@ -15,8 +15,8 @@ always @(posedge pc)if(rst)begin
 if(regions.observation)area_observations=area_observations+1;
 if(adown)real_downs=real_downs+1;if(ak2)real_clicks=real_clicks+1;
 case(point_phase)
-0:if(at)begin real_keys<=6;key_age<=0;point_phase<=1;end
-1:if(key_age==7500000)begin real_keys<=7;key_age<=0;point_phase<=2;end else key_age<=key_age+1;
+0:if(at && selected_id>=8)begin real_keys<=6;key_age<=0;point_phase<=1;end
+1:if(key_age==3750000)begin real_keys<=7;key_age<=0;point_phase<=2;end else key_age<=key_age+1;
 2:if(ak2)begin key_age<=0;point_phase<=3;end
 3:if(key_age==128)begin if(ad==0)point_phase<=0;else point_phase<=4;end else key_age<=key_age+1;
 endcase end
@@ -30,4 +30,6 @@ coverage='''if(real_downs==0 || real_clicks==0 || ad!=1 || an!=0 || area_observa
 s=s.replace('\ndef execute(job):',"\nfrom stage1_test_sources import EXTRA_OSD\nmods += EXTRA_OSD+[R/'rtl/color_regions'/n for n in ('stage1_sequence.v','stage1_regions.v','stage1_controls.v')]\n"+
 "s=s.replace("+repr('$display("STABLE_LIVE_PASS')+','+repr(coverage)+")\n\ndef execute(job):")
 s=s.replace("f'{a.reader}_v4_live_","f'stage1_v4_live_").replace('REFINED_LIVE_ALL_PASS','STAGE1_LIVE_ALL_PASS')
+s=s.replace('def execute(job):',"s=s.replace('frame==5','frame==12').replace('checked!=5*1280*624','checked!=12*1280*624').replace('transactions<5','transactions<12').replace('#200000000;','#500000000;')\n\ndef execute(job):")
+s=s.replace("5*jobs,'frames',3993600*jobs","12*jobs,'frames',9584640*jobs")
 exec(compile(s,str(R/'scripts/test_refined_live.py'),'exec'),{'__name__':'__main__','__file__':__file__})
