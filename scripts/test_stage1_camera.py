@@ -15,7 +15,7 @@ refined_camera_control_relay relay(refclk,cc,pc,rst,rst,request,up,cam_ack,event
 wire [2:0] zoom,slot;wire tracking,show,conflict,pair,ce,cs,cl,rotate,down,k2,k3,k4,cancel,gb,gf;
 wire [7:0] session;wire [1:0] diag,mode;
 stage1_controls #(.CYCLES_PER_MS(1000)) controls(pc,rst,keys,2'd0,ack,8'd0,pause,ui,
-request,up,zoom,tracking,show,session,conflict,pair,ce,cs,cl,rotate,diag,mode,down,k2,k3,k4,cancel,gb,gf,slot);
+request,up,zoom,tracking,show,session,conflict,pair,ce,cs,cl,rotate,diag,mode,down,k2,k3,k4,cancel,gb,gf,slot,);
 refined_camera_config #(.CYCLES_PER_MS(320),.CLK_DIV(23),.BOOT_MS(1),.TRANSACTION_MS(10),.FRAME_TIMEOUT_MS(100)) camera(
 .clk(cc),.rst_n(rst),.gain_req(cam_req),.gain_up(cam_up),.frame_toggle(frame_toggle),.bad_frame_toggle(1'b0),
 .gain_ack(cam_ack),.scl(scl),.sda(sda),.ready(ready_cam),.receiver_enable(receiver_enable),.parameter_event(event_cam),

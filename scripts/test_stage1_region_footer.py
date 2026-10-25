@@ -16,7 +16,7 @@ def main():
     def add(name,line,**kw):
         d=dict(name=name,mode=2,state=2,n=2,expected=1,actual=0,nd=0,occupied=1,distance=86,dwell=2500,trend=0,error=0,tip=1,show=1,muted=0,busy=0,line=line)
         d.update(kw);assert len(line)<=64,(name,len(line));cases.append(d)
-    def edit(msg='TIP READY',dist='1234',n=2):return f"EDIT {'ABCD-'[n]} PTS 2/2 SAVE {n}/4 {msg:<16}              T012.3s   "
+    def edit(msg='TIP READY',dist='1234',n=2):return f"EDIT {'ABCD-'[n]} PTS 2/2 SAVE {n}/4 {msg:<16} AUTO SAVE    T012.3s   "
     def test(state,detail,occupied='A',dist='0086',target='B'):return f'{state:<8} NEXT {target} IN {occupied}          T002.5s {"":<8} {detail:<17}'
     add('edit',edit(),mode=1,nd=2,occupied=0,distance=1234,dwell=12345,state=0)
     add('edit_cross',edit('RECT TOO SMALL'),mode=1,nd=2,occupied=0,distance=1234,dwell=12345,state=0,error=2)
@@ -27,15 +27,15 @@ def main():
     add('paused',test('PAUSED','KEY3 RESUME'),state=3)
     add('fail',test('FAIL','EXP B GOT C'),state=6,actual=3)
     add('fail_muted',test('FAIL','EXP B GOT C  MUTE'),state=6,actual=3,muted=1)
-    add('hidden_fail','FAIL EXP B GOT C. KEY2 RETEST'.ljust(32)+'MUTE',state=6,actual=3,muted=1,show=0)
-    add('hidden_pause','PAUSED. KEY3 RESUME',state=3,show=0)
-    add('hidden_lost','INPUT LOST. KEY2 RETEST',state=7,show=0,tip=0)
-    add('hidden_run','',state=2,show=0)
+    add('hidden_fail',test('FAIL','EXP B GOT C  MUTE'),state=6,actual=3,muted=1,show=0)
+    add('hidden_pause',test('PAUSED','KEY3 RESUME'),state=3,show=0)
+    add('hidden_lost',test('STOPPED','INPUT LOST'),state=7,show=0,tip=0)
+    add('hidden_run',test('RUN','TIP READY'),state=2,show=0)
     out=R/'build'/('stage1_rect_region_footer_vectors_'+hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]);out.mkdir(parents=True,exist_ok=True)
     paths=[]
     for i,d in enumerate(cases):
         pixels=[0x101824]*(1280*96)
-        for row,line in enumerate([d['line'],second if d['show'] else '']):
+        for row,line in enumerate([d['line'],second]):
             for col,c in enumerate(line.ljust(64)):
                 for yy,bits in enumerate(font[c]):
                     for xx in range(8):
@@ -52,7 +52,7 @@ reg [2:0] n=2,target=1,actual=0;reg [10:0] distance=1234;reg [19:0] dwell=12345;
 wire vs,hs,ode;wire [23:0] rgb;
 stage1_osd dut(umode,672'd0,168'd0,16'd0,4'd0,n,target,actual,nd,state,4'd0,occupied,muted,trend,distance,dwell,error,4'd0,busy,tip,1'b0,1'b0,3'd5,
 clk,rst,1'b0,1'b0,de,24'h123456,meta,11'd0,10'd0,3'd2,2'd1,3'd2,1'b1,show,1'b1,1'b0,1'b1,1'b1,
-vs,hs,ode,rgb,1'b1,2'd0,32'h12345678,1'b0,1'b1,32'd12345,32'd2,128'd0,128'd0,39'd0,18'd0);
+vs,hs,ode,rgb,1'b1,2'd0,32'h12345678,1'b0,1'b1,32'd12345,32'd2,128'd0,128'd0,39'd0,18'd90,7'd105,4'd0);
 reg [23:0] expected[0:122879];integer c,x,y,outn;reg checking=0;
 always @(posedge clk)begin #1;if(checking && ode)begin
 if(rgb!==expected[outn])$fatal(1,"region footer c%0d pixel%0d got%h expected%h",c,outn,rgb,expected[outn]);outn=outn+1;end end

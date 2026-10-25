@@ -13,7 +13,7 @@ module stage1_osd(
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
  input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
  input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
- input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason
 );
  localparam FONT=16,CHAR_WIDTH=8,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
@@ -125,7 +125,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
- I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode);
+ I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason);
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
  flat_valid<=0;flatency<=0;fage<=0;
@@ -143,7 +143,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
  6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
- 7:begin characters[(format_row?COLS:0)+format_col]<=!format_row && fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
@@ -179,7 +179,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  if(x>=16 && x<16+COLS*CHAR_WIDTH && ((y>=632+(32-FONT)/2 && y<632+(32-FONT)/2+FONT) ||
  (y>=676+(32-FONT)/2 && y<676+(32-FONT)/2+FONT)))begin
  footer_row=y>=676;footer_gy=footer_row?y-(676+(32-FONT)/2):y-(632+(32-FONT)/2);
- footer_text=I_show || stage_force_footer;if(!I_show && footer_row)footer_text=0;
+ footer_text=1;
  if(footer_current)footer_glyph=characters[(footer_row?COLS:0)+footer_col];
  else if(footer_ready && !footer_row && footer_col<11)footer_glyph=WAIT_WORD>>((10-footer_col)*8);
  end

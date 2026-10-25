@@ -32,6 +32,23 @@ def verify(directory):
     proof=audit(d['attempt']);assert proof['passed']==d['stage1_checks'] and not proof['missing']
     assert proof['build']['compiled_source_commit']==d['compiled_source_commit']
     assert proof['build']['summary']['resources']==d['resources'] and proof['build']['summary']['slack_ns']==d['slack_ns']
+    if 'safety_receipts' in d:
+        assert len(d['safety_receipts'])==3
+        expected={'ROUTING_GUARDS_PASS':('test_stage1_routing_guards.py',6),
+                  'RELEASE_GUARDS_PASS':('test_stage1_release_guards.py',4),
+                  'GATE_REUSE_GUARDS_PASS':('test_stage1_gate_reuse_guards.py',4)}
+        seen=set()
+        for name,h in d['safety_receipts'].items():
+            assert manifest[name]==h and sha(R/name)==h
+            record=json.loads((R/name).read_text(encoding='utf-8'));status=record['status'];producer,count=expected[status];seen.add(status)
+            assert len(record['checks'])==count and set(record['checks'].values())=={'REJECTED'}
+            if status=='ROUTING_GUARDS_PASS':assert len(record['current_checks'])==8 and set(record['current_checks'].values())=={'REJECTED'}
+            assert record['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
+            assert record['producer_sha256']==sha(R/'scripts'/producer)
+            assert all(manifest[n]==v and sha(R/n)==v for n,v in record['fixtures'].items())
+        assert seen==set(expected)
+        receipt=json.loads((R/d['software_receipt']).read_text(encoding='utf-8'))
+        assert receipt['passed']==proof['passed'] and not receipt['missing'] and receipt['regression']==proof['regression']
     check_protected()
     return dict(passed=True,directory=d['directory'],bit_sha256=d['bit_sha256'],source_zip_sha256=d['source_zip_sha256'],
                 verified_members=len(manifest),current_stage1_checks=proof['passed'],compiled_inputs=len(compiled),hardware_status='PENDING')

@@ -9,7 +9,7 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  output wire O_conflict,output reg O_pair,output reg O_cal_enter,O_cal_sample,O_cal_cancel,
  output reg O_rotate,output wire [1:0] O_diag,output reg [1:0] O_ui_mode,
  output reg O_down2,O_click2,O_click3,O_click4,O_cancel,
- output reg O_gain_busy,O_gain_failed,output reg [2:0] O_gain_slot);
+ output reg O_gain_busy,O_gain_failed,output reg [2:0] O_gain_slot,output wire [6:0] O_gain_target);
  (* async_reg="true" *)reg [2:0] k1,k2;(* async_reg="true" *)reg [1:0] s1,s2;
  (* async_reg="true" *)reg [1:0] ack_sync;
  reg [2:0] key_candidate,keys,previous,gesture,chord;reg [1:0] switch_candidate;
@@ -20,6 +20,7 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  wire accepting_mode=tick && s2==switch_candidate && sd==DEBOUNCE_MS-1 && O_ui_mode!=switch_candidate;
  wire valid_chord=pressed==3 || pressed==5 || pressed==6;
  wire camera_ready=I_camera[17];wire [6:0] applied_gain=I_camera[6:0];
+ assign O_gain_target=target_gain;
  assign O_conflict=conflict || pressed==7;assign O_diag=0;
  function [6:0] gain_at;input [2:0] slot;begin
  case(slot)0:gain_at=16;1:gain_at=32;2:gain_at=48;3:gain_at=64;4:gain_at=80;5:gain_at=90;default:gain_at=105;endcase end endfunction

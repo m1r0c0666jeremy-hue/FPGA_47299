@@ -6,26 +6,39 @@ from audit_stage1 import R,audit,sha
 def write_new(path,value):
     with path.open('x',encoding='utf-8',newline='\n') as f:json.dump(value,f,ensure_ascii=False,indent=2);f.write('\n')
 
-def package(attempt):
+def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
     proof=audit(attempt)
-    guard_report=R/'reports/stage1/routing_guards_20261024_130333.json'
+    software_report=R/software
+    saved=json.loads(software_report.read_text(encoding='utf-8'))
+    assert saved['passed']==proof['required'] and not saved['missing']
+    assert saved['regression']==proof['regression'],'Software receipt differs from current evidence'
+    guard_report=R/routing_guards
     guards=json.loads(guard_report.read_text(encoding='utf-8'))
     assert guards['status']=='ROUTING_GUARDS_PASS' and len(guards['checks'])==6 and set(guards['checks'].values())=={'REJECTED'}
     assert len(guards['current_checks'])==8 and set(guards['current_checks'].values())=={'REJECTED'}
     assert guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
     assert guards['producer_sha256']==sha(R/'scripts/test_stage1_routing_guards.py')
     assert all(sha(R/n)==h for n,h in guards['fixtures'].items())
+    safety_reports=[guard_report]
+    safety_fixtures={R/n for n in guards['fixtures']}
+    for name,status,producer in ((release_guards,'RELEASE_GUARDS_PASS','test_stage1_release_guards.py'),
+                                (gate_reuse_guards,'GATE_REUSE_GUARDS_PASS','test_stage1_gate_reuse_guards.py')):
+        path=R/name;result=json.loads(path.read_text(encoding='utf-8'))
+        assert result['status']==status and len(result['checks'])==4 and set(result['checks'].values())=={'REJECTED'}
+        assert result['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
+        assert result['producer_sha256']==sha(R/'scripts'/producer)
+        assert all(sha(R/n)==h for n,h in result['fixtures'].items())
+        safety_reports.append(path);safety_fixtures|={R/n for n in result['fixtures']}
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     report=R/'reports/stage1'/('final_audit_'+stamp+'.json');report.parent.mkdir(parents=True,exist_ok=True)
     write_new(report,proof)
     build=R/proof['build']['attempt'];compiled=json.loads((build/'inputs.json').read_text())
     dest=R/'build'/('target_region_sequence_stage1_'+stamp);dest.mkdir(exist_ok=False)
-    paths={R/n for n in compiled}|{build/'compiled_source'/n for n in compiled}|{report,guard_report}|{R/n for n in guards['fixtures']}
+    paths={R/n for n in compiled}|{build/'compiled_source'/n for n in compiled}|{report,software_report}|set(safety_reports)|safety_fixtures
     for folder in ('scripts','sim','rtl'):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
-    paths|={R/'README.md',R/'reports/stage1/validation.md',R/'reports/stage1/software_current_20261024_1246.json',
-            R/'reports/stage1/guards_20261024_130406.json',
+    paths|={R/'README.md',R/'reports/stage1/validation.md',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/proof['baseline']['archive']}
     for e in proof['regression'].values():
@@ -38,14 +51,6 @@ def package(attempt):
         paths|={origin/'compiled_source'/n for n in compiled}
         paths|={origin/n for n in ('summary.json','source_context.json','inputs.json','inputs_after.json',
                                   'flow_options.json','run.tcl','td.log','target_color_regions_gate.db')}
-        gate_guard_report=R/'reports/stage1/gate_reuse_guards_20261024_130407.json'
-        gate_guards=json.loads(gate_guard_report.read_text(encoding='utf-8'))
-        assert gate_guards['status']=='GATE_REUSE_GUARDS_PASS' and len(gate_guards['checks'])==4
-        assert set(gate_guards['checks'].values())=={'REJECTED'}
-        assert gate_guards['auditor_sha256']==sha(R/'scripts/audit_stage1.py')
-        assert gate_guards['producer_sha256']==sha(R/'scripts/test_stage1_gate_reuse_guards.py')
-        assert all(sha(R/n)==h for n,h in gate_guards['fixtures'].items())
-        paths|={gate_guard_report}|{R/n for n in gate_guards['fixtures']}
     for directory in (parent,build):
         for p in directory.iterdir():
             if p.is_file() and p.suffix in ('.json','.tcl','.area','.timing','.ts','.txt','.log','.zip','.db','.bit'):paths.add(p)
@@ -62,12 +67,15 @@ def package(attempt):
         if (build/n).is_file():shutil.copy2(build/n,dest/n)
     write_new(dest/'source_files.json',manifest)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name='矩形区域顺序报警第一阶段候选',branch=proof['branch'],head=proof['head'],
+      archive_name='矩形区域跨帧记点与自动保存候选',branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),
       resources=proof['build']['summary']['resources'],slack_ns=proof['build']['summary']['slack_ns'],
-      baseline_module_checks=160,stage1_checks=proof['passed'],hardware_status='PENDING; no board download or Flash write')
+      baseline_module_checks=160,stage1_checks=proof['passed'],
+      software_receipt=software_report.relative_to(R).as_posix(),
+      safety_receipts={p.relative_to(R).as_posix():sha(p) for p in safety_reports},
+      hardware_status='PENDING; no board download or Flash write')
     write_new(dest/'delivery.json',delivery)
     with (dest/'SHA256SUMS.txt').open('x',encoding='utf-8') as f:
         for p in sorted(dest.iterdir()):
@@ -79,4 +87,6 @@ def package(attempt):
     return dest
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--attempt',required=True);a=ap.parse_args();package(a.attempt)
+    ap=argparse.ArgumentParser();ap.add_argument('--attempt',required=True)
+    for name in ('software','routing-guards','release-guards','gate-reuse-guards'):ap.add_argument('--'+name,required=True)
+    a=ap.parse_args();package(a.attempt,a.software,a.routing_guards,a.release_guards,a.gate_reuse_guards)

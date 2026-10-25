@@ -10,7 +10,7 @@ wire [2:0] zoom,slot;wire [7:0] session;wire [1:0] diag,mode;
 reg [1:0] last_mode=0;
 stage1_controls #(.CYCLES_PER_MS(2),.DEBOUNCE_MS(3),.LONG_PRESS_MS(20),.CHORD_WINDOW_MS(8)) dut(
 clk,rst,keys,sw,ack,cal,pause,camera,req,up,zoom,tracking,show,session,conflict,pair,ce,cs,cc,rotate,diag,mode,
-down,c2,c3,c4,cancel,gb,gf,slot);
+down,c2,c3,c4,cancel,gb,gf,slot,);
 integer clicks2=0,clicks3=0,clicks4=0,downs=0,steps=0;reg [6:0] next_gain;integer delay_ack=0,delay_feedback=0;
 always @(posedge clk)begin #1;if(rst && mode!=last_mode && (down || c2 || c3 || c4))$fatal(1,"switch acceptance leaked a gesture");last_mode=mode;end
 always @(posedge clk)begin

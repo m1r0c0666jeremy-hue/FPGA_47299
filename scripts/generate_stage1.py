@@ -8,130 +8,7 @@ MESSAGES=['TIP READY','SET TWO CORNERS','RECT TOO SMALL','AREA TOUCH/OVER','MAX 
           'KEY3 RESUME','TRACK LOST','BRT FAILED']
 RUN_NAMES=['IDLE','WAIT OUT','RUN','PAUSED','MOVE OUT','PASS','FAIL','STOPPED']
 
-def ui_assets():
-    ids={c:i for i,c in enumerate(CHARS)}
-    rom=[0]*512
-    for base,stride,values in [(0,16,MESSAGES),(256,8,[s[:8] for s in RUN_NAMES]),(320,8,['STABLE','APPROACH','AWAY'])]:
-        for i,s in enumerate(values):
-            assert len(s)<=stride
-            for j,c in enumerate(s):rom[base+i*stride+j]=ids[c]
-    text='module stage1_ui_text(input wire clk,input wire [8:0] addr,output reg [7:0] q);\n(* rom_style="bram" *)reg [7:0] mem[0:511];\ninitial begin\n'
-    text+=''.join(f"mem[{i}]=8'd{v};\n" for i,v in enumerate(rom))+'end\nalways @(posedge clk)q<=mem[addr];\nendmodule\n'
-    def layout():return ["8'd0"]*64
-    def put(line,start,s):
-        for i,c in enumerate(s):line[start+i]=f"8'd{ids[c]}"
-    def digits(line,start,word):
-        for i in range(4):line[start+i]=f"8'd1+{word}[{(3-i)*4}+:4]"
-    edit=layout();put(edit,0,'EDIT ');edit[5]="fn<4?8'd11+fn:8'd41"
-    put(edit,7,'PTS ');edit[11]="8'd1+fdraft";put(edit,12,'/2 SAVE ');edit[20]="8'd1+fn";put(edit,21,'/4')
-    for i in range(24,40):edit[i]='rom_glyph'
-    put(edit,40,' D');digits(edit,42,'distance_bcd');put(edit,46,'PX IN ')
-    for i in range(42,46):edit[i]=f"fn!=0 && ftip && !fbusy?({edit[i]}):8'd41"
-    edit[52]="foccupied[0]?8'd11:foccupied[1]?8'd12:foccupied[2]?8'd13:foccupied[3]?8'd14:8'd41"
-    put(edit,54,'T');digits(edit,55,'dwell_bcd');edit[58]="8'd39";edit[59]="8'd1+dwell_bcd[3:0]";put(edit,60,'s')
-    edit[62]="ftrend==1?8'd11:ftrend==2?8'd11:8'd29";edit[63]="ftrend==1?8'd26:ftrend==2?8'd33:8'd30"
-    test=layout()
-    for i in range(8):test[i]='rom_glyph'
-    put(test,9,'NEXT ');test[14]="fexpected<fn && fstate!=5?8'd11+fexpected:8'd41"
-    put(test,16,'IN ');test[19]=edit[52];put(test,22,'D');digits(test,23,'distance_bcd');put(test,27,'PX T')
-    for i in range(23,27):test[i]=f"fn!=0 && ftip && !fbusy?({test[i]}):8'd41"
-    test[31]="8'd1+dwell_bcd[15:12]";test[32]="8'd1+dwell_bcd[11:8]";test[33]="8'd1+dwell_bcd[7:4]";put(test,34,'.');test[35]="8'd1+dwell_bcd[3:0]";put(test,36,'s')
-    for i in range(38,46):test[i]='rom_glyph'
-    for i in range(47,63):test[i]='rom_glyph'
-    fail=layout();put(fail,47,'EXP ');fail[51]="8'd11+fexpected";put(fail,52,' GOT ');fail[57]="factual!=0?8'd10+factual:8'd41"
-    for i in range(47,64):test[i]=f"fstate==6?({fail[i]}):({test[i]})"
-    for i,c in enumerate('MUTE'):test[60+i]=f"fmuted?8'd{ids[c]}:({test[60+i]})"
-    # Rectangle release: distance and trend are deliberately not displayed.
-    for i in range(40,54):edit[i]="8'd0"
-    edit[62]=edit[63]="8'd0"
-    for i in list(range(22,30))+list(range(38,46)):test[i]="8'd0"
-    normal=layout();put(normal,54,'BRT');normal[57]="8'd2+fslot";put(normal,58,'/7')
-    busy=layout();put(busy,0,'BRIGHTNESS BUSY ');busy[16]="8'd2+fslot";put(busy,17,'/7 TO ');busy[23]="fslot==6?8'd2:8'd3+fslot";put(busy,24,'/7')
-    failed=layout();put(failed,0,'BRT FAILED. CHECK CAM')
-    reserved=layout();put(reserved,0,'ROUTE RESERVED')
-    hidden_fail=layout();put(hidden_fail,0,'FAIL EXP ');hidden_fail[9]="8'd11+fexpected";put(hidden_fail,10,' GOT ');hidden_fail[15]="factual!=0?8'd10+factual:8'd41";put(hidden_fail,16,'. KEY2 RETEST')
-    for i,c in enumerate('MUTE'):hidden_fail[32+i]=f"fmuted?8'd{ids[c]}:8'd0"
-    hidden_pause=layout();put(hidden_pause,0,'PAUSED. KEY3 RESUME')
-    hidden_lost=layout();put(hidden_lost,0,'INPUT LOST. KEY2 RETEST')
-    hidden_wait=layout();put(hidden_wait,0,'WAIT OUT. LEAVE ALL AREAS')
-    minimal=[f"fstate==6?({a}):fstate==3?({b}):fstate==7?({c}):({d})" for a,b,c,d in zip(hidden_fail,hidden_pause,hidden_lost,hidden_wait)]
-    ui='''`default_nettype none
-module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
- input wire [1:0] mode,input wire [3:0] run_state,input wire [2:0] area_count,draft_area,expected_area,actual_area,
- input wire [3:0] draft_count,occupied,input wire [10:0] distance,input wire [19:0] dwell_ms,
- input wire [1:0] trend,input wire [3:0] edit_error,start_error,input wire busy,tip_live,muted,gain_busy,gain_failed,
- input wire [2:0] gain_slot,input wire show,
- output reg [7:0] glyph,output wire override_enable,force_footer,
- output wire [3:0] snapshot_state,output wire [1:0] snapshot_mode);
- reg [1:0] fmode,ftrend;reg [3:0] fstate,fn,fdraft,foccupied,fedit,fstart;
- reg [2:0] fexpected,factual,fslot;reg fbusy,ftip,fmuted,fgain,fgain_failed,fshow;
- reg [10:0] fdistance;reg [19:0] divider,binary_a,binary_b;reg [6:0] remainder;
- reg [13:0] quotient;reg [15:0] bcd_a,bcd_b,distance_bcd,dwell_bcd,adjust_a,adjust_b;
- reg [1:0] conversion;reg [4:0] bit_index;reg [3:0] message_id;reg [8:0] rom_addr;wire [7:0] rom_glyph;
- stage1_ui_text text_rom(clk,rom_addr,rom_glyph);
- wire [7:0] shifted_remainder={remainder,divider[19]};wire qbit=shifted_remainder>=100;
- assign snapshot_state=fstate;assign snapshot_mode=fmode;
- assign force_footer=run_state==1 || run_state==3 || run_state==4 || run_state==6 || run_state==7;
- assign override_enable=fmode!=0 || fgain || fgain_failed || col>=54 || (!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7));
- integer i;
- always @*begin adjust_a=bcd_a;adjust_b=bcd_b;
- for(i=0;i<4;i=i+1)begin if(bcd_a[i*4+:4]>=5)adjust_a[i*4+:4]=bcd_a[i*4+:4]+3;
- if(bcd_b[i*4+:4]>=5)adjust_b[i*4+:4]=bcd_b[i*4+:4]+3;end end
- always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin fmode<=0;ftrend<=0;fstate<=0;fn<=0;fdraft<=0;foccupied<=0;fedit<=0;fstart<=0;
- fexpected<=0;factual<=0;fslot<=5;fbusy<=0;ftip<=0;fmuted<=0;fgain<=0;fgain_failed<=0;fshow<=1;
- fdistance<=0;divider<=0;binary_a<=0;binary_b<=0;remainder<=0;quotient<=0;
- bcd_a<=0;bcd_b<=0;distance_bcd<=0;dwell_bcd<=0;conversion<=0;bit_index<=0;end
- else begin
- if(conversion==1)begin
- divider<=divider<<1;remainder<=qbit?shifted_remainder-100:shifted_remainder;quotient<={quotient[12:0],qbit};
- if(bit_index==19)begin binary_a<={9'd0,fdistance};binary_b<={6'd0,quotient[12:0],qbit};bcd_a<=0;bcd_b<=0;bit_index<=0;conversion<=2;end
- else bit_index<=bit_index+1'b1;
- end else if(conversion==2)begin
- binary_a<=binary_a<<1;binary_b<=binary_b<<1;bcd_a<={adjust_a[14:0],binary_a[19]};bcd_b<={adjust_b[14:0],binary_b[19]};
- if(bit_index==19)begin distance_bcd<={adjust_a[14:0],binary_a[19]};dwell_bcd<={adjust_b[14:0],binary_b[19]};conversion<=0;end else bit_index<=bit_index+1'b1;
- end
- if(latch)begin fmode<=mode;fstate<=run_state;fn<={1'b0,area_count};fdraft<=draft_count;foccupied<=occupied;
- fexpected<=expected_area;factual<=actual_area;ftrend<=trend;fedit<=edit_error;fstart<=start_error;
- fbusy<=busy;ftip<=tip_live;fmuted<=muted;fgain<=gain_busy;fgain_failed<=gain_failed;fslot<=gain_slot;fshow<=show;
- fdistance<=distance;divider<=dwell_ms;remainder<=0;quotient<=0;bit_index<=0;conversion<=1;end
- end end
- always @*begin
- message_id=fbusy?8:fedit!=0?fedit:!ftip?5:0;
- if(fmode==2 || !fshow)begin
- if(fbusy)message_id=8;
- else if(fstart!=0)case(fstart)1:message_id=7;2:message_id=9;3:message_id=5;default:message_id=8;endcase
- else case(fstate)0:message_id=11;1,4:message_id=10;3:message_id=13;5:message_id=12;7:message_id=14;default:message_id=0;endcase
- end
- rom_addr=0;
- if(fmode==1 && col>=24 && col<40)rom_addr={1'b0,message_id,4'd0}+col-24;
- if(fmode==2 || (!fshow && force_footer))begin
- if(col<8)rom_addr=9'd256+{2'd0,fstate,3'd0}+col;
- else if(col>=38 && col<46)rom_addr=9'd320+{4'd0,ftrend,3'd0}+col-38;
- else if(col>=47 && col<63)rom_addr={1'b0,message_id,4'd0}+col-47;
- end
- glyph=0;
-'''
-    for name,line in [('edit',edit),('test',test),('normal',normal),('busy',busy),('failed',failed),('reserved',reserved)]:
-        ui+=f'// {name} layout\n'
-        cond={'edit':'fmode==1','test':'fmode==2 || (!fshow && force_footer)','normal':'1\'b1','busy':'fgain','failed':'fgain_failed','reserved':'fmode==3'}[name]
-        # Select layouts below with a function, avoiding priority surprises.
-    ui+='end\n'
-    for name,line in [('edit',edit),('test',test),('normal',normal),('busy',busy),('failed',failed),('reserved',reserved),('minimal',minimal)]:
-        ui+=f'function [7:0] {name}_char;input [5:0] column;begin {name}_char=0;case(column)\n'
-        ui+=''.join(f"6'd{i}:{name}_char={expr};\n" for i,expr in enumerate(line) if expr!="8'd0")+'endcase end endfunction\n'
-    ui+='''always @(col or fmode or fshow or fstate or fgain_failed or fgain or fn or fdraft or fexpected or factual or fmuted or fslot or foccupied or ftrend or distance_bcd or dwell_bcd or rom_glyph or force_footer)begin
- if(!fshow && (fstate==1 || fstate==3 || fstate==4 || fstate==6 || fstate==7))glyph=minimal_char(col);
- else if(fmode==2)glyph=test_char(col);
- else if(fmode==1)glyph=edit_char(col);else if(fgain_failed)glyph=failed_char(col);
- else if(fgain)glyph=busy_char(col);else if(fmode==3)glyph=reserved_char(col);else glyph=normal_char(col);
- end
-endmodule
-`default_nettype wire
-'''
-    # glyph is driven by the dedicated layout block, not the address block.
-    ui=ui.replace(' glyph=0;\n','')
-    return text,ui
+from stage1_behavior_ui import ui_assets
 
 def assets():
     out={}
@@ -140,39 +17,42 @@ def assets():
     top=top.replace('output wire       O_screen_pwm,','output wire       O_buzzer,\n    output wire       O_screen_pwm,')
     a=top.index('refined_controls #');b=top.index('\nPLL u_PLL',a)
     top=top[:a]+'''wire [1:0] stage_mode;wire stage_down,stage_k2,stage_k3,stage_k4,stage_cancel,stage_gain_busy,stage_gain_failed,stage_alarm;
-wire [2:0] stage_gain_slot;
+wire [2:0] stage_gain_slot;wire [6:0] stage_gain_target;
 stage1_controls u_controls(.I_clk(S_hdmi_pixel_clk),.I_rst_n(process_rst_n),.I_keys_n(I_button),.I_ui_switch(I_ui_switch),
  .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),.I_pause(camera_pause),.I_camera(camera_ui_status),
  .O_gain_req(gain_req),.O_gain_up(gain_up),.O_zoom(ui_zoom),.O_tracking(ui_tracking),.O_show(ui_show),.O_session(ui_session),
  .O_conflict(ui_conflict),.O_pair(ui_pair),.O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),
  .O_rotate(ui_rotate),.O_diag(ui_diag),.O_ui_mode(stage_mode),.O_down2(stage_down),.O_click2(stage_k2),.O_click3(stage_k3),
- .O_click4(stage_k4),.O_cancel(stage_cancel),.O_gain_busy(stage_gain_busy),.O_gain_failed(stage_gain_failed),.O_gain_slot(stage_gain_slot));
+ .O_click4(stage_k4),.O_cancel(stage_cancel),.O_gain_busy(stage_gain_busy),.O_gain_failed(stage_gain_failed),.O_gain_slot(stage_gain_slot),.O_gain_target(stage_gain_target));
 stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_n,stage_alarm,O_buzzer);
 '''+top[b:]
     top=top.replace('stable_memory_video_out #','stage1_memory_video_out #')
     top=top.replace('u_video (','''u_video (
     .I_ui_mode(stage_mode),.I_key_down2(stage_down),.I_key2(stage_k2),.I_key3(stage_k3),.I_key4(stage_k4),.I_key_cancel(stage_cancel),
-    .I_gain_busy(stage_gain_busy),.I_gain_failed(stage_gain_failed),.I_gain_slot(stage_gain_slot),.O_area_alarm(stage_alarm),''')
+    .I_gain_busy(stage_gain_busy),.I_gain_failed(stage_gain_failed),.I_gain_slot(stage_gain_slot),.I_gain_target(stage_gain_target),.O_area_alarm(stage_alarm),''')
     out['rtl/color_regions/stage1_top.v']=top
     video=(R/'rtl/color_regions/stable_memory_video_out.v').read_text(encoding='utf-8').replace('module stable_memory_video_out','module stage1_memory_video_out')
     video=video.replace('input wire [31:0] I_source_id','''input wire [1:0] I_ui_mode,input wire I_key_down2,I_key2,I_key3,I_key4,I_key_cancel,
-    input wire I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,output wire O_area_alarm,
+    input wire I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,input wire [6:0] I_gain_target,output wire O_area_alarm,
     input wire [31:0] I_source_id''')
-    addition='''wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
+    addition='''wire area_associated,area_video;wire [3:0] area_tip_reason;
+    stage1_input_guard region_input(I_pixel_clk,I_process_rst_n,stream_pixel_n,I_tracking,I_camera_ready,I_gain_busy,
+     video_ok,S_hdmi_out_de,frame_commit,I_session,I_pair,selected_frame_id,image_epoch,image_us,image_time_valid,active_meta,area_associated,area_video);
+    wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
     wire [15:0] area_revision,area_counts;wire [671:0] area_vertices,area_saved_vertices;wire [167:0] area_draft_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
     wire [1:0] area_trend;wire [10:0] area_distance;wire [19:0] area_dwell;
     stage1_regions area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
-     .tracking(I_tracking),.video_ok(video_ok && stream_pixel_n),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
-     .frame_commit(frame_commit),.detection_valid(detection_valid),.image_id(selected_frame_id),.meta(active_meta),
+     .tracking(I_tracking),.video_ok(area_video),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
+     .frame_commit(frame_commit),.detection_valid(area_associated),.image_id(selected_frame_id),.meta(active_meta),
      .region_count(area_count),.draft_count(area_draft),.revision(area_revision),.render_vertices(area_vertices),.render_counts(area_counts),.closed_mask(area_closed),
      .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(O_area_alarm),
-     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices));
+     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices),.tip_reason(area_tip_reason));
     stage1_osd u_osd (
      .I_ui_mode(I_ui_mode),.I_region_vertices(area_saved_vertices),.I_region_draft(area_draft_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
      .I_area_count(area_count),.I_draft_count(area_draft),.I_run_state(area_state),.I_completed(area_completed),.I_occupied(area_occupied),
      .I_expected_area(area_expected),.I_actual_area(area_actual),.I_area_muted(area_muted),.I_area_trend(area_trend),.I_area_distance(area_distance),.I_area_dwell(area_dwell),
      .I_edit_error(area_edit_error),.I_start_error(area_start_error),.I_area_busy(area_busy || (area_tip && area_count!=0 && !area_metrics_valid)),.I_tip_live(area_tip),
-     .I_gain_busy(I_gain_busy),.I_gain_failed(I_gain_failed),.I_gain_slot(I_gain_slot),'''
+     .I_gain_busy(I_gain_busy),.I_gain_failed(I_gain_failed),.I_gain_slot(I_gain_slot),.I_gain_target(I_gain_target),.I_tip_reason(area_tip_reason),'''
     assert 'refined_osd u_osd (' in video
     video=video.replace('refined_osd u_osd (',addition)
     out['rtl/color_regions/stage1_memory_video_out.v']=video
@@ -182,6 +62,7 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
  input wire I_area_muted,input wire [1:0] I_area_trend,input wire [10:0] I_area_distance,input wire [19:0] I_area_dwell,
  input wire [3:0] I_edit_error,I_start_error,input wire I_area_busy,I_tip_live,I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,
  input wire I_clk,I_rst_n,I_vs''')
+    osd=osd.replace('input wire [17:0] I_camera\n', 'input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason\n')
     hook='''wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  wire [23:0] region_color,region_label_color;wire region_label_on,region_ready,region_underrun;
  wire [7:0] region_label_glyph,stage_glyph;wire [2:0] region_label_gx;wire [3:0] region_label_gy;
@@ -191,12 +72,12 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
- I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode);
+ I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason);
 '''
     osd=osd.replace(' always @(posedge I_clk or negedge I_rst_n)begin\n if(!I_rst_n)begin\n flat_valid',hook+' always @(posedge I_clk or negedge I_rst_n)begin\n if(!I_rst_n)begin\n flat_valid',1)
-    osd=osd.replace('characters[(format_row?COLS:0)+format_col]<=decoded_glyph;',"characters[(format_row?COLS:0)+format_col]<=!format_row && fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;")
+    osd=osd.replace('characters[(format_row?COLS:0)+format_col]<=decoded_glyph;',"characters[(format_row?COLS:0)+format_col]<=fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;")
     osd=osd.replace('wire footer_current=footer_ready &&','wire footer_current=stage_snapshot_state==I_run_state && stage_snapshot_mode==I_ui_mode && footer_ready &&')
-    osd=osd.replace('footer_text=1;','footer_text=I_show || stage_force_footer;if(!I_show && footer_row)footer_text=0;')
+    # Both footer rows remain visible when video overlays are disabled.
     marker=' end end\n wire [9:0] shared_font_addr='
     assert marker in osd
     osd=osd.replace(marker,''' end
@@ -225,7 +106,8 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
     for i,name in enumerate(stage_files,100):
         additions+=f'''            <File Path="../rtl/color_regions/{name}"><FileInfo><Attr Name="UsedInSyn" Val="true" /><Attr Name="UsedInP&amp;R" Val="true" /><Attr Name="BelongTo" Val="design_1" /><Attr Name="CompileOrder" Val="{i}" /></FileInfo></File>\n'''.replace('P&amp;R','P&R')
     project=project.replace('        </Verilog>',additions+'        </Verilog>')
-    out['td_project/target_color_regions_stage1.al']=project
+    from stage1_project import check_project
+    check_project(R/'td_project/target_color_regions_stage1.al',project)
     build=(R/'scripts/run_refined_build.py').read_text(encoding='utf-8')
     # Vendor AdderChainThresholdHigh uses min_ripple_len=18. Expose the same
     # synthesis-only choice without enabling expensive extra gate mapping.

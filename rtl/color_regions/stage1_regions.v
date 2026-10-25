@@ -10,7 +10,7 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  output wire [3:0] run_state,completed,occupied,output wire [2:0] expected_area,actual_area,
  output wire muted,alarm,output wire [1:0] trend,output wire [10:0] distance,
  output wire [19:0] dwell_ms,output reg [3:0] edit_error,output wire [3:0] start_error,
- output wire busy,tip_live,metrics_valid,output wire [671:0] saved_vertices,output wire [167:0] draft_vertices);
+ output wire busy,tip_live,metrics_valid,output wire [671:0] saved_vertices,output wire [167:0] draft_vertices,output wire [3:0] tip_reason);
 
  // Only two corners per area are stored. Wide legacy ports are zero padded;
  // no arbitrary polygon, iterative multiplier/divider or bitmap is instantiated.
@@ -18,12 +18,19 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  reg seen;reg [31:0] last_id;reg [15:0] last_epoch,last_model;
  reg [7:0] last_session,session_last,point_session;reg [1:0] mode_last;
  reg [16:0] subms;reg [8:0] tip_age;reg [20:0] edit_point;
- reg [15:0] point_model;reg point_pending;reg [1:0] edit_request;
+ reg [15:0] point_model,point_epoch;reg point_pair;reg point_pending;reg [2:0] edit_request;
+ reg [3:0] point_failure;
  reg observation,configuration_changed,metrics_good;
  reg [3:0] observed_in,observed_near;
- wire source_ok=detection_valid && meta[255] && meta[247] && meta[32] && meta[415:413]==4 &&
- meta[31:0]==image_id && meta[242:235]==session && meta[243]==pair && meta[244] &&
- meta[89:79]<1280 && meta[99:90]<720;
+ wire packet_ok=detection_valid && meta[255] && meta[247] && meta[415:413]==4 &&
+ meta[31:0]==image_id && meta[242:235]==session && meta[243]==pair && meta[244];
+ wire source_ok=packet_ok && meta[32] && meta[89:79]<1280 && meta[99:90]<720;
+ wire point_context=point_session==session && point_model==meta[559:544] && point_epoch==meta[719:704] && point_pair==pair;
+ wire [3:0] live_reason=!tracking?1:!camera_ready?2:gain_busy?6:!video_ok?3:
+ !packet_ok?9:!meta[32] || meta[89:79]>=1280 || meta[99:90]>=720?4:tip_age>=250?5:0;
+ assign tip_reason=mode==1 && point_failure!=0?point_failure:live_reason;
+ wire execute_edit=mode==1 && mode==mode_last && session==session_last && !cancel;
+ wire execute_point=execute_edit && tip_live && point_context;
  assign tip_live=tracking && camera_ready && video_ok && source_ok && tip_age<250 && !gain_busy;
  assign metrics_valid=metrics_good && tip_live && seen && image_id==last_id && session==last_session &&
  meta[719:704]==last_epoch && meta[559:544]==last_model;
@@ -66,16 +73,16 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  run_state,expected_area,actual_area,completed,occupied,muted,alarm,,,dwell_ms,start_error);
  // Payload is invalid above region/draft counts and is overwritten before reuse.
  always @(posedge clk)begin
- if(edit_request==1 && mode==1 && region_count<4 && draft_count<2)begin
+ if(edit_request==1 && execute_point && region_count<4 && draft_count<2)begin
  if(draft_count==0)draft[20:0]<=edit_point;else draft[41:21]<=edit_point;end
- if(edit_request==2 && mode==1 && draft_count==2 && region_count<4 &&
+ if(edit_request==2 && execute_point && draft_count==2 && region_count<4 &&
  xmax-xmin>=6 && ymax-ymin>=6 && !overlap)begin
  for(data_index=0;data_index<4;data_index=data_index+1)if(region_count==data_index)rectangles[data_index]<=normalized;
  end end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin
  region_count<=0;draft_count<=0;revision<=0;seen<=0;last_id<=0;last_epoch<=0;last_model<=0;last_session<=0;
- session_last<=0;point_session<=0;point_model<=0;mode_last<=0;subms<=0;tip_age<=250;
+ session_last<=0;point_session<=0;point_model<=0;point_epoch<=0;point_pair<=0;point_failure<=0;mode_last<=0;subms<=0;tip_age<=250;
  edit_point<=0;point_pending<=0;edit_request<=0;observation<=0;configuration_changed<=0;
  observed_in<=0;observed_near<=0;metrics_good<=0;edit_error<=0;
  end else begin
@@ -83,38 +90,66 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  if(subms==CYCLES_PER_MS-1)begin subms<=0;if(tip_age<250)tip_age<=tip_age+1'b1;end
  else subms<=subms+1'b1;
  if(!seen || image_id!=last_id || session!=last_session || meta[719:704]!=last_epoch || meta[559:544]!=last_model)begin
- if(source_ok && tracking && camera_ready && video_ok && !gain_busy)begin
+ if(packet_ok && tracking && camera_ready && video_ok && !gain_busy)begin
  seen<=1;last_id<=image_id;last_session<=session;last_epoch<=meta[719:704];last_model<=meta[559:544];tip_age<=0;
  for(obs_index=0;obs_index<4;obs_index=obs_index+1)begin
  observed_in[obs_index]<=obs_index<region_count && contains(rectangles[obs_index],meta[89:79],meta[99:90]);
  observed_near[obs_index]<=obs_index<region_count && border_band(rectangles[obs_index],meta[89:79],meta[99:90]);end
- observation<=1;metrics_good<=1;
+ observation<=source_ok;metrics_good<=source_ok;
  if(seen && (meta[719:704]!=last_epoch || meta[559:544]!=last_model))begin configuration_changed<=1;observation<=0;end
  end end
- if(mode==1 && down2)begin point_pending<=tip_live && !busy;
- if(tip_live && !busy)begin edit_point<={meta[99:90],meta[89:79]};point_session<=session;point_model<=meta[559:544];end
- else edit_error<=busy?4'd8:4'd5;end
- if(mode==1 && !busy)begin
+ if(mode==1 && down2 && !cancel)begin point_failure<=0;edit_error<=0;point_pending<=tip_live && !busy;
+ if(tip_live && !busy)begin edit_point<={meta[99:90],meta[89:79]};point_session<=session;point_model<=meta[559:544];
+ point_epoch<=meta[719:704];point_pair<=pair;end
+ else begin edit_error<=busy?4'd8:4'd5;point_failure<=busy?4'd0:live_reason;end end
+ if(mode==1 && !busy && !cancel)begin
  if(click2)begin
- if(point_pending && tip_live && point_session==session && point_model==meta[559:544])edit_request<=1;
- else edit_error<=5;point_pending<=0;end
- else if(click3)edit_request<=2;else if(click4)edit_request<=3;
+ if(point_pending && tip_live && point_context)edit_request<=1;
+ else begin edit_error<=point_failure!=0?4'd9:4'd5;if(point_failure==0)point_failure<=live_reason;end
+ point_pending<=0;end
+ else if(click3)begin edit_request<=4;point_failure<=0;end
+ else if(click4)begin edit_request<=3;point_failure<=0;end
  end
  if(edit_request!=0)begin edit_request<=0;edit_error<=0;
- if(mode==1)case(edit_request)
+ if(execute_edit)case(edit_request)
  1:if(region_count==4)edit_error<=4;else if(draft_count==2)edit_error<=6;
- else begin draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
- 2:if(draft_count!=2)edit_error<=1;else if(region_count==4)edit_error<=4;
+ else if(!execute_point)begin edit_error<=9;point_failure<=!point_context?4'd8:live_reason;end
+ else begin draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;
+ if(draft_count==1)edit_request<=2;end
+ 2:if(!execute_point)begin edit_error<=9;point_failure<=!point_context?4'd8:live_reason;end
+ else if(draft_count!=2)edit_error<=1;else if(region_count==4)edit_error<=4;
  else if(xmax-xmin<6 || ymax-ymin<6)edit_error<=2;
  else if(overlap)edit_error<=3;
  else begin region_count<=region_count+1'b1;draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  3:if(draft_count!=0)begin draft_count<=draft_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  else if(region_count!=0)begin region_count<=region_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  else edit_error<=7;
- default:begin end endcase end
- if(cancel || (!down2 && (!tip_live || session!=point_session || meta[559:544]!=point_model)))point_pending<=0;
+ 4:if(draft_count!=0)begin draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
+ default:begin end endcase
+ else begin edit_error<=9;point_failure<=7;end end
+ if(point_pending && (cancel || (!down2 && (!tip_live || !point_context))))begin
+ point_pending<=0;edit_error<=9;point_failure<=cancel?4'd7:!point_context?4'd8:live_reason;end
  if(mode!=mode_last || session!=session_last)begin point_pending<=0;configuration_changed<=1;observation<=0;
  if(mode!=1)edit_request<=0;end
  end end
+endmodule
+
+// Region input validity uses committed image identity, not the reader's
+// intentional VS blanking pulse. Active-video faults still invalidate at once.
+module stage1_input_guard(input wire clk,rst_n,stream_n,tracking,camera_ready,gain_busy,
+ input wire raw_video_ok,reader_de,frame_commit,input wire [7:0] session,input wire pair,
+ input wire [31:0] image_id,input wire [15:0] image_epoch,input wire [31:0] image_us,
+ input wire time_valid,input wire [767:0] meta,output wire associated,video_ok);
+ reg admitted;
+ assign associated=meta[255] && meta[247] && meta[415:413]==4 && meta[31:0]==image_id &&
+ meta[719:704]==image_epoch && meta[671:640]==image_us && meta[720] && time_valid &&
+ meta[242:235]==session && meta[243]==pair && meta[244]==tracking;
+ wire active_fault=reader_de && !raw_video_ok;
+ assign video_ok=admitted && stream_n && !active_fault;
+ always @(posedge clk or negedge rst_n)begin
+ if(!rst_n)admitted<=0;
+ else if(!stream_n || !tracking || !camera_ready || gain_busy || !associated || active_fault)admitted<=0;
+ else if(raw_video_ok)admitted<=1;
+ end
 endmodule
 `default_nettype wire

@@ -27,6 +27,10 @@ def old_modules():
 
 def specs():
     d={
+      'stage1_real_keys':('STAGE1_REAL_KEYS_PASS durations50/100/300',('stage1_controls','stage1_regions','refined_line_reader','stable_display')),
+      'stage1_real_keys_faults':('STAGE1_REAL_KEYS_FAULTS_PASS',('stage1_controls','stage1_regions','refined_line_reader','stable_display')),
+      'stage1_transactions':('STAGE1_TRANSACTIONS_PASS',('stage1_regions','stage1_render','stage1_sequence')),
+      'stage1_project_guards':('STAGE1_PROJECT_GUARDS_PASS',()),
       'stage1_controls':('STAGE1_CONTROLS_PASS',('stage1_controls',)),
       'stage1_sequence':('STAGE1_SEQUENCE_PASS',('stage1_sequence',)),
       'stage1_age_equivalence_1':('STAGE1_AGE_EQUIVALENCE_PASS period=1 cycles=1284003',('stage1_sequence',)),

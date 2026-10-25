@@ -28,7 +28,9 @@ def main():
     record.with_suffix('.log').write_text('PRIVATE_STALE_EVIDENCE_SENTINEL\n')
     assert evidence(name,'PRIVATE_STALE_EVIDENCE_SENTINEL',('stage1_point',)) is None
     outcomes['stale_source']='REJECTED'
-    result=dict(status='RELEASE_GUARDS_PASS',checks=outcomes,scope='Artificial negative fixtures only; not board or functional evidence')
+    fixtures={f.relative_to(R).as_posix():sha(f) for f in root.rglob('*') if f.is_file()}
+    fixtures.update({f.relative_to(R).as_posix():sha(f) for f in (record,record.with_suffix('.log'))})
+    result=dict(status='RELEASE_GUARDS_PASS',checks=outcomes,auditor_sha256=sha(R/'scripts/audit_stage1.py'),producer_sha256=sha(Path(__file__)),fixtures=fixtures,scope='Artificial negative fixtures only; not board or functional evidence')
     report=R/'reports/stage1'/('guards_'+stamp+'.json');report.parent.mkdir(parents=True,exist_ok=True)
     report.write_text(json.dumps(result,indent=2));print('STAGE1_RELEASE_GUARDS_PASS',outcomes)
 

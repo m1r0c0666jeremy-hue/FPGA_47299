@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json,re,subprocess
 BASELINE='607db22c9a570969df40b2f5c333981b3f63e9cd'
-BRANCH='feature/region-sequence-stage1'
+BRANCHES=('feature/region-sequence-stage1','Behaviour_region_1024')
 ORIGINAL=Path('D:/aaa_FPGA/transparent-ring-stability')
 PROTECTED={
  'td_project/target_color_regions.al':'4467601011e2e6df3603c786579b175bcc71a537469bfc75c6b533ffee05de64',
@@ -14,7 +14,7 @@ PROTECTED={
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def git(root,*args):return subprocess.check_output(['git','-c','safe.directory='+root.as_posix(),*args],cwd=root,text=True).strip()
 def check_branch(root):
-    branch=git(root,'branch','--show-current');assert branch==BRANCH,branch
+    branch=git(root,'branch','--show-current');assert branch in BRANCHES,branch
     subprocess.run(['git','-c','safe.directory='+root.as_posix(),'merge-base','--is-ancestor',BASELINE,'HEAD'],cwd=root,check=True)
     return branch
 def check_protected():
