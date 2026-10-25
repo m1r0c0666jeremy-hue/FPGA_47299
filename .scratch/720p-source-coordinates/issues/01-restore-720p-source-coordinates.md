@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** implemented; software verified; final package verification recorded in reports/720p
+**Status:** complete (software and delivery); hardware acceptance pending
 
 - [x] 恢复已审计英文 720p 编译输入。
 - [x] 在确认的边界 A 验证五倍率源坐标不变、标注映射和同帧身份。

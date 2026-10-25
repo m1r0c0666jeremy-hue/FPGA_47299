@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 恢复 720p 全链路并保留源坐标。
 
-**Status:** implemented; software verified; final package verification recorded in reports/720p
+**Status:** complete (software and delivery); hardware acceptance pending
 
 - [x] 在确认的边界 B 拒绝混入 FHD 的源码、错误 bit 和无效证据。
 - [x] 验证全部编译输入与物理构建证据对应。
