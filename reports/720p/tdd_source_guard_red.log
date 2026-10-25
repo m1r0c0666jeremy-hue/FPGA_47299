@@ -1,0 +1,17 @@
+test_changed_compiled_input_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_changed_compiled_input_is_rejected_without_candidate) ... FAIL
+test_unchanged_720p_is_delivered_with_historical_provenance (test_720p_delivery.DeliveryContract.test_unchanged_720p_is_delivered_with_historical_provenance) ... ok
+
+======================================================================
+FAIL: test_changed_compiled_input_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_changed_compiled_input_is_rejected_without_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\codex\FPGAco\720p-zoom\tests\test_720p_delivery.py", line 32, in test_changed_compiled_input_is_rejected_without_candidate
+    self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+AssertionError: 2 != 3 : usage: package_720p.py [-h] [--output OUTPUT]
+package_720p.py: error: unrecognized arguments: --source-root C:\Users\Fle\AppData\Local\Temp\720p_mutation_jlki5q99\source
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 3.482s
+
+FAILED (failures=1)

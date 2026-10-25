@@ -1,0 +1,8 @@
+test_changed_compiled_input_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_changed_compiled_input_is_rejected_without_candidate) ... ok
+test_unchanged_720p_is_delivered_with_historical_provenance (test_720p_delivery.DeliveryContract.test_unchanged_720p_is_delivered_with_historical_provenance) ... ok
+test_wrong_bit_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_wrong_bit_is_rejected_without_candidate) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 4.597s
+
+OK

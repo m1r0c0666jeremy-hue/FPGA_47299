@@ -1,0 +1,171 @@
+SOURCE_MASK_ORACLE 0
+SOURCE_MASK_ORACLE 1
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.264 s; speed 3.998 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.360 s; speed 3.911 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.400 s; speed 3.875 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.127 s; speed 4.131 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.059 s; speed 4.200 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.307 s; speed 3.959 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 3.991 s; speed 4.272 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.069 s; speed 4.190 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.122 s; speed 4.137 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.122 s; speed 4.137 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.199 s; speed 4.061 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.231 s; speed 4.030 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 3.830 s; speed 4.451 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.061 s; speed 4.198 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.493 s; speed 3.795 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 3.762 s; speed 4.532 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.971 s; speed 4.293 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.161 s; speed 4.097 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.828 s; speed 4.454 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.602 s; speed 4.733 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.961 s; speed 4.305 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.800 s; speed 4.487 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.862 s; speed 4.415 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.045 s; speed 4.215 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          0 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.060 s; speed 4.199 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          0 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.337 s; speed 3.932 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          1 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.094 s; speed 4.165 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          1 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.336 s; speed 3.933 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          2 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.169 s; speed 4.090 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          2 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.036 s; speed 4.225 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          3 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.009 s; speed 4.253 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          3 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.152 s; speed 4.106 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          0 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.237 s; speed 4.024 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          0 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.037 s; speed 4.223 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          1 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.966 s; speed 4.299 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          1 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.884 s; speed 4.390 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          2 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.008 s; speed 4.254 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          2 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.967 s; speed 4.298 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          3 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.815 s; speed 4.469 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          3 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.823 s; speed 4.460 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.261 s; speed 4.002 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.104 s; speed 4.154 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.071 s; speed 4.188 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          1 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.328 s; speed 3.940 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.114 s; speed 4.145 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.166 s; speed 4.092 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 4.203 s; speed 4.057 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          3 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- Verilator: $finish at 17ms; walltime 3.878 s; speed 4.397 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.095 s; speed 4.164 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 3.868 s; speed 4.408 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 3.927 s; speed 4.342 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          1 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 3.948 s; speed 4.319 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.259 s; speed 4.003 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          2 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.090 s; speed 4.169 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.178 s; speed 4.081 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          3 x0=        101 y0=         99 frames=          1 pixels=     798720 DDR=     101280 black=          0
+- Verilator: $finish at 17ms; walltime 4.135 s; speed 4.124 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.112 s; speed 4.147 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          0 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.331 s; speed 3.937 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 3.967 s; speed 4.298 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          1 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.380 s; speed 3.893 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.286 s; speed 3.978 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          2 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.255 s; speed 4.007 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.110 s; speed 4.149 ms/s
+STABLE_VIDEO_PASS: zoom=          2 mode=          3 x0=        320 y0=        204 frames=          1 pixels=     798720 DDR=      76320 black=          0
+- Verilator: $finish at 17ms; walltime 4.020 s; speed 4.241 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          0 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.309 s; speed 3.957 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          0 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.292 s; speed 3.973 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          1 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.270 s; speed 3.993 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          1 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.320 s; speed 3.947 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          2 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.461 s; speed 3.822 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          2 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.006 s; speed 4.257 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          3 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.534 s; speed 3.761 ms/s
+STABLE_VIDEO_PASS: zoom=          3 mode=          3 x0=        787 y0=        400 frames=          1 pixels=     798720 DDR=      51360 black=          0
+- Verilator: $finish at 17ms; walltime 4.266 s; speed 3.997 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          0 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.203 s; speed 4.057 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          0 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.284 s; speed 3.980 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          1 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.311 s; speed 3.955 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          1 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.138 s; speed 4.120 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          2 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 3.895 s; speed 4.377 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          2 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.296 s; speed 3.969 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          3 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.169 s; speed 4.090 ms/s
+STABLE_VIDEO_PASS: zoom=          4 mode=          3 x0=        959 y0=        563 frames=          1 pixels=     798720 DDR=      38880 black=          0
+- Verilator: $finish at 17ms; walltime 4.408 s; speed 3.868 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     164160 black=     733440
+- Verilator: $finish at 34ms; walltime 7.335 s; speed 4.574 ms/s
+STABLE_VIDEO_PASS: zoom=          0 mode=          0 x0=          0 y0=         48 frames=          2 pixels=    1597440 DDR=     288720 black=      69120
+- Verilator: $finish at 34ms; walltime 7.981 s; speed 4.204 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          2 pixels=    1597440 DDR=     139200 black=          0
+- Verilator: $finish at 34ms; walltime 7.784 s; speed 4.310 ms/s
+STABLE_VIDEO_PASS: zoom=          1 mode=          0 x0=        101 y0=         99 frames=          2 pixels=    1597440 DDR=     139200 black=          0
+- Verilator: $finish at 34ms; walltime 7.402 s; speed 4.533 ms/s
+REFINED_VIDEO_ALL_PASS 84 jobs 70287360 image pixels

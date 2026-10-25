@@ -1,0 +1,6 @@
+REFINED_GEOMETRY_PASS 360 rational-reference cases, all zooms/directions, odd extents, clipped boxes, sample/guide and mirrored point centres
+E:\codex\FPGAco\720p-zoom\build\sim\refined\rational_overlay_geometry_20261025_190210_729756\tb.sv:9: $finish called at 72040 (1s)
+
+REFINED_VIEWPORT_PASS five zooms, odd-width clamps, step-limited movement, both orientations, calibration/restoration
+E:\codex\FPGAco\720p-zoom\build\sim\refined\five_zoom_viewport_20261025_190211_275518\tb.sv:16: $finish called at 72160 (1s)
+

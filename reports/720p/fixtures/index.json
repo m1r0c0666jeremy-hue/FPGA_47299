@@ -1,0 +1,674 @@
+[
+  {
+    "name": "controls_with_camera_pause_20261025_190210_696254",
+    "record_sha256": "bb9396277987220cdbea35aa6c0491071d39641c56a131e54e766d132ff680f0",
+    "log_sha256": "be582a15c78a9262a294074a3e5835b5f9ff5ed664aa149271693411105c98b7",
+    "fixture_sha256": "543cf98594290aab3d0278e97781047786462ca832bf113703208bca4237e4e3",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "five_zoom_viewport_20261025_190211_275518",
+    "record_sha256": "8aaa809aabda244152a2ae5995f34bd2dac6666f9bb9dbe4a646a706593b02fe",
+    "log_sha256": "f1ad36397048c45278314c406a0b38a8ec5705588f8604d0ff85637dac016c75",
+    "fixture_sha256": "82a83d19e0bb8b7ac635ca677bd1c6117bf1fd3338ce9043abc753039e942579",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "project_rtl_elaboration_20261025_190211_330084",
+    "record_sha256": "482f1b4952e32c9b53e980a60b6c75f2a437ca2ba0a1f93609e49a0eeeeab74f",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fixture_sha256": "24e16849f14135a27740c83610ea450b473353beab43ca4f0fe5fa5c58b0d4e9",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "rational_overlay_geometry_20261025_190210_729756",
+    "record_sha256": "ad8a0625e0ce8e2d9b47fa0423f71ee1cdeb0939511609b5fe6f26b2b92c8d6b",
+    "log_sha256": "15e44951d50712d76dd730ffc46f5dbc32dbc273434d5f1123c10420a05ea05e",
+    "fixture_sha256": "14d84f59c7813f2764c450fe629f06c9e3fe0244327f731788066e40fbabae0e",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "refined_v4_live_0_0_refined_g160_20261025_190212_939126",
+    "record_sha256": "a1e503b1e93b20f460137d175caf6e798e1f0a4c479ce28382331246962bbe1a",
+    "log_sha256": "9808764f45c9d3db053e6712b9f575dde664e127be0503b9a1ec4a21ee187c37",
+    "fixture_sha256": "9f56286afd097524c83cb3d93bd3ecb3a2d3aa7fde0e48d42acf354d8d2ad78e",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_v4_live_0_1_refined_g160_20261025_190212_939126",
+    "record_sha256": "6d920de54ac00169b8821cc12d0cef94b29b11fdf204f24539545c05c664e9c7",
+    "log_sha256": "55e82909f3e5665b84f7a589e6b68d8e8714420f45a3ef43630fd7f5d08e3203",
+    "fixture_sha256": "9f56286afd097524c83cb3d93bd3ecb3a2d3aa7fde0e48d42acf354d8d2ad78e",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_v4_live_1_0_refined_g160_20261025_190436_405118",
+    "record_sha256": "596405e7adef0497530931fa96de5f25b2c160ee5e8fdb60f23352c427b42990",
+    "log_sha256": "d77c893f9da1de2028cab9062350c2ec41ebc5a92466c31a5782e5d74dc204ae",
+    "fixture_sha256": "9f56286afd097524c83cb3d93bd3ecb3a2d3aa7fde0e48d42acf354d8d2ad78e",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_v4_live_1_1_refined_g160_20261025_190622_369621",
+    "record_sha256": "1cdffce68a65cc8570f56caa13e13bfe4abc95bedf9691b8e7f0770f0d124a22",
+    "log_sha256": "e4113c81c0ee9f8078eff21a2a35d92ec302640ed1d95eb192f617b1ed5c37f0",
+    "fixture_sha256": "9f56286afd097524c83cb3d93bd3ecb3a2d3aa7fde0e48d42acf354d8d2ad78e",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_0_0_f0_n1_20261025_190220_550372",
+    "record_sha256": "67b82653dd9b8e61d6fa29256bed27de82114946e833cb00834d462e70fbb1a5",
+    "log_sha256": "e03083d73d34b6f7ad3953efc0a8a22ed54a4352da9e03f86a022324048f27dc",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "refined_video_0_0_0_0_f0_n1_20261025_190221_109192",
+    "record_sha256": "b681626add3368df0321a0373f0688b3d7b9ee90c491ade1f9dc1482fc605e8b",
+    "log_sha256": "80075847b4b0285a06ada72e83f37b054e6275c4e2380cd8db625090e04fe244",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_0_0_f1_n2_20261025_190612_427166",
+    "record_sha256": "4746701a407da3370c478824f1f1ba4838d194721e9061eb80256977d10d98ec",
+    "log_sha256": "40f247c89600260606c9a278986a11de0e91b8f106e7f5ebf710dd6579247b12",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_0_1_f0_n1_20261025_190220_550372",
+    "record_sha256": "6c9143d0971d6f07ce7423c546642ccd8041200f62f19c9482dd71f2b664f8dd",
+    "log_sha256": "9a440ff8bd1c2c6f0787704d33b5c694d7354718b348ceefd48ff24a08a07884",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "refined_video_0_0_0_1_f0_n1_20261025_190221_109192",
+    "record_sha256": "546668e69a67043ebe577fe5cfe1ef45977998201921fdd5a8b0ec3291a2d158",
+    "log_sha256": "60d482f63210efc933d87e9fd4fdd888ccd36da99fc7894c6d14ab4ee4f606e7",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_0_1_f1_n2_20261025_190614_667210",
+    "record_sha256": "d5e7724b0e0b59bce53254c6b7358fc0908813b1ef4ffade0f376e87205d98d1",
+    "log_sha256": "55ca2ff0354ceb8170c14c9e9d62a37ddb4cdf1d0241705eea6e41d7243193b2",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_1_0_f0_n1_20261025_190221_109192",
+    "record_sha256": "ae4cf3ea3eab8208a019020a110b9e04763d966831904f7d7c292c20d041e1c4",
+    "log_sha256": "b8363ff07c81a58da198a3136a4176034bf87a63e9a301b23bdce51fc6c0a728",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_1_1_f0_n1_20261025_190425_934542",
+    "record_sha256": "23220f427bf3030998f4e1f815679d389dd7864d23d7daf54dabe5fcf96d57f5",
+    "log_sha256": "43cdbff203e5e89e94be51eb3fa709571897b4d00f33d3af159ef95a4e25c791",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_2_0_f0_n1_20261025_190426_054490",
+    "record_sha256": "ab7fadfebbc7647c0640e88ab3ad0fbe3592f09342f26ba9afcbca3b40d66b62",
+    "log_sha256": "59883aedaa15fd1d4fa31e4bdd655de4c721f16b0597c165fea94af0bba4c63d",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_2_1_f0_n1_20261025_190426_105704",
+    "record_sha256": "6bf520a7a66f31332628441bf48a001e532899da70d41268bf1952e81f4b4e32",
+    "log_sha256": "c0f1a9fa112d833ccdadee40b818ad27d04de79a242e390e4b84a131481176a3",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_3_0_f0_n1_20261025_190430_217379",
+    "record_sha256": "c359e2af4eaceff6c77c3324072f4d9478d91f86c18e3152205068d79c8ea66c",
+    "log_sha256": "6b76425fcea29eec7df8b0614c0808a9a242c421c80070f901ff2dd41e54f940",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_0_3_1_f0_n1_20261025_190430_275256",
+    "record_sha256": "c9dd6de9259272d179a5fa8646e2163600e98aa644b2bf02f0442ec32939c6e3",
+    "log_sha256": "99a01b5895904bd3184769843ac060f41220aa5e1cd8d418de28237c17a56e57",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_0_0_f0_n1_20261025_190430_462596",
+    "record_sha256": "4e2ab7faa46d9ed5210c160fe8d1af01f0d7ca4dd197aa93d9689687387b62e3",
+    "log_sha256": "d0768c4ac6507922f85f977c9a2840edf82f2e18766a3e0d8beb2cfffc23e76d",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_0_0_f0_n2_20261025_190616_675085",
+    "record_sha256": "c086e78c8631a8140e9caa49fc9e19062d41203a24d6cc7ad89c5aa185ad1568",
+    "log_sha256": "09a01ff082829e81b9c8074a932df55360e787f14dd6a2cd905ca3be66610fcc",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_0_1_f0_n1_20261025_190434_368407",
+    "record_sha256": "3c0aea2ca2feefc3df183dd9c281517cc436c95cb7c59b72e79b5dd2a54d9b91",
+    "log_sha256": "a118c00cb8aec1ac7e3f68a0d85d510f963c58890489258fb75c1e465df1a1fb",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_0_1_f0_n2_20261025_190619_859852",
+    "record_sha256": "8da8b2c6d380b271f82834dc975d48440db12d8ad28e06fca561d9f957d6dcf5",
+    "log_sha256": "203847560e3cb4ad2d9608a372cd06be58f0d2df92b2877a23e6d2d865a9a151",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_1_0_f0_n1_20261025_190434_399704",
+    "record_sha256": "5641f527b72fabf382dfe092199d0c72e184b0064c1eaef7a81d13945fe2109a",
+    "log_sha256": "e75e4879b7733d800bdf753a05946889d47dc1e5f8297288a2f1edc4d1595880",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_1_1_f0_n1_20261025_190434_687090",
+    "record_sha256": "309f48df4c0609d550aba256a3c268845e4b0b75f7b01e5b60900859625ec235",
+    "log_sha256": "8b29ab2b7cd9b094ec0d34b01a70dcc87ed2b13ea55251bc171f0fa552c6712f",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_2_0_f0_n1_20261025_190438_619790",
+    "record_sha256": "b484d8991e5b745de73552a2c0229e4f79bd672679ce8f0e5462bd8f7b788145",
+    "log_sha256": "29be46db218431eec3458c7011f08ac4688699b243d021f6d7d045cb408bbcc9",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_2_1_f0_n1_20261025_190438_673796",
+    "record_sha256": "b5342213efd8b824187da64e6eeecb8372ac31e37139b2f4063c6eadbb794545",
+    "log_sha256": "bf9f6a65a51fee4b6eca991c08f4107a6c8bf8771eb656642d800de81ea2678d",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_3_0_f0_n1_20261025_190439_025231",
+    "record_sha256": "0d760475d2d479549850b926ca9f424baa57c76f6c030742231fae946fd380ae",
+    "log_sha256": "865376de8506b36d90876cc3fc8624e8f33e099e06ba2c22c5d33078539f666b",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_1_3_1_f0_n1_20261025_190442_568752",
+    "record_sha256": "80ac409731d09607b60f8565485b33d5d5f188a27d87e2514eae29275a33fedc",
+    "log_sha256": "355560986b146983110786fe57f104ef149c9e0c0d5755657c750fc3fa412663",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_0_0_f0_n1_20261025_190442_825705",
+    "record_sha256": "01613ada43283faaadb12aefea350169198cd68185ab99803480155053651a90",
+    "log_sha256": "56a20bd589e07048a04f03aa0af985bb296f66c8d870ed3ec39bc4d57ece9862",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_0_1_f0_n1_20261025_190443_630283",
+    "record_sha256": "812f10b7c95bef7941aa3d793bed283d8f73a8aad00e4421e7d7832eb0e6586d",
+    "log_sha256": "69452b8cd1abeaf84d4cea87b901a616e11e4a836b9c03342fef0082c23f653a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_1_0_f0_n1_20261025_190446_430388",
+    "record_sha256": "103b941aa95678a94e8a99b4008acf7e7bc92e089e43ca4e94fbeb91501b7c4c",
+    "log_sha256": "c2e5c6895f1ef449b81daea30de3fab30d90709bfcfd263397c9a8e78f23e54c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_1_1_f0_n1_20261025_190446_885221",
+    "record_sha256": "5aef6b350efab43b304c8bb117add7d79317498fb0a3aa041bc44f39765b2eae",
+    "log_sha256": "461f700b66f19137778dcef4d23414e6a7f4bd924fe7116d8c05958f111d7310",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_2_0_f0_n1_20261025_190447_895586",
+    "record_sha256": "4ed87d3a1a50d82ca91d83aebefeca9e65b92222aa61e04815ee44f55d3ce153",
+    "log_sha256": "10bf0ceb311d2b7b107b5382b5c0fe7e49d7d78bffeb89ce62d87b7d4b671324",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_2_1_f0_n1_20261025_190450_370171",
+    "record_sha256": "a5248f3d5b869bf164a9b54e8df171693b649a77ce90668e9d2f163010de33bb",
+    "log_sha256": "d5f5aa35682b4036b3138f544734bcb184257990044f1b994d98b5edd73180a8",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_3_0_f0_n1_20261025_190450_593859",
+    "record_sha256": "52206a5b2ec73a01f091f104931ac653cc03300b68176c3de18642965f06b7eb",
+    "log_sha256": "d926204c41d947ea55b827977ea3b6f4422a1e0224417563f565640e57fbb3d7",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_2_3_1_f0_n1_20261025_190451_995037",
+    "record_sha256": "fadd24978d2527b405acf34f557a20a9b20177b90bbb9733d697ddb4ca4b656b",
+    "log_sha256": "bb535f377f5ab534859a4ed060d47b6524a0ea9698633e317d0e6471b54fd553",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_0_0_f0_n1_20261025_190454_313678",
+    "record_sha256": "6bc67abdc67505f9c11eb09868059cd1fa6d5c98b9cac1931f5504133d82a5d9",
+    "log_sha256": "02855284f9a6370cff2f7cb072af46911eb41795ab394fff6bf61fa8fad652be",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_0_1_f0_n1_20261025_190454_563044",
+    "record_sha256": "1d6cb64049e2e5e66b7dfb3e38a02c0dc1ba9b764bae65c8a20eb1e792c392a3",
+    "log_sha256": "18e4dc25cd17c74c9c71bb95305faff0a5d98234df07145f188b9b3f832ed9de",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_1_0_f0_n1_20261025_190456_145999",
+    "record_sha256": "a94f86a1c7d8d972236be591c78f87d49c8dfe8fdfb4b514720044ba22de0c29",
+    "log_sha256": "12507aa8ecbc58c530e9de609af799e815080472d135ecc431ea39f06a3bdb46",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_1_1_f0_n1_20261025_190458_476053",
+    "record_sha256": "480cd9925dc44f04580cf29fced8ad73a8876a440fdeabdf8a4fbfceb2ffa35d",
+    "log_sha256": "9d0954845523baca549d712b4c856832a3c9d8c89e0c0e1ec8239ccb062068e2",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_2_0_f0_n1_20261025_190459_041025",
+    "record_sha256": "a1aced1049a6a681cd4cb55986d386290dbada6d5cd319ba4a7f195f7725c9ab",
+    "log_sha256": "fad0a1864fe54895d8a6958d68e54919bbd783a1742b8990de9ea009e219c5c1",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_2_1_f0_n1_20261025_190500_351446",
+    "record_sha256": "5bd12341572aab68ec69c7870843af7c6e72323b859d9d258b677c750ce1fa67",
+    "log_sha256": "f25d076576a30a85350997404ca612c09db8d8fd6ee50d0874d45d06dbc14a5c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_3_0_f0_n1_20261025_190502_915242",
+    "record_sha256": "785e315b5340282e6a623ccc5b97267a86e44e621a02e041aecbe502da8623e2",
+    "log_sha256": "aba550acabf160ab4cdaaf160e23f11de4df32cb6c185494f6860abe617790bb",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_3_3_1_f0_n1_20261025_190503_313623",
+    "record_sha256": "4533c0d4e3e28933be77271b0a16ce9165a03bb16e6844d6c681bdcfd36354d0",
+    "log_sha256": "8e99bda7eb8202ddec8bab8192322818380717e06a8bce31fec45f9cd62bef0d",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_0_0_f0_n1_20261025_190504_503863",
+    "record_sha256": "40df2ba92a89ad14e83219fd621cf92e79812bfb147695d6c627bc1dddb48377",
+    "log_sha256": "932c2bea5924f19c96106f5ac8a3ff8bd9a9db4b1259e132b070a7e69eb49308",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_0_1_f0_n1_20261025_190507_067159",
+    "record_sha256": "16933d8fc219f387080fca3a43f3c06e12c597bb74869bdd7ab480b65b7bbec9",
+    "log_sha256": "d7aeaf35bc8efc5071cd2766f4a263822565485d72ee66d50a4a8b9324af8143",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_1_0_f0_n1_20261025_190507_581343",
+    "record_sha256": "d4e45fff155565cf104287408e45d7c4b86ff4a2ad895163cdd237c1232745d2",
+    "log_sha256": "bfa35453feb87d881d98634559c5c428fc1423213f0ef75c1ef65cdcda424cf6",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_1_1_f0_n1_20261025_190508_840309",
+    "record_sha256": "a9c38b6d14500b5127c51d288a86e2ceeec6ec01e8c35b5d2b5aedab939943b5",
+    "log_sha256": "f8aeda3691733cfe073c474a8e46a3eb2bbc93b76afe1bfb9d2e165ef1b99834",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_2_0_f0_n1_20261025_190511_201087",
+    "record_sha256": "3f152fb85c5bc72e6b13e5c5e940beee13a2bf743bf6db465bb6b6145dea5ea1",
+    "log_sha256": "83d0e928c89f56fee7e3b58d87ee3fe771a0841965d14fbd475795d4480dd1fa",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_2_1_f0_n1_20261025_190511_684817",
+    "record_sha256": "1e4cd13965c272a2d30569deb707d1e4928ee4a656b0985e832bdc29d1550684",
+    "log_sha256": "de246772510f5c13a08d6e00f880d909a0bc512e179d3ea20eeb2b370b8a4902",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_3_0_f0_n1_20261025_190512_825221",
+    "record_sha256": "3050129b5060ad363bdeccb1514c96c6cd17b4a7ee78baf8c5f67d5bcf812976",
+    "log_sha256": "6858d1970144d023245aaf5525550e46b0508085df14409854224e4970ed1076",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_0_4_3_1_f0_n1_20261025_190515_319409",
+    "record_sha256": "c72e8c4fb8b86a2830c1c7e84cfc040fd6dd2032b53aa44dcd74a5561fe5ef1a",
+    "log_sha256": "b9652363ffdbe210c4cb33ecb75e1110ed25e3f41cbb0b76b5d49195e6a8f83c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_0_0_f0_n1_20261025_190515_837727",
+    "record_sha256": "410c85eeac58f2c5d2994c807c4783f85588fc0d8951ba66827ce77bfd2c588c",
+    "log_sha256": "e9b7d57a9da449714ce9a8912770a0c02365ab6fe2f913dcc35a1fc7c598ce24",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_0_1_f0_n1_20261025_190516_734643",
+    "record_sha256": "1784ebae9303a6d76690c300181050a2a14e60f0a0eaf9c1c7fa219f9db2dfa9",
+    "log_sha256": "8c0964ee29a224a865d12d48d8e09a6f31061fa9a2f6898346e3bd18cf052a8a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_1_0_f0_n1_20261025_190519_253326",
+    "record_sha256": "f089bb9e1b223fa5303351be4b48fb174914e228abfbc5ad7f63b6c38a567e9a",
+    "log_sha256": "303fd0a9e4765f5250f0ed3824d2824eed7c1f2811a98ea6acf81dd6724b75ab",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_1_1_f0_n1_20261025_190520_203421",
+    "record_sha256": "dc0248d3fd2ff6e04caada9123d652972da407916954cabf0d10af3802ec8e2b",
+    "log_sha256": "f9431cee20df3b2e5566ea54abafe67c597ca80512a1ff44217045f9da5f44a4",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_2_0_f0_n1_20261025_190520_944795",
+    "record_sha256": "939a33463b16241c169cabb7291cef4d4cda627ea17272e0314fc9abcafd1a57",
+    "log_sha256": "e5a87c6fc880dcd46570c43de8539b07a116451466e465564dbd5c489d3247bf",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_2_1_f0_n1_20261025_190523_436371",
+    "record_sha256": "4c76e75fc89d37c2aee82636db009d069e790c898dde3a035ce2bc2481bcdf38",
+    "log_sha256": "2085b0484d615226222ab3926fd956a266c39bc2ab90b56aa803327553d789ee",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_3_0_f0_n1_20261025_190524_632515",
+    "record_sha256": "f6eecf1c8935380eaaa4d5c1e94cc964ef02f43fb8b71d04dae32e2b852cd436",
+    "log_sha256": "4dbf5704d0acb8cabbd84ac812f777e10173c9caa07fad3d07017f3727c12c98",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_0_3_1_f0_n1_20261025_190525_158684",
+    "record_sha256": "45bd85122309b0df9d677a1ed9cfe300f040856c46c2b40f5c820a5a4c622bf7",
+    "log_sha256": "28c05d4e0874e6be2f880632fca1c6fa6614ad629bfbc5de63b2577fc09a44fd",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_0_0_f0_n1_20261025_190527_764987",
+    "record_sha256": "721c79c3421c1a7baca8e015724aafb117e204b6952499745eb69e459cdbec44",
+    "log_sha256": "a18df06787b19a695e44636d5de5bf0014b61208025b4815702739dd794542da",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_0_1_f0_n1_20261025_190528_992323",
+    "record_sha256": "b7380b6aff7c25ba40e7779288910b852c0bd552e525e5ba5657c8db1c1210d3",
+    "log_sha256": "b5e6c194fdd02de4dbb956f07cd94760d86495c3532b755955321818480c174e",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_1_0_f0_n1_20261025_190529_161745",
+    "record_sha256": "c11f0adcfa1f5db7677b0627612c57a370d9298655b0bfd2d2aaa5ed3ace543a",
+    "log_sha256": "b7cc647965008198d82cba36877592dbfef8334fe00377c971470f9e6b464ddd",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_1_1_f0_n1_20261025_190531_973216",
+    "record_sha256": "de9e52befc2a103d7f82c9648ed04175e14b144393bece2afa70c49d0115c75d",
+    "log_sha256": "d7658e6d18a122106b8720c72cf8640553d936b15facebd2cf2d5834825cdf8c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_2_0_f0_n1_20261025_190532_961246",
+    "record_sha256": "031996806252c404e9771dc6abfc3d8c8197b888a3916de965d7b5e8b0a0e7f3",
+    "log_sha256": "16913888dc7d63720e58cdb81c319d721ee9c5f5d04579ef5173f05e5783c5f7",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_2_1_f0_n1_20261025_190533_188755",
+    "record_sha256": "5d4011f4e81619bdaac7c57970e410a9e158d0951f5a492f903c5faa58af9548",
+    "log_sha256": "c9608d0cc065774a2c5612bc719abef093f24154dcd043bd04f5f0fff660a364",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_3_0_f0_n1_20261025_190536_035761",
+    "record_sha256": "d69cc70b40d2fd500f543e8ce14bc38b1d5134b84fe78f6f79db72e1b058a406",
+    "log_sha256": "8e59847926219afade205a1190526c1c373fa3c42b2b8a52b069028be54e2fd1",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_1_3_1_f0_n1_20261025_190537_329580",
+    "record_sha256": "f91d69a430da6227e55c0ff3106efcabc86504c6995f0afedf852b7ecffc4474",
+    "log_sha256": "6d35bdd5123994915e3a716e02520b88b798d48c6b5309752764c237601463a4",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_0_0_f0_n1_20261025_190537_388830",
+    "record_sha256": "df469dbc078ae704407608e2f4138f01fbf2a3ae70e80a7029e6c2fd9e75f034",
+    "log_sha256": "b9ce10d37473873f26df9920b27a762a069460fe4f0905c9461e854bc9299c89",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_0_1_f0_n1_20261025_190540_344672",
+    "record_sha256": "3f763db0312611a9c19afbcce82503a5e513cb0a30ada813c51678b5be69cfb8",
+    "log_sha256": "5df6cc2bae8634c1e3ff04fe3c587135765d2b867a8a84160fab6b8697a44d42",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_1_0_f0_n1_20261025_190541_573736",
+    "record_sha256": "57885f4ea0dcce981121e9322ab7e9730e99d1c3b21f66d22d974ff2ebf0572e",
+    "log_sha256": "9f8897102fef2d4491468279cd021fa42aa1253193eef8bbb1b3ef6b371b12f5",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_1_1_f0_n1_20261025_190541_617060",
+    "record_sha256": "f7aa0443a5fe3788102c8a3047c861dcba47e53fe3f601ea5934208fd05deba8",
+    "log_sha256": "8626221d23deab8b5d8b7dfc0f94f91edf913d9b15907bb3d0dd1bf41fe206c3",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_2_0_f0_n1_20261025_190544_774372",
+    "record_sha256": "cbf57491824f90c7925d23cf4e4bd3ed8c506ad31c7e1c5cb58cbebcd0cb24b3",
+    "log_sha256": "5cca41f6b1d7dfc56b9906bd9be75d3233f2c96f82992d9cf1710192b673aab4",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_2_1_f0_n1_20261025_190545_719138",
+    "record_sha256": "f272cc6af6d579b6fee21ef568de2482a471cb98e012e2be2250bbdfed84d202",
+    "log_sha256": "4821585174867ee125864dbe0115fc83c7b65a0b484b147991308cad06462f17",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_3_0_f0_n1_20261025_190546_124905",
+    "record_sha256": "e126614ec915c0e3e4505e28fbb4b7965a861a6cc429d121122f9183fdb042c3",
+    "log_sha256": "040341ff4700b6df6ea408345ab98d21a3ecf2f3169bed6fd0bf36764e437c7d",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_2_3_1_f0_n1_20261025_190549_197919",
+    "record_sha256": "f0d92bfb84a0be0cef013fd596b398ac32ddd49ae8b72aefc1f4db5f2d71d3af",
+    "log_sha256": "fc1887c7f90795e390cdef4ef330b2783b681c9351849c55d2175ec2e1804af3",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_0_0_f0_n1_20261025_190550_066264",
+    "record_sha256": "f16dc4b4a8ec3a4ea081f2efc90aa46ef7d0fff5d3559178c16f62890fa2c3e2",
+    "log_sha256": "b16351780b056e85e8bf2034b16724a76e47971f3ab610513857f62fb199ad77",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_0_1_f0_n1_20261025_190550_343626",
+    "record_sha256": "5c85f93d245b754442aa2c9e42cd7677160cfd70490099b7673fce0383a923b8",
+    "log_sha256": "f57d9f115acb0196cb722dd7cfd7dc7acb7521fbad2d6860d23366ee74ded03a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_1_0_f0_n1_20261025_190553_334200",
+    "record_sha256": "6c0678fedf7ebf7e8125be2a9162d15f3f41a7506eb430f9e2ab056fe900b5f8",
+    "log_sha256": "176e62b2f3fa5beb2a46b3898632c36cfc5f51c3f9f4451f32d94992d1e17b2a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_1_1_f0_n1_20261025_190554_531389",
+    "record_sha256": "c8dafe37c8853e8af1e04b42a892931c723d5f64a374226b53f1a63c4a63dda5",
+    "log_sha256": "77f55682acb66ec35b9941654acd1338d2a0ffd8d1abc2342c1bf0e004f39e4b",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_2_0_f0_n1_20261025_190554_767463",
+    "record_sha256": "107b8e11b8a063461f7d39c8697c85d11bfa349378ebd2e5483caaf75524b65c",
+    "log_sha256": "67a6b1d5185d14e043d4a0d142d1ed08c7a209eadcafd5253753c9e66e189b28",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_2_1_f0_n1_20261025_190557_707643",
+    "record_sha256": "c0f982c11cfdbc565e3171fcec27ac0c83ba68bdd31a4b8d03aa038fa66c36ec",
+    "log_sha256": "e9829c11580f52bb3b0bfaceec7f128718d86c72e1c36568001861ef11ea7a3e",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_3_0_f0_n1_20261025_190558_963147",
+    "record_sha256": "0d350233cbd136b5d202106e251c4b0bc71049b3b19ca99150ccd4894e9eab9f",
+    "log_sha256": "47b884923d5fafdbc935bb6b66365ff767b8059bfd2cbb851075d5fa8f0b8b8a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_3_3_1_f0_n1_20261025_190559_369321",
+    "record_sha256": "97ccfaac83926c35968f84a53437d1484162d331530e0e75d3d8787261fe3dbe",
+    "log_sha256": "cf99f40d8932f6a1f3938bfa6c2116fea5b981c906308ac09ed9b443cd9007c9",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_0_0_f0_n1_20261025_190601_818886",
+    "record_sha256": "b92b18a727e14e643db20d696dd6c81ae22f5126e37d9177916d7291ec568436",
+    "log_sha256": "e8fb6a3c8754ee1a5feb4398a1a77f7e8279167a91257a2e4c5d5d9cf2e0f15f",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_0_1_f0_n1_20261025_190603_616226",
+    "record_sha256": "9636f2cf84c9d5d85a79e22343da5f06d48394e5070d88c158cba970baf08b5e",
+    "log_sha256": "2ba15be88a13830a859bc715ad06a75c67f0f988a6ce1f7a76cc2756b9da126c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_1_0_f0_n1_20261025_190603_741361",
+    "record_sha256": "1a4fe8cb12ff4642e5f81145833b723df418c7bccc475bde0ee2496766500d15",
+    "log_sha256": "d987c6c637234e6861423327492b508e33b2e4b592b76f0fb29caf8069b4e55a",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_1_1_f0_n1_20261025_190606_138547",
+    "record_sha256": "d9214098bbe77b88d8c304e15ce21fb893598b6d248a8cb49125d9ca4ce4f933",
+    "log_sha256": "432c22b1e614c54c58dd44478ab95209db58bc3ec6c96735d8c65aa5a72da42c",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_2_0_f0_n1_20261025_190608_017213",
+    "record_sha256": "786d9e7f4247e34a04fcebbe1282e4b511af0a84cb8507341335329a111fc13c",
+    "log_sha256": "6ad4bfc16328f04cee7bc20e8df8ec56cbcbf25ef7d9d87a6555c99986afff47",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_2_1_f0_n1_20261025_190608_157219",
+    "record_sha256": "4ed46726024543833b04ac4d0fbc363af7483a92969bf010f4d8dad13db7f6b5",
+    "log_sha256": "588b0250adb1873ed467d253454d1fbb1eb7db27230ffe7a1259488282dc6e57",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_3_0_f0_n1_20261025_190610_405003",
+    "record_sha256": "bf5f82099a88b5d372aa7015da20f3059f5f7b2c29caa89c659241ec2a1513fb",
+    "log_sha256": "3ccbe733e5342ada8f2b0798d722ae882cd1fce5ef1e619b6cb2901f4f364eeb",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "refined_video_1_4_3_1_f0_n1_20261025_190612_157542",
+    "record_sha256": "9cd9d06d271302a08b3f0569125e901dd8f537cefb3aaf0bb6de6dd483d21fc6",
+    "log_sha256": "d1d5e4f65261ca6e94c94b210849a6062d2729a47f7323f34bc3d9e1ea9acf14",
+    "fixture_sha256": "45dd6d424d827a40b941aa71d65cf176dd649c34c8c7067fd76a37974e611d32",
+    "backend": "Verilator 5.050 two-state/timing; GCC 16.2"
+  },
+  {
+    "name": "source_coordinates_720p_20261025_185505_514324",
+    "record_sha256": "28624bcafd8bf36316f41859e8bdb2b79a35347d0d2541cea8a104fff49b4016",
+    "log_sha256": "b26d87cd348666c08d94bf1ff8456caff9accf75e7765e3da690a7ca6bb4dad3",
+    "fixture_sha256": "a0d2d511006f8e2597e76b9a2c74828c060c557c887817d50b2752a40148b81f",
+    "backend": "Icarus four-state"
+  },
+  {
+    "name": "source_coordinates_720p_20261025_190210_701545",
+    "record_sha256": "b1e061f6dbcdda816f3252220f731a277100879aceb4f504db8b0f1701f93543",
+    "log_sha256": "b1fb15d7d44c1189d284eddc1b02a1f93610bcef52e49a0b25d9984f935b0ad2",
+    "fixture_sha256": "a0d2d511006f8e2597e76b9a2c74828c060c557c887817d50b2752a40148b81f",
+    "backend": "Icarus four-state"
+  }
+]
