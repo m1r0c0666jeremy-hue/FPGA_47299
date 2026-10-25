@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stable_display.v": "c7201c361cc2d42659e0cbc7b89b39bde8332c25900ef7df887cb304b51c2805",
+    "rtl\\color_regions\\refined_zoom_geometry.v": "b8140c99c2ccc8187d0239e6a3660089015fbe9d20c2fbe448f5581244f822ca"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "E:\\codex\\FPGAco\\720p-zoom\\build\\sim\\refined\\source_coordinates_720p_20261025_185505_514324"
+}

@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "inputs_unchanged": true,
+  "jobs": [
+    {
+      "name": "source_coordinates",
+      "argv": [
+        "scripts/test_720p_source_coordinates.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.734,
+      "log": "reports/720p/regression/20261025_190209_896791/source_coordinates.log",
+      "log_sha256": "498c9e27f674e37317327dcbfe8b98a0086e887ad1d84750210062c90d83a5a8"
+    },
+    {
+      "name": "controls",
+      "argv": [
+        "scripts/test_refined_controls.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.172,
+      "log": "reports/720p/regression/20261025_190209_896791/controls.log",
+      "log_sha256": "5b75dee7b1860db7f97855574153b4eeb6cbd06b546f1230429584a10834ec18"
+    },
+    {
+      "name": "geometry",
+      "argv": [
+        "scripts/test_refined_geometry.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.406,
+      "log": "reports/720p/regression/20261025_190209_896791/geometry.log",
+      "log_sha256": "4033bc4b2d0d8e5f76d1d76e924cef3b6c930c27573d91d4c1f66b5a0c77ce3c"
+    },
+    {
+      "name": "elaboration",
+      "argv": [
+        "scripts/test_refined_compile.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.469,
+      "log": "reports/720p/regression/20261025_190209_896791/elaboration.log",
+      "log_sha256": "d21e3f84496aaf06c703a7d818428be15bb85637c1e56f2c18c2bebfff5863f5"
+    },
+    {
+      "name": "video_80_and_faults",
+      "argv": [
+        "scripts/run_720p_native.py",
+        "video",
+        "--full",
+        "--faults",
+        "--workers",
+        "3"
+      ],
+      "exit_code": 0,
+      "seconds": 255.547,
+      "log": "reports/720p/regression/20261025_190209_896791/video_80_and_faults.log",
+      "log_sha256": "fbbd48ae7a926e618a61213e89bf1533c42d6b4d598844dbaee9bd0a4aefd3dc"
+    },
+    {
+      "name": "delivery_cli",
+      "argv": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_720p_delivery.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 17.109,
+      "log": "reports/720p/regression/20261025_190209_896791/delivery_cli.log",
+      "log_sha256": "bea1c7d55bce4e2220679c7df7f9f9cdf1dab47bc507a4917f8d37e627139d9e"
+    },
+    {
+      "name": "four_state_video",
+      "argv": [
+        "scripts/test_refined_video.py",
+        "--case-range",
+        "0",
+        "2",
+        "--workers",
+        "2"
+      ],
+      "exit_code": 0,
+      "seconds": 360.297,
+      "log": "reports/720p/regression/20261025_190209_896791/four_state_video.log",
+      "log_sha256": "112cc080feb71271a22ed6360b867bc3ca7bca9378e2d329401d7f441745b49f"
+    },
+    {
+      "name": "joint_video",
+      "argv": [
+        "scripts/run_720p_native.py",
+        "live",
+        "--workers",
+        "2"
+      ],
+      "exit_code": 0,
+      "seconds": 440.625,
+      "log": "reports/720p/regression/20261025_190209_896791/joint_video.log",
+      "log_sha256": "887a5bf2511a08a3557b74adc718ef12a2aaaaa422ba7d2b9764f3bc50ffd24c"
+    }
+  ],
+  "scope": "new 720p contract suite; original 160 checks are separately re-audited historical evidence",
+  "limits": "Verilator long tests are two-state; Icarus runs retain four-state checks. Hardware pending."
+}

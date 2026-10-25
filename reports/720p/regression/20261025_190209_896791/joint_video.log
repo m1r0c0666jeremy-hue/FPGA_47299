@@ -1,0 +1,9 @@
+STABLE_LIVE_PASS pair0 rotation0 real capture->DDR->768/852 CDC->moving viewport->source masks->OSD: four pages, five rational zooms, parameter switch, 3993600 pixels, 6 snapshots, 4 tip snapshots, 1969680 written words
+- Verilator: $finish at 113ms; walltime 46.654 s; speed 2.429 ms/s
+STABLE_LIVE_PASS pair0 rotation1 real capture->DDR->768/852 CDC->moving viewport->source masks->OSD: four pages, five rational zooms, parameter switch, 3993600 pixels, 6 snapshots, 4 tip snapshots, 1969680 written words
+- Verilator: $finish at 113ms; walltime 48.838 s; speed 2.321 ms/s
+STABLE_LIVE_PASS pair1 rotation0 real capture->DDR->768/852 CDC->moving viewport->source masks->OSD: four pages, five rational zooms, parameter switch, 3993600 pixels, 6 snapshots, 4 tip snapshots, 1969680 written words
+- Verilator: $finish at 113ms; walltime 43.346 s; speed 2.615 ms/s
+STABLE_LIVE_PASS pair1 rotation1 real capture->DDR->768/852 CDC->moving viewport->source masks->OSD: four pages, five rational zooms, parameter switch, 3993600 pixels, 6 snapshots, 4 tip snapshots, 1969680 written words
+- Verilator: $finish at 113ms; walltime 42.626 s; speed 2.659 ms/s
+REFINED_LIVE_ALL_PASS 4 jobs 20 frames 15974400 image pixels, actual command/native FIFOs and v4 source-time banks; synthetic line gap 160 camera clocks

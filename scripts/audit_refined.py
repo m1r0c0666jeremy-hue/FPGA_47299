@@ -17,6 +17,8 @@ def evidence(prefix,required=()):
  return dict(record=p.relative_to(R).as_posix(),record_sha256=sha(p),log_sha256=sha(p.with_suffix('.log')),inputs=d['inputs'])
 def required_inputs(prefix):
  required=[]
+ if prefix.startswith(('refined_video_','refined_v4_live_','osd_english_','osd_packed_')):
+  required.extend('rtl/color_regions/'+n+'.v' for n in ('refined_osd','refined_footer_program_rom','refined_english_font_rom','refined_english_text_rom'))
  if prefix=='camera_relay_equivalence' or prefix.startswith('camera_relay_production_'):
   required.append('rtl/color_regions/stable_top.v')
  if prefix.startswith('camera_relay_production_'):required.append('rtl/color_regions/refined_camera_config.v')
@@ -40,13 +42,20 @@ def checkpoint_report_signature(path,parent,out):
 
 def canonical_build_inputs(inputs):
  names=set(inputs)
+ english_roms={'rtl/color_regions/refined_english_font_rom.v','rtl/color_regions/refined_english_text_rom.v'}
+ if names & english_roms:
+  baseline=set(json.loads((R/'build/refined_route_20261019_100156_645532/inputs.json').read_text(encoding='utf-8')))
+  assert names==baseline|english_roms,'OSD successor compiler dependency set changed unexpectedly'
  assert {n for n in names if n.endswith('.al')}=={'td_project/target_color_regions_refined.al'},'Noncanonical project entry'
  assert all(not Path(n).is_absolute() and not Path(n).drive and '..' not in Path(n).parts and not n.replace('\\','/').startswith('build/') for n in names),'Private/escaped compiler input'
  required={'rtl/color_regions/'+n for n in ('stable_tracker.v','stable_capture.v','stable_grid.v','refined_line_reader.v','refined_frame_store.v')}
  assert required.issubset(names),'Noncanonical core module paths'
 def audit(attempt=None,regression=False):
  branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
- assert branch=='release/transparent-ring-stability-20261015',branch
+ from osd_memory_branch import check_branch,check_osd_only,OPT_BRANCH
+ assert branch==check_branch(R)
+ english=branch==OPT_BRANCH
+ if english:check_osd_only(R)
  subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
  subprocess.run([__import__('sys').executable,'-X','utf8',str(R/'scripts/refined_protection_current.py')],cwd=R,check=True)
  from generate_refined_regions import assets
@@ -56,10 +65,11 @@ def audit(attempt=None,regression=False):
  # Image/overlay rendering is identical. Footer diagnostic capture moves from
  # row 620 to 625; the separate late-abort pixel regression covers that change.
  a=(R/'rtl/color_regions/refined_osd.v').read_text(encoding='utf-8').replace('module refined_osd(', 'module stable_osd(').replace('refined_footer_program_rom program_rom','stable_footer_program_rom program_rom').replace('I_de && y==625 && x==0','I_de && y==620 && x==0')
- assert a==(R/'rtl/color_regions/stable_osd.v').read_text(encoding='utf-8')
+ if not english:assert a==(R/'rtl/color_regions/stable_osd.v').read_text(encoding='utf-8')
  b=(R/'rtl/color_regions/refined_footer_program_rom.v').read_text(encoding='utf-8').replace('refined_footer_program_rom','stable_footer_program_rom').replace('ram_style="block"','rom_style="bram"')
- assert b==(R/'rtl/color_regions/stable_footer_program_rom.v').read_text(encoding='utf-8')
- result=dict(branch=branch,head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),protection_pass=True,generator_pass=True,image_renderer_identical=True,footer_capture_row=625)
+ if not english:assert b==(R/'rtl/color_regions/stable_footer_program_rom.v').read_text(encoding='utf-8')
+ result=dict(branch=branch,head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),protection_pass=True,generator_pass=True,image_renderer_identical=not english,footer_capture_row=625)
+ if english:result.update(osd_only=True,non_osd_compiler_inputs_preserved=check_osd_only(R),english_ui=True)
  if regression:
   writer=(R/'rtl/color_regions/refined_video_in.v').read_text(encoding='utf-8').replace('module refined_video_in (','module arbitration_video_in #(parameter BW=240)(').replace('burst_count==239','burst_count==BW-1').replace('fifo_count>=240','fifo_count>=BW')
   assert (R/'build/sim/refined_arbitration/writer.v').read_text(encoding='utf-8')==writer,'arbitration fixture differs from current writer'
@@ -75,11 +85,16 @@ def audit(attempt=None,regression=False):
   prefixes += [f'recovery_mailbox_equivalence_{p}' for p in (0,1,4,9)]
   prefixes += ['capture_history_pipeline_'+name for name in ('stale_context','matching_identity','expired_identity')]
   prefixes += ['compact_footer_equivalence']
+  if english:
+   prefixes=[p for p in prefixes if p not in ('refined_v4_ui_pixels','footer_late_abort_after','compact_footer_equivalence')]
+   prefixes += ['osd_shared_chinese_equivalence','osd_english_ui','osd_english_abort','osd_english_overlay']
+   from refined_english_ui import PACK_PROGRAM
+   if PACK_PROGRAM:prefixes += ['osd_packed_program_equivalence']
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
-  late=result['regression']['footer_late_abort_after']
+  late=result['regression']['osd_english_abort' if english else 'footer_late_abort_after']
   for name in ('history_full_rgb_after','capture_diagnostics_v4'):
    assert 'CAPTURE_CANDIDATE_HOLD_PASS' in (R/result['regression'][name]['record']).with_suffix('.log').read_text(encoding='utf-8')
-  assert 'V4_UI_CASE_PASS last_pixel_abort' in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
+  assert ('ENGLISH_UI_CASE_PASS last_pixel_abort' if english else 'V4_UI_CASE_PASS last_pixel_abort') in (R/late['record']).with_suffix('.log').read_text(encoding='utf-8')
   for mode in range(3):
    assert 'FAILED_JOB_PEAK_PASS' in (R/result['regression'][f'final_video_drain_{mode}']['record']).with_suffix('.log').read_text(encoding='utf-8')
    if mode:

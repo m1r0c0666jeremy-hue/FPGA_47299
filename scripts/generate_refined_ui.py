@@ -154,7 +154,8 @@ endcase end
                   source_font_sha256=hashlib.sha256(fontfile.read_bytes()).hexdigest(),
                   official_symbol_sha256=hashlib.sha256((R/'assets/osd/anlogic/anlogic_logo_mobile_official.svg').read_bytes()).hexdigest())
     out['assets/osd/anlogic/refined_ui_manifest.json']=json.dumps(manifest,ensure_ascii=False,indent=2)+'\n'
-    return out
+    from refined_english_ui import english_assets
+    return {**out,**english_assets(out)}
 
 if __name__=='__main__':
     import argparse

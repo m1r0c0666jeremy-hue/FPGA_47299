@@ -1,0 +1,5 @@
+STABLE_VIDEO_PASS: zoom=          0 mode=          2 x0=          0 y0=         48 frames=          1 pixels=     798720 DDR=     151200 black=          0
+- E:\codex\FPGAco\720p-zoom\build\sim\native\refined_video_0_0_1_0_f0_n1_20261025_190221_109192\tb.sv:153: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.050 2026-07-01
+- Verilator: $finish at 17ms; walltime 4.059 s; speed 4.200 ms/s
+- Verilator: cpu 0.000 s on 1 threads; allocated 7 MB

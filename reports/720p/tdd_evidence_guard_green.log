@@ -1,0 +1,34 @@
+test_changed_compiled_input_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_changed_compiled_input_is_rejected_without_candidate) ... FAIL
+test_negative_timing_evidence_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_negative_timing_evidence_is_rejected_without_candidate) ... ok
+test_unchanged_720p_is_delivered_with_historical_provenance (test_720p_delivery.DeliveryContract.test_unchanged_720p_is_delivered_with_historical_provenance) ... FAIL
+test_wrong_bit_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_wrong_bit_is_rejected_without_candidate) ... FAIL
+
+======================================================================
+FAIL: test_changed_compiled_input_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_changed_compiled_input_is_rejected_without_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\codex\FPGAco\720p-zoom\tests\test_720p_delivery.py", line 67, in test_changed_compiled_input_is_rejected_without_candidate
+    self.assertIn("COMPILED_INPUT_MISMATCH: rtl/color_regions/refined_zoom_geometry.v", result.stderr)
+AssertionError: 'COMPILED_INPUT_MISMATCH: rtl/color_regions/refined_zoom_geometry.v' not found in 'EVIDENCE_MISMATCH: ingress\n'
+
+======================================================================
+FAIL: test_unchanged_720p_is_delivered_with_historical_provenance (test_720p_delivery.DeliveryContract.test_unchanged_720p_is_delivered_with_historical_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\codex\FPGAco\720p-zoom\tests\test_720p_delivery.py", line 76, in test_unchanged_720p_is_delivered_with_historical_provenance
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 3 != 0 : EVIDENCE_MISMATCH: ingress
+
+
+======================================================================
+FAIL: test_wrong_bit_is_rejected_without_candidate (test_720p_delivery.DeliveryContract.test_wrong_bit_is_rejected_without_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\codex\FPGAco\720p-zoom\tests\test_720p_delivery.py", line 48, in test_wrong_bit_is_rejected_without_candidate
+    self.assertIn("BIT_MISMATCH", result.stderr)
+AssertionError: 'BIT_MISMATCH' not found in 'EVIDENCE_MISMATCH: ingress\n'
+
+----------------------------------------------------------------------
+Ran 4 tests in 8.853s
+
+FAILED (failures=3)

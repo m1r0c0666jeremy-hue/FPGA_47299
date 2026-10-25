@@ -1,0 +1,21 @@
+{
+  "historical_regression_count": 160,
+  "historical_archive_members_verified": 1835,
+  "compiled_input_count": 297,
+  "resources": {
+    "slice": 17555,
+    "lut6": 17044,
+    "reg": 19333,
+    "eram": 95,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": 0.103,
+    "HWNS": 0.02
+  },
+  "historical_evidence_sha256": "9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3",
+  "current_compiled_inputs_match": true,
+  "compiled_source_commit": "09cccd89e34f2508aeae342a4b1e6819a920d889",
+  "historical_evidence_not_new_execution": true,
+  "hardware_status": "pending"
+}

@@ -19,7 +19,8 @@ ap.add_argument('--checkpoint',action='store_true')
 ap.add_argument('--max-fanout',type=int);a=ap.parse_args()
 if a.max_fanout is not None:assert 9<=a.max_fanout<=999999
 branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()
-assert branch=='release/transparent-ring-stability-20261015'
+from osd_memory_branch import check_branch
+assert branch==check_branch(R)
 created_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
 subprocess.run(['git','merge-base','--is-ancestor','2f79847f8443fb18f3896a6b88ae9b75c06c9ff8','HEAD'],cwd=R,check=True)
 stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
@@ -48,6 +49,8 @@ paths.update(p for p in (R/'user_source').rglob('*') if p.is_file() and 'log' no
 paths.update(p for p in (R/'ip/refined_ddr2').rglob('*') if p.is_file())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 before={p.relative_to(R).as_posix():sha(p) for p in sorted(paths)}
+from audit_refined import canonical_build_inputs
+canonical_build_inputs(before)
 (out/'inputs.json').write_text(json.dumps(before,indent=2),encoding='utf-8')
 (out/'source_context.json').write_text(json.dumps(dict(compiled_source_commit=created_head,creation_time=stamp,input_count=len(before),inputs_sha256=sha(out/'inputs.json')),indent=2),encoding='utf-8')
 with zipfile.ZipFile(out/'compiled_inputs.zip','w',zipfile.ZIP_DEFLATED) as z:

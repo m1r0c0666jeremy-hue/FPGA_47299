@@ -1,0 +1,15 @@
+{
+  "created_local": "2026-10-25T19:12:27.258951",
+  "passed": true,
+  "exit_code": 0,
+  "source_zip_sha256": "4b00b5bad5028985f285400f549fc2fa16ba5890633c65815244c2e6231e8bff",
+  "bit_sha256": "18fbffee70889073d44f3598029cce8bc5b0662d37f0911e138998315f83844a",
+  "prepared_exactly_as_readme": true,
+  "compiled_inputs_verified": 297,
+  "extracted_cli_tests": 4,
+  "log_sha256": "bd0fc59c1ea553cff5a574c81e1f30bc8dfd6f648545cbff8779f0d81810873a",
+  "review_issue": "P2 source archive requires paired artifacts staged before default commands",
+  "review_issue_resolved": true,
+  "full_video_suite": "reports/720p/regression/20261025_190209_896791/summary.json",
+  "hardware_status": "pending"
+}

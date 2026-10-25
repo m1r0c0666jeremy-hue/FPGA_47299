@@ -1,0 +1,4 @@
+REFINED_CONTROLS_PAUSE_PASS immediate capture fault pause, new session and calibration cancellation
+RING_CONTROLS_PASS both chord orders, 100ms window/late key, short/long, repeat, all-release suppression, triple keys, four calibration steps and reset
+E:\codex\FPGAco\720p-zoom\build\sim\refined\controls_with_camera_pause_20261025_190210_696254\tb.sv:43: $finish called at 326920 (1s)
+

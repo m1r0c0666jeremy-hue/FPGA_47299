@@ -1,0 +1,15 @@
+{
+  "delivery_directory": "build/delivery_720p_20261025_rollback",
+  "bit": "720p_source_coordinates_sram.bit",
+  "source_zip": "720p_same_source.zip",
+  "historical_evidence": "historical_build_evidence.zip",
+  "bit_sha256": "18fbffee70889073d44f3598029cce8bc5b0662d37f0911e138998315f83844a",
+  "reused_historical_build": true,
+  "hardware_status": "pending",
+  "regression_summary": "reports/720p/regression/20261025_190209_896791/summary.json",
+  "onsite_zip": "720p_现场下载包.zip",
+  "source_archive_git_revision": "0f80bd0",
+  "delivery_qa": "reports/720p/delivery_qa.json",
+  "delivery_qa_passed": true,
+  "source_zip_sha256": "4b00b5bad5028985f285400f549fc2fa16ba5890633c65815244c2e6231e8bff"
+}
