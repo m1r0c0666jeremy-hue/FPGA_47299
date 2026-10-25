@@ -32,4 +32,5 @@ s=s.replace('\ndef execute(job):',"\nfrom stage1_test_sources import EXTRA_OSD\n
 s=s.replace("f'{a.reader}_v4_live_","f'stage1_v4_live_").replace('REFINED_LIVE_ALL_PASS','STAGE1_LIVE_ALL_PASS')
 s=s.replace('def execute(job):',"s=s.replace('frame==5','frame==12').replace('checked!=5*1280*624','checked!=12*1280*624').replace('transactions<5','transactions<12').replace('#200000000;','#500000000;')\n\ndef execute(job):")
 s=s.replace("5*jobs,'frames',3993600*jobs","12*jobs,'frames',9584640*jobs")
+s=s.replace('timeout=3600','timeout=10800')
 exec(compile(s,str(R/'scripts/test_refined_live.py'),'exec'),{'__name__':'__main__','__file__':__file__})
