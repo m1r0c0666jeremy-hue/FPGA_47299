@@ -26,9 +26,11 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  meta[31:0]==image_id && meta[242:235]==session && meta[243]==pair && meta[244];
  wire source_ok=packet_ok && meta[32] && meta[89:79]<1280 && meta[99:90]<720;
  wire point_context=point_session==session && point_model==meta[559:544] && point_epoch==meta[719:704] && point_pair==pair;
- wire [3:0] live_reason=!tracking?1:!camera_ready?2:gain_busy?6:!video_ok?3:
+ wire [3:0] live_reason=gain_busy?6:!camera_ready?2:!tracking?1:!video_ok?3:
  !packet_ok?9:!meta[32] || meta[89:79]>=1280 || meta[99:90]>=720?4:tip_age>=250?5:0;
  assign tip_reason=mode==1 && point_failure!=0?point_failure:live_reason;
+ // The top gates tracking with camera-ready; preserve the specific cause.
+ wire [3:0] point_reason=gain_busy?6:!camera_ready?2:!tracking?1:!packet_ok?9:!point_context?8:live_reason;
  wire execute_edit=mode==1 && mode==mode_last && session==session_last && !cancel;
  wire execute_point=execute_edit && tip_live && point_context;
  assign tip_live=tracking && camera_ready && video_ok && source_ok && tip_age<250 && !gain_busy;
@@ -113,10 +115,10 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  if(edit_request!=0)begin edit_request<=0;edit_error<=0;
  if(execute_edit)case(edit_request)
  1:if(region_count==4)edit_error<=4;else if(draft_count==2)edit_error<=6;
- else if(!execute_point)begin edit_error<=9;point_failure<=!packet_ok?4'd9:!point_context?4'd8:live_reason;end
+ else if(!execute_point)begin edit_error<=9;point_failure<=point_reason;end
  else begin draft_count<=draft_count+1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;
  if(draft_count==1)edit_request<=2;end
- 2:if(!execute_point)begin edit_error<=9;point_failure<=!packet_ok?4'd9:!point_context?4'd8:live_reason;end
+ 2:if(!execute_point)begin edit_error<=9;point_failure<=point_reason;end
  else if(draft_count!=2)edit_error<=1;else if(region_count==4)edit_error<=4;
  else if(xmax-xmin<6 || ymax-ymin<6)edit_error<=2;
  else if(overlap)edit_error<=3;
@@ -128,7 +130,7 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  default:begin end endcase
  else begin edit_error<=9;point_failure<=7;end end
  if(point_pending && (cancel || (!down2 && (!tip_live || !point_context))))begin
- point_pending<=0;edit_error<=9;point_failure<=cancel?4'd7:!packet_ok?4'd9:!point_context?4'd8:live_reason;end
+ point_pending<=0;edit_error<=9;point_failure<=cancel?4'd7:point_reason;end
  if(mode!=mode_last || session!=session_last)begin point_pending<=0;configuration_changed<=1;observation<=0;
  if(mode!=1)edit_request<=0;end
  end end
