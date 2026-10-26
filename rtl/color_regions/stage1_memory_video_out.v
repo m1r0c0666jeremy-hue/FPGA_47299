@@ -153,7 +153,7 @@ refined_video_in u_video_in(
     wire active_rotate;wire [2:0] active_zoom;wire [1:0] frame_mode,selected_bank;
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
-    wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;
+    wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;wire stage1_raw_area_alarm;
     wire [31:0] image_us,latest_image_id;wire [15:0] image_epoch;wire image_time_valid;
     wire latency_valid;wire [31:0] latency_us,frame_age;
     refined_gray_sync latest_source(I_pixel_clk,I_process_rst_n,I_latest_gray,latest_image_id);
@@ -360,11 +360,12 @@ refined_video_in u_video_in(
     wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
     wire [15:0] area_revision,area_counts;wire [671:0] area_vertices,area_saved_vertices;wire [167:0] area_draft_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
     wire [1:0] area_trend;wire [10:0] area_distance;wire [19:0] area_dwell;
+    stage1_teach_alarm replay_alarm_gate(I_ui_mode,teaching_status[3:0],stage1_raw_area_alarm,O_area_alarm);
     stage1_scene area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
      .tracking(I_tracking),.video_ok(area_video),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
      .frame_commit(frame_commit),.detection_valid(area_associated),.image_id(selected_frame_id),.meta(active_meta),
      .region_count(area_count),.draft_count(area_draft),.revision(area_revision),.render_vertices(area_vertices),.render_counts(area_counts),.closed_mask(area_closed),
-     .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(O_area_alarm),
+     .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(stage1_raw_area_alarm),
      .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices),.tip_reason(area_tip_reason),.image_healthy(teaching_image_ok),.image_reason(teaching_image_reason),
      .shown_point(teach_active_point),.desired_point(teach_desired_point),.teaching(teaching_status));
     stage1_osd u_osd (.I_teaching(teaching_status),.I_point(teach_active_point[22:0]),
@@ -455,5 +456,12 @@ module refined_recovery_mailbox #(parameter WIDTH=256)(
             if(req3!=ack) begin D_data<=payload;D_valid<=1;ack<=req3;end
         end
     end
+endmodule
+`default_nettype wire
+
+// Suppress a latched previous sequence result during replay preload/restart.
+`default_nettype none
+module stage1_teach_alarm(input wire [1:0] mode,input wire [3:0] route_state,input wire raw_alarm,output wire alarm);
+assign alarm=raw_alarm && (mode!=2'd3 || route_state==4'd8);
 endmodule
 `default_nettype wire

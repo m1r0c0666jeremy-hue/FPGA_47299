@@ -15,7 +15,7 @@ def viewport_source():
 
 def decorate(out):
     v=out['rtl/color_regions/stage1_memory_video_out.v']
-    v=v.replace('wire [767:0] active_meta;', 'wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;')
+    v=v.replace('wire [767:0] active_meta;', 'wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;wire stage1_raw_area_alarm;')
     v=v.replace('stable_display #(.V4(1))','stage1_viewport #(.V4(1))')
     v=v.replace('.O_state(active_status));','.O_state(active_status),.I_point(teach_desired_point),.O_point(teach_active_point));')
     marker='wire area_associated,area_video;wire [3:0] area_tip_reason;'
@@ -30,6 +30,16 @@ def decorate(out):
     v=v.replace('stage1_regions area_controller','stage1_scene area_controller')
     v=v.replace('.tip_reason(area_tip_reason));','.tip_reason(area_tip_reason),.image_healthy(teaching_image_ok),.image_reason(teaching_image_reason),\n     .shown_point(teach_active_point),.desired_point(teach_desired_point),.teaching(teaching_status));')
     v=v.replace('stage1_osd u_osd (','stage1_osd u_osd (.I_teaching(teaching_status),.I_point(teach_active_point[22:0]),')
+    assert '.alarm(O_area_alarm)' in v
+    v=v.replace('.alarm(O_area_alarm)', '.alarm(stage1_raw_area_alarm)')
+    v=v.replace('stage1_scene area_controller(', 'stage1_teach_alarm replay_alarm_gate(I_ui_mode,teaching_status[3:0],stage1_raw_area_alarm,O_area_alarm);\n    stage1_scene area_controller(')
+    v+='''\n// Suppress a latched previous sequence result during replay preload/restart.
+`default_nettype none
+module stage1_teach_alarm(input wire [1:0] mode,input wire [3:0] route_state,input wire raw_alarm,output wire alarm);
+assign alarm=raw_alarm && (mode!=2'd3 || route_state==4'd8);
+endmodule
+`default_nettype wire
+'''
     out['rtl/color_regions/stage1_memory_video_out.v']=v
     s=out['rtl/color_regions/stage1_osd.v']
     s=s.replace('input wire [3:0] I_tip_reason\n','input wire [3:0] I_tip_reason,input wire [63:0] I_teaching,input wire [22:0] I_point\n')
