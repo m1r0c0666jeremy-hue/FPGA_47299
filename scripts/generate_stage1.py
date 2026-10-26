@@ -126,6 +126,8 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
     route=route.replace('from osd_memory_branch import check_branch','from stage1_policy import check_branch')
     route=route.replace("f'refined_route_{stamp}'","f'stage1_route_{stamp}'")
     out['scripts/run_stage1_route.py']=route
+    from stage1_teaching_codegen import decorate
+    decorate(out)
     return out
 
 def main():

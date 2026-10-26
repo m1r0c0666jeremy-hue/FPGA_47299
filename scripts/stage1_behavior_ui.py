@@ -54,7 +54,7 @@ def ui_assets():
     for i in range(3):busy[9+i]=f"8'd1+target_bcd[{8-4*i}+:4]"
     put(busy,12,' BUSY ')
     failed=normal.copy();put(failed,0,'BRT FAILED. CHECK CAM')
-    reserved=layout();put(reserved,0,'ROUTE RESERVED')
+    reserved=layout();put(reserved,0,'TEACH EMPTY')
     ui='''`default_nettype none
 module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  input wire [1:0] mode,input wire [3:0] run_state,input wire [2:0] area_count,draft_area,expected_area,actual_area,

@@ -27,6 +27,12 @@ def old_modules():
 
 def specs():
     d={
+      'stage1_teach_motion':('STAGE1_TEACH_MOTION_PASS distance_cases=100',('stage1_regions',)),
+      'stage1_teach_route':('STAGE1_TEACH_ROUTE_PASS 60s',('stage1_regions',)),
+      'stage1_teach_integration':('STAGE1_TEACH_INTEGRATION_PASS',('stage1_regions','stage1_sequence','stage1_controls','refined_zoom_geometry')),
+      'stage1_teach_ui':('STAGE1_TEACH_UI_PASS cases=37',('stage1_ui_formatter',)),
+      'stage1_teach_pixels':('STAGE1_TEACH_PIXELS_PASS cases=12 pixels=9584640',('stage1_regions','stage1_osd','stage1_ui_formatter')),
+      'stage1_teach_keys_75m':('STAGE1_TEACH_KEYS_75M_PASS',('stage1_controls',)),
       'stage1_real_keys':('STAGE1_REAL_KEYS_PASS durations50/100/300',('stage1_controls','stage1_regions','refined_line_reader','stable_display')),
       'stage1_real_keys_faults':('STAGE1_REAL_KEYS_FAULTS_PASS',('stage1_controls','stage1_regions','refined_line_reader','stable_display')),
       'stage1_transactions':('STAGE1_TRANSACTIONS_PASS',('stage1_regions','stage1_render','stage1_sequence')),

@@ -1,6 +1,6 @@
 // Decisions consume fresh source-image results only. All durations use wall milliseconds.
 `default_nettype none
-module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200,TREND_PIXELS=4)(
+module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200,TREND_PIXELS=4,REPLAY=0)(
  input wire clk,rst_n,input wire [1:0] mode,input wire [2:0] region_count,input wire [3:0] draft_count,
  input wire start_key,pause_key,mute_key,can_start,live,configuration_changed,
  input wire sample,input wire [3:0] inside_mask,near_mask,input wire [43:0] distances,
@@ -38,7 +38,7 @@ module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200
  previous_distance<=0;trend_target<=0;trend_ready<=0;confirmations<=0;outside_count<=0;mode_last<=0;
  state<=IDLE;expected_area<=0;actual_area<=0;completed<=0;occupied<=0;muted<=0;trend<=0;start_error<=0;last_stay<=0;
  for(j=0;j<4;j=j+1)stays[j]<=0;
- end else begin
+ end else if(!REPLAY || !pause_key || mode!=mode_last || configuration_changed || start_key)begin
  if(tick)begin subms<=0;
  if(fresh_age<STALE_MS)fresh_age<=fresh_age+1'b1;
  if(sample_age<STALE_MS)sample_age<=sample_age+1'b1;
@@ -78,7 +78,7 @@ module stage1_sequence #(parameter CYCLES_PER_MS=75000,STALE_MS=250,TREND_MS=200
  if(expected_area+1'b1==region_count)state<=PASS;else expected_area<=expected_area+1'b1;
  end end end
  end end
- if(mode==2 && pause_key)begin
+ if(mode==2 && pause_key && !REPLAY)begin
  if(state==RUN && !(sample && live && entered!=0 &&
  (multiple || entered!=expected_area+1'b1 || expected_area+1'b1==region_count)))begin state<=PAUSED;trend_ready<=0;end
  else if(state==PAUSED && live)begin state<=RESUME;outside_count<=0;occupied<=0;confirmations<=0;sample_age<=tick?1'b1:1'b0;end end

@@ -71,10 +71,10 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  if(!O_gain_busy && camera_ready && O_gain_req==ack_sync[1])begin
  target_slot<=O_gain_slot==6?0:O_gain_slot+1'b1;target_gain<=gain_at(O_gain_slot==6?3'd0:O_gain_slot+1'b1);
  O_gain_busy<=1;O_gain_failed<=0;gain_wait<=0;gain_age<=0;O_tracking<=0;O_session<=O_session+1'b1;end
- else conflict<=1;end else if(O_ui_mode!=3)O_click2<=1;
- 2:if(O_ui_mode==0)O_zoom<=O_zoom==4?0:O_zoom+1'b1;else if(O_ui_mode!=3)O_click3<=1;
+ else conflict<=1;end else O_click2<=1;
+ 2:if(O_ui_mode==0)O_zoom<=O_zoom==4?0:O_zoom+1'b1;else O_click3<=1;
  4:if(O_ui_mode==0)begin O_pair<=~O_pair;O_session<=O_session+1'b1;end
- else if(O_ui_mode!=3)O_click4<=1;
+ else O_click4<=1;
  default:begin end
  endcase end
  gesture<=0;chord<=0;held<=0;window_age<=0;consumed<=0;conflict<=0;
@@ -101,6 +101,7 @@ module stage1_controls #(parameter CYCLES_PER_MS=75000,DEBOUNCE_MS=20,LONG_PRESS
  else if(gesture==2)begin
  if(!O_tracking && (!camera_ready || O_gain_busy))conflict<=1;
  else begin O_tracking<=~O_tracking;O_session<=O_session+1'b1;end end
+ else if(gesture==4 && O_ui_mode==3)O_click4<=1;
  end end end
  if(I_pause)begin O_tracking<=0;O_session<=O_session+1'b1;O_cancel<=1;
  if(cal_ui)begin O_cal_cancel<=~O_cal_cancel;cal_ui<=0;cal_seen<=0;end end

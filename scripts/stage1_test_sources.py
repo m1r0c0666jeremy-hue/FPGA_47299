@@ -8,3 +8,4 @@ _PORTS=['I_ui_mode','I_region_vertices','I_region_counts','I_region_closed','I_a
 OSD_ZERO_NAMED=','.join('.'+n+'('+v+')' for n,v in zip(_PORTS,OSD_ZERO_ARGS.rstrip(',').split(',')))+','
 
 OSD_ZERO_NAMED += ".I_gain_target(7'd105),.I_tip_reason(4'd0),"
+OSD_ZERO_NAMED += ".I_teaching(64'd0),.I_point(23'd0),"

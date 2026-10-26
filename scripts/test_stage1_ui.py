@@ -66,7 +66,7 @@ initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
             if d['busy']:assert 'BUSY' in line,(d,line)
         elif d['gb']:assert f"BRT{d['gain']:03d} TO105 BUSY" in line,line
         elif d['gf']:assert 'BRT FAILED. CHECK CAM' in line,line
-        elif d['mode']==3:assert 'ROUTE RESERVED' in line,line
+        elif d['mode']==3:assert 'TEACH EMPTY' in line,line
         else:
             assert f"BRT{d['gain']:03d}" in line and 'ZOOM 1.5X' in line and ('MARK ON' if d['show'] else 'MARK OFF') in line,(d,line)
             assert ('-/7' if d['gain']==97 else str((16,32,48,64,80,90,105).index(d['gain'])+1)+'/7') in line,(d,line)

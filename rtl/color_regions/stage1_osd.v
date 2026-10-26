@@ -13,7 +13,7 @@ module stage1_osd(
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
  input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
  input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
- input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason,input wire [63:0] I_teaching,input wire [22:0] I_point
 );
  localparam FONT=16,CHAR_WIDTH=8,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
@@ -118,11 +118,13 @@ if(!program_in_range_q)decoded_glyph=0;
 end
 wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  wire [23:0] region_color,region_label_color;wire region_label_on,region_ready,region_underrun;
- wire [7:0] region_label_glyph,stage_glyph;wire [2:0] region_label_gx;wire [3:0] region_label_gy;
+ wire [7:0] region_label_glyph,stage_glyph,teaching_glyph;wire teaching_override;wire [2:0] region_label_gx;wire [3:0] region_label_gy;
  wire stage_override,stage_force_footer;
  stage1_render #(.SPLIT_DRAFT(1)) region_render(I_clk,I_rst_n,I_geometry_commit,I_region_vertices,I_region_counts,I_region_closed,I_ui_mode,
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
+ stage1_teach_text teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
+ I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
  I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason);
@@ -143,7 +145,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
  6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
- 7:begin characters[(format_row?COLS:0)+format_col]<=fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
@@ -155,7 +157,8 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  field_index<=0;footer_ready<=0;format_state<=1;
  end end end
  wire geometry_ready;wire [251:0] geometry;
- refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,I_meta[639:0],I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
+ wire [639:0] point_geometry=I_point[22]?{I_meta[639:100],I_point[20:0],I_meta[78:0]}:I_meta[639:0];
+ refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,point_geometry,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
  function border;input signed [13:0] xx,yy,x0,x1,y0,y1;reg signed [13:0] l,r,t,b;begin
  l=xx-x0;r=x1-xx;t=yy-y0;b=y1-yy;
  border=!(l[13] || r[13] || t[13] || b[13]) && (l[13:1]==0 || r[13:1]==0 || t[13:1]==0 || b[13:1]==0);end endfunction
@@ -237,7 +240,7 @@ endcase
 endcase
 endcase
  end end end
- if(I_show && I_detection_valid && I_meta[32])begin
+ if(I_show && (I_point[22]?I_point[21]:(I_detection_valid && I_meta[32])))begin
  lx=$signed(geometry[224+:14]);ly=$signed(geometry[238+:14]);ldx=xx-lx;ldy=yy-ly;
  if((ldx>=-6 && ldx<=6 && ldy>=-1 && ldy<=1)||(ldy>=-6 && ldy<=6 && ldx>=-1 && ldx<=1))begin back_on=1;back=24'h40ff90;end end
  if(I_meta[567:565]!=0 && border(xx,yy,$signed(geometry[168+:14]),$signed(geometry[182+:14]),$signed(geometry[196+:14]),$signed(geometry[210+:14])))begin back_on=1;back=24'h80ff80;end

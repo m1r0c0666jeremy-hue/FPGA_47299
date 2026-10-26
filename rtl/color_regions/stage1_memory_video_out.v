@@ -153,7 +153,7 @@ refined_video_in u_video_in(
     wire active_rotate;wire [2:0] active_zoom;wire [1:0] frame_mode,selected_bank;
     wire [2:0] active_status;
     wire [31:0] selected_frame_id;
-    wire [767:0] active_meta;
+    wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;
     wire [31:0] image_us,latest_image_id;wire [15:0] image_epoch;wire image_time_valid;
     wire latency_valid;wire [31:0] latency_us,frame_age;
     refined_gray_sync latest_source(I_pixel_clk,I_process_rst_n,I_latest_gray,latest_image_id);
@@ -217,7 +217,7 @@ refined_video_in u_video_in(
     target_mailbox #(.WIDTH(852)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
         .D_clk(I_pixel_clk),.D_rst_n(stream_pixel_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
-    stable_display #(.V4(1)) u_viewport(
+    stage1_viewport #(.V4(1)) u_viewport(
         .O_image_us(image_us),.O_epoch(image_epoch),.O_time_valid(image_time_valid),
         .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
         .I_clk(I_pixel_clk),.I_rst_n(stream_pixel_n),.I_vs(S_hdmi_vsync),.I_de(S_hdmi_de),
@@ -225,7 +225,7 @@ refined_video_in u_video_in(
         .I_live(video_ok && I_camera_ready && stream_pixel_n),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
-        .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status));
+        .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status),.I_point(teach_desired_point),.O_point(teach_active_point));
     refined_line_reader u_scaler (
         .I_stream_n(stream_async_n),.O_fault_toggle(read_fault_toggle),.O_ddr_diag(ddr_diagnostics),.O_pixel_diag(pixel_diagnostics),
         .I_accepted_reads(accepted_reads),.I_unexpected_return(unexpected_return),
@@ -349,18 +349,25 @@ refined_video_in u_video_in(
     refined_performance performance(I_pixel_clk,I_process_rst_n,osd_vs,osd_de,video_ok && I_camera_ready && stream_pixel_n,
      I_board_us,image_us,selected_frame_id,latest_image_id,image_time_valid,latency_valid,latency_us,frame_age);
     wire area_associated,area_video;wire [3:0] area_tip_reason;
+    wire teaching_image_ok;wire [3:0] teaching_image_reason;
+    wire teaching_image_associated=active_meta[255] && active_meta[247] && active_meta[415:413]==4 &&
+     active_meta[31:0]==selected_frame_id && active_meta[719:704]==image_epoch && active_meta[671:640]==image_us &&
+     active_meta[720] && image_time_valid && active_meta[242:235]==I_session && active_meta[243]==I_pair && active_meta[244]==I_tracking;
+    stage1_teach_image_guard teaching_video_guard(I_pixel_clk,I_process_rst_n,stream_pixel_n,I_camera_ready,I_gain_busy,
+     video_ok,S_hdmi_out_de,teaching_image_associated,selected_frame_id,teaching_image_ok,teaching_image_reason);
     stage1_input_guard region_input(I_pixel_clk,I_process_rst_n,stream_pixel_n,I_tracking,I_camera_ready,I_gain_busy,
      video_ok,S_hdmi_out_de,frame_commit,I_session,I_pair,selected_frame_id,image_epoch,image_us,image_time_valid,active_meta,area_associated,area_video);
     wire [2:0] area_count,area_expected,area_actual;wire [3:0] area_draft,area_state,area_completed,area_occupied,area_closed,area_edit_error,area_start_error;
     wire [15:0] area_revision,area_counts;wire [671:0] area_vertices,area_saved_vertices;wire [167:0] area_draft_vertices;wire area_muted,area_busy,area_tip,area_metrics_valid;
     wire [1:0] area_trend;wire [10:0] area_distance;wire [19:0] area_dwell;
-    stage1_regions area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
+    stage1_scene area_controller(.clk(I_pixel_clk),.rst_n(I_process_rst_n),.mode(I_ui_mode),.down2(I_key_down2),.click2(I_key2),.click3(I_key3),.click4(I_key4),.cancel(I_key_cancel),
      .tracking(I_tracking),.video_ok(area_video),.camera_ready(I_camera_ready),.gain_busy(I_gain_busy),.session(I_session),.pair(I_pair),
      .frame_commit(frame_commit),.detection_valid(area_associated),.image_id(selected_frame_id),.meta(active_meta),
      .region_count(area_count),.draft_count(area_draft),.revision(area_revision),.render_vertices(area_vertices),.render_counts(area_counts),.closed_mask(area_closed),
      .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(O_area_alarm),
-     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices),.tip_reason(area_tip_reason));
-    stage1_osd u_osd (
+     .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices),.tip_reason(area_tip_reason),.image_healthy(teaching_image_ok),.image_reason(teaching_image_reason),
+     .shown_point(teach_active_point),.desired_point(teach_desired_point),.teaching(teaching_status));
+    stage1_osd u_osd (.I_teaching(teaching_status),.I_point(teach_active_point[22:0]),
      .I_ui_mode(I_ui_mode),.I_region_vertices(area_saved_vertices),.I_region_draft(area_draft_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
      .I_area_count(area_count),.I_draft_count(area_draft),.I_run_state(area_state),.I_completed(area_completed),.I_occupied(area_occupied),
      .I_expected_area(area_expected),.I_actual_area(area_actual),.I_area_muted(area_muted),.I_area_trend(area_trend),.I_area_distance(area_distance),.I_area_dwell(area_dwell),
