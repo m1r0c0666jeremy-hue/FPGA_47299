@@ -292,7 +292,7 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  else if(!real_live || !image_ok)reason<=real_reason==0?4'd3:real_reason;
  else begin state<=WAIT_POINT;recording_context<=context_id;reason<=0;phase<=0;pending_record<=0;end
  end else if(key3 && state!=REC && state!=WAIT_POINT)begin
- if(state==PLAY)begin state<=PAUSE;phase<=0;end
+ if(state==PLAY)begin state<=PAUSE;end
  else if(state==PAUSE)state<=PLAY;
  else if(count<2 || duration_ms==0)reason<=15;
  else if(!image_ok)reason<=3;
@@ -313,7 +313,7 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  end
  if(state==PLAY && frame_commit && point_valid && !round_sent)begin start_round<=1;round_sent<=1;end
  if(state==PLAY && elapsed_ms==duration_ms && computed_ms==duration_ms && phase==0 && frame_commit && shown_ms==duration_ms)state<=DONE;
- case(phase)
+ if(state==PREP || state==PLAY)case(phase)
  1:phase<=2;
  2:begin p0<=rddata;point_x<=rddata[10:0];point_y<=rddata[20:11];point_ms<=0;point_valid<=1;rdaddr<=1;phase<=3;end
  3:phase<=4;
