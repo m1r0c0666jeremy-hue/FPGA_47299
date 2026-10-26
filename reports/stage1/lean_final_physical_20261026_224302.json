@@ -1,0 +1,143 @@
+{
+  "status": "FINAL_PHYSICAL_PASSED_SOFTWARE4LIVE_PENDING",
+  "build": {
+    "attempt": "build/stage1_route_20261026_222201_476507",
+    "summary": {
+      "stage": "full",
+      "head": "c0c09cf3d113c4a4f393e2e1296e4213bdd140f4",
+      "head_after": "c0c09cf3d113c4a4f393e2e1296e4213bdd140f4",
+      "route_effort": "normal",
+      "placement_strategy": 1,
+      "map_mode": "area_prior",
+      "pack_effort": "high",
+      "infer_fsm": "sequential",
+      "min_ripple_len": 64,
+      "map_strategy": null,
+      "macro_performance": "macro_congestion",
+      "pack_mode": null,
+      "place_effort": "high",
+      "max_fanout": 999999,
+      "exit_code": 0,
+      "inputs_unchanged": true,
+      "working_tree_matches": true,
+      "official_strategy": {
+        "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+        "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+        "selected": {
+          "CongestionHigh": {
+            "description": "Makes extra optimization on macros besides those actions on unit cells to get lower congestion result.",
+            "is_syn": "phy",
+            "params": [
+              {
+                "step": "place",
+                "param": "opt_timing",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "ofv",
+                "val": "70"
+              },
+              {
+                "step": "place",
+                "param": "opt_max_density",
+                "val": "50"
+              },
+              {
+                "step": "place",
+                "param": "target_density",
+                "val": "0.6"
+              },
+              {
+                "step": "place",
+                "param": "target_density_pp",
+                "val": "0.7"
+              },
+              {
+                "step": "place",
+                "param": "aggressive_opt",
+                "val": "20"
+              },
+              {
+                "step": "place",
+                "param": "enhanced_beeline_opt",
+                "val": "2"
+              },
+              {
+                "step": "place",
+                "param": "enhanced_gp",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "non_crit_opt",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "post_place_opt",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "enable_congestion_recovery",
+                "val": "on"
+              },
+              {
+                "step": "route",
+                "param": "post_route_opt",
+                "val": "high"
+              }
+            ]
+          }
+        }
+      },
+      "reused_gate": null,
+      "checkpoint_provenance": {
+        "parent": "build/stage1_place_20261026_220555",
+        "checkpoint_name": "target_color_regions_placed.db",
+        "checkpoint_sha256": "c48f8c3e0aa3cf8c3aa2859b4b3fe2edc57d93b455c518f1613daeaeab8e5bed",
+        "parent_summary_sha256": "a09cddfdf066c87bb9d7906f5f7bd4043af0a31e85bfd63011af0b25c55513a3",
+        "parent_context_sha256": "87ea023d25f2815ef4dd09300e7819a488b7cc1abd883927b72939e24229663f",
+        "parent_inputs_sha256": "f4449724d3a720aaa72703b6f806aaf5a1e613ea8ecab1d0e7e854fe27e22dba"
+      },
+      "checkpoint_unchanged": true,
+      "replaced_strategy": null,
+      "flow_threads": 16,
+      "retry_routability": true,
+      "route_retry_performed": false,
+      "final_route_effort": "normal",
+      "route_checkpoints": {
+        "target_color_regions_routed.db": "3955f5d40e25959e838f4d291bb998f99bb5bd8fe38917164746cd93acaa82a7"
+      },
+      "resources": {
+        "slice": 18927,
+        "lut6": 18539,
+        "reg": 21875,
+        "eram": 98,
+        "dsp": 40
+      },
+      "gate_estimate": false,
+      "resource_pass": true,
+      "placement_required": false,
+      "slack_ns": {
+        "SWNS": 0.009,
+        "HWNS": 0.02
+      },
+      "timing_pass": true
+    },
+    "compiled_source_commit": "c0c09cf3d113c4a4f393e2e1296e4213bdd140f4",
+    "git_blob_inputs_verified": 304,
+    "reused_gate": null,
+    "bit_sha256": "f92e2774aa751c87c86e2bb6c08af3f8c9a969efa0e9110973ea73f987f6fb79",
+    "routing": {
+      "final_over_count": 0,
+      "final_over": 0,
+      "final_worst": 0,
+      "routing_drc_pass": true,
+      "log_sha256": "09690a2aa0274ffa312534c2f74c994fc517f2762af708d4c9831ce093feaace"
+    },
+    "sta_coverage_percent": 98.83
+  },
+  "hardware_status": "PENDING_JEREMY_NO_BOARD_OR_FLASH"
+}

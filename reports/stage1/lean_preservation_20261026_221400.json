@@ -1,0 +1,14 @@
+{
+  "status": "PRESERVATION_PASS",
+  "compiled_inputs": 304,
+  "protected": {
+    "td_project/target_color_regions_stage1.al": "c54dce5561b155cc2ff0ddc787b6d03b4a0eb2b724f29612f81336e712119456",
+    "build/target_region_sequence_stage1_20261025_202552/target_color_regions.bit": "15de0fc76aca57e53bf20ab97853f63be6647577e82f51ee52afe645089a8d72",
+    "build/target_region_sequence_stage1_20261025_202552/region_sequence_same_source.zip": "379a6e3e4822d20079037fcce13f3ac0ef797e2d8a8e2a4d4c288728efb1c6a6",
+    "build/target_region_sequence_stage1_20261024_130549/target_color_regions.bit": "57cea17e19e4a34969e2c1c2d4e0f0f43fc6f3d7ff9d01e0e2569ec826911b17",
+    "build/target_region_sequence_stage1_20261024_130549/region_sequence_same_source.zip": "34f2551bda8300d3b5ecb376d1b2a63a0727608fdd6da3a29e363d205fab2de1"
+  },
+  "hardware_status": "PENDING",
+  "compiled_source": "c0c09cf3d113c4a4f393e2e1296e4213bdd140f4",
+  "scope": "Current working tree and frozen 220555 inputs; old candidates/TD user bytes protected. Not physical pass."
+}
