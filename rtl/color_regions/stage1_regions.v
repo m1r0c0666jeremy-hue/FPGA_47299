@@ -178,7 +178,7 @@ module stage1_motion #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,activ
  input wire [10:0] x,input wire [9:0] y,input wire [41:0] rectangle,
  input wire [18:0] identity,output reg [1:0] trend,output reg [10:0] distance,output reg valid);
  reg [16:0] subms;reg [15:0] now_ms,last_sample,first_ms,baseline_ms,calc_ms;
- reg [18:0] last_identity;reg seen,baseline_ready;reg [10:0] baseline;
+ reg [18:0] last_identity;reg seen,baseline_ready,warm;reg [10:0] baseline;
  reg [20:0] history[0:15];reg [15:0] times[0:15];reg [4:0] count;reg [3:0] wr,scan;
  reg [10:0] minx,maxx;reg [9:0] miny,maxy;reg still_now;
  reg [3:0] phase;reg [3:0] left;reg [10:0] factor,dy,root;
@@ -194,18 +194,19 @@ module stage1_motion #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,activ
  wire [15:0] baseline_age=calc_ms-baseline_ms;
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin subms<=0;now_ms<=0;last_sample<=0;first_ms<=0;baseline_ms<=0;calc_ms<=0;
- last_identity<=0;seen<=0;baseline_ready<=0;baseline<=0;count<=0;wr<=0;scan<=0;phase<=0;left<=0;
+ last_identity<=0;seen<=0;baseline_ready<=0;warm<=0;baseline<=0;count<=0;wr<=0;scan<=0;phase<=0;left<=0;
  minx<=0;maxx<=0;miny<=0;maxy<=0;still_now<=0;factor<=0;dy<=0;root<=0;product<=0;shifted<=0;
  square_x<=0;radicand<=0;remainder<=0;trend<=0;distance<=0;valid<=0;min_dist<=0;lastx<=0;lasty<=0;end
  else begin
  if(subms==CYCLES_PER_MS-1)begin subms<=0;now_ms<=now_ms+1'b1;end else subms<=subms+1'b1;
+ if(seen && window_age>=500)warm<=1;
  if(!active || identity!=last_identity)begin
- last_identity<=identity;seen<=0;baseline_ready<=0;count<=0;wr<=0;phase<=0;valid<=0;trend<=0;end
+ last_identity<=identity;seen<=0;baseline_ready<=0;warm<=0;count<=0;wr<=0;phase<=0;valid<=0;trend<=0;end
  else case(phase)
  0:if(sample && (!seen || sample_age>=50))begin
  if(!seen)first_ms<=now_ms;seen<=1;last_sample<=now_ms;calc_ms<=now_ms;
  history[wr]<={y,x};times[wr]<=now_ms;wr<=wr+1'b1;if(count<16)count<=count+1'b1;
- minx<=x;maxx<=x;miny<=y;maxy<=y;scan<=0;still_now<=window_age>=500 && seen;
+ minx<=x;maxx<=x;miny<=y;maxy<=y;scan<=0;still_now<=warm || (window_age>=500 && seen);
  factor<=dx;dy<=ddy;shifted<={11'd0,dx};product<=0;left<=11;phase<=1;
  end
  1:begin
@@ -270,7 +271,7 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=60000,MAX_POINTS=1202
  wire fatal=operating && (!image_ok || context_bad || record_fault);
  wire first_write=state==WAIT_POINT && real_sample && real_live;
  wire more_write=state==REC && pending_record && div_done && quotient>last_stamp && quotient<=MAX_MS && count<MAX_POINTS;
- wire write_ok=mode==3 && !clear && !fatal && !key4 && !(key2 && state==REC) &&
+ wire write_ok=rst_n && mode==3 && !clear && !fatal && !key2 &&
  !(state==REC && (record_ms>=MAX_MS || count>=MAX_POINTS));
  wire [15:0] stamp=quotient[15:0];
  wire [15:0] stopped_ms=record_ms>last_stamp?record_ms:last_stamp;
@@ -307,21 +308,20 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=60000,MAX_POINTS=1202
  else if(key4 || operating)reason<=13;
  end else if(sequence_fail && state==PLAY)begin
  state<=FAIL;phase<=0;point_x<=shown_x;point_y<=shown_y;point_ms<=shown_ms;elapsed_ms<=shown_ms;reason<=0;
- end else if(key4)reason<=10;
- else if(key2)begin
+ end else if(key2)begin
  if(state==REC)begin state<=READY;duration_ms<=stopped_ms;pending_record<=0;phase<=0;reason<=13;end
  else if(point_use || state==WAIT_POINT)reason<=10;
  else if(!real_live || !image_ok)reason<=real_reason==0?4'd3:real_reason;
  else begin state<=WAIT_POINT;recording_context<=context_id;reason<=0;phase<=0;pending_record<=0;end
- end else if(key3)begin
- if(state==REC || state==WAIT_POINT)reason<=10;
- else if(state==PLAY)begin state<=PAUSE;phase<=0;end
+ end else if(key3 && state!=REC && state!=WAIT_POINT)begin
+ if(state==PLAY)begin state<=PAUSE;phase<=0;end
  else if(state==PAUSE)state<=PLAY;
  else if(count<2 || duration_ms==0)reason<=15;
  else if(!image_ok)reason<=3;
  else begin state<=PREP;recording_context<=context_id;elapsed_ms<=0;point_ms<=0;point_valid<=0;
  phase<=1;rdaddr<=0;index<=1;reason<=0;round_sent<=0;computed_ms<=0;end
  end else begin
+ if((key3 || key4) && (state==REC || state==WAIT_POINT))reason<=10;
  if(first_write)begin
  state<=REC;count<=1;record_ms<=0;last_stamp<=0;first_us<=source_us;last_us<=source_us;elapsed_ms<=0;duration_ms<=0;reason<=0;
  end
@@ -416,7 +416,7 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  tracking,video_ok,camera_ready,gain_busy,session,pair,frame_commit,detection_valid,image_id,meta,
  region_count,draft_count,revision,render_vertices,render_counts,closed_mask,real_state,real_completed,real_occupied,
  real_expected,real_actual,real_muted,real_alarm,,,real_dwell,edit_error,real_start,busy,real_tip,metrics_valid,saved_vertices,draft_vertices,real_reason);
- reg real_seen;reg [31:0] real_last;reg [40:0] last_context;
+ reg real_seen,tracking_last;reg [31:0] real_last;reg [40:0] last_context;
  reg [15:0] generation,revision_last,last_virtual_ms;reg sample_seen,replay_started;
  wire [40:0] context_id={session,pair,meta[719:704],meta[559:544]};
  wire real_sample=real_tip && (!real_seen || real_last!=image_id || context_id!=last_context);
@@ -440,8 +440,9 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  !(shown_point[10:0]>rect[10:0]+11'd2 && shown_point[10:0]+11'd2<rect[31:21] &&
  shown_point[20:11]>rect[20:11]+10'd2 && shown_point[20:11]+10'd2<rect[41:32]);
  end end end
+ wire [3:0] route_cause=gain_busy?4'd6:!camera_ready?4'd2:tracking_last && !tracking?4'd1:!image_healthy?image_reason:real_reason;
  stage1_route #(.CYCLES_PER_MS(CYCLES_PER_MS)) route(clk,rst_n,mode,click2,click3,click4 && !cancel,click4 && cancel,
- image_healthy,real_tip,real_sample,!image_healthy?image_reason:real_reason,meta[89:79],meta[99:90],meta[671:640],context_id,
+ image_healthy,real_tip,real_sample,route_cause,meta[89:79],meta[99:90],meta[671:640],context_id,
  frame_commit,replay_started && replay_state==6,shown_point[10:0],shown_point[20:11],shown_point[38:23],
  route_state,route_reason,route_count,elapsed,duration,use_point,point_valid,px,py,point_ms,start_round,running);
  assign desired_point={point_ms,use_point,point_valid,py,px};
@@ -470,11 +471,11 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  motion_x,motion_y,target_rect,{generation,expected_area},trend,distance,motion_valid);
  assign teaching={4'd0,draft_count,use_point,seq_enabled,trend,motion_valid,duration,elapsed,route_count,route_reason,route_state};
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin real_seen<=0;real_last<=0;last_context<=0;generation<=0;revision_last<=0;last_virtual_ms<=0;sample_seen<=0;replay_started<=0;end
+ if(!rst_n)begin real_seen<=0;tracking_last<=0;real_last<=0;last_context<=0;generation<=0;revision_last<=0;last_virtual_ms<=0;sample_seen<=0;replay_started<=0;end
  else begin
  if(real_sample)begin real_seen<=1;real_last<=image_id;end
  if(context_id!=last_context || revision!=revision_last || start_round)generation<=generation+1'b1;
- last_context<=context_id;revision_last<=revision;
+ last_context<=context_id;revision_last<=revision;tracking_last<=tracking;
  if(!use_point || route_state==4)begin replay_started<=0;sample_seen<=0;last_virtual_ms<=0;end
  else begin
  if(replay_state==1 || replay_state==2)replay_started<=1;

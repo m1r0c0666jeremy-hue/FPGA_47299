@@ -30,7 +30,7 @@ initial begin repeat(3)@(negedge clk);rst=1;
         elif row==1 and not seq:
             text=list('K2 REC/STOP K3 PLAY/PAUSE K4 STOP K4 HOLD CLEAR'.ljust(64))
             prefix='FINISH DRAFT. SEQ OFF' if draft else 'NO SAVED AREAS. SEQ OFF'
-            text[:32]=prefix.ljust(32);expected_line=''.join(text)
+            text[:32]=prefix.ljust(32);text[32:]='K3 PLAY K4 STOP K4 HOLD CLEAR'.ljust(32);expected_line=''.join(text)
         else:expected_line=None
         cases.append((src_line,expected_line,st,row,state))
     for st in range(9):add(st=st)

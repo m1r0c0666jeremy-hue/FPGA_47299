@@ -25,8 +25,9 @@ ms(200);point(610,220);if(trend!=0)$fatal(1,"lateral mistaken for still");
 identity=identity+1;repeat(3)@(negedge clk);point(500,200);
 repeat(12)begin ms(50);point(500,200);end
 if(trend!=3)$fatal(1,"stationary window trend%0d",trend);
+repeat(1312)begin ms(50);point(500,200);if(trend!=3)$fatal(1,"still lost across 16-bit millisecond rollover");end
 active=0;@(negedge clk);if(valid)$fatal(1,"invalid active retained valid");
-$display("STAGE1_TEACH_MOTION_PASS distance_cases=100 approach/away/lateral/still/reset");$finish;end endmodule'''
+$display("STAGE1_TEACH_MOTION_PASS distance_cases=100 approach/away/lateral/still/reset/timewrap");$finish;end endmodule'''
     run('stage1_teach_motion',src,MODULES,timeout=120)
 
 def route():

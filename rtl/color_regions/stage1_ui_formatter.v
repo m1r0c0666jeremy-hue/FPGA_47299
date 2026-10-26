@@ -345,6 +345,7 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  reg [2:0] field;reg [1:0] conversion;reg [4:0] index;integer i;
  wire [7:0] shifted={rem,number[19]};wire take=shifted>=100;
  localparam [63:0] INCOMPLETE="INCOMP  ";localparam [255:0] DRAFT_OFF="FINISH DRAFT. SEQ OFF           ",NO_AREAS="NO SAVED AREAS. SEQ OFF         ";
+ localparam [255:0] PLAY_KEYS="K3 PLAY K4 STOP K4 HOLD CLEAR   ";
  reg [63:0] state_word,motion_word,run_word;reg [255:0] reason_word;reg [7:0] ascii;
  function [7:0] encode;input [7:0] c;begin
  if(c>=48 && c<=57)encode=c-47;else if(c>=65 && c<=90)encode=c-54;
@@ -386,6 +387,7 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  motion_word="        ";if(f[51])case(f[53:52])0:motion_word="MOVE    ";1:motion_word="APPROACH";2:motion_word="AWAY    ";3:motion_word="STILL   ";endcase
  run_word="IDLE    ";case(fs)
  1:run_word="WAIT OUT";2:run_word="RUN     ";3:run_word="PAUSED  ";4:run_word="MOVE OUT";5:run_word="PASS    ";6:run_word="FAIL    ";7:run_word="STOPPED ";endcase
+ if(f[3:0]==6)run_word="PAUSED  ";
  reason_word=0;case(f[7:4])
 0:reason_word="                                ";
 1:reason_word="TRACKING OFF                    ";
@@ -464,8 +466,9 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 45:ascii=8'd65;
 46:ascii=8'd82;
  endcase
- if(f[55] && !f[54] && col<32)begin
- if(f[59:56]!=0)ascii=DRAFT_OFF[(31-col)*8+:8];
+ if(f[55] && !f[54])begin
+ if(col>=32)ascii=PLAY_KEYS[(63-col)*8+:8];
+ else if(f[59:56]!=0)ascii=DRAFT_OFF[(31-col)*8+:8];
  else ascii=NO_AREAS[(31-col)*8+:8];end
  end
  glyph=encode(ascii);end

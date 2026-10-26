@@ -99,6 +99,7 @@ STATE_CASES
  motion_word="        ";if(f[51])case(f[53:52])0:motion_word="MOVE    ";1:motion_word="APPROACH";2:motion_word="AWAY    ";3:motion_word="STILL   ";endcase
  run_word="IDLE    ";case(fs)
  1:run_word="WAIT OUT";2:run_word="RUN     ";3:run_word="PAUSED  ";4:run_word="MOVE OUT";5:run_word="PASS    ";6:run_word="FAIL    ";7:run_word="STOPPED ";endcase
+ if(f[3:0]==6)run_word="PAUSED  ";
  reason_word=0;case(f[7:4])
 REASON_CASES
  endcase
@@ -124,8 +125,9 @@ REASON_CASES
  case(col)
 HINT_CASES
  endcase
- if(f[55] && !f[54] && col<32)begin
- if(f[59:56]!=0)ascii="FINISH DRAFT. SEQ OFF            "[(31-col)*8+:8];
+ if(f[55] && !f[54])begin
+ if(col>=32)ascii=PLAY_KEYS[(63-col)*8+:8];
+ else if(f[59:56]!=0)ascii="FINISH DRAFT. SEQ OFF            "[(31-col)*8+:8];
  else ascii="NO SAVED AREAS. SEQ OFF          "[(31-col)*8+:8];end
  end
  glyph=encode(ascii);end
@@ -138,6 +140,7 @@ endmodule
     s=s.replace('HINT_CASES','\n'.join(f'{i}:ascii=8\'d{ord(c)};' for i,c in enumerate(hint) if c!=' '))
     # Named constants avoid variable selection from literal strings in TD.
     constants='localparam [63:0] INCOMPLETE="INCOMP  ";localparam [255:0] DRAFT_OFF="'+ 'FINISH DRAFT. SEQ OFF'.ljust(32)+'",NO_AREAS="'+'NO SAVED AREAS. SEQ OFF'.ljust(32)+'";\n '
+    constants+='localparam [255:0] PLAY_KEYS="'+'K3 PLAY K4 STOP K4 HOLD CLEAR'.ljust(32)+'";\n '
     s=s.replace('reg [63:0] state_word,motion_word,run_word;',constants+'reg [63:0] state_word,motion_word,run_word;')
     s=s.replace('"INCOMP  "[','INCOMPLETE[').replace('"FINISH DRAFT. SEQ OFF            "[','DRAFT_OFF[').replace('"NO SAVED AREAS. SEQ OFF          "[','NO_AREAS[')
     return s

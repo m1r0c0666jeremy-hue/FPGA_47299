@@ -65,6 +65,9 @@ exists=1;ms(60);key(1,50);ms(100);held_show=show;key(1,1100);
 if(teaching[3:0]!=3 || show==held_show)$fatal(1,"long hide interrupted recording");
 camera=0;ms(2);if(teaching[3:0]!=1 || reason!=2 || teaching[18:8]<2)$fatal(1,"camera fault prefix reason%0d",reason);
 camera=1;ms(60);if(teaching[3:0]!=1)$fatal(1,"record resumed automatically");
+key(1,50);ms(100);key(2,1100);
+if(tracking || teaching[3:0]!=1 || reason!=1)$fatal(1,"tracking-off reason shadowed reason%0d",reason);
+key(2,1100);ms(60);if(!tracking)$fatal(1,"tracking restore");
 key(4,1100);if(teaching[18:8]!=0 || teaching[3:0]!=0 || clears!=1)$fatal(1,"long clear leaked gesture clear%0d",clears);
 // Wrong first region must freeze the same point that caused FAIL.
 move(900,400,60);key(1,50);ms(220);move(600,150,300);move(200,150,300);key(1,50);exists=0;ms(40);key(2,50);ms(800);

@@ -29,6 +29,7 @@ def specs():
     d={
       'stage1_teach_motion':('STAGE1_TEACH_MOTION_PASS distance_cases=100',('stage1_regions',)),
       'stage1_teach_route':('STAGE1_TEACH_ROUTE_PASS 60s',('stage1_regions',)),
+      'stage1_teach_transactions':('STAGE1_TEACH_TRANSACTIONS_PASS collisions=10',('stage1_regions',)),
       'stage1_teach_integration':('STAGE1_TEACH_INTEGRATION_PASS',('stage1_regions','stage1_sequence','stage1_controls','refined_zoom_geometry')),
       'stage1_teach_ui':('STAGE1_TEACH_UI_PASS cases=37',('stage1_ui_formatter',)),
       'stage1_teach_pixels':('STAGE1_TEACH_PIXELS_PASS cases=12 pixels=9584640',('stage1_regions','stage1_osd','stage1_ui_formatter')),
