@@ -16,8 +16,8 @@ initial begin repeat(3)@(negedge clk);rst=1;
 '''.replace('CHARS',CHARS)
     cases=[]
     states=['EMPTY','READY','WAIT TIP','RECORD','LOADING','REPLAY','PAUSED','DONE','FAIL']
-    reasons=['','TRACKING OFF','CAMERA NOT READY','VIDEO NOT READY','NO VALID TIP','STALE 250MS','BRIGHTNESS BUSY','GESTURE CANCELED','CONTEXT CHANGED','METADATA MISMATCH','STOP FIRST','NO ROUTE','LIMIT 60S/FULL','STOPPED','CLEARED','NEED 2 TIMED POINTS']
-    def add(st=5,reason=0,elapsed=12345,duration=60000,count=1202,trend=1,valid=1,seq=1,use=1,draft=0,row=0,mode=3,state=2):
+    reasons=['','TRACKING OFF','CAMERA NOT READY','VIDEO NOT READY','NO VALID TIP','STALE 250MS','BRIGHTNESS BUSY','GESTURE CANCELED','CONTEXT CHANGED','METADATA MISMATCH','STOP FIRST','NO ROUTE','LIMIT 30S/FULL','STOPPED','CLEARED','NEED 2 TIMED POINTS']
+    def add(st=5,reason=0,elapsed=12345,duration=30000,count=602,trend=1,valid=1,seq=1,use=1,draft=0,row=0,mode=3,state=2):
         bus=st|(reason<<4)|(count<<8)|(elapsed<<19)|(duration<<35)|(valid<<51)|(trend<<52)|(seq<<54)|(use<<55)|(draft<<56)
         src_line=f'status=64\'h{bus:x};row={row};mode={mode};state={state};capture;\n'
         if mode==3 and row==0:
@@ -35,7 +35,7 @@ initial begin repeat(3)@(negedge clk);rst=1;
         cases.append((src_line,expected_line,st,row,state))
     for st in range(9):add(st=st)
     for reason in range(16):add(reason=reason)
-    for elapsed,duration,count in ((0,0,0),(99,100,1),(999,1000,2),(59999,60000,1201),(60000,60000,1202)):
+    for elapsed,duration,count in ((0,0,0),(99,100,1),(999,1000,2),(29999,30000,601),(30000,30000,602)):
         add(elapsed=elapsed,duration=duration,count=count)
     for trend in range(4):add(mode=2,trend=trend)
     add(seq=0,row=1);add(seq=0,row=1,draft=1);add(row=1,state=6,st=8)

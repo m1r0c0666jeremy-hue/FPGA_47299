@@ -63,7 +63,7 @@ endmodule
 def teaching_text_source():
     states=['EMPTY','READY','WAIT TIP','RECORD','LOADING','REPLAY','PAUSED','DONE','FAIL']
     reasons=['','TRACKING OFF','CAMERA NOT READY','VIDEO NOT READY','NO VALID TIP','STALE 250MS','BRIGHTNESS BUSY','GESTURE CANCELED',
-             'CONTEXT CHANGED','METADATA MISMATCH','STOP FIRST','NO ROUTE','LIMIT 60S/FULL','STOPPED','CLEARED','NEED 2 TIMED POINTS']
+             'CONTEXT CHANGED','METADATA MISMATCH','STOP FIRST','NO ROUTE','LIMIT 30S/FULL','STOPPED','CLEARED','NEED 2 TIMED POINTS']
     def cases(values,width,name):
         return '\n'.join(f'{i}:{name}="{s:<{width}}";' for i,s in enumerate(values))
     s=r'''

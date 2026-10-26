@@ -47,7 +47,7 @@ reg sk=0,pk=0,mk=0,can=1,live=1,changed=0,sample=0;reg [3:0] im=0,nm=0;reg [43:0
 wire [3:0] state,completed,occupied,se;wire [2:0] expected,actual;wire muted,alarm;wire [1:0] trend;
 wire [10:0] distance;wire [19:0] dwell;reg [19:0] held_dwell;
 stage1_sequence #(.CYCLES_PER_MS(1)) dut(clk,rst,mode,nr,draft,sk,pk,mk,can,live,changed,sample,im,nm,ds,
-state,expected,actual,completed,occupied,muted,alarm,trend,distance,dwell,se);
+state,expected,actual,completed,occupied,muted,alarm,trend,distance,dwell,se,1'b0);
 task frame;input [3:0] a,b;begin im=a;nm=b;sample=1;@(negedge clk);sample=0;repeat(9)@(negedge clk);end endtask
 task frames;input [3:0] a;begin frame(a,0);frame(a,0);frame(a,0);end endtask
 task start;begin sk=1;@(negedge clk);sk=0;frames(0);if(state!=2)$fatal(1,"not RUN %0d error%0d",state,se);end endtask

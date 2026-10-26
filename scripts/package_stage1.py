@@ -68,7 +68,7 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
         if (build/n).is_file():shutil.copy2(build/n,dest/n)
     write_new(dest/'source_files.json',manifest)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name='单条路线示教回放与区域运动状态候选',branch=proof['branch'],head=proof['head'],
+      archive_name='30秒路线示教回放与区域运动状态候选',branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),

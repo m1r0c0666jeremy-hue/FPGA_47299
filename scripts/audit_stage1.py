@@ -28,8 +28,8 @@ def old_modules():
 def specs():
     d={
       'stage1_teach_motion':('STAGE1_TEACH_MOTION_PASS distance_cases=100',('stage1_regions',)),
-      'stage1_teach_route':('STAGE1_TEACH_ROUTE_PASS 60s',('stage1_regions',)),
-      'stage1_teach_replay60':('STAGE1_TEACH_REPLAY60_PASS record1200 replay60000ms independent60001-vectors',('stage1_regions',)),
+      'stage1_teach_route':('STAGE1_TEACH_ROUTE_PASS 30s',('stage1_regions',)),
+      'stage1_teach_replay30':('STAGE1_TEACH_REPLAY30_PASS record600 replay30000ms independent30001-vectors',('stage1_regions',)),
       'stage1_teach_alarm':('STAGE1_TEACH_ALARM_PASS fail/stop/restart/no-old-alarm',('stage1_regions','stage1_sequence','stage1_controls','stage1_memory_video_out')),
       'stage1_teach_transactions':('STAGE1_TEACH_TRANSACTIONS_PASS collisions=10',('stage1_regions',)),
       'stage1_teach_integration':('STAGE1_TEACH_INTEGRATION_PASS',('stage1_regions','stage1_sequence','stage1_controls','refined_zoom_geometry')),

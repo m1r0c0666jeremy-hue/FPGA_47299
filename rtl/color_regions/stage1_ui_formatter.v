@@ -401,7 +401,7 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 9:reason_word="METADATA MISMATCH               ";
 10:reason_word="STOP FIRST                      ";
 11:reason_word="NO ROUTE                        ";
-12:reason_word="LIMIT 60S/FULL                  ";
+12:reason_word="LIMIT 30S/FULL                  ";
 13:reason_word="STOPPED                         ";
 14:reason_word="CLEARED                         ";
 15:reason_word="NEED 2 TIMED POINTS             ";

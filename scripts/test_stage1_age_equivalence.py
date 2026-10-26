@@ -19,7 +19,7 @@ reg sk=0,pk=0,mk=0,can=1,live=1,changed=0,sample=0;reg [3:0] im=0,nm=0;reg [43:0
 wire [3:0] sa,sb,ca,cb,oa,ob,ea,eb;wire [2:0] xa,xb,aa,ab;wire ma,mb,ala,alb;wire [1:0] ta,tb;
 wire [10:0] da,db;wire [19:0] wa,wb;
 stage1_sequence_baseline #(.CYCLES_PER_MS(MS)) a(clk,rst,mode,nr,draft,sk,pk,mk,can,live,changed,sample,im,nm,ds,sa,xa,aa,ca,oa,ma,ala,ta,da,wa,ea);
-stage1_sequence #(.CYCLES_PER_MS(MS)) b(clk,rst,mode,nr,draft,sk,pk,mk,can,live,changed,sample,im,nm,ds,sb,xb,ab,cb,ob,mb,alb,tb,db,wb,eb);
+stage1_sequence #(.CYCLES_PER_MS(MS)) b(clk,rst,mode,nr,draft,sk,pk,mk,can,live,changed,sample,im,nm,ds,sb,xb,ab,cb,ob,mb,alb,tb,db,wb,eb,1'b0);
 integer cycle=0,i;reg [31:0] rng=32'h1021dabc;
 always @(posedge clk)begin #1;cycle=cycle+1;
 if({sa,xa,aa,ca,oa,ma,ala,ta,da,wa,ea}!=={sb,xb,ab,cb,ob,mb,alb,tb,db,wb,eb})

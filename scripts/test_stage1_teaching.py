@@ -16,7 +16,7 @@ task ms;input integer n;begin repeat(n*200)@(negedge clk);end endtask
 initial begin repeat(3)@(negedge clk);rst=1;active=1;repeat(3)@(negedge clk);
 '''
     for i,(x,y) in enumerate(cases):
-        dx=max(200-x,0,x-400);dy=max(100-y,0,y-300);expected=math.isqrt(dx*dx+dy*dy)
+        dx=max(200-x,0,x-400);dy=max(100-y,0,y-300);expected=max(dx,dy)
         src+=f'identity=identity+1;repeat(2)@(negedge clk);point({x},{y});if(!valid || distance!={expected})$fatal(1,"distance case{i} got%0d expected{expected}",distance);\n'
     src+='''identity=identity+1;repeat(3)@(negedge clk);point(600,200);
 ms(200);point(590,200);if(trend!=1)$fatal(1,"approach");
@@ -54,7 +54,8 @@ if(state!=1 || duration<120 || count!=3)$fatal(1,"record duration state%0d ms%0d
 live=0;fault=4;key(3);clocks(20);
 if(state!=5 || !pv || px!=100 || py!=100)$fatal(1,"play without actual tool state%0d xy%0d/%0d",state,px,py);
 ms(25);clocks(120);view();
-if(px<148 || px>154 || py<124 || py>127)$fatal(1,"interpolation xy%0d/%0d t%0d",px,py,pm);
+if(px!=100 || py!=100 || pm!=0)$fatal(1,"hold before 50ms xy%0d/%0d t%0d",px,py,pm);
+ms(25);clocks(20);view();if(px!=200 || py!=150 || pm!=50)$fatal(1,"50ms step xy%0d/%0d t%0d",px,py,pm);
 key(3);frozen=elapsed;ms(500);if(elapsed!=frozen || state!=6)$fatal(1,"pause clock");
 key(3);ms(100);clocks(120);repeat(3)view();
 if(state!=7 || px!=300 || py!=200)$fatal(1,"finish hold state%0d xy%0d/%0d",state,px,py);
@@ -63,18 +64,18 @@ key(2);if(count!=3 || state!=1)$fatal(1,"bad record start erased route");
 live=1;fault=0;key(2);if(count!=3)$fatal(1,"pending record erased route");
 clear=1;sample=1;clocks(1);clear=0;sample=0;clocks(70);if(count!=0 || state!=0)$fatal(1,"clear/write collision");
 key(2);base=32'hffff0000;point(500,300,base);
-for(i=1;i<1200;i=i+1)begin ms(50);point(500+(i%100),300,base+i*50000);end
+for(i=1;i<600;i=i+1)begin ms(50);point(500+(i%100),300,base+i*50000);end
 // Source time wraps while the run is lengthened slightly by the fixture.
-if(count>1202 || count<1100 || duration>60000)$fatal(1,"capacity count%0d duration%0d",count,duration);
+if(count>602 || count<550 || duration>30000)$fatal(1,"capacity count%0d duration%0d",count,duration);
 if(state==3)ms(1000);
-if(state!=1 || duration!=60000)$fatal(1,"full 60 seconds state%0d duration%0d",state,duration);
+if(state!=1 || duration!=30000)$fatal(1,"full 30 seconds state%0d duration%0d",state,duration);
 key(3);clocks(20);ms(50);clocks(120);view();fail=1;clocks(1);fail=0;
 if(state!=8 || px!=sx || py!=sy || elapsed!=sm)$fatal(1,"failure did not hold shown point");
 key(4);key(2);point(100,100,1000);ms(50);point(200,200,51000);
 live=0;fault=4;clocks(1);if(state!=1 || count!=2 || reason!=4)$fatal(1,"fault prefix");
 live=1;clocks(10);if(state!=1)$fatal(1,"automatic record resumed");
 key(3);clocks(20);context_id=2;clocks(1);if(use_point || count!=2 || reason!=8)$fatal(1,"context stop");
-$display("STAGE1_TEACH_ROUTE_PASS 60s/source-wrap/interpolation/tail/pause/clear/fault/prefix/no-tip-play/fail");$finish;end endmodule'''
+$display("STAGE1_TEACH_ROUTE_PASS 30s/source-wrap/20Hz-hold/tail/pause/clear/fault/prefix/no-tip-play/fail");$finish;end endmodule'''
     run('stage1_teach_route',src,MODULES,timeout=180)
 
 if __name__=='__main__':
