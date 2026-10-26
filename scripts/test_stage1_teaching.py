@@ -1,34 +1,7 @@
 """Independent arithmetic and timed route contracts; no board access."""
-import math, random
 from refined_testlib import R,run
 
 MODULES=[R/'rtl/color_regions/stage1_regions.v',R/'rtl/color_regions/stage1_sequence.v']
-
-def motion():
-    rng=random.Random(0x1024)
-    cases=[(0,0),(100,100),(200,200),(1279,719),(400,300)]+[(rng.randrange(1280),rng.randrange(720)) for _ in range(95)]
-    src='''module tb;
-reg clk=0;always #5 clk=~clk;reg rst=0,active=0,sample=0;reg [10:0] x=0;reg [9:0] y=0;
-reg [18:0] identity=1;wire [1:0] trend;wire [10:0] distance;wire valid;
-stage1_motion #(.CYCLES_PER_MS(200)) dut(clk,rst,active,sample,x,y,{10'd300,11'd400,10'd100,11'd200},identity,trend,distance,valid);
-task point;input integer px,py;begin x=px;y=py;sample=1;@(negedge clk);sample=0;repeat(100)@(negedge clk);end endtask
-task ms;input integer n;begin repeat(n*200)@(negedge clk);end endtask
-initial begin repeat(3)@(negedge clk);rst=1;active=1;repeat(3)@(negedge clk);
-'''
-    for i,(x,y) in enumerate(cases):
-        dx=max(200-x,0,x-400);dy=max(100-y,0,y-300);expected=max(dx,dy)
-        src+=f'identity=identity+1;repeat(2)@(negedge clk);point({x},{y});if(!valid || distance!={expected})$fatal(1,"distance case{i} got%0d expected{expected}",distance);\n'
-    src+='''identity=identity+1;repeat(3)@(negedge clk);point(600,200);
-ms(200);point(590,200);if(trend!=1)$fatal(1,"approach");
-ms(200);point(610,200);if(trend!=2)$fatal(1,"away");
-ms(200);point(610,220);if(trend!=0)$fatal(1,"lateral mistaken for still");
-identity=identity+1;repeat(3)@(negedge clk);point(500,200);
-repeat(12)begin ms(50);point(500,200);end
-if(trend!=3)$fatal(1,"stationary window trend%0d",trend);
-repeat(1312)begin ms(50);point(500,200);if(trend!=3)$fatal(1,"still lost across 16-bit millisecond rollover");end
-active=0;@(negedge clk);if(valid)$fatal(1,"invalid active retained valid");
-$display("STAGE1_TEACH_MOTION_PASS distance_cases=100 approach/away/lateral/still/reset/timewrap");$finish;end endmodule'''
-    run('stage1_teach_motion',src,MODULES,timeout=120)
 
 def route():
     src=r'''module tb;
@@ -56,8 +29,8 @@ if(state!=5 || !pv || px!=100 || py!=100)$fatal(1,"play without actual tool stat
 ms(25);clocks(120);view();
 if(px!=100 || py!=100 || pm!=0)$fatal(1,"hold before 50ms xy%0d/%0d t%0d",px,py,pm);
 ms(25);clocks(20);view();if(px!=200 || py!=150 || pm!=50)$fatal(1,"50ms step xy%0d/%0d t%0d",px,py,pm);
-key(3);frozen=elapsed;ms(500);if(elapsed!=frozen || state!=6)$fatal(1,"pause clock");
-key(3);ms(100);clocks(120);repeat(3)view();
+key(3);frozen=elapsed;ms(20);if(elapsed<=frozen || state!=5 || reason!=10)$fatal(1,"play key paused/restarted running route");
+ms(80);clocks(120);repeat(3)view();
 if(state!=7 || px!=300 || py!=200)$fatal(1,"finish hold state%0d xy%0d/%0d",state,px,py);
 key(4);if(use_point || count!=3)$fatal(1,"stop loses route");
 key(2);if(count!=3 || state!=1)$fatal(1,"bad record start erased route");
@@ -75,8 +48,8 @@ key(4);key(2);point(100,100,1000);ms(50);point(200,200,51000);
 live=0;fault=4;clocks(1);if(state!=1 || count!=2 || reason!=4)$fatal(1,"fault prefix");
 live=1;clocks(10);if(state!=1)$fatal(1,"automatic record resumed");
 key(3);clocks(20);context_id=2;clocks(1);if(use_point || count!=2 || reason!=8)$fatal(1,"context stop");
-$display("STAGE1_TEACH_ROUTE_PASS 30s/source-wrap/20Hz-hold/tail/pause/clear/fault/prefix/no-tip-play/fail");$finish;end endmodule'''
+$display("STAGE1_TEACH_ROUTE_PASS 30s/source-wrap/20Hz-hold/tail/play-only/clear/fault/prefix/no-tip-play/fail");$finish;end endmodule'''
     run('stage1_teach_route',src,MODULES,timeout=180)
 
 if __name__=='__main__':
-    motion();route()
+    route()

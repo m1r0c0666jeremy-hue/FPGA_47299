@@ -15,7 +15,7 @@ for(i=0;i<64;i=i+1)begin col=i;@(negedge clk);if(glyph>=45)$fatal(1,"glyph range
 initial begin repeat(3)@(negedge clk);rst=1;
 '''.replace('CHARS',CHARS)
     cases=[]
-    states=['EMPTY','READY','WAIT TIP','RECORD','LOADING','REPLAY','PAUSED','DONE','FAIL']
+    states=['EMPTY','READY','WAIT TIP','RECORD','LOADING','REPLAY','UNUSED','DONE','FAIL']
     reasons=['','TRACKING OFF','CAMERA NOT READY','VIDEO NOT READY','NO VALID TIP','STALE 250MS','BRIGHTNESS BUSY','GESTURE CANCELED','CONTEXT CHANGED','METADATA MISMATCH','STOP FIRST','NO ROUTE','LIMIT 30S/FULL','STOPPED','CLEARED','NEED 2 TIMED POINTS']
     def add(st=5,reason=0,elapsed=12345,duration=30000,count=602,trend=1,valid=1,seq=1,use=1,draft=0,row=0,mode=3,state=2):
         bus=st|(reason<<4)|(count<<8)|(elapsed<<19)|(duration<<35)|(valid<<51)|(trend<<52)|(seq<<54)|(use<<55)|(draft<<56)
@@ -26,9 +26,9 @@ initial begin repeat(3)@(negedge clk);rst=1;
             put(0,'TEACH');put(6,states[st].ljust(8));put(15,f'{elapsed//1000:02d}.{elapsed//100%10}/{duration//1000:02d}.{duration//100%10}s')
             put(26,f'P{count:04d}');put(32,reasons[reason].ljust(32));expected_line=''.join(text)
         elif mode==2:
-            expected_line=' '*21+(['MOVE    ','APPROACH','AWAY    ','STILL   '][trend] if valid else ' '*8)+' '*35
+            expected_line=' '*64
         elif row==1 and not seq:
-            text=list('K2 REC/STOP K3 PLAY/PAUSE K4 STOP K4 HOLD CLEAR'.ljust(64))
+            text=list('K2 REC/STOP K3 PLAY K4 STOP K4 HOLD CLEAR'.ljust(64))
             prefix='FINISH DRAFT. SEQ OFF' if draft else 'NO SAVED AREAS. SEQ OFF'
             text[:32]=prefix.ljust(32);text[32:]='K3 PLAY K4 STOP K4 HOLD CLEAR'.ljust(32);expected_line=''.join(text)
         else:expected_line=None

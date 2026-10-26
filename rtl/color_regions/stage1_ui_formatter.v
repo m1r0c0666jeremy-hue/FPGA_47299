@@ -350,7 +350,7 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  function [7:0] encode;input [7:0] c;begin
  if(c>=48 && c<=57)encode=c-47;else if(c>=65 && c<=90)encode=c-54;
  else case(c)109:encode=37;115:encode=38;46:encode=39;58:encode=40;45:encode=41;47:encode=42;40:encode=43;41:encode=44;default:encode=0;endcase end endfunction
- assign override_enable=fm==3 || (fm==2 && !row && f[51] && col>=21 && col<29);
+ assign override_enable=fm==3;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
@@ -380,14 +380,13 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 3:state_word="RECORD  ";
 4:state_word="LOADING ";
 5:state_word="REPLAY  ";
-6:state_word="PAUSED  ";
+6:state_word="UNUSED  ";
 7:state_word="DONE    ";
 8:state_word="FAIL    ";
  endcase
- motion_word="        ";if(f[51])case(f[53:52])0:motion_word="MOVE    ";1:motion_word="APPROACH";2:motion_word="AWAY    ";3:motion_word="STILL   ";endcase
+ motion_word="        ";
  run_word="IDLE    ";case(fs)
  1:run_word="WAIT OUT";2:run_word="RUN     ";3:run_word="PAUSED  ";4:run_word="MOVE OUT";5:run_word="PASS    ";6:run_word="FAIL    ";7:run_word="STOPPED ";endcase
- if(f[3:0]==6)run_word="PAUSED  ";
  reason_word=0;case(f[7:4])
 0:reason_word="                                ";
 1:reason_word="TRACKING OFF                    ";
@@ -442,29 +441,23 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 16:ascii=8'd76;
 17:ascii=8'd65;
 18:ascii=8'd89;
-19:ascii=8'd47;
-20:ascii=8'd80;
-21:ascii=8'd65;
-22:ascii=8'd85;
+20:ascii=8'd75;
+21:ascii=8'd52;
 23:ascii=8'd83;
-24:ascii=8'd69;
-26:ascii=8'd75;
-27:ascii=8'd52;
-29:ascii=8'd83;
-30:ascii=8'd84;
-31:ascii=8'd79;
-32:ascii=8'd80;
-34:ascii=8'd75;
-35:ascii=8'd52;
-37:ascii=8'd72;
-38:ascii=8'd79;
-39:ascii=8'd76;
-40:ascii=8'd68;
-42:ascii=8'd67;
-43:ascii=8'd76;
-44:ascii=8'd69;
-45:ascii=8'd65;
-46:ascii=8'd82;
+24:ascii=8'd84;
+25:ascii=8'd79;
+26:ascii=8'd80;
+28:ascii=8'd75;
+29:ascii=8'd52;
+31:ascii=8'd72;
+32:ascii=8'd79;
+33:ascii=8'd76;
+34:ascii=8'd68;
+36:ascii=8'd67;
+37:ascii=8'd76;
+38:ascii=8'd69;
+39:ascii=8'd65;
+40:ascii=8'd82;
  endcase
  if(f[55] && !f[54])begin
  if(col>=32)ascii=PLAY_KEYS[(63-col)*8+:8];

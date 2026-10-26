@@ -27,9 +27,12 @@ def old_modules():
 
 def specs():
     d={
-      'stage1_teach_motion':('STAGE1_TEACH_MOTION_PASS distance_cases=100',('stage1_regions',)),
+      'stage1_shared_dwell_1':('STAGE1_SHARED_DWELL_PASS period=1',('stage1_sequence',)),
+      'stage1_shared_dwell_3':('STAGE1_SHARED_DWELL_PASS period=3',('stage1_sequence',)),
+      'stage1_rect_observer':('STAGE1_RECT_OBSERVER_PASS cases=1200',('stage1_regions',)),
+      'stage1_scene_observer':('STAGE1_SCENE_OBSERVER_PASS',('stage1_regions','stage1_sequence')),
       'stage1_teach_route':('STAGE1_TEACH_ROUTE_PASS 30s',('stage1_regions',)),
-      'stage1_teach_pause_transactions':('STAGE1_TEACH_PAUSE_TRANSACTIONS_PASS phases5/6/7 no-skipped-samples',('stage1_regions',)),
+      'stage1_teach_pause_transactions':('STAGE1_TEACH_COMMANDS_PASS phases5/6/7 play/stop/restart/cancel',('stage1_regions',)),
       'stage1_teach_replay30':('STAGE1_TEACH_REPLAY30_PASS record600 replay30000ms independent30001-vectors',('stage1_regions',)),
       'stage1_teach_alarm':('STAGE1_TEACH_ALARM_PASS fail/stop/restart/no-old-alarm',('stage1_regions','stage1_sequence','stage1_controls','stage1_memory_video_out')),
       'stage1_teach_transactions':('STAGE1_TEACH_TRANSACTIONS_PASS collisions=10',('stage1_regions',)),

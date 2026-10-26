@@ -40,11 +40,11 @@ clocks(4);rst=1;clocks(3);k2=1;clocks(1);k2=0;clocks(3);
 for(i=0;i<600;i=i+1)begin {y,x}=inputs[i];us=32'hffff0000+i*50000;sample=1;clocks(1);sample=0;clocks(9999);end
 clocks(3);if(state!=1 || count!=600 || duration!=30000)$fatal(1,"30s record count%0d duration%0d state%0d",count,duration,state);
 live=0;k3=1;clocks(1);k3=0;checking=1;ms(10000);k3=1;clocks(1);k3=0;held_time=elapsed;ms(1000);
-if(state!=6 || elapsed!=held_time)$fatal(1,"full route pause");k3=1;clocks(1);k3=0;ms(20100);
+if(state!=5 || elapsed<=held_time || reason!=10)$fatal(1,"full route play key changed progress");k3=1;clocks(1);k3=0;ms(19100);
 if(state!=7 || elapsed!=30000 || count!=600 || checked<1700 || {py,px}!==inputs[599])$fatal(1,"30s end state%0d t%0d n%0d checks%0d",state,elapsed,count,checked);
 ms(500);if(elapsed!=30000)$fatal(1,"end clocks advanced");
 k4=1;clocks(1);k4=0;if(use_point || count!=600)$fatal(1,"stop loses route");
-$display("STAGE1_TEACH_REPLAY30_PASS record600 replay30000ms independent30001-vectors frames=%0d pause/tail/wrap/no-tip",checked);$finish;end endmodule'''
+$display("STAGE1_TEACH_REPLAY30_PASS record600 replay30000ms independent30001-vectors frames=%0d play-only/tail/wrap/no-tip",checked);$finish;end endmodule'''
     src=src.replace('INPUT',source.as_posix()).replace('ORACLE',oracle.as_posix())
     run('stage1_teach_replay30',src,[R/'rtl/color_regions/stage1_regions.v'],timeout=600)
 

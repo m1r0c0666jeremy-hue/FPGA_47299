@@ -40,7 +40,9 @@ stage1_scene #(.CYCLES_PER_MS(CPM)) scene(.clk(clk),.rst_n(rst),.mode(mode),.dow
 .dwell_ms(dwell),.tip_live(tip),.tip_reason(reason),.image_healthy(image_ok),.image_reason(image_reason),
 .shown_point(shown),.desired_point(desired),.teaching(teaching));
 integer samples=0,clears=0;reg [15:0] held_time;reg [19:0] held_dwell;reg held_show;
-always @(posedge clk)if(rst)begin if(scene.virtual_sample)samples=samples+1;if(k4 && cancel)clears=clears+1;end
+always @(posedge clk)if(rst)begin if(teaching[53:51]!=0)$fatal(1,"deferred motion status asserted");
+if(occupied!=0 && (occupied & (occupied-1))!=0)$fatal(1,"shared dwell requires disjoint occupancy");
+if(scene.virtual_sample)samples=samples+1;if(k4 && cancel)clears=clears+1;end
 task ms;input integer n;begin repeat(n*CPM)@(negedge clk);end endtask
 task key;input [2:0] mask;input integer n;begin keys=~mask;ms(n);keys=7;ms(35);end endtask
 task corner;input integer x,y;begin px=x;py=y;ms(60);key(1,50);end endtask
@@ -58,7 +60,7 @@ move(200,150,260);move(900,400,220);move(600,150,260);move(900,400,220);key(1,50
 if(teaching[3:0]!=1 || teaching[18:8]<15)$fatal(1,"real-key recording state%0d n%0d reason%0d",teaching[3:0],teaching[18:8],reason);
 exists=0;ms(60);key(2,50);ms(250);key(2,50);
 held_time=teaching[34:19];held_dwell=dwell;ms(500);
-if(teaching[3:0]!=6 || teaching[34:19]!=held_time || dwell!=held_dwell)$fatal(1,"connected pause time/dwell");
+if(teaching[3:0]!=5 || teaching[34:19]<=held_time || reason!=10)$fatal(1,"connected PLAY key paused or restarted");
 key(2,50);ms(1500);
 if(teaching[3:0]!=7 || state!=5 || complete!=3 || !shown[22])$fatal(1,"replay no-tip PASS state%0d seq%0d complete%h expected%0d samples%0d",teaching[3:0],state,complete,expected,samples);
 held_time=teaching[34:19];held_dwell=dwell;ms(400);
@@ -79,7 +81,7 @@ if(teaching[3:0]!=8 || state!=6 || !alarm || actual!=2 || shown[10:0]<500 || sho
 held_time=teaching[34:19];ms(300);if(teaching[34:19]!=held_time)$fatal(1,"FAIL kept moving");
 key(4,50);if(alarm)$fatal(1,"stop did not silence");
 key(2,50);ms(100);same_frame=1;ms(300);if(desired[22] || image_ok || reason!=5)$fatal(1,"virtual source masked stale video reason%0d",reason);
-$display("STAGE1_TEACH_INTEGRATION_PASS keys/editor/viewport/guards/no-tip/pause/PASS/FAIL/stale/clear");$finish;end
+$display("STAGE1_TEACH_INTEGRATION_PASS keys/editor/viewport/guards/no-tip/play-only/PASS/FAIL/stale/clear");$finish;end
 initial begin #100000000;$fatal(1,"integration timeout");end
 endmodule'''
 
