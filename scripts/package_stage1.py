@@ -39,7 +39,8 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
     paths|={R/'README.md',R/'reports/stage1/validation.md',
-            R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
+            R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',
+            R/'docs/示教录制回放与运动状态_操作与验证.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/proof['baseline']['archive']}
     for e in proof['regression'].values():
         rp=R/e['record'];paths|={rp,rp.with_suffix('.log')}
@@ -67,7 +68,7 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
         if (build/n).is_file():shutil.copy2(build/n,dest/n)
     write_new(dest/'source_files.json',manifest)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name='矩形区域跨帧记点与自动保存候选',branch=proof['branch'],head=proof['head'],
+      archive_name='单条路线示教回放与区域运动状态候选',branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),
