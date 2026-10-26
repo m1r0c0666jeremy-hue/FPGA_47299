@@ -1,0 +1,25 @@
+{
+  "status": "GATE_COMPARISON_ONLY_NOT_FINAL_PLACEMENT_OR_ROUTING",
+  "compiled_source": "8413a1c3f0cd130057c516b69214c32a4556c2cb",
+  "old": {
+    "gate_estimated_slices": 22067,
+    "gate_logic_luts": 20054,
+    "registers": 22720,
+    "eram": 100,
+    "dsp": 40
+  },
+  "new": {
+    "gate_estimated_slices": 20959,
+    "gate_logic_luts": 18822,
+    "registers": 22244,
+    "eram": 98,
+    "dsp": 40
+  },
+  "old_report": "build/stage1_place_20261026_110506/target_color_regions_gate.area",
+  "old_sha256": "e1bc2b823019bfb8d33d0f72a294f5b9a4f445224e555979c72f2eabe31bc1b5",
+  "new_report": "build/stage1_place_20261026_122422/target_color_regions_gate.area",
+  "new_sha256": "c4009f504735919acef505a48417a0776057c84fa483f43838ae5ed8f082c2db",
+  "shared_sequence_only": true,
+  "route_eram": 2,
+  "hardware_status": "PENDING"
+}

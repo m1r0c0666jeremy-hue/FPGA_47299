@@ -1,0 +1,43 @@
+{
+  "status": "PLACEMENT_REVIEW_PASS",
+  "parent": "build/stage1_place_20261026_122422",
+  "compiled_source_commit": "8413a1c3f0cd130057c516b69214c32a4556c2cb",
+  "inputs_verified": 304,
+  "baseline_verified": 297,
+  "original_protection_count": 5,
+  "parameters": {
+    "effective_place.txt": {
+      "parameters": {
+        "pr_strategy": "2",
+        "max_fanout": "999999",
+        "macro_performance": "macro_congestion",
+        "opt_timing": "high"
+      },
+      "sha256": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41"
+    },
+    "effective_route.txt": {
+      "parameters": {
+        "fix_hold": "on",
+        "timing": "on",
+        "effort": "normal"
+      },
+      "sha256": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+    }
+  },
+  "resources": {
+    "slice": 19478,
+    "lut6": 19238,
+    "reg": 22098,
+    "eram": 98,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "495a9de41647b09142e974deaff0bc7be7269e32c6ea73722bc52be8c4c484c3",
+    "target_color_regions_placed.db": "0005383754501ca72a11f53f0c19941857ebb91e15db08703d1a848046a98c81"
+  },
+  "summary_sha256": "d31fb7cb262e1ea6c8d22c55ab69bda2d7407845ddbc907036ec67596acf8a24",
+  "source_context_sha256": "8ba4e264f95f1533599845dcfb2703a5bdef5c741804686bbd0163b832395797",
+  "inputs_sha256": "a81d4a4e5586fc4a19ccebb78860961ddbdeb63cb4a6837217f470446f8deb00",
+  "producer_sha256": "98d7e9fcf39c5590c3313b624e2e817c937ddb99afa9de4cad1df54f4901c711",
+  "hardware_status": "PENDING; placement is not final routing/timing"
+}
