@@ -1,0 +1,16 @@
+{
+  "status": "NORMAL_NATIVE_FAILURE_RETRY_CANCELLED_FOR_VENDOR_RECOMMENDED_REPLACEMENT_PLACEMENT",
+  "route": "build/stage1_route_20261026_124009_281144",
+  "session": 8246,
+  "native_pid": 39824,
+  "exit_code": 1,
+  "stop": "Ctrl-C; verified no TD or VVP remains",
+  "reason": "Native PHY-8080 recommends changing pr_strategy. Normal best2790 ended4181. Current routability retry best11569,last12085. Preserve failed route; change only placement strategy on identical verified gate.",
+  "log_sha256": "4ac2f3c5a5d5d99bdae3d537d75ddf43e33834e202b278b70de834ffa7334afb",
+  "failed_normal_db_sha256": "8df350180ae3c5fd14ebe56e805790472866eed8a562fec4be922ec31137364d",
+  "inputs_verified": 304,
+  "compiled_source": "8413a1c3f0cd130057c516b69214c32a4556c2cb",
+  "software": "reports/stage1/software_current_compact_20261026_1421.json",
+  "software_passed": 121,
+  "hardware_status": "PENDING; no final DRC/timing; no new bit/ZIP"
+}

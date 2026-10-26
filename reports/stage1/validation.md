@@ -1,3 +1,11 @@
+## 2026-10-26 14:27：121软件全通过，同源更换布局策略继续物理优化
+
+14:20一次接续任务已执行，功能/编译仍8413a1c3f0cd130057c516b69214c32a4556c2cb。严格审计software_current_compact_20261026_1421.json为121/121，无缺项；84视频70287360像素、4真实采集联接48帧38338560像素全部当前通过，所有VVP已退出。生成8逐字、工程语义、原160/297/5与304源保护保持。未重复已通过且未改变的检查。22负例routing122422/release122423/gate122423仍当前。
+
+route124009普通策略最低iter27 over_count2790/over2793/worst2，iter33回升4181/4185，工具PHY-8080明确失败并建议更换pr_strategy。自动routability回退至iter13仍12085/12109，最低11569；为采用工具建议优化物理，在核对native39824/12:40:12后Ctrl-C退出session8246，确认无TD/VVP残留才新建布局。回退为人工优化取消，不伪称native完整失败或通过；所有日志和failed_normal_route.db保留，收据compact_route_strategy2_cancellation_20261026_1425.json。没有最终DRC/时序或可交付新bit。
+
+当前唯一place142509/session91552，复用place122422已严格核验的gate DB495a9de41647b09142e974deaff0bc7be7269e32c6ea73722bc52be8c4c484c3，只将布局策略2改为3；原map/pack/FSM/min64/max999999/macro_congestion/ConHigh、全部ADC/SDC和功能不变。304当前/冻结/Git均在启动前核验，compiled_source仍8413，所有121软件证据可复用。待新布局实际资源、DB、约束和参数核验后再唯一route。最终121、零DRC/无异常/非负建立保持、同源package与独立CLI verify仍必需，全部实物待Jeremy。不推送/上板/Flash，不建第二定时，不运行旧complete.py。
+
 ## 2026-10-26 12:43：精简版布局实际节省1213Slice和2ERAM，最终布线继续
 
 功能/编译8413a1c3f0cd130057c516b69214c32a4556c2cb，新增phase5/6/7暂停预读测试使门槛为121。原1fdc在RAM取下一点时暂停会跳点，独立用例先失败（100ms应x300、实际x200），修正为冻结整个phase/index/cache事务后3阶段均通过；已停止旧mapping/live/pixels并保留全部取消与失败日志才改源。旧video默认6组已通过，当前改用显式--full --faults和按哈希复用，共84项。最新software_compact_progress_20261026_1240.json为75/121，只剩42视频及4真实采集联接；33个其他检查均当前通过，包括完整30秒600点/30001独立预期/1858显示比较、66秒静止回绕、100简化距离、10记录事务碰撞、真实与回放共用顺序PASS/FAIL/暂停、37行UI和12组9584640逐像素结果。
