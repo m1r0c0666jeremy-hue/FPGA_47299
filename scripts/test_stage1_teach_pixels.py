@@ -22,7 +22,7 @@ stage1_osd osd(.I_clk(clk),.I_rst_n(rst),.I_vs(vs),.I_hs(1'b0),.I_de(de),.I_rgb(
 .I_ui_mode(2'd3),.I_region_vertices(672'd0),.I_region_draft(168'd0),.I_region_counts(16'd0),.I_region_closed(4'd0),
 .I_area_count(3'd0),.I_expected_area(3'd0),.I_actual_area(3'd0),.I_draft_count(4'd0),.I_run_state(4'd0),.I_completed(4'd0),.I_occupied(4'd0),
 .I_area_muted(1'b0),.I_area_trend(2'd0),.I_area_distance(11'd0),.I_area_dwell(20'd0),.I_edit_error(4'd0),.I_start_error(4'd0),
-.I_area_busy(1'b0),.I_tip_live(1'b0),.I_gain_busy(1'b0),.I_gain_failed(1'b0),.I_gain_slot(3'd5),.I_teaching(64'd0),.I_point(shown[22:0]),.O_de(ode),.O_rgb(rgb));
+.I_area_busy(1'b0),.I_tip_live(1'b0),.I_gain_busy(1'b0),.I_gain_failed(1'b0),.I_gain_slot(3'd5),.I_k_value(8'd50),.I_k_adjust(1'b0),.I_teaching(80'd0),.I_point(shown[22:0]),.O_de(ode),.O_rgb(rgb));
 integer x,y,c,pixels=0,checked=0,green=0,tx,ty,ex,ey,source_index=0,ox,oy;reg checking=0;reg [23:0] e0,e1;reg v0=0,v1=0;
 always @(posedge clk)begin
 if(de)begin ox=source_index%1280;oy=source_index/1280;source_index=source_index+1;

@@ -6,11 +6,12 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  input wire [2:0] gain_slot,input wire show,output reg [7:0] glyph,output wire override_enable,force_footer,
  output wire [3:0] snapshot_state,output wire [1:0] snapshot_mode,
  input wire row,input wire [6:0] gain_actual,gain_target,input wire [2:0] zoom,
- input wire [1:0] process_mode,input wire pair,rotate,input wire [4:0] status,input wire [3:0] tip_reason);
+ input wire [1:0] process_mode,input wire pair,rotate,input wire [4:0] status,input wire [3:0] tip_reason,
+ input wire [7:0] I_k_value,input wire I_k_adjust);
  reg [1:0] fmode,fprocess;reg [3:0] fstate,fn,fdraft,foccupied,fedit,fstart,freason;
  reg [2:0] fexpected,factual,fslot,fzoom;reg [4:0] fstatus;
- reg status_pending;reg fbusy,ftip,fmuted,fgain,fgain_failed,fshow,fpair,frotate;
- reg [6:0] fgain_actual;reg [11:0] gain_bcd,target_bcd;
+ reg status_pending;reg fbusy,ftip,fmuted,fgain,fgain_failed,fshow,fpair,frotate,fk_adjust;
+ reg [6:0] fgain_actual;reg [11:0] gain_bcd,target_bcd,k_bcd;
  reg [19:0] divider,binary;reg [6:0] remainder;reg [13:0] quotient;
  reg [15:0] bcd,dwell_bcd,adjusted;reg [1:0] conversion;reg [4:0] bit_index;
  reg [3:0] message_id;reg [9:0] rom_addr;wire [7:0] rom_glyph;reg [2:0] actual_slot;
@@ -21,14 +22,17 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  function [11:0] decimal7;input [6:0] value;reg [11:0] d;integer j,k;begin d=0;
  for(j=6;j>=0;j=j-1)begin for(k=0;k<3;k=k+1)if(d[k*4+:4]>=5)d[k*4+:4]=d[k*4+:4]+3;d={d[10:0],value[j]};end
  decimal7=d;end endfunction
+ function [11:0] decimal8;input [7:0] value;reg [11:0] d;integer j,k;begin d=0;
+ for(j=7;j>=0;j=j-1)begin for(k=0;k<3;k=k+1)if(d[k*4+:4]>=5)d[k*4+:4]=d[k*4+:4]+3;d={d[10:0],value[j]};end
+ decimal8=d;end endfunction
  integer i;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;
  case(fgain_actual)16:actual_slot=0;32:actual_slot=1;48:actual_slot=2;64:actual_slot=3;80:actual_slot=4;90:actual_slot=5;105:actual_slot=6;default:actual_slot=7;endcase end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin fmode<=0;fstate<=0;fn<=0;fdraft<=0;foccupied<=0;fedit<=0;fstart<=0;freason<=0;
  status_pending<=0;fexpected<=0;factual<=0;fslot<=5;fzoom<=0;fprocess<=0;fstatus<=0;fpair<=0;frotate<=1;
- fbusy<=0;ftip<=0;fmuted<=0;fgain<=0;fgain_failed<=0;fshow<=1;fgain_actual<=90;
- gain_bcd<=12'h090;target_bcd<=12'h090;divider<=0;binary<=0;remainder<=0;quotient<=0;
+ fbusy<=0;ftip<=0;fmuted<=0;fgain<=0;fgain_failed<=0;fshow<=1;fgain_actual<=90;fk_adjust<=0;
+ gain_bcd<=12'h090;target_bcd<=12'h090;k_bcd<=12'h050;divider<=0;binary<=0;remainder<=0;quotient<=0;
  bcd<=0;dwell_bcd<=0;conversion<=0;bit_index<=0;end
  else begin
  status_pending<=latch;if(status_pending)fstatus<=status;
@@ -40,6 +44,7 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  fexpected<=expected_area;factual<=actual_area;fedit<=edit_error;fstart<=start_error;freason<=tip_reason;
  fbusy<=busy;ftip<=tip_live;fmuted<=muted;fgain<=gain_busy;fgain_failed<=gain_failed;fslot<=gain_slot;fshow<=show;
  fzoom<=zoom;fprocess<=process_mode;fpair<=pair;frotate<=rotate;
+ k_bcd<=decimal8(I_k_value);fk_adjust<=I_k_adjust;
  fgain_actual<=gain_actual;gain_bcd<=decimal7(gain_actual);target_bcd<=decimal7(gain_target);
  divider<=dwell_ms;remainder<=0;quotient<=0;bit_index<=0;conversion<=1;end end end
  always @*begin
@@ -48,11 +53,15 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  if(fbusy)message_id=8;else if(fstart!=0)case(fstart)1:message_id=7;2:message_id=10;3:message_id=5;default:message_id=8;endcase
  else case(fstate)0:message_id=12;1,4:message_id=11;3:message_id=14;5:message_id=13;7:message_id=15;default:message_id=0;endcase end
  rom_addr=0;
- if(row && col>=42)rom_addr=10'd704+{1'b0,freason,5'd0}+col-42;
+ if(row && col>=42)begin
+ if(fstatus>=20 && fstatus<=24)rom_addr=col<53?10'd320+(fstatus-20)*12+col-42:10'd383;
+ else rom_addr=10'd704+{1'b0,freason,5'd0}+col-42;end
  else if(fmode==1 && col>=24 && col<40)rom_addr={2'd0,message_id,4'd0}+col-24;
  else if(fmode==2)begin if(col<8)rom_addr=10'd256+{3'd0,fstate,3'd0}+col;
  else if(col>=47 && col<63)rom_addr={2'd0,message_id,4'd0}+col-47;end
- else if(fmode==0 && col>=47 && col<63)rom_addr=10'd384+{1'b0,fstatus,4'd0}+col-47;
+ else if(fmode==0 && col>=53)begin
+ if(fstatus>=20 && fstatus<=24)rom_addr=10'd320+(fstatus-20)*12+col-53;
+ else rom_addr=10'd384+{1'b0,fstatus,4'd0}+col-53;end
  end
 function [7:0] edit_char;input [5:0] column;begin edit_char=0;case(column)
 6'd0:edit_char=8'd15;
@@ -186,12 +195,11 @@ function [7:0] normal_char;input [5:0] column;begin normal_char=0;case(column)
 6'd43:normal_char=fshow?8'd25:8'd25;
 6'd44:normal_char=fshow?8'd24:8'd16;
 6'd45:normal_char=fshow?8'd0:8'd16;
-6'd47:normal_char=rom_glyph;
-6'd48:normal_char=rom_glyph;
-6'd49:normal_char=rom_glyph;
-6'd50:normal_char=rom_glyph;
-6'd51:normal_char=rom_glyph;
-6'd52:normal_char=rom_glyph;
+6'd47:normal_char=8'd21;
+6'd48:normal_char=8'd1+k_bcd[8+:4];
+6'd49:normal_char=8'd39;
+6'd50:normal_char=8'd1+k_bcd[4+:4];
+6'd51:normal_char=8'd1+k_bcd[0+:4];
 6'd53:normal_char=rom_glyph;
 6'd54:normal_char=rom_glyph;
 6'd55:normal_char=rom_glyph;
@@ -202,6 +210,7 @@ function [7:0] normal_char;input [5:0] column;begin normal_char=0;case(column)
 6'd60:normal_char=rom_glyph;
 6'd61:normal_char=rom_glyph;
 6'd62:normal_char=rom_glyph;
+6'd63:normal_char=rom_glyph;
 endcase end endfunction
 function [7:0] busy_char;input [5:0] column;begin busy_char=0;case(column)
 6'd0:busy_char=8'd12;
@@ -241,12 +250,11 @@ function [7:0] busy_char;input [5:0] column;begin busy_char=0;case(column)
 6'd43:busy_char=fshow?8'd25:8'd25;
 6'd44:busy_char=fshow?8'd24:8'd16;
 6'd45:busy_char=fshow?8'd0:8'd16;
-6'd47:busy_char=rom_glyph;
-6'd48:busy_char=rom_glyph;
-6'd49:busy_char=rom_glyph;
-6'd50:busy_char=rom_glyph;
-6'd51:busy_char=rom_glyph;
-6'd52:busy_char=rom_glyph;
+6'd47:busy_char=8'd21;
+6'd48:busy_char=8'd1+k_bcd[8+:4];
+6'd49:busy_char=8'd39;
+6'd50:busy_char=8'd1+k_bcd[4+:4];
+6'd51:busy_char=8'd1+k_bcd[0+:4];
 6'd53:busy_char=rom_glyph;
 6'd54:busy_char=rom_glyph;
 6'd55:busy_char=rom_glyph;
@@ -257,6 +265,7 @@ function [7:0] busy_char;input [5:0] column;begin busy_char=0;case(column)
 6'd60:busy_char=rom_glyph;
 6'd61:busy_char=rom_glyph;
 6'd62:busy_char=rom_glyph;
+6'd63:busy_char=rom_glyph;
 endcase end endfunction
 function [7:0] failed_char;input [5:0] column;begin failed_char=0;case(column)
 6'd0:failed_char=8'd12;
@@ -297,12 +306,11 @@ function [7:0] failed_char;input [5:0] column;begin failed_char=0;case(column)
 6'd43:failed_char=fshow?8'd25:8'd25;
 6'd44:failed_char=fshow?8'd24:8'd16;
 6'd45:failed_char=fshow?8'd0:8'd16;
-6'd47:failed_char=rom_glyph;
-6'd48:failed_char=rom_glyph;
-6'd49:failed_char=rom_glyph;
-6'd50:failed_char=rom_glyph;
-6'd51:failed_char=rom_glyph;
-6'd52:failed_char=rom_glyph;
+6'd47:failed_char=8'd21;
+6'd48:failed_char=8'd1+k_bcd[8+:4];
+6'd49:failed_char=8'd39;
+6'd50:failed_char=8'd1+k_bcd[4+:4];
+6'd51:failed_char=8'd1+k_bcd[0+:4];
 6'd53:failed_char=rom_glyph;
 6'd54:failed_char=rom_glyph;
 6'd55:failed_char=rom_glyph;
@@ -313,6 +321,37 @@ function [7:0] failed_char;input [5:0] column;begin failed_char=0;case(column)
 6'd60:failed_char=rom_glyph;
 6'd61:failed_char=rom_glyph;
 6'd62:failed_char=rom_glyph;
+6'd63:failed_char=rom_glyph;
+endcase end endfunction
+function [7:0] kpage_char;input [5:0] column;begin kpage_char=0;case(column)
+6'd0:kpage_char=8'd21;
+6'd2:kpage_char=8'd11;
+6'd3:kpage_char=8'd14;
+6'd4:kpage_char=8'd20;
+6'd5:kpage_char=8'd31;
+6'd6:kpage_char=8'd29;
+6'd7:kpage_char=8'd30;
+6'd9:kpage_char=8'd21;
+6'd10:kpage_char=8'd1+k_bcd[8+:4];
+6'd11:kpage_char=8'd39;
+6'd12:kpage_char=8'd1+k_bcd[4+:4];
+6'd13:kpage_char=8'd1+k_bcd[0+:4];
+6'd16:kpage_char=8'd21;
+6'd17:kpage_char=8'd4;
+6'd19:kpage_char=8'd19;
+6'd20:kpage_char=8'd24;
+6'd21:kpage_char=8'd13;
+6'd23:kpage_char=8'd21;
+6'd24:kpage_char=8'd5;
+6'd26:kpage_char=8'd14;
+6'd27:kpage_char=8'd15;
+6'd28:kpage_char=8'd13;
+6'd30:kpage_char=8'd21;
+6'd31:kpage_char=8'd3;
+6'd33:kpage_char=8'd15;
+6'd34:kpage_char=8'd34;
+6'd35:kpage_char=8'd19;
+6'd36:kpage_char=8'd30;
 endcase end endfunction
 function [7:0] reserved_char;input [5:0] column;begin reserved_char=0;case(column)
 6'd0:reserved_char=8'd30;
@@ -326,10 +365,11 @@ function [7:0] reserved_char;input [5:0] column;begin reserved_char=0;case(colum
 6'd9:reserved_char=8'd30;
 6'd10:reserved_char=8'd35;
 endcase end endfunction
-always @(row or col or fmode or fgain_failed or fgain or fshow or fn or fdraft or fstate or fexpected or factual or foccupied or fmuted or fprocess or fzoom or fpair or frotate or gain_bcd or target_bcd or actual_slot or dwell_bcd or rom_glyph)begin
+always @(row or col or fmode or fgain_failed or fgain or fshow or fn or fdraft or fstate or fexpected or factual or foccupied or fmuted or fprocess or fzoom or fpair or frotate or gain_bcd or target_bcd or actual_slot or dwell_bcd or rom_glyph or k_bcd or fk_adjust)begin
  if(row)glyph=col>=42?rom_glyph:8'd0;
  else if(fmode==2)glyph=test_char(col);else if(fmode==1)glyph=edit_char(col);
  else if(fgain_failed)glyph=failed_char(col);else if(fgain)glyph=busy_char(col);
+ else if(fmode==0 && fk_adjust)glyph=kpage_char(col);
  else if(fmode==3)glyph=reserved_char(col);else glyph=normal_char(col);
  end
 endmodule
@@ -337,23 +377,26 @@ endmodule
 
 `default_nettype none
 module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input wire row,input wire [1:0] mode,
- input wire [63:0] teaching,input wire [3:0] run_state,occupied,input wire [2:0] expected,actual,
- input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable);
- reg [63:0] f;reg [1:0] fm;reg [3:0] fs,fi;reg [2:0] fe,fa;
+ input wire [79:0] teaching,input wire [3:0] run_state,occupied,input wire [2:0] expected,actual,
+ input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable,input wire [7:0] current_k);
+ reg [79:0] f;reg [1:0] fm;reg [3:0] fs,fi;reg [2:0] fe,fa;reg [7:0] fk;
  reg [19:0] dwell_value,number,binary;reg [6:0] rem;reg [13:0] quotient;
- reg [15:0] bcd,adjusted,time_bcd,duration_bcd,count_bcd,dwell_bcd;
+ reg [15:0] bcd,adjusted,time_bcd,duration_bcd,count_bcd,dwell_bcd;reg [11:0] route_k_bcd;
  reg [2:0] field;reg [1:0] conversion;reg [4:0] index;integer i;
  wire [7:0] shifted={rem,number[19]};wire take=shifted>=100;
  localparam [63:0] INCOMPLETE="INCOMP  ";localparam [255:0] DRAFT_OFF="FINISH DRAFT. SEQ OFF           ",NO_AREAS="NO SAVED AREAS. SEQ OFF         ";
  localparam [255:0] PLAY_KEYS="K3 PLAY K4 STOP K4 HOLD CLEAR   ";
- reg [63:0] state_word,motion_word,run_word;reg [255:0] reason_word;reg [7:0] ascii;
+ reg [63:0] state_word,motion_word,run_word;reg [255:0] reason_word,play_keys;reg [511:0] all_keys;reg [135:0] short_keys;reg [7:0] ascii;
+ function [11:0] decimal8;input [7:0] value;reg [11:0] d;integer j,k;begin d=0;
+ for(j=7;j>=0;j=j-1)begin for(k=0;k<3;k=k+1)if(d[k*4+:4]>=5)d[k*4+:4]=d[k*4+:4]+3;d={d[10:0],value[j]};end
+ decimal8=d;end endfunction
  function [7:0] encode;input [7:0] c;begin
  if(c>=48 && c<=57)encode=c-47;else if(c>=65 && c<=90)encode=c-54;
  else case(c)109:encode=37;115:encode=38;46:encode=39;58:encode=40;45:encode=41;47:encode=42;40:encode=43;41:encode=44;default:encode=0;endcase end endfunction
  assign override_enable=fm==3;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;end
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
+ if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;fk<=50;route_k_bcd<=12'h050;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
  bcd<=0;time_bcd<=0;duration_bcd<=0;count_bcd<=0;dwell_bcd<=0;field<=0;conversion<=0;index<=0;end
  else begin
  if(conversion==1)begin number<=number<<1;rem<=take?shifted-100:shifted;quotient<={quotient[12:0],take};
@@ -369,7 +412,8 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  2:begin number<=dwell_value;conversion<=1;end
  default:conversion<=0;endcase
  end else index<=index+1'b1;end
- if(latch)begin f<=teaching;fm<=mode;fs<=run_state;fi<=occupied;fe<=expected;fa<=actual;dwell_value<=dwell;
+ if(latch)begin f<=teaching;fm<=mode;fs<=run_state;fi<=occupied;fe<=expected;fa<=actual;fk<=current_k;
+ route_k_bcd<=decimal8(teaching[71:64]);dwell_value<=dwell;
  number<={4'd0,teaching[34:19]};field<=0;index<=0;rem<=0;quotient<=0;conversion<=1;end
  end end
  always @*begin
@@ -385,6 +429,17 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 8:state_word="FAIL    ";
  endcase
  motion_word="        ";
+ all_keys="K2 REC/STOP K3 PLAY K4 STOP K4 HOLD CLEAR                       ";
+ play_keys="K3 PLAY K4 STOP K4 HOLD CLEAR   ";short_keys="K3 PLAY K4 STOP  ";
+ if(f[3:0]==2 || f[3:0]==3)begin
+ all_keys="K2 STOP K4 HOLD CLEAR                                           ";
+ play_keys="K2 STOP K4 HOLD CLEAR           ";short_keys="K2 STOP          ";end
+ else if(f[3:0]==4 || f[3:0]==5)begin
+ all_keys="K4 STOP K4 HOLD CLEAR                                           ";
+ play_keys="K4 STOP K4 HOLD CLEAR           ";short_keys="K4 STOP          ";end
+ else if(f[3:0]==7 || f[3:0]==8)begin
+ all_keys="K3 REPLAY K4 STOP K4 HOLD CLEAR                                 ";
+ play_keys="K3 REPLAY K4 STOP K4 HOLD CLEAR ";short_keys="K3 REPLAY K4 STOP";end
  run_word="IDLE    ";case(fs)
  1:run_word="WAIT OUT";2:run_word="RUN     ";3:run_word="PAUSED  ";4:run_word="MOVE OUT";5:run_word="PASS    ";6:run_word="FAIL    ";7:run_word="STOPPED ";endcase
  reason_word=0;case(f[7:4])
@@ -413,54 +468,27 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  15:ascii=48+time_bcd[11:8];16:ascii=48+time_bcd[7:4];17:ascii=".";18:ascii=48+time_bcd[3:0];19:ascii="/";
  20:ascii=48+duration_bcd[11:8];21:ascii=48+duration_bcd[7:4];22:ascii=".";23:ascii=48+duration_bcd[3:0];24:ascii="s";
  26:ascii="P";27:ascii=48+count_bcd[15:12];28:ascii=48+count_bcd[11:8];29:ascii=48+count_bcd[7:4];30:ascii=48+count_bcd[3:0];endcase
- if(col>=6 && col<14)ascii=state_word[(13-col)*8+:8];if(col>=32)ascii=reason_word[(63-col)*8+:8];
+ if(col>=6 && col<14)ascii=state_word[(13-col)*8+:8];
+ case(col)32:ascii="R";33:ascii="K";
+ 34:ascii=f[72]?48+route_k_bcd[11:8]:45;35:ascii=f[72]?46:45;
+ 36:ascii=f[72]?48+route_k_bcd[7:4]:45;37:ascii=f[72]?48+route_k_bcd[3:0]:45;
+ 39:if(f[72] && f[71:64]!=fk)ascii="D";40:if(f[72] && f[71:64]!=fk)ascii="I";
+ 41:if(f[72] && f[71:64]!=fk)ascii="F";42:if(f[72] && f[71:64]!=fk)ascii="F";endcase
+ if(col>=44)ascii=reason_word[(31-(col-44))*8+:8];
  end else if(f[55] && f[54])begin
  if(col<8)ascii=run_word[(7-col)*8+:8];
  case(col)9:ascii="N";10:ascii="E";11:ascii="X";12:ascii="T";14:ascii=fs!=5?65+fe:45;
  16:ascii="I";17:ascii="N";19:ascii=fi[0]?65:fi[1]?66:fi[2]?67:fi[3]?68:45;
  30:ascii="T";31:ascii=48+dwell_bcd[15:12];32:ascii=48+dwell_bcd[11:8];33:ascii=48+dwell_bcd[7:4];34:ascii=".";35:ascii=48+dwell_bcd[3:0];36:ascii="s";
- 47:ascii="K";48:ascii="3";50:ascii="P";51:ascii="L";52:ascii="A";53:ascii="Y";55:ascii="K";56:ascii="4";58:ascii="S";59:ascii="T";60:ascii="O";61:ascii="P";endcase
+ endcase
+ if(col>=47)ascii=short_keys[(63-col)*8+:8];
  if(col>=21 && col<29)ascii=motion_word[(28-col)*8+:8];
- if(fs==6)case(col)47:ascii="E";48:ascii="X";49:ascii="P";50:ascii=32;51:ascii=65+fe;52:ascii=32;53:ascii="G";54:ascii="O";55:ascii="T";56:ascii=32;57:ascii=fa!=0?64+fa:45;58,59,60,61:ascii=32;endcase
+ if(fs==6)case(col)47:ascii="E";48:ascii="X";49:ascii="P";50:ascii=32;51:ascii=65+fe;52:ascii=32;53:ascii="G";54:ascii="O";55:ascii="T";56:ascii=32;57:ascii=fa!=0?64+fa:45;58,59,60,61,62,63:ascii=32;endcase
  if(f[3:0]==7 && fs!=5 && col<8)ascii=INCOMPLETE[(7-col)*8+:8];
  end else begin
- case(col)
-0:ascii=8'd75;
-1:ascii=8'd50;
-3:ascii=8'd82;
-4:ascii=8'd69;
-5:ascii=8'd67;
-6:ascii=8'd47;
-7:ascii=8'd83;
-8:ascii=8'd84;
-9:ascii=8'd79;
-10:ascii=8'd80;
-12:ascii=8'd75;
-13:ascii=8'd51;
-15:ascii=8'd80;
-16:ascii=8'd76;
-17:ascii=8'd65;
-18:ascii=8'd89;
-20:ascii=8'd75;
-21:ascii=8'd52;
-23:ascii=8'd83;
-24:ascii=8'd84;
-25:ascii=8'd79;
-26:ascii=8'd80;
-28:ascii=8'd75;
-29:ascii=8'd52;
-31:ascii=8'd72;
-32:ascii=8'd79;
-33:ascii=8'd76;
-34:ascii=8'd68;
-36:ascii=8'd67;
-37:ascii=8'd76;
-38:ascii=8'd69;
-39:ascii=8'd65;
-40:ascii=8'd82;
- endcase
+ ascii=all_keys[(63-col)*8+:8];
  if(f[55] && !f[54])begin
- if(col>=32)ascii=PLAY_KEYS[(63-col)*8+:8];
+ if(col>=32)ascii=play_keys[(63-col)*8+:8];
  else if(f[59:56]!=0)ascii=DRAFT_OFF[(31-col)*8+:8];
  else ascii=NO_AREAS[(31-col)*8+:8];end
  end

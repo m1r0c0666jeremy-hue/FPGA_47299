@@ -7,7 +7,7 @@ reg clk=0;always #5 clk=~clk;reg rst=0;reg [2:0] keys=7;reg [1:0] switches=1;
 reg camera=1,frames=1,exists=1,same_frame=0;reg [10:0] px=900;reg [9:0] py=400;
 reg [851:0] packet=0;integer phase=0,frame_id=0;reg vs=0,snapshot=0;
 wire tracking,show,pair,rotate,down,k2,k3,k4,cancel,gb;wire [7:0] session;wire [1:0] mode;wire [2:0] zoom;
-wire [38:0] desired,shown;wire [63:0] teaching;wire commit,det,time_valid;
+wire [38:0] desired,shown;wire [79:0] teaching;wire commit,det,time_valid;
 wire [31:0] image,image_us;wire [15:0] epoch;wire [767:0] meta;
 wire [10:0] x0;wire [9:0] y0;wire [2:0] nr,expected,actual;wire [3:0] nd,state,complete,occupied;
 wire [3:0] reason;wire [19:0] dwell;wire tip,alarm;wire image_ok,associated,area_video;wire [3:0] image_reason;
@@ -33,7 +33,7 @@ stage1_input_guard real_guard(clk,rst,rst,tracking && camera,camera,gb,raw_video
 wire image_associated=meta[255] && meta[247] && meta[31:0]==image && meta[671:640]==image_us && meta[719:704]==epoch &&
  meta[242:235]==session && meta[243]==pair && meta[244]==(tracking && camera) && time_valid;
 stage1_teach_image_guard #(.CYCLES_PER_MS(CPM)) guard(clk,rst,rst,camera,gb,raw_video,reader_de,image_associated,image,image_ok,image_reason);
-stage1_scene #(.CYCLES_PER_MS(CPM)) scene(.clk(clk),.rst_n(rst),.mode(mode),.down2(down),.click2(k2),.click3(k3),.click4(k4),.cancel(cancel),
+stage1_scene #(.CYCLES_PER_MS(CPM)) scene(.clk(clk),.rst_n(rst),.mode(mode),.current_k(8'd50),.down2(down),.click2(k2),.click3(k3),.click4(k4),.cancel(cancel),
 .tracking(tracking && camera),.video_ok(area_video),.camera_ready(camera),.gain_busy(gb),.session(session),.pair(pair),
 .frame_commit(commit),.detection_valid(associated),.image_id(image),.meta(meta),.region_count(nr),.draft_count(nd),
 .run_state(state),.completed(complete),.occupied(occupied),.expected_area(expected),.actual_area(actual),.alarm(alarm),
@@ -60,7 +60,7 @@ move(200,150,260);move(900,400,220);move(600,150,260);move(900,400,220);key(1,50
 if(teaching[3:0]!=1 || teaching[18:8]<15)$fatal(1,"real-key recording state%0d n%0d reason%0d",teaching[3:0],teaching[18:8],reason);
 exists=0;ms(60);key(2,50);ms(250);key(2,50);
 held_time=teaching[34:19];held_dwell=dwell;ms(500);
-if(teaching[3:0]!=5 || teaching[34:19]<=held_time || reason!=10)$fatal(1,"connected PLAY key paused or restarted");
+if(teaching[3:0]!=5 || teaching[34:19]<=held_time || reason!=0)$fatal(1,"connected PLAY key paused or restarted");
 key(2,50);ms(1500);
 if(teaching[3:0]!=7 || state!=5 || complete!=3 || !shown[22])$fatal(1,"replay no-tip PASS state%0d seq%0d complete%h expected%0d samples%0d",teaching[3:0],state,complete,expected,samples);
 held_time=teaching[34:19];held_dwell=dwell;ms(400);

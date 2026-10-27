@@ -11,7 +11,7 @@ reg [31:0] us=32'hfff00000;reg [40:0] context_id=1;reg commit=0,fail=0;
 wire [3:0] state,reason;wire [10:0] count,px;wire [9:0] py;wire [15:0] elapsed,duration,pm;
 wire use_point,pv,start,running;reg [10:0] sx=0;reg [9:0] sy=0;reg [15:0] sm=0;
 stage1_route #(.CYCLES_PER_MS(200)) dut(clk,rst,mode,k2,k3,k4,clear,image_ok,live,sample,fault,x,y,us,context_id,commit,fail,sx,sy,sm,
-state,reason,count,elapsed,duration,use_point,pv,px,py,pm,start,running);
+state,reason,count,elapsed,duration,use_point,pv,px,py,pm,start,running,8'd50,,);
 always @(posedge clk)if(commit)begin sx<=px;sy<=py;sm<=pm;end
 task clocks;input integer n;begin repeat(n)@(negedge clk);end endtask
 task ms;input integer n;begin clocks(n*200);end endtask
@@ -29,7 +29,7 @@ if(state!=5 || !pv || px!=100 || py!=100)$fatal(1,"play without actual tool stat
 ms(25);clocks(120);view();
 if(px!=100 || py!=100 || pm!=0)$fatal(1,"hold before 50ms xy%0d/%0d t%0d",px,py,pm);
 ms(25);clocks(20);view();if(px!=200 || py!=150 || pm!=50)$fatal(1,"50ms step xy%0d/%0d t%0d",px,py,pm);
-key(3);frozen=elapsed;ms(20);if(elapsed<=frozen || state!=5 || reason!=10)$fatal(1,"play key paused/restarted running route");
+key(3);frozen=elapsed;ms(20);if(elapsed<=frozen || state!=5 || reason!=0)$fatal(1,"play key paused/restarted running route");
 ms(80);clocks(120);repeat(3)view();
 if(state!=7 || px!=300 || py!=200)$fatal(1,"finish hold state%0d xy%0d/%0d",state,px,py);
 key(4);if(use_point || count!=3)$fatal(1,"stop loses route");

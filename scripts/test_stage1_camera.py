@@ -14,15 +14,19 @@ refined_camera_control_relay relay(refclk,cc,pc,rst,rst,request,up,cam_ack,event
  {ready_cam,phase,fault,retries,applied},cam_req,cam_up,ack,event_ref,ready_ref,ui);
 wire [2:0] zoom,slot;wire tracking,show,conflict,pair,ce,cs,cl,rotate,down,k2,k3,k4,cancel,gb,gf;
 wire [7:0] session;wire [1:0] diag,mode;
-stage1_controls #(.CYCLES_PER_MS(1000)) controls(pc,rst,keys,2'd0,ack,8'd0,pause,ui,
-request,up,zoom,tracking,show,session,conflict,pair,ce,cs,cl,rotate,diag,mode,down,k2,k3,k4,cancel,gb,gf,slot,);
+stage1_controls #(.CYCLES_PER_MS(1000)) controls(.I_clk(pc),.I_rst_n(rst),.I_keys_n(keys),.I_ui_switch(2'd0),
+.I_gain_ack(ack),.I_cal_status(8'd0),.I_pause(pause),.I_camera(ui),.O_gain_req(request),.O_gain_up(up),
+.O_zoom(zoom),.O_tracking(tracking),.O_show(show),.O_session(session),.O_conflict(conflict),.O_pair(pair),
+.O_cal_enter(ce),.O_cal_sample(cs),.O_cal_cancel(cl),.O_rotate(rotate),.O_diag(diag),.O_ui_mode(mode),
+.O_down2(down),.O_click2(k2),.O_click3(k3),.O_click4(k4),.O_cancel(cancel),.O_gain_busy(gb),.O_gain_failed(gf),.O_gain_slot(slot));
 refined_camera_config #(.CYCLES_PER_MS(320),.CLK_DIV(23),.BOOT_MS(1),.TRANSACTION_MS(10),.FRAME_TIMEOUT_MS(100)) camera(
 .clk(cc),.rst_n(rst),.gain_req(cam_req),.gain_up(cam_up),.frame_toggle(frame_toggle),.bad_frame_toggle(1'b0),
 .gain_ack(cam_ack),.scl(scl),.sda(sda),.ready(ready_cam),.receiver_enable(receiver_enable),.parameter_event(event_cam),
 .fault(fault),.retries(retries),.phase(phase),.requested_gain(requested),.applied_gain(applied));
-reg used_nack=0;wire deny=INJECT_NACK && gb && camera.gain_table && camera.index==3 && !used_nack;
-assign sda=camera.bus.IIC_S==3 && !deny?1'b0:1'bz;
-always @(posedge cc)if(rst && camera.bus.O_iic_bus_error)used_nack<=1;
+wire used_nack;wire [31:0] sensor_writes,sensor_reads,sensor_restarts,sensor_errors;
+wire [15:0] sensor_address;wire [7:0] sensor_value;
+sc500_i2c_slave_model sensor(rst,scl,sda,INJECT_NACK && gb,2'd1,1'b0,16'h3e02,8'h01,
+used_nack,sensor_writes,sensor_reads,sensor_restarts,sensor_errors,sensor_address,sensor_value);
 integer acknowledgements=0;reg previous_ack=0;reg [6:0] previous_applied=0;
 always @(negedge cc)if(rst)begin
 if(cam_ack!=previous_ack)begin acknowledgements=acknowledgements+1;previous_ack=cam_ack;end
@@ -39,10 +43,12 @@ initial begin repeat(5)@(negedge pc);rst=1;await_gain(90,5);
 brightness;await_gain(105,6);if(acknowledgements!=15)$fatal(1,"105 ACK count %0d",acknowledgements);
 brightness;await_gain(16,0);if(acknowledgements!=104)$fatal(1,"wrap ACK count %0d",acknowledgements);
 if(INJECT_NACK && !used_nack)$fatal(1,"NACK not exercised");
+if(sensor_errors!=0 || sensor_reads!=sensor_restarts)$fatal(1,"I2C wire protocol");
 $display("STAGE1_CAMERA_PASS real-I2C/relay/presets90-105-16/104-complete-ACKs/parameter-events NACK=%0d retries=%0d",INJECT_NACK,retries);$finish;end
 initial begin #150000000;$fatal(1,"camera test timeout");end
 endmodule'''
 mods=[R/'rtl/color_regions'/n for n in ('stage1_controls.v','stage1_top.v','refined_camera_config.v')]
 mods += [R/'rtl/04_tracking/target_mailbox.v']
 mods += [R/'user_source/hdl_source/uics500_cfg'/n for n in ('uics500reg_720p60.v','uics500regAE.v','SC500GainTbl.v','uii2c.v')]
+mods += [R/'scripts/sc500_i2c_slave_model.v.txt']
 for nack in (0,1):run('stage1_camera_'+str(nack),src,mods,compile_args=['-Ptb.INJECT_NACK='+str(nack)],timeout=600)

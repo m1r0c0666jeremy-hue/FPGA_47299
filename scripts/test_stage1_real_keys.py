@@ -88,7 +88,7 @@ initial begin
  short_key(1,duration);
  if(downs!=1 || clicks!=1 || nd!=1 || regions.draft[20:0]!={10'd100,11'd100})$fatal(1,"crossframe duration%0d nd%0d err%0d",duration,nd,ee);
  record(300,250);if(nr!=1 || nd!=0 || saved[41:0]!={10'd250,11'd300,10'd100,11'd100})$fatal(1,"automatic second point");
- record(500,300);short_key(2,50);if(nd!=0 || nr!=1)$fatal(1,"KEY3 must clear only draft");
+ record(500,300);short_key(2,50);if(nd!=1 || nr!=1)$fatal(1,"KEY3 must leave draft");short_key(4,50);if(nd!=0 || nr!=1)$fatal(1,"KEY4 must undo draft");
  record(500,300);record(700,450);if(nr!=2 || nd!=0)$fatal(1,"B automatic save");
  end
  switches=2;location(900,600);short_key(1,50);ms(70);if(state!=2)$fatal(1,"normal VS interrupted WAIT OUT state%0d",state);

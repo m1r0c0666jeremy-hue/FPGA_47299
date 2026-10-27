@@ -9,24 +9,46 @@ BASE_AUDIT=R/'reports/osd_memory/final_audit_20261019_2344.json'
 
 def old_modules():
     assert sha(ARCHIVE)=='9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3'
-    old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={}
+    old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={};refreshed=[]
+    refresh={'camera_frame_admission':'REFINED_CAMERA_GATE_PASS',
+             'camera_real_i2c':'REFINED_CAMERA_PASS',
+             'camera_relay_production_real_i2c':'CAMERA_RELAY_SUPERVISOR_PASS'}
+    for i in range(6):
+        refresh['camera_supervisor_'+str(i)]='REFINED_CAMERA_'
+        refresh['camera_relay_production_'+str(i)]='CAMERA_RELAY_SUPERVISOR_PASS'
     with zipfile.ZipFile(ARCHIVE) as z:
         assert BASE_AUDIT.read_bytes()==z.read(BASE_AUDIT.relative_to(R).as_posix())
         for name,e in old['regression'].items():
             rp=e['record'].replace('\\','/');lp=str(Path(rp).with_suffix('.log')).replace('\\','/')
             assert hashlib.sha256(z.read(rp)).hexdigest()==e['record_sha256'],name
             assert hashlib.sha256(z.read(lp)).hexdigest()==e['log_sha256'],name
+            changed=[]
             for n,h in e['inputs'].items():
                 n=n.replace('\\','/');p=R/n
                 data=p.read_bytes() if p.is_file() else z.read(n)
-                assert hashlib.sha256(data).hexdigest()==h,'Changed baseline dependency '+n
-            result[name]=e
+                if hashlib.sha256(data).hexdigest()!=h:changed.append(n)
+            if changed:
+                assert name in refresh and set(changed)=={'rtl/color_regions/refined_camera_config.v'},'Unreviewed baseline dependency change '+str(changed)
+                current=evidence(name,refresh[name],('refined_camera_config',))
+                assert current,'Missing current camera baseline replacement '+name
+                result[name]=current;refreshed.append(name)
+            else:result[name]=e
     assert len(result)==160
-    return dict(scope='UNCHANGED BASELINE MODULES ONLY; new UI/control/region behavior requires new checks',
-                archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result)
+    assert len(refreshed)==15,'Expected all 15 changed camera dependencies to be rerun'
+    return dict(scope='145 unchanged archived checks plus 15 current-source camera replacements; new behavior has separate checks',
+                archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result,current_replacements=refreshed)
 
 def specs():
     d={
+      'stage1_camera_osd':('STAGE1_CAMERA_OSD_PASS cases=22',('stage1_osd','stage1_ui_formatter','stage1_ui_text')),
+      'stage1_k_tracker':('STAGE1_K_TRACKER_PASS cases=18524',('stage1_memory_video_out',)),
+      'stage1_k_capture':('STAGE1_K_CAPTURE_PASS frames10 pixels9216000',('stage1_memory_video_out','stable_model_lane','stable_filter4','stable_grid')),
+      'stage1_k_controls':('STAGE1_K_CONTROLS_PASS',('stage1_controls',)),
+      'stage1_k_route_identity':('STAGE1_K_ROUTE_PASS',('stage1_regions','stage1_sequence')),
+      'stage1_k_editor':('STAGE1_K_EDITOR_PASS',('stage1_regions','stage1_sequence')),
+      'stage1_k_ui':('STAGE1_K_UI_PASS',('stage1_ui_formatter','stage1_ui_text')),
+      'stage1_k_teach_ui':('STAGE1_K_TEACH_UI_PASS',('stage1_ui_formatter','stage1_ui_text')),
+      'stage1_k_keys_75m':('STAGE1_K_KEYS_75M_PASS actual75000-cycles-per-ms',('stage1_controls',)),
       'stage1_shared_dwell_1':('STAGE1_SHARED_DWELL_PASS period=1',('stage1_sequence',)),
       'stage1_shared_dwell_3':('STAGE1_SHARED_DWELL_PASS period=3',('stage1_sequence',)),
       'stage1_rect_observer':('STAGE1_RECT_OBSERVER_PASS cases=1200',('stage1_regions',)),
@@ -64,11 +86,15 @@ def specs():
       'stage1_english_abort':('STAGE1_ENGLISH_ABORT_PASS 2 cases 245760 pixels',('stage1_osd',)),
       'stage1_english_wait':('STAGE1_ENGLISH_WAIT_PASS 1 cases 122880 pixels',('stage1_osd',)),
     }
+    camera_cases=['all_presets','reserved_bits']+[f'mismatch_{i}' for i in range(6)]+[
+      'persistent_mismatch','id_high','id_low','read_nack','write_nack','timeout',
+      'superseded_first','superseded_last','reset_read','persistent_read_nack']
+    for name in camera_cases:d['stage1_camera_readback_'+name]=('STAGE1_CAMERA_READBACK_PASS',('refined_camera_config',))
     jobs=[(p,z,m,r,0,1) for p in (0,1) for z in range(5) for m in range(4) for r in (0,1)]
     jobs += [(0,0,0,r,1,2) for r in (0,1)]+[(0,1,0,r,0,2) for r in (0,1)]
     for p,z,m,r,f,n in jobs:d[f'stage1_video_{p}_{z}_{m}_{r}_f{f}_n{n}']=('STABLE_VIDEO_PASS:',('stage1_osd','refined_line_reader'))
     for p in (0,1):
-        for r in (0,1):d[f'stage1_v4_live_{p}_{r}_refined_g160']=('STAGE1_LIVE_EDITOR_PASS',('stage1_regions','stage1_osd','stable_capture','refined_frame_store'))
+        for r in (0,1):d[f'stage1_v4_live_{p}_{r}_refined_g160']=('STAGE1_LIVE_EDITOR_PASS',('stage1_regions','stage1_osd','stage1_memory_video_out','refined_frame_store'))
     return d
 
 def evidence(prefix,marker,modules):

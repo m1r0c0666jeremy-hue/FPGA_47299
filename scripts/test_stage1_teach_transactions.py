@@ -6,7 +6,7 @@ BENCH=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0;reg [1:0] mode=3;reg k2=0,k3=0,k4=0,clear=0;
 reg image_ok=1,live=1,sample=0;reg [3:0] fault=0;reg [10:0] x=100;reg [9:0] y=100;
 reg [31:0] us=0;reg [40:0] context_id=1;wire [3:0] state,reason;wire [10:0] count;
-stage1_route #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.key2(k2),.key3(k3),.key4(k4),.clear(clear),
+stage1_route #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.current_k(8'd50),.key2(k2),.key3(k3),.key4(k4),.clear(clear),
 .image_ok(image_ok),.real_live(live),.real_sample(sample),.real_reason(fault),.real_x(x),.real_y(y),.source_us(us),
 .context_id(context_id),.frame_commit(1'b0),.sequence_fail(1'b0),.shown_x(11'd0),.shown_y(10'd0),.shown_ms(16'd0),
 .state(state),.reason(reason),.count(count));

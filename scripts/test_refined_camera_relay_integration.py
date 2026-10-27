@@ -1,12 +1,14 @@
 """Camera supervisor through the private relay, including actual I2C RTL."""
 import argparse
-from refined_testlib import R, run, literal_fixture
+from refined_testlib import R, literal_fixture
+from sc500_test_evidence import run
 
 ap=argparse.ArgumentParser();ap.add_argument('--production',action='store_true');args=ap.parse_args()
 relay=R/'rtl/color_regions/stable_top.v' if args.production else R/'build/refined_camera_relay_prototype/relay.v'
 assert 'module refined_camera_control_relay(' in relay.read_text(encoding='utf-8')
 source=literal_fixture(R/'scripts/test_refined_camera.py','src')
 stub=literal_fixture(R/'scripts/test_refined_camera.py','stub')
+wire_driver=literal_fixture(R/'scripts/test_refined_camera.py','wire_driver')
 source=source.replace('always #5 clk=~clk','always #21 clk=~clk')
 for before,after in (('.gain_req(request)','.gain_req(camera_req)'),('.gain_up(up)','.gain_up(camera_up)'),('.gain_ack(ack)','.gain_ack(camera_ack)')):
     assert source.count(before)==1
@@ -32,5 +34,5 @@ prefix='camera_relay_production' if args.production else 'camera_relay_private_i
 for mode in range(6):
     tb=source.replace('(CPM)','(10)').replace('(DIV)','(1)').replace('ACK_DRIVER','').replace('STUB',stub)
     run(prefix+'_'+str(mode),tb,modules,args=['+MODE='+str(mode)])
-tb=source.replace('(CPM)','(24000)').replace('(DIV)','(239)').replace('STUB','').replace('ACK_DRIVER',"assign sda=dut.bus.IIC_S==3?1'b0:1'bz;")
-run(prefix+'_real_i2c',tb,[*modules,R/'user_source/hdl_source/uics500_cfg/uii2c.v'],args=['+MODE=0'])
+tb=source.replace('(CPM)','(24000)').replace('(DIV)','(239)').replace('STUB','').replace('ACK_DRIVER',wire_driver)
+run(prefix+'_real_i2c',tb,[*modules,R/'user_source/hdl_source/uics500_cfg/uii2c.v',R/'scripts/sc500_i2c_slave_model.v.txt'],args=['+MODE=0'])

@@ -1,5 +1,6 @@
 """Teaching hooks are confined to candidate wrappers; vendor/live RTL is frozen."""
 from pathlib import Path
+import re
 R=Path(__file__).resolve().parents[1]
 
 def viewport_source():
@@ -15,7 +16,7 @@ def viewport_source():
 
 def decorate(out):
     v=out['rtl/color_regions/stage1_memory_video_out.v']
-    v=v.replace('wire [767:0] active_meta;', 'wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [63:0] teaching_status;wire stage1_raw_area_alarm;')
+    v=v.replace('wire [767:0] active_meta;', 'wire [767:0] active_meta;wire [38:0] teach_desired_point,teach_active_point;wire [79:0] teaching_status;wire stage1_raw_area_alarm;')
     v=v.replace('stable_display #(.V4(1))','stage1_viewport #(.V4(1))')
     v=v.replace('.O_state(active_status));','.O_state(active_status),.I_point(teach_desired_point),.O_point(teach_active_point));')
     marker='wire area_associated,area_video;wire [3:0] area_tip_reason;'
@@ -42,7 +43,7 @@ endmodule
 '''
     out['rtl/color_regions/stage1_memory_video_out.v']=v
     s=out['rtl/color_regions/stage1_osd.v']
-    s=s.replace('input wire [3:0] I_tip_reason\n','input wire [3:0] I_tip_reason,input wire [63:0] I_teaching,input wire [22:0] I_point\n')
+    s=s.replace('input wire [3:0] I_tip_reason\n','input wire [3:0] I_tip_reason,input wire [79:0] I_teaching,input wire [22:0] I_point\n')
     s=s.replace('wire [7:0] region_label_glyph,stage_glyph;', 'wire [7:0] region_label_glyph,stage_glyph,teaching_glyph;wire teaching_override;')
     marker=' stage1_ui_formatter region_text('
     hook=''' stage1_teach_text teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
@@ -69,21 +70,24 @@ def teaching_text_source():
     s=r'''
 `default_nettype none
 module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input wire row,input wire [1:0] mode,
- input wire [63:0] teaching,input wire [3:0] run_state,occupied,input wire [2:0] expected,actual,
- input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable);
- reg [63:0] f;reg [1:0] fm;reg [3:0] fs,fi;reg [2:0] fe,fa;
+ input wire [79:0] teaching,input wire [3:0] run_state,occupied,input wire [2:0] expected,actual,
+ input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable,input wire [7:0] current_k);
+ reg [79:0] f;reg [1:0] fm;reg [3:0] fs,fi;reg [2:0] fe,fa;reg [7:0] fk;
  reg [19:0] dwell_value,number,binary;reg [6:0] rem;reg [13:0] quotient;
- reg [15:0] bcd,adjusted,time_bcd,duration_bcd,count_bcd,dwell_bcd;
+ reg [15:0] bcd,adjusted,time_bcd,duration_bcd,count_bcd,dwell_bcd;reg [11:0] route_k_bcd;
  reg [2:0] field;reg [1:0] conversion;reg [4:0] index;integer i;
  wire [7:0] shifted={rem,number[19]};wire take=shifted>=100;
- reg [63:0] state_word,motion_word,run_word;reg [255:0] reason_word;reg [7:0] ascii;
+ reg [63:0] state_word,motion_word,run_word;reg [255:0] reason_word,play_keys;reg [511:0] all_keys;reg [135:0] short_keys;reg [7:0] ascii;
+ function [11:0] decimal8;input [7:0] value;reg [11:0] d;integer j,k;begin d=0;
+ for(j=7;j>=0;j=j-1)begin for(k=0;k<3;k=k+1)if(d[k*4+:4]>=5)d[k*4+:4]=d[k*4+:4]+3;d={d[10:0],value[j]};end
+ decimal8=d;end endfunction
  function [7:0] encode;input [7:0] c;begin
  if(c>=48 && c<=57)encode=c-47;else if(c>=65 && c<=90)encode=c-54;
  else case(c)109:encode=37;115:encode=38;46:encode=39;58:encode=40;45:encode=41;47:encode=42;40:encode=43;41:encode=44;default:encode=0;endcase end endfunction
  assign override_enable=fm==3;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;end
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
+ if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;fk<=50;route_k_bcd<=12'h050;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
  bcd<=0;time_bcd<=0;duration_bcd<=0;count_bcd<=0;dwell_bcd<=0;field<=0;conversion<=0;index<=0;end
  else begin
  if(conversion==1)begin number<=number<<1;rem<=take?shifted-100:shifted;quotient<={quotient[12:0],take};
@@ -99,7 +103,8 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  2:begin number<=dwell_value;conversion<=1;end
  default:conversion<=0;endcase
  end else index<=index+1'b1;end
- if(latch)begin f<=teaching;fm<=mode;fs<=run_state;fi<=occupied;fe<=expected;fa<=actual;dwell_value<=dwell;
+ if(latch)begin f<=teaching;fm<=mode;fs<=run_state;fi<=occupied;fe<=expected;fa<=actual;fk<=current_k;
+ route_k_bcd<=decimal8(teaching[71:64]);dwell_value<=dwell;
  number<={4'd0,teaching[34:19]};field<=0;index<=0;rem<=0;quotient<=0;conversion<=1;end
  end end
  always @*begin
@@ -107,6 +112,17 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
 STATE_CASES
  endcase
  motion_word="        ";
+ all_keys="K2 REC/STOP K3 PLAY K4 STOP K4 HOLD CLEAR                        ";
+ play_keys="K3 PLAY K4 STOP K4 HOLD CLEAR     ";short_keys="K3 PLAY K4 STOP   ";
+ if(f[3:0]==2 || f[3:0]==3)begin
+ all_keys="K2 STOP K4 HOLD CLEAR                                            ";
+ play_keys="K2 STOP K4 HOLD CLEAR            ";short_keys="K2 STOP          ";end
+ else if(f[3:0]==4 || f[3:0]==5)begin
+ all_keys="K4 STOP K4 HOLD CLEAR                                            ";
+ play_keys="K4 STOP K4 HOLD CLEAR            ";short_keys="K4 STOP          ";end
+ else if(f[3:0]==7 || f[3:0]==8)begin
+ all_keys="K3 REPLAY K4 STOP K4 HOLD CLEAR                                   ";
+ play_keys="K3 REPLAY K4 STOP K4 HOLD CLEAR   ";short_keys="K3 REPLAY K4 STOP ";end
  run_word="IDLE    ";case(fs)
  1:run_word="WAIT OUT";2:run_word="RUN     ";3:run_word="PAUSED  ";4:run_word="MOVE OUT";5:run_word="PASS    ";6:run_word="FAIL    ";7:run_word="STOPPED ";endcase
  reason_word=0;case(f[7:4])
@@ -120,22 +136,27 @@ REASON_CASES
  15:ascii=48+time_bcd[11:8];16:ascii=48+time_bcd[7:4];17:ascii=".";18:ascii=48+time_bcd[3:0];19:ascii="/";
  20:ascii=48+duration_bcd[11:8];21:ascii=48+duration_bcd[7:4];22:ascii=".";23:ascii=48+duration_bcd[3:0];24:ascii="s";
  26:ascii="P";27:ascii=48+count_bcd[15:12];28:ascii=48+count_bcd[11:8];29:ascii=48+count_bcd[7:4];30:ascii=48+count_bcd[3:0];endcase
- if(col>=6 && col<14)ascii=state_word[(13-col)*8+:8];if(col>=32)ascii=reason_word[(63-col)*8+:8];
+ if(col>=6 && col<14)ascii=state_word[(13-col)*8+:8];
+ case(col)32:ascii="R";33:ascii="K";
+ 34:ascii=f[72]?48+route_k_bcd[11:8]:45;35:ascii=f[72]?46:45;
+ 36:ascii=f[72]?48+route_k_bcd[7:4]:45;37:ascii=f[72]?48+route_k_bcd[3:0]:45;
+ 39:if(f[72] && f[71:64]!=fk)ascii="D";40:if(f[72] && f[71:64]!=fk)ascii="I";
+ 41:if(f[72] && f[71:64]!=fk)ascii="F";42:if(f[72] && f[71:64]!=fk)ascii="F";endcase
+ if(col>=44)ascii=reason_word[(31-(col-44))*8+:8];
  end else if(f[55] && f[54])begin
  if(col<8)ascii=run_word[(7-col)*8+:8];
  case(col)9:ascii="N";10:ascii="E";11:ascii="X";12:ascii="T";14:ascii=fs!=5?65+fe:45;
  16:ascii="I";17:ascii="N";19:ascii=fi[0]?65:fi[1]?66:fi[2]?67:fi[3]?68:45;
  30:ascii="T";31:ascii=48+dwell_bcd[15:12];32:ascii=48+dwell_bcd[11:8];33:ascii=48+dwell_bcd[7:4];34:ascii=".";35:ascii=48+dwell_bcd[3:0];36:ascii="s";
- 47:ascii="K";48:ascii="3";50:ascii="P";51:ascii="L";52:ascii="A";53:ascii="Y";55:ascii="K";56:ascii="4";58:ascii="S";59:ascii="T";60:ascii="O";61:ascii="P";endcase
+ endcase
+ if(col>=47)ascii=short_keys[(63-col)*8+:8];
  if(col>=21 && col<29)ascii=motion_word[(28-col)*8+:8];
- if(fs==6)case(col)47:ascii="E";48:ascii="X";49:ascii="P";50:ascii=32;51:ascii=65+fe;52:ascii=32;53:ascii="G";54:ascii="O";55:ascii="T";56:ascii=32;57:ascii=fa!=0?64+fa:45;58,59,60,61:ascii=32;endcase
+ if(fs==6)case(col)47:ascii="E";48:ascii="X";49:ascii="P";50:ascii=32;51:ascii=65+fe;52:ascii=32;53:ascii="G";54:ascii="O";55:ascii="T";56:ascii=32;57:ascii=fa!=0?64+fa:45;58,59,60,61,62,63:ascii=32;endcase
  if(f[3:0]==7 && fs!=5 && col<8)ascii="INCOMP  "[(7-col)*8+:8];
  end else begin
- case(col)
-HINT_CASES
- endcase
+ ascii=all_keys[(63-col)*8+:8];
  if(f[55] && !f[54])begin
- if(col>=32)ascii=PLAY_KEYS[(63-col)*8+:8];
+ if(col>=32)ascii=play_keys[(63-col)*8+:8];
  else if(f[59:56]!=0)ascii="FINISH DRAFT. SEQ OFF            "[(31-col)*8+:8];
  else ascii="NO SAVED AREAS. SEQ OFF          "[(31-col)*8+:8];end
  end
@@ -152,4 +173,6 @@ endmodule
     constants+='localparam [255:0] PLAY_KEYS="'+'K3 PLAY K4 STOP K4 HOLD CLEAR'.ljust(32)+'";\n '
     s=s.replace('reg [63:0] state_word,motion_word,run_word;',constants+'reg [63:0] state_word,motion_word,run_word;')
     s=s.replace('"INCOMP  "[','INCOMPLETE[').replace('"FINISH DRAFT. SEQ OFF            "[','DRAFT_OFF[').replace('"NO SAVED AREAS. SEQ OFF          "[','NO_AREAS[')
+    for width,name in ((64,'all_keys'),(32,'play_keys'),(17,'short_keys')):
+        s=re.sub(rf'({name}=)"([^"\n]*)";',lambda m:m[1]+'"'+m[2].rstrip().ljust(width)+'";',s)
     return s

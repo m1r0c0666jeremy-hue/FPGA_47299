@@ -6,7 +6,7 @@ reg clk=0;always #5 clk=~clk;reg rst=0,k2=0,k3=0,k4=0,clear=0,sample=0,image_ok=
 reg [1:0] mode=3;reg [10:0] x=100;reg [31:0] us=0;
 wire [3:0] state;wire [10:0] px;wire [9:0] py;wire [15:0] pm,elapsed;wire use_point;
 integer phase_edge,i,t,command;reg [15:0] held;
-stage1_route #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.key2(k2),.key3(k3),.key4(k4),.clear(clear),
+stage1_route #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.current_k(8'd50),.key2(k2),.key3(k3),.key4(k4),.clear(clear),
 .image_ok(image_ok),.real_live(1'b1),.real_sample(sample),.real_reason(4'd0),.real_x(x),.real_y(10'd100),.source_us(us),
 .context_id(41'd1),.frame_commit(1'b0),.sequence_fail(1'b0),.shown_x(11'd0),.shown_y(10'd0),.shown_ms(16'd0),
 .state(state),.point_x(px),.point_y(py),.point_ms(pm),.elapsed_ms(elapsed),.point_use(use_point));

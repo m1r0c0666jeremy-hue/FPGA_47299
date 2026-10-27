@@ -59,11 +59,11 @@ def main():
     else:
         source+=r'''
 key(3);if(ee!=0 || nr!=0 || nd!=0)$fatal(1,"empty clear modified saved areas");
-record(10,10);key(3);if(ee!=0 || nd!=0 || nr!=0)$fatal(1,"KEY3 did not clear only draft");
+record(10,10);key(3);if(nd!=1 || nr!=0)$fatal(1,"KEY3 changed draft");key(4);if(nd!=0)$fatal(1,"KEY4 did not undo draft");
 record(100,100);record(180,180);
 if(nr!=1 || nd!=0 || counts[3:0]!=2)$fatal(1,"A automatic save");
-record(220,220);key(3);if(nr!=1 || nd!=0)$fatal(1,"clear draft deleted saved area");
-rect(104,104,120,120);if(ee!=3 || nr!=1 || nd!=2)$fatal(1,"nested rectangle accepted");record(150,150);if(ee!=6 || nd!=2)$fatal(1,"third rejected draft corner accepted");key(3);if(nd!=0 || nr!=1)$fatal(1,"clear invalid draft");
+record(220,220);key(4);if(nr!=1 || nd!=0)$fatal(1,"clear draft deleted saved area");
+rect(104,104,120,120);if(ee!=3 || nr!=1 || nd!=2)$fatal(1,"nested rectangle accepted");record(150,150);if(ee!=6 || nd!=2)$fatal(1,"third rejected draft corner accepted");key(4);key(4);if(nd!=0 || nr!=1)$fatal(1,"undo invalid draft");
 rect(180,130,240,200);if(ee!=3 || nr!=1)$fatal(1,"touch accepted");key(4);key(4);
 rect(250,250,254,254);if(ee!=2 || nr!=1)$fatal(1,"rectangle without guard-band interior accepted");key(4);key(4);
 rect(400,300,300,200);if(nr!=2 || saved[168+:42]!=={10'd300,11'd400,10'd200,11'd300})$fatal(1,"reverse corners not normalized");

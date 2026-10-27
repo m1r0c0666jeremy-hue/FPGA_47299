@@ -128,6 +128,8 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
     out['scripts/run_stage1_route.py']=route
     from stage1_teaching_codegen import decorate
     decorate(out)
+    from stage1_k_datapath import decorate as decorate_k
+    decorate_k(out)
     return out
 
 def main():

@@ -109,7 +109,6 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  if(point_pending && tip_live && point_context)edit_request<=1;
  else begin edit_error<=point_failure!=0?4'd9:4'd5;if(point_failure==0)point_failure<=live_reason;end
  point_pending<=0;end
- else if(click3)begin edit_request<=4;point_failure<=0;end
  else if(click4)begin edit_request<=3;point_failure<=0;end
  end
  if(edit_request!=0)begin edit_request<=0;edit_error<=0;
@@ -126,7 +125,6 @@ module stage1_regions #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  3:if(draft_count!=0)begin draft_count<=draft_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  else if(region_count!=0)begin region_count<=region_count-1'b1;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  else edit_error<=7;
- 4:if(draft_count!=0)begin draft_count<=0;revision<=revision+1'b1;configuration_changed<=1;metrics_good<=0;end
  default:begin end endcase
  else begin edit_error<=9;point_failure<=7;end end
  if(point_pending && (cancel || (!down2 && (!tip_live || !point_context))))begin
@@ -182,7 +180,8 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  output reg [3:0] state,reason,output reg [10:0] count,
  output reg [15:0] elapsed_ms,duration_ms,output wire point_use,
  output reg point_valid,output reg [10:0] point_x,output reg [9:0] point_y,
- output reg [15:0] point_ms,output reg start_round,output wire running);
+ output reg [15:0] point_ms,output reg start_round,output wire running,
+ input wire [7:0] current_k,output reg [7:0] route_k,output reg route_k_valid);
  localparam EMPTY=0,READY=1,WAIT_POINT=2,REC=3,PREP=4,PLAY=5,DONE=7,FAIL=8;
  (* ram_style="block" *)reg [39:0] memory[0:1023];
  reg [9:0] rdaddr;reg [39:0] rddata,p0,p1;
@@ -217,7 +216,7 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  state<=EMPTY;reason<=0;count<=0;elapsed_ms<=0;duration_ms<=0;point_valid<=0;point_x<=0;point_y<=0;point_ms<=0;start_round<=0;
  rdaddr<=0;p0<=0;p1<=0;index<=0;subms<=0;record_ms<=0;last_stamp<=0;first_us<=0;last_us<=0;recording_context<=0;
  phase<=0;goal<=0;computed_ms<=0;pending_point<=0;pending_record<=0;round_sent<=0;
- div_start<=0;numerator<=0;denominator<=1;
+ div_start<=0;numerator<=0;denominator<=1;route_k<=8'd50;route_k_valid<=0;
  end else begin
  div_start<=0;start_round<=0;
  if(tick)begin subms<=0;
@@ -228,7 +227,7 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  if(state==REC)duration_ms<=stopped_ms;
  if(operating)state<=count!=0?READY:EMPTY;
  phase<=0;pending_record<=0;point_valid<=0;round_sent<=0;elapsed_ms<=0;
- if(clear)begin count<=0;duration_ms<=0;state<=EMPTY;reason<=14;end
+ if(clear)begin count<=0;duration_ms<=0;state<=EMPTY;reason<=14;route_k_valid<=0;end
  else if(fatal)reason<=(real_reason==1 || real_reason==2 || real_reason==6)?real_reason:context_bad?4'd8:real_reason==0?4'd3:real_reason;
  else if(key4 || operating)reason<=13;
  end else if(sequence_fail && state==PLAY)begin
@@ -245,9 +244,9 @@ module stage1_route #(parameter CYCLES_PER_MS=75000,MAX_MS=30000,MAX_POINTS=602)
  phase<=1;rdaddr<=0;index<=1;reason<=0;round_sent<=0;computed_ms<=0;end
  end else begin
  if((key3 || key4) && (state==REC || state==WAIT_POINT))reason<=10;
- if(key3 && (state==PLAY || state==PREP))reason<=10;
  if(first_write)begin
  state<=REC;count<=1;record_ms<=0;last_stamp<=0;first_us<=source_us;last_us<=source_us;elapsed_ms<=0;duration_ms<=0;reason<=0;
+ route_k<=current_k;route_k_valid<=1;
  end
  if(state==REC)begin
  if(record_ms>=MAX_MS || count>=MAX_POINTS)begin state<=READY;duration_ms<=stopped_ms;pending_record<=0;reason<=12;end
@@ -354,7 +353,7 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  output wire [19:0] dwell_ms,output wire [3:0] edit_error,start_error,
  output wire busy,tip_live,metrics_valid,output wire [671:0] saved_vertices,output wire [167:0] draft_vertices,
  output wire [3:0] tip_reason,input wire image_healthy,input wire [3:0] image_reason,
- input wire [38:0] shown_point,output wire [38:0] desired_point,output wire [63:0] teaching);
+ input wire [38:0] shown_point,output wire [38:0] desired_point,output wire [79:0] teaching,input wire [7:0] current_k);
  wire [3:0] real_state,real_completed,real_occupied,real_start,real_reason;
  wire [2:0] real_expected,real_actual;wire real_muted,real_alarm,real_tip;
  wire [19:0] real_dwell;
@@ -366,7 +365,7 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  reg [1:0] observer_mode_last;reg [15:0] revision_last,last_virtual_ms;reg sample_seen,replay_started,source_last;
  wire [40:0] context_id={session,pair,meta[719:704],meta[559:544]};
  wire real_sample=real_tip && (!real_seen || real_last!=image_id || context_id!=last_context);
- wire [3:0] route_state,route_reason;wire [10:0] route_count,px;wire [9:0] py;
+ wire [3:0] route_state,route_reason;wire [10:0] route_count,px;wire [9:0] py;wire [7:0] route_k;wire route_k_valid;
  wire [15:0] elapsed,duration,point_ms;wire use_point,point_valid,start_round,running;
  wire [3:0] replay_state,replay_completed,replay_occupied,replay_error;
  wire [2:0] replay_expected,replay_actual;wire replay_muted,replay_alarm;wire [19:0] replay_dwell;
@@ -381,7 +380,7 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  // Each observation is atomic. Geometry stays stable through revision checks;
  // a new request replaces unfinished work rather than mixing image positions.
  wire observer_cancel=sequence_changed || mode!=observer_mode_last || !tip_live ||
- (mode==1 && (click2 || click3 || click4 || busy)) ||
+ (mode==1 && (click2 || click4 || busy)) ||
  (mode==3 && (!running || click4)) || start_round;
  stage1_rect_observer observer(.clk(clk),.rst_n(rst_n),.cancel(observer_cancel),
  .request(use_point?virtual_sample:real_sample),.x(chosen_x),.y(chosen_y),
@@ -391,7 +390,7 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  stage1_route #(.CYCLES_PER_MS(CYCLES_PER_MS)) route(clk,rst_n,mode,click2,click3,click4 && !cancel,click4 && cancel,
  image_healthy,real_tip,real_sample,route_cause,meta[89:79],meta[99:90],meta[671:640],context_id,
  frame_commit,replay_started && replay_state==6,shown_point[10:0],shown_point[20:11],shown_point[38:23],
- route_state,route_reason,route_count,elapsed,duration,use_point,point_valid,px,py,point_ms,start_round,running);
+ route_state,route_reason,route_count,elapsed,duration,use_point,point_valid,px,py,point_ms,start_round,running,current_k,route_k,route_k_valid);
  assign desired_point={point_ms,use_point,point_valid,py,px};
  stage1_sequence #(.CYCLES_PER_MS(CYCLES_PER_MS),.ONEHOT_DWELL(1)) shared_controller(
  .clk(clk),.rst_n(rst_n),.mode(sequence_mode),.region_count(region_count),.draft_count(draft_count),
@@ -406,7 +405,9 @@ module stage1_scene #(parameter CYCLES_PER_MS=75000)(input wire clk,rst_n,
  // Motion analysis is deferred. Reserved status bits remain zero so neither
  // footer can label distance-constant movement as STILL or MOVE.
  assign trend=2'd0;assign distance=11'd0;
- assign teaching={4'd0,draft_count,use_point,seq_enabled,3'd0,duration,elapsed,route_count,route_reason,route_state};
+ // Preserve the original low 64 status bits; route K is committed with its
+ // first RAM entry, so an unsuccessful new recording keeps the old identity.
+ assign teaching={7'd0,route_k_valid,route_k,4'd0,draft_count,use_point,seq_enabled,3'd0,duration,elapsed,route_count,route_reason,route_state};
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin real_seen<=0;tracking_last<=0;real_last<=0;last_context<=0;observer_mode_last<=0;revision_last<=0;last_virtual_ms<=0;sample_seen<=0;replay_started<=0;source_last<=0;end
  else begin

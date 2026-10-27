@@ -6,7 +6,7 @@ reg clk=0;always #5 clk=~clk;reg rst=0;reg [1:0] mode=1;
 reg down=0,k2=0,k3=0,k4=0,tracking=1,camera=1,video=1,gb=0;
 reg [31:0] image=0;reg [767:0] meta=0;wire [2:0] count;wire [3:0] draft,occupied;
 integer phase,action,i,observations=0,before_observations;
-stage1_scene #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.down2(down),.click2(k2),.click3(k3),.click4(k4),.cancel(1'b0),
+stage1_scene #(.CYCLES_PER_MS(200)) dut(.clk(clk),.rst_n(rst),.mode(mode),.current_k(8'd50),.down2(down),.click2(k2),.click3(k3),.click4(k4),.cancel(1'b0),
 .tracking(tracking),.video_ok(video),.camera_ready(camera),.gain_busy(gb),.session(8'd1),.pair(1'b0),.frame_commit(1'b0),
 .detection_valid(1'b1),.image_id(image),.meta(meta),.region_count(count),.draft_count(draft),.occupied(occupied),
 .image_healthy(camera && video && !gb),.image_reason(4'd3),.shown_point(39'd0));

@@ -13,12 +13,17 @@ module stage1_osd(
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
  input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
  input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
- input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason,input wire [63:0] I_teaching,input wire [22:0] I_point
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason,input wire [79:0] I_teaching,input wire [22:0] I_point,input wire [7:0] I_k_value,input wire I_k_adjust
 );
  localparam FONT=16,CHAR_WIDTH=8,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
  reg [767:0] fm;reg [31:0] fimage;reg [1:0] fmode;reg [2:0] fzoom;
  reg [2:0] fstate;reg fpair,frotate,ftracking,fshow,fvideo,fdetection,fsample;
+ reg [7:0] stage_camera_snapshot;
+ wire stage_camera_dead=stage_camera_snapshot[7:4]==9 && stage_camera_snapshot[3:0]>=1 && stage_camera_snapshot[3:0]<=5;
+ always @(posedge I_clk or negedge I_rst_n)
+ if(!I_rst_n)stage_camera_snapshot<=0;
+ else if(I_de && y==625 && x==0)stage_camera_snapshot<=I_camera[16:9];
  reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
  reg flat_valid;reg [31:0] flatency,fage;
  always @*begin
@@ -30,6 +35,9 @@ module stage1_osd(
  if(ftracking && !fm[255])status_id=19;
  if(fm[255] && !fm[247])status_id=8;
  if(fstate==7)status_id=18;if(fstate==5)status_id=17;if(!fvideo || fstate==6)status_id=16;
+ if(stage_camera_dead)case(stage_camera_snapshot[3:0])
+ 1:status_id=20;2:status_id=21;3:status_id=22;4:status_id=23;5:status_id=24;
+ endcase
  end
  // Only latency and frame age need decimal conversion in the overview.
  function [23:0] field_value;input id;begin
@@ -124,10 +132,10 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
  stage1_teach_text teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
- I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override);
+ I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override,I_k_value);
  stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
- I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason);
+ I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason,I_k_value,I_k_adjust);
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
  flat_valid<=0;flatency<=0;fage<=0;
@@ -145,7 +153,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
  6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
- 7:begin characters[(format_row?COLS:0)+format_col]<=fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=format_row && stage_camera_dead && format_col>=42?stage_glyph:fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end

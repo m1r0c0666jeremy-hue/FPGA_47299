@@ -10,7 +10,7 @@ wire [2:0] zoom,slot;wire [7:0] session;wire [1:0] diag,mode;
 reg [1:0] last_mode=0;
 stage1_controls #(.CYCLES_PER_MS(2),.DEBOUNCE_MS(3),.LONG_PRESS_MS(20),.CHORD_WINDOW_MS(8)) dut(
 clk,rst,keys,sw,ack,cal,pause,camera,req,up,zoom,tracking,show,session,conflict,pair,ce,cs,cc,rotate,diag,mode,
-down,c2,c3,c4,cancel,gb,gf,slot,);
+down,c2,c3,c4,cancel,gb,gf,slot,,,);
 integer clicks2=0,clicks3=0,clicks4=0,downs=0,steps=0;reg [6:0] next_gain;integer delay_ack=0,delay_feedback=0;
 always @(posedge clk)begin #1;if(rst && mode!=last_mode && (down || c2 || c3 || c4))$fatal(1,"switch acceptance leaked a gesture");last_mode=mode;end
 always @(posedge clk)begin
@@ -30,10 +30,10 @@ key(2,28);if(tracking)$fatal(1,"tracking did not stop");
 key(1,7);ms(300);if(gb || gf || slot!=6 || camera[6:0]!=105 || steps!=15)$fatal(1,"preset105 or stale feedback: slot%0d gain%0d steps%0d",slot,camera[6:0],steps);
 key(1,7);ms(1000);if(gb || gf || slot!=0 || camera[6:0]!=16 || steps!=104)$fatal(1,"preset wrap steps wrong");
 sw=1;ms(8);if(mode!=1)$fatal(1,"edit switch");key(1,7);key(2,7);key(4,7);
-if(clicks2!=1 || clicks3!=1 || clicks4!=1 || downs!=1)$fatal(1,"edit routing");
+if(clicks2!=1 || clicks3!=0 || clicks4!=1 || downs!=1)$fatal(1,"edit routing/KEY3 no-op");
 key(1,28);if(clicks2!=1 || downs!=2)$fatal(1,"long key accidentally recorded point");
 keys=6;ms(7);sw=2;ms(8);keys=7;ms(8);if(clicks2!=1 || mode!=2)$fatal(1,"mode switch leaked short key");
-key(1,7);key(2,7);key(4,7);if(clicks2!=2 || clicks3!=2 || clicks4!=2)$fatal(1,"test routing");
+key(1,7);key(2,7);key(4,7);if(clicks2!=2 || clicks3!=1 || clicks4!=2)$fatal(1,"test routing");
 sw=0;ms(8);key(5,28);if(!ce || clicks2!=2)$fatal(1,"calibration chord");
 cal=8'h20;key(2,7);if(!cs || tracking)$fatal(1,"cal sample exclusive");key(1,7);if(!cc || gb)$fatal(1,"cal cancel exclusive");
 cal=0;ms(5);key(6,28);if(rotate)$fatal(1,"rotate chord");

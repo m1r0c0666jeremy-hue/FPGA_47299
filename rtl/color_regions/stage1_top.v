@@ -115,13 +115,13 @@ always @(posedge S_csi_rx_clk or negedge cal_rst_n)if(!cal_rst_n)status_sent<=0;
 target_mailbox #(.WIDTH(8)) cal_feedback(.S_clk(S_csi_rx_clk),.S_rst_n(cal_rst_n),.S_send(status_send),.S_data(cal_status),.S_ready(status_ready),
 .D_clk(S_hdmi_pixel_clk),.D_rst_n(process_rst_n),.D_valid(),.D_data(ui_cal_status));
 wire [1:0] stage_mode;wire stage_down,stage_k2,stage_k3,stage_k4,stage_cancel,stage_gain_busy,stage_gain_failed,stage_alarm;
-wire [2:0] stage_gain_slot;wire [6:0] stage_gain_target;
+wire [7:0] stage_k_value;wire stage_k_adjust;wire [2:0] stage_gain_slot;wire [6:0] stage_gain_target;
 stage1_controls u_controls(.I_clk(S_hdmi_pixel_clk),.I_rst_n(process_rst_n),.I_keys_n(I_button),.I_ui_switch(I_ui_switch),
  .I_gain_ack(gain_ack),.I_cal_status(ui_cal_status),.I_pause(camera_pause),.I_camera(camera_ui_status),
  .O_gain_req(gain_req),.O_gain_up(gain_up),.O_zoom(ui_zoom),.O_tracking(ui_tracking),.O_show(ui_show),.O_session(ui_session),
  .O_conflict(ui_conflict),.O_pair(ui_pair),.O_cal_enter(cal_enter),.O_cal_sample(cal_sample),.O_cal_cancel(cal_cancel),
  .O_rotate(ui_rotate),.O_diag(ui_diag),.O_ui_mode(stage_mode),.O_down2(stage_down),.O_click2(stage_k2),.O_click3(stage_k3),
- .O_click4(stage_k4),.O_cancel(stage_cancel),.O_gain_busy(stage_gain_busy),.O_gain_failed(stage_gain_failed),.O_gain_slot(stage_gain_slot),.O_gain_target(stage_gain_target));
+ .O_click4(stage_k4),.O_cancel(stage_cancel),.O_gain_busy(stage_gain_busy),.O_gain_failed(stage_gain_failed),.O_gain_slot(stage_gain_slot),.O_gain_target(stage_gain_target),.O_k_value(stage_k_value),.O_k_adjust(stage_k_adjust));
 stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_n,stage_alarm,O_buzzer);
 
 PLL u_PLL(
@@ -182,7 +182,7 @@ status_sync u_status_sync (
     .I_status_async(camera_status_async), .O_status(S_hdmi_debug_status)
 );
 stage1_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
-    .I_ui_mode(stage_mode),.I_key_down2(stage_down),.I_key2(stage_k2),.I_key3(stage_k3),.I_key4(stage_k4),.I_key_cancel(stage_cancel),
+    .I_k_value(stage_k_value),.I_k_adjust(stage_k_adjust),.I_ui_mode(stage_mode),.I_key_down2(stage_down),.I_key2(stage_k2),.I_key3(stage_k3),.I_key4(stage_k4),.I_key_cancel(stage_cancel),
     .I_gain_busy(stage_gain_busy),.I_gain_failed(stage_gain_failed),.I_gain_slot(stage_gain_slot),.I_gain_target(stage_gain_target),.O_area_alarm(stage_alarm),
     .I_source_id(source_id),.I_source_us(source_us),.I_capture_us(capture_us),.I_source_time_valid(source_time_valid),
     .I_board_us(board_us),.I_latest_gray(latest_id_gray),.I_model_state(frame_model_state),.I_quality(frame_quality),
