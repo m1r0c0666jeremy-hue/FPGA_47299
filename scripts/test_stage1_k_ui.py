@@ -82,7 +82,7 @@ def teaching_ui():
     source=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,latch=0,row=0;reg [5:0] col=0;reg [1:0] mode=3;
 reg [79:0] status=0;reg [7:0] current=50;reg [3:0] state=2;wire [7:0] glyph;wire enabled;
-stage1_teach_text dut(clk,rst,latch,col,row,mode,status,state,4'd1,3'd1,3'd3,20'd2500,glyph,enabled,current);
+stage1_teach_text dut(clk,rst,latch,col,row,mode,status,state,4'd1,3'd1,3'd3,20'd2500,glyph,enabled,current,176'd0);
 integer i;reg [359:0] chars="CHARS";
 task snapshot;begin latch=1;@(negedge clk);latch=0;repeat(180)@(negedge clk);end endtask
 task capture;begin for(i=0;i<64;i=i+1)begin col=i;@(negedge clk);

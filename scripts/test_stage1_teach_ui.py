@@ -8,7 +8,7 @@ def main():
 reg clk=0;always #5 clk=~clk;reg rst=0,latch=0,row=0;reg [5:0] col=0;reg [1:0] mode=3;
 reg [79:0] status=0;reg [3:0] state=2,occupied=1;reg [2:0] expected=1,actual=3;reg [19:0] dwell=2500;
 wire [7:0] glyph;wire enabled;
-stage1_teach_text dut(clk,rst,latch,col,row,mode,status,state,occupied,expected,actual,dwell,glyph,enabled,8'd50);
+stage1_teach_text dut(clk,rst,latch,col,row,mode,status,state,occupied,expected,actual,dwell,glyph,enabled,8'd50,176'd0);
 integer i;reg [359:0] chars="CHARS";
 task capture;begin latch=1;@(negedge clk);latch=0;repeat(180)@(negedge clk);
 for(i=0;i<64;i=i+1)begin col=i;@(negedge clk);if(glyph>=45)$fatal(1,"glyph range");$write("%c",chars[(44-glyph)*8+:8]);end $write("\n");end endtask

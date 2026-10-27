@@ -1,5 +1,5 @@
 `default_nettype none
-module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
+module stage1_ui_formatter #(parameter SHARED_NUMBERS=0)(input wire clk,rst_n,latch,input wire [5:0] col,
  input wire [1:0] mode,input wire [3:0] run_state,input wire [2:0] area_count,draft_area,expected_area,actual_area,
  input wire [3:0] draft_count,occupied,input wire [10:0] distance,input wire [19:0] dwell_ms,
  input wire [1:0] trend,input wire [3:0] edit_error,start_error,input wire busy,tip_live,muted,gain_busy,gain_failed,
@@ -7,13 +7,13 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  output wire [3:0] snapshot_state,output wire [1:0] snapshot_mode,
  input wire row,input wire [6:0] gain_actual,gain_target,input wire [2:0] zoom,
  input wire [1:0] process_mode,input wire pair,rotate,input wire [4:0] status,input wire [3:0] tip_reason,
- input wire [7:0] I_k_value,input wire I_k_adjust);
+ input wire [7:0] I_k_value,input wire I_k_adjust,input wire [175:0] I_numbers);
  reg [1:0] fmode,fprocess;reg [3:0] fstate,fn,fdraft,foccupied,fedit,fstart,freason;
  reg [2:0] fexpected,factual,fslot,fzoom;reg [4:0] fstatus;
  reg status_pending;reg fbusy,ftip,fmuted,fgain,fgain_failed,fshow,fpair,frotate,fk_adjust;
- reg [6:0] fgain_actual;reg [11:0] gain_bcd,target_bcd,k_bcd;
+ reg [6:0] fgain_actual;reg [11:0] local_gain_bcd,local_target_bcd,local_k_bcd;
  reg [19:0] divider,binary;reg [6:0] remainder;reg [13:0] quotient;
- reg [15:0] bcd,dwell_bcd,adjusted;reg [1:0] conversion;reg [4:0] bit_index;
+ reg [15:0] bcd,local_dwell_bcd,adjusted;reg [1:0] conversion;reg [4:0] bit_index;
  reg [3:0] message_id;reg [9:0] rom_addr;wire [7:0] rom_glyph;reg [2:0] actual_slot;
  stage1_ui_text text_rom(clk,rom_addr,rom_glyph);
  wire [7:0] shifted={remainder,divider[19]};wire qbit=shifted>=100;
@@ -26,26 +26,30 @@ module stage1_ui_formatter(input wire clk,rst_n,latch,input wire [5:0] col,
  for(j=7;j>=0;j=j-1)begin for(k=0;k<3;k=k+1)if(d[k*4+:4]>=5)d[k*4+:4]=d[k*4+:4]+3;d={d[10:0],value[j]};end
  decimal8=d;end endfunction
  integer i;
+wire [11:0] gain_bcd=SHARED_NUMBERS?I_numbers[91:80]:local_gain_bcd;
+wire [11:0] target_bcd=SHARED_NUMBERS?I_numbers[103:92]:local_target_bcd;
+wire [11:0] k_bcd=SHARED_NUMBERS?I_numbers[115:104]:local_k_bcd;
+wire [15:0] dwell_bcd=SHARED_NUMBERS?I_numbers[79:64]:local_dwell_bcd;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;
  case(fgain_actual)16:actual_slot=0;32:actual_slot=1;48:actual_slot=2;64:actual_slot=3;80:actual_slot=4;90:actual_slot=5;105:actual_slot=6;default:actual_slot=7;endcase end
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin fmode<=0;fstate<=0;fn<=0;fdraft<=0;foccupied<=0;fedit<=0;fstart<=0;freason<=0;
  status_pending<=0;fexpected<=0;factual<=0;fslot<=5;fzoom<=0;fprocess<=0;fstatus<=0;fpair<=0;frotate<=1;
  fbusy<=0;ftip<=0;fmuted<=0;fgain<=0;fgain_failed<=0;fshow<=1;fgain_actual<=90;fk_adjust<=0;
- gain_bcd<=12'h090;target_bcd<=12'h090;k_bcd<=12'h050;divider<=0;binary<=0;remainder<=0;quotient<=0;
- bcd<=0;dwell_bcd<=0;conversion<=0;bit_index<=0;end
+ local_gain_bcd<=12'h090;local_target_bcd<=12'h090;local_k_bcd<=12'h050;divider<=0;binary<=0;remainder<=0;quotient<=0;
+ bcd<=0;local_dwell_bcd<=0;conversion<=0;bit_index<=0;end
  else begin
  status_pending<=latch;if(status_pending)fstatus<=status;
  if(conversion==1)begin divider<=divider<<1;remainder<=qbit?shifted-100:shifted;quotient<={quotient[12:0],qbit};
  if(bit_index==19)begin binary<={6'd0,quotient[12:0],qbit};bcd<=0;bit_index<=0;conversion<=2;end else bit_index<=bit_index+1'b1;
  end else if(conversion==2)begin binary<=binary<<1;bcd<={adjusted[14:0],binary[19]};
- if(bit_index==19)begin dwell_bcd<={adjusted[14:0],binary[19]};conversion<=0;end else bit_index<=bit_index+1'b1;end
+ if(bit_index==19)begin local_dwell_bcd<={adjusted[14:0],binary[19]};conversion<=0;end else bit_index<=bit_index+1'b1;end
  if(latch)begin fmode<=mode;fstate<=run_state;fn<={1'b0,area_count};fdraft<=draft_count;foccupied<=occupied;
  fexpected<=expected_area;factual<=actual_area;fedit<=edit_error;fstart<=start_error;freason<=tip_reason;
  fbusy<=busy;ftip<=tip_live;fmuted<=muted;fgain<=gain_busy;fgain_failed<=gain_failed;fslot<=gain_slot;fshow<=show;
  fzoom<=zoom;fprocess<=process_mode;fpair<=pair;frotate<=rotate;
- k_bcd<=decimal8(I_k_value);fk_adjust<=I_k_adjust;
- fgain_actual<=gain_actual;gain_bcd<=decimal7(gain_actual);target_bcd<=decimal7(gain_target);
+ local_k_bcd<=decimal8(I_k_value);fk_adjust<=I_k_adjust;
+ fgain_actual<=gain_actual;local_gain_bcd<=decimal7(gain_actual);local_target_bcd<=decimal7(gain_target);
  divider<=dwell_ms;remainder<=0;quotient<=0;bit_index<=0;conversion<=1;end end end
  always @*begin
  message_id=fbusy?8:fedit!=0?fedit:!ftip?5:0;
@@ -376,12 +380,12 @@ endmodule
 `default_nettype wire
 
 `default_nettype none
-module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input wire row,input wire [1:0] mode,
+module stage1_teach_text #(parameter SHARED_NUMBERS=0)(input wire clk,rst_n,latch,input wire [5:0] col,input wire row,input wire [1:0] mode,
  input wire [79:0] teaching,input wire [3:0] run_state,occupied,input wire [2:0] expected,actual,
- input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable,input wire [7:0] current_k);
+ input wire [19:0] dwell,output reg [7:0] glyph,output wire override_enable,input wire [7:0] current_k,input wire [175:0] I_numbers);
  reg [79:0] f;reg [1:0] fm;reg [3:0] fs,fi;reg [2:0] fe,fa;reg [7:0] fk;
  reg [19:0] dwell_value,number,binary;reg [6:0] rem;reg [13:0] quotient;
- reg [15:0] bcd,adjusted,time_bcd,duration_bcd,count_bcd,dwell_bcd;reg [11:0] route_k_bcd;
+ reg [15:0] bcd,adjusted,local_time_bcd,local_duration_bcd,local_count_bcd,local_dwell_bcd;reg [11:0] local_route_k_bcd;
  reg [2:0] field;reg [1:0] conversion;reg [4:0] index;integer i;
  wire [7:0] shifted={rem,number[19]};wire take=shifted>=100;
  localparam [63:0] INCOMPLETE="INCOMP  ";localparam [255:0] DRAFT_OFF="FINISH DRAFT. SEQ OFF           ",NO_AREAS="NO SAVED AREAS. SEQ OFF         ";
@@ -394,17 +398,22 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  if(c>=48 && c<=57)encode=c-47;else if(c>=65 && c<=90)encode=c-54;
  else case(c)109:encode=37;115:encode=38;46:encode=39;58:encode=40;45:encode=41;47:encode=42;40:encode=43;41:encode=44;default:encode=0;endcase end endfunction
  assign override_enable=fm==3;
+wire [15:0] time_bcd=SHARED_NUMBERS?I_numbers[131:116]:local_time_bcd;
+wire [15:0] duration_bcd=SHARED_NUMBERS?I_numbers[147:132]:local_duration_bcd;
+wire [15:0] count_bcd=SHARED_NUMBERS?I_numbers[163:148]:local_count_bcd;
+wire [15:0] dwell_bcd=SHARED_NUMBERS?I_numbers[79:64]:local_dwell_bcd;
+wire [11:0] route_k_bcd=SHARED_NUMBERS?I_numbers[175:164]:local_route_k_bcd;
  always @*begin adjusted=bcd;for(i=0;i<4;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;end
  always @(posedge clk or negedge rst_n)begin
- if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;fk<=50;route_k_bcd<=12'h050;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
- bcd<=0;time_bcd<=0;duration_bcd<=0;count_bcd<=0;dwell_bcd<=0;field<=0;conversion<=0;index<=0;end
+ if(!rst_n)begin f<=0;fm<=0;fs<=0;fi<=0;fe<=0;fa<=0;fk<=50;local_route_k_bcd<=12'h050;dwell_value<=0;number<=0;binary<=0;rem<=0;quotient<=0;
+ bcd<=0;local_time_bcd<=0;local_duration_bcd<=0;local_count_bcd<=0;local_dwell_bcd<=0;field<=0;conversion<=0;index<=0;end
  else begin
  if(conversion==1)begin number<=number<<1;rem<=take?shifted-100:shifted;quotient<={quotient[12:0],take};
  if(index==19)begin binary<={6'd0,quotient[12:0],take};bcd<=0;index<=0;conversion<=2;end else index<=index+1'b1;end
  else if(conversion==2)begin binary<=binary<<1;bcd<={adjusted[14:0],binary[19]};
  if(index==19)begin
- case(field)0:time_bcd<={adjusted[14:0],binary[19]};1:duration_bcd<={adjusted[14:0],binary[19]};
- 2:count_bcd<={adjusted[14:0],binary[19]};3:dwell_bcd<={adjusted[14:0],binary[19]};endcase
+ case(field)0:local_time_bcd<={adjusted[14:0],binary[19]};1:local_duration_bcd<={adjusted[14:0],binary[19]};
+ 2:local_count_bcd<={adjusted[14:0],binary[19]};3:local_dwell_bcd<={adjusted[14:0],binary[19]};endcase
  index<=0;bcd<=0;rem<=0;quotient<=0;field<=field+1'b1;
  case(field)
  0:begin number<={4'd0,f[50:35]};conversion<=1;end
@@ -413,7 +422,7 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  default:conversion<=0;endcase
  end else index<=index+1'b1;end
  if(latch)begin f<=teaching;fm<=mode;fs<=run_state;fi<=occupied;fe<=expected;fa<=actual;fk<=current_k;
- route_k_bcd<=decimal8(teaching[71:64]);dwell_value<=dwell;
+ local_route_k_bcd<=decimal8(teaching[71:64]);dwell_value<=dwell;
  number<={4'd0,teaching[34:19]};field<=0;index<=0;rem<=0;quotient<=0;conversion<=1;end
  end end
  always @*begin
@@ -494,5 +503,48 @@ module stage1_teach_text(input wire clk,rst_n,latch,input wire [5:0] col,input w
  end
  glyph=encode(ascii);end
  end
+endmodule
+`default_nettype wire
+
+`default_nettype none
+module stage1_footer_numbers(input wire clk,rst_n,latch,
+ input wire [31:0] latency,age,input wire [19:0] dwell,
+ input wire [6:0] gain,target,input wire [7:0] k,input wire [79:0] teaching,
+ output reg [175:0] numbers,output reg ready);
+ reg [23:0] values[0:9];reg [3:0] field;reg [2:0] state;reg [4:0] bit_index;
+ reg [23:0] binary,quotient;reg [6:0] remainder;reg [31:0] bcd,adjusted;
+ wire [7:0] trial={remainder,binary[23]};wire take=trial>=100;
+ integer i,j;
+ always @*begin adjusted=bcd;
+ for(i=0;i<8;i=i+1)if(bcd[i*4+:4]>=5)adjusted[i*4+:4]=bcd[i*4+:4]+3;end
+ always @(posedge clk or negedge rst_n)begin
+ if(!rst_n)begin numbers<=0;ready<=0;field<=0;state<=0;bit_index<=0;
+ binary<=0;quotient<=0;remainder<=0;bcd<=0;for(j=0;j<10;j=j+1)values[j]<=0;end
+ else begin
+ case(state)
+ 1:begin binary<=values[field];quotient<=0;remainder<=0;bcd<=0;bit_index<=0;
+ state<=(field==2 || field==6 || field==7)?2:3;end
+ 2:begin binary<=binary<<1;quotient<={quotient[22:0],take};remainder<=take?trial-100:trial;
+ if(bit_index==23)begin binary<={quotient[22:0],take};bit_index<=0;state<=3;end
+ else bit_index<=bit_index+1'b1;end
+ 3:begin binary<=binary<<1;bcd<={adjusted[30:0],binary[23]};
+ if(bit_index==23)state<=4;else bit_index<=bit_index+1'b1;end
+ 4:begin
+ case(field)
+ 0:numbers[31:0]<=bcd;1:numbers[63:32]<=bcd;2:numbers[79:64]<=bcd[15:0];
+ 3:numbers[91:80]<=bcd[11:0];4:numbers[103:92]<=bcd[11:0];5:numbers[115:104]<=bcd[11:0];
+ 6:numbers[131:116]<=bcd[15:0];7:numbers[147:132]<=bcd[15:0];8:numbers[163:148]<=bcd[15:0];
+ 9:numbers[175:164]<=bcd[11:0];endcase
+ if(field==9)begin ready<=1;state<=0;end else begin field<=field+1'b1;state<=1;end
+ end
+ default:begin end endcase
+ if(latch)begin
+ values[0]<=latency>9999999?24'd9999999:latency[23:0];
+ values[1]<=age>999?24'd999:age[23:0];values[2]<={4'd0,dwell};
+ values[3]<={17'd0,gain};values[4]<={17'd0,target};values[5]<={16'd0,k};
+ values[6]<={8'd0,teaching[34:19]};values[7]<={8'd0,teaching[50:35]};
+ values[8]<={13'd0,teaching[18:8]};values[9]<={16'd0,teaching[71:64]};
+ ready<=0;field<=0;state<=1;
+ end end end
 endmodule
 `default_nettype wire

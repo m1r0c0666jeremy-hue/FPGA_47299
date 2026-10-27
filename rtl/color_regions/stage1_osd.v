@@ -39,19 +39,14 @@ module stage1_osd(
  1:status_id=20;2:status_id=21;3:status_id=22;4:status_id=23;5:status_id=24;
  endcase
  end
- // Only latency and frame age need decimal conversion in the overview.
- function [23:0] field_value;input id;begin
- field_value=id?(fage>999?24'd999:fage):(flatency>9999999?24'd9999999:flatency);
- end endfunction
- reg [31:0] numbers[0:1];reg [7:0] characters[0:127];
- reg [2:0] format_state;reg field_index;reg [4:0] bit_index;
+ wire [175:0] footer_numbers;wire footer_numbers_ready;wire [31:0] numbers[0:1];
+ assign numbers[0]=footer_numbers[31:0];assign numbers[1]=footer_numbers[63:32];
+ reg [7:0] characters[0:127];
+ reg [2:0] format_state;
  // The existing token wait states separate RAM selection and digit mux.
  // They add no footer/pixel latency and do not change character write cycles.
  reg [31:0] number_word_q,hex_word_q;reg [3:0] number_digit_q,hex_digit_q;
- reg [23:0] binary;reg [31:0] decimal,adjusted;reg [5:0] format_col;reg format_row,footer_ready;
- integer nibble;
- always @*begin adjusted=decimal;for(nibble=0;nibble<8;nibble=nibble+1)
- if(decimal[nibble*4+:4]>=5)adjusted[nibble*4+:4]=decimal[nibble*4+:4]+3;end
+ reg [5:0] format_col;reg format_row,footer_ready;
 reg [4:0] template_index;reg token_valid;reg [31:0] hex_value;reg [7:0] decoded_glyph;
 wire [15:0] token_data;wire [7:0] dynamic_glyph;
 reg [9:0] template_start;reg [6:0] template_length;
@@ -128,27 +123,25 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  wire [23:0] region_color,region_label_color;wire region_label_on,region_ready,region_underrun;
  wire [7:0] region_label_glyph,stage_glyph,teaching_glyph;wire teaching_override;wire [2:0] region_label_gx;wire [3:0] region_label_gy;
  wire stage_override,stage_force_footer;
- stage1_render #(.SPLIT_DRAFT(1)) region_render(I_clk,I_rst_n,I_geometry_commit,I_region_vertices,I_region_counts,I_region_closed,I_ui_mode,
+ stage1_render #(.SPLIT_DRAFT(1),.LINE_CACHE(1)) region_render(I_clk,I_rst_n,I_geometry_commit,I_region_vertices,I_region_counts,I_region_closed,I_ui_mode,
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
- stage1_teach_text teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
- I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override,I_k_value);
- stage1_ui_formatter region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
+ stage1_footer_numbers numeric_engine(I_clk,I_rst_n,I_de && y==625 && x==0,
+ I_latency_us,I_frame_age,I_area_dwell,I_camera[6:0],I_gain_target,I_k_value,I_teaching,footer_numbers,footer_numbers_ready);
+ stage1_teach_text #(.SHARED_NUMBERS(1)) teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
+ I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override,I_k_value,footer_numbers);
+ stage1_ui_formatter #(.SHARED_NUMBERS(1)) region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
  I_draft_count,I_occupied,I_area_distance,I_area_dwell,I_area_trend,I_edit_error,I_start_error,(I_area_busy || region_underrun || (!region_ready && I_region_counts!=0)),I_tip_live,I_area_muted,I_gain_busy,I_gain_failed,
- I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason,I_k_value,I_k_adjust);
+ I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason,I_k_value,I_k_adjust,footer_numbers);
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
  flat_valid<=0;flatency<=0;fage<=0;
  fm<=0;fimage<=0;fmode<=0;fzoom<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
- format_state<=0;field_index<=0;bit_index<=0;binary<=0;decimal<=0;format_col<=0;format_row<=0;footer_ready<=0;number_word_q<=0;hex_word_q<=0;number_digit_q<=0;hex_digit_q<=0;
+ format_state<=0;format_col<=0;format_row<=0;footer_ready<=0;number_word_q<=0;hex_word_q<=0;number_digit_q<=0;hex_digit_q<=0;
  end else begin
  case(format_state)
- 1:begin binary<=field_value(field_index);decimal<=0;bit_index<=0;format_state<=2;end
- 2:begin binary<=binary<<1;decimal<={adjusted[30:0],binary[23]};
- if(bit_index==23)begin numbers[field_index]<={adjusted[30:0],binary[23]};
- if(field_index)begin format_col<=0;format_row<=0;format_state<=3;end
- else begin field_index<=field_index+1'b1;format_state<=1;end end
- else bit_index<=bit_index+1'b1;end
+ 1:if(footer_numbers_ready)begin
+ format_col<=0;format_row<=0;format_state<=3;end
  3:format_state<=4;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
@@ -162,7 +155,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
- field_index<=0;footer_ready<=0;format_state<=1;
+ footer_ready<=0;format_state<=1;
  end end end
  wire geometry_ready;wire [251:0] geometry;
  wire [639:0] point_geometry=I_point[22]?{I_meta[639:100],I_point[20:0],I_meta[78:0]}:I_meta[639:0];

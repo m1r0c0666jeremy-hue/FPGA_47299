@@ -6,7 +6,7 @@ reg [671:0] vertices=0;wire [3:0] mask;wire [23:0] color,label_color;wire label_
 wire [7:0] glyph;wire [2:0] gx;wire [3:0] gy;
 reg [2:0] split_region=0;reg split_visible=1;wire [671:0] split_saved={vertices[671:168],168'd0};
 // B vertex inspected below is valid; unused snapshot payload is unspecified.
-stage1_render #(.SPLIT_DRAFT(1)) dut(clk,rst,commit,split_saved,16'h0022,4'h1,2'd2,11'd0,10'd0,3'd0,1'b0,4'd2,4'd0,3'd0,3'd0,
+stage1_render #(.SPLIT_DRAFT(1),.LINE_CACHE(1)) dut(clk,rst,commit,split_saved,16'h0022,4'h1,2'd2,11'd0,10'd0,3'd0,1'b0,4'd2,4'd0,3'd0,3'd0,
 x,y,de,mask,color,label_on,glyph,gx,gy,label_color,ready,underrun,vertices[167:0],split_region,split_visible);
 integer k;
 initial begin vertices[189:168]={10'd77,11'd88};vertices[20:0]={10'd10,11'd10};vertices[41:21]={10'd200,11'd200};vertices[210:189]={10'd120,11'd140};

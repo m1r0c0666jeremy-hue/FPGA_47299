@@ -32,7 +32,7 @@ reg [2:0] n=0,expected=0,actual=0,slot=5;reg [10:0] distance=0;reg [19:0] dwell=
 reg busy=0,tip=0,muted=0,gb=0,gf=0,show=1;wire [7:0] glyph;wire override_line,force_footer;wire [3:0] ss;wire [1:0] sm;
 reg row=0;reg [6:0] gain=90,tgt=105;reg [2:0] zm=1;reg [1:0] proc=0;reg [3:0] reason=0;
 stage1_ui_formatter dut(clk,rst,latch,col,mode,state,n,3'd0,expected,actual,nd,occupied,distance,dwell,trend,error,start_error,
-busy,tip,muted,gb,gf,slot,show,glyph,override_line,force_footer,ss,sm,row,gain,tgt,zm,proc,1'b0,1'b1,5'd3,reason,8'd50,1'b0);
+busy,tip,muted,gb,gf,slot,show,glyph,override_line,force_footer,ss,sm,row,gain,tgt,zm,proc,1'b0,1'b1,5'd3,reason,8'd50,1'b0,176'd0);
 integer fd,c;reg [359:0] chars="CHARS";
 initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
 '''.replace('CHARS',CHARS)

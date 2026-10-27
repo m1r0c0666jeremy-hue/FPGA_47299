@@ -40,6 +40,10 @@ def old_modules():
 
 def specs():
     d={
+      'stage1_footer_numbers':('STAGE1_FOOTER_NUMBERS_PASS cases=512',('stage1_ui_formatter',)),
+      'stage1_footer_equivalence':('STAGE1_FOOTER_EQUIVALENCE_PASS cases=256 glyphs=32768',('stage1_osd','stage1_ui_formatter','stage1_render')),
+      'stage1_render_equivalence':('STAGE1_RENDER_EQUIVALENCE_PASS cases=14 pixels=11182080',('stage1_render',)),
+      'stage1_render_labels':('STAGE1_RENDER_LABELS_PASS cases=20 pixels=15974400',('stage1_render',)),
       'stage1_camera_osd':('STAGE1_CAMERA_OSD_PASS cases=22',('stage1_osd','stage1_ui_formatter','stage1_ui_text')),
       'stage1_k_tracker':('STAGE1_K_TRACKER_PASS cases=18524',('stage1_memory_video_out',)),
       'stage1_k_capture':('STAGE1_K_CAPTURE_PASS frames10 pixels9216000',('stage1_memory_video_out','stable_model_lane','stable_filter4','stable_grid')),
