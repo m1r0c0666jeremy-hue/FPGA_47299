@@ -17,10 +17,10 @@ module native_read_adapter(
  reg [10:0] base_x;reg [11:0] base_y;reg [9:0] logical_y;
  reg [2:0] fetch_index,process_index;reg [1:0] filled;reg [2:0] slot_index[0:1];
  reg [3:0] slot_offset[0:1];
- reg [8:0] accepted,returned,sent,received,words;
+ reg [7:0] accepted,returned,sent,received,words;
  reg [24:0] first_addr,line_address;
  reg [3:0] byte_offset;reg [6:0] group_index;reg [1:0] quad;
- reg [383:0] pixels;reg [511:0] assembly;
+ reg [383:0] pixels,assembly;
  reg [3:0] flush_age;reg [17:0] elapsed;
  (* ram_style="block" *) reg [127:0] scratch[0:511];
  reg [127:0] scratch_q;reg [7:0] scratch_addr;
@@ -29,7 +29,7 @@ module native_read_adapter(
  assign virtual_ready=state!=BROKEN && (state==IDLE || accepted<240);
  assign read_busy=fetch_state==F_SEND && !write_busy && !fault;
  assign read_en=fetch_state==F_SEND && !write_busy && !write_en && ddr_ready && !fault;
- assign read_addr=line_address+{13'd0,sent,3'd0};
+ assign read_addr=line_address+{14'd0,sent,3'd0};
  function [24:0] base_for;input [1:0] b;begin
  case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase end endfunction
  wire [11:0] candidate_y=dense?base_y:{1'b0,logical_y,1'b0}+fetch_index[0];
@@ -39,7 +39,7 @@ module native_read_adapter(
  wire [24:0] x_address=dense?({14'd0,base_x}<<1)+{14'd0,base_x}:
                                       fetch_index[1]?25'd1920:25'd0;
  wire [24:0] raw_address=base_for(bank)+y_address+x_address;
- wire [8:0] group_word=({2'd0,group_index}<<1)+{2'd0,group_index};
+ wire [7:0] group_word=({1'd0,group_index}<<1)+{1'd0,group_index};
  always @*begin
  case(state)
  LOAD1:scratch_addr=group_word+1'b1;
@@ -60,7 +60,7 @@ module native_read_adapter(
  wire dense_valid=state==EMIT;
  wire [95:0] dense_rgb=pixels[383:288];
  // Share one byte aligner at both first-load and rolling-word boundaries.
- wire [383:0] aligned_pixels=({assembly[511:128],scratch_q} << (byte_offset*8)) >> 128;
+ wire [383:0] aligned_pixels=({assembly,scratch_q} << (byte_offset*8)) >> 128;
  wire reduced_sof,reduced_valid;wire [95:0] reduced_rgb;wire [32:0] unused_tag;
  native_downsample2 #(.WIDTH(1280),.HEIGHT(2)) average(
   clk,rst_n,1'b0,state==LOAD0 && !process_index[0] && !dense,dense_valid && !dense,
@@ -90,7 +90,7 @@ module native_read_adapter(
   case(fetch_state)
   F_IDLE:if(active && fetch_index<(dense?1:4) && !filled[fetch_index[0]])begin
    line_address<={raw_address[24:3],3'd0};slot_offset[fetch_index[0]]<={raw_address[2:0],1'b0};
-   words<=raw_address[2:0]!=0?9'd241:9'd240;sent<=0;received<=0;fetch_state<=F_WAIT;
+   words<=raw_address[2:0]!=0?8'd241:8'd240;sent<=0;received<=0;fetch_state<=F_WAIT;
   end
   F_WAIT:if(!write_busy && !write_en)fetch_state<=F_SEND;
   F_SEND:if(read_en)begin sent<=sent+1'b1;if(sent==words-1)fetch_state<=F_RECEIVE;end
@@ -106,24 +106,23 @@ module native_read_adapter(
    byte_offset<=slot_offset[process_index[0]];group_index<=0;state<=LOAD0;
   end
   LOAD0:state<=LOAD1;
-  LOAD1:begin assembly[511:384]<=scratch_q;state<=LOAD2;end
-  LOAD2:begin assembly[383:256]<=scratch_q;state<=LOAD3;end
-  LOAD3:begin assembly[255:128]<=scratch_q;state<=LOAD4;end
-  LOAD4:begin assembly[127:0]<=scratch_q;state<=EMIT;quad<=0;
+  LOAD1:begin assembly[383:256]<=scratch_q;state<=LOAD2;end
+  LOAD2:begin assembly[255:128]<=scratch_q;state<=LOAD3;end
+  LOAD3:begin assembly[127:0]<=scratch_q;state<=LOAD4;end
+  LOAD4:begin state<=EMIT;quad<=0;
    pixels<=aligned_pixels;
   end
   EMIT:begin
    case(quad)
-   0:assembly[511:384]<=assembly[127:0];
-   1:assembly[383:256]<=scratch_q;
-   2:assembly[255:128]<=scratch_q;
+   0:assembly[383:256]<=scratch_q;
+   1:assembly[255:128]<=scratch_q;
+   2:assembly[127:0]<=scratch_q;
    default:begin end
    endcase
    if(quad==3)begin
     if(group_index==79)begin filled[process_index[0]]<=0;state<=FLUSH;flush_age<=0;end
     else begin
      group_index<=group_index+1'b1;quad<=0;
-     assembly[127:0]<=scratch_q;
      pixels<=aligned_pixels;
     end
    end else begin quad<=quad+1'b1;pixels<={pixels[287:0],96'd0};end
@@ -147,7 +146,7 @@ module native_read_adapter(
    end
    if(received>=sent && !(fetch_state==F_SEND && read_en))begin fault<=1;state<=BROKEN;end
   end
-  if(issue && state!=IDLE && virtual_addr!=first_addr+({16'd0,accepted}<<3))begin fault<=1;state<=BROKEN;end
+  if(issue && state!=IDLE && virtual_addr!=first_addr+({17'd0,accepted}<<3))begin fault<=1;state<=BROKEN;end
   if(unexpected_return)begin fault<=1;state<=BROKEN;end
  end end
 endmodule

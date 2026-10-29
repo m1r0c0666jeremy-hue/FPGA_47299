@@ -65,7 +65,7 @@ if a.gate_parent:
  prior=json.loads((parent/'summary.json').read_text(encoding='utf-8'))
  context=json.loads((parent/'source_context.json').read_text(encoding='utf-8'))
  checkpoint=parent/'target_color_regions_gate.db'
- assert prior['stage']=='place' and prior['exit_code'] in (0,3221225477) and prior['inputs_unchanged']
+ assert prior['stage']=='place' and prior['exit_code'] in (0,1,3221225477) and prior['inputs_unchanged']
  for key in ('map_mode','pack_effort','infer_fsm','min_ripple_len','map_strategy'):
   assert getattr(a,key)==prior[key],f'Gate reuse cannot change synthesis option {key}'
  assert prior['checkpoints'][checkpoint.name]==sha(checkpoint)
@@ -75,7 +75,8 @@ if a.gate_parent:
  parent_tcl=(parent/'run.tcl').read_text(encoding='utf-8')
  assert parent_tcl.index('legalize_phy_inst')<parent_tcl.index('export_db target_color_regions_gate.db')
  parent_log=(parent/'td.log').read_text(encoding='utf-8')
- assert 'REFINED_PLACED_CHECKPOINT_READY' in parent_log or (prior['exit_code']==3221225477 and 'Oops! coredump' in parent_log and 'finish command "export_db target_color_regions_gate.db"' in parent_log)
+ assert 'finish command "export_db target_color_regions_gate.db"' in parent_log
+ assert 'REFINED_PLACED_CHECKPOINT_READY' in parent_log or (prior['exit_code']==3221225477 and 'Oops! coredump' in parent_log) or (prior['exit_code']==1 and "PHY-9053 ERROR: Design's slice number" in parent_log)
  from refined_build_report import assess
  assert assess(parent,'synth')['resource_pass'],'Gate RAM/DSP/register limit exceeded' 
  gate_proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'),placement_created_commit=created_head)
@@ -158,6 +159,7 @@ if gate_proof:
  t=t.replace('    legalize_phy_inst\n','',1)
  t=t.replace('    place\n','    puts "STAGE1_VERIFIED_GATE_REUSE"\n    place\n',1)
 t=t.replace('    place\n','    report_param -detail -stage place -file effective_place.txt\n    report_param -detail -stage route -file effective_route.txt\n    place\n',1)
+t=t.replace('puts stderr "BUILD_FAILED: $message"', 'catch {report_area -io_info -file failed_partial.area}\n catch {report_timing_summary -file failed_partial.timing}\n puts stderr "BUILD_FAILED: $message"')
 script=out/'run.tcl';script.write_text(t,encoding='utf-8')
 td=Path('D:/26_software/TangDynasty/bin/td_commands_prompt.exe')
 env=os.environ.copy();env['PATH']=str(td.parent)+os.pathsep+env.get('PATH','')
