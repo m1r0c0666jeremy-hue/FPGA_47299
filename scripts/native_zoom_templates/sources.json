@@ -1,0 +1,58 @@
+{
+  "camera.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\stable_camera_capture.v",
+    "sha256": "3b24363d3c21f12206ce19a2341323b4c93b64553e37d602a5b69c310be9f2c1"
+  },
+  "raw_bridge.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\fhd_raw_bridge.v",
+    "sha256": "016fe46661b62db51c1cb9ca8137e4bc67354e077bdef7482fcf99bdb64b310b"
+  },
+  "line_ram.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\fhd_isp_line_ram.v",
+    "sha256": "d07e4cbc3348bf2b8c2a1b7768b1a54fde7937568fc8e775b55a9d455b31d546"
+  },
+  "line_buffer.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\fhd_line_buffer_demosaic.v",
+    "sha256": "ead6e7176e3ce8e5d9e07ab51973c7861a19e19213be45e8d7bb1ab566c31bd6"
+  },
+  "matrix.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\refined_raw_matrix_3x3_buffer.v",
+    "sha256": "1b366c861b45a30b18f36f1903c5e045e9673be130332bfa3044b02bbd4528e7"
+  },
+  "zhenghe.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\refined_zhenghe.v",
+    "sha256": "9fe1a464e5e516b1bdd60d6c6dd6782857eb420c3e6c3961bfcbcfe7bf7d83b3"
+  },
+  "clocks.v": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\rtl\\color_regions\\fhd_system_pll.v",
+    "sha256": "8ca5a114010199480792c869fe0e1d9908027c98d99065daaaadb33cd312245e"
+  },
+  "demosaic.v": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\rtl\\color_regions\\refined_demosaic.v",
+    "sha256": "e9556fb7eb8c3555ce7932cfef9b712b235926d04ff5144ba4b65cef4cbe4a51"
+  },
+  "camera_config.v": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\rtl\\color_regions\\refined_camera_config.v",
+    "sha256": "2e735fe648532ca43d9dfbf34dec7ddcc4288c9adc9534ac8641dec5910161d2"
+  },
+  "controls.v": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\rtl\\color_regions\\stage1_controls.v",
+    "sha256": "14432dcdd76b0f34fed587eadcb3a283ebed6e70f22f4fe0ff9544ca179b8b56"
+  },
+  "frame_store.v": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\rtl\\color_regions\\refined_frame_store.v",
+    "sha256": "cabb925ecad48ee885bc77c15f87c41256bdab5d491b0e7b61d4986ac276e2d1"
+  },
+  "project.al": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\td_project\\target_color_regions_stage1.al",
+    "sha256": "6b9d309fdd45fedead3a1419d7ed0862d385f34d286f6bf74df517f3cbe55ad0"
+  },
+  "line_core.v": {
+    "source": "D:\\aaa_FPGA\\region-sequence-stage1\\rtl\\color_regions\\refined_line_reader.v",
+    "sha256": "6359e2a2bc68e4c5f1c274569522f2fc154b1659e7295769664d24a137f1b9fd"
+  },
+  "camera_integration_tb.sv": {
+    "source": "D:\\aaa_FPGA\\FPGA_47299-native-1080p\\scripts\\test_fhd_camera_integration.py",
+    "sha256": "461165015aefd4eb0db5fc56a5fbb937c51b3821a9b7e6e0498095c62080f2e6"
+  }
+}

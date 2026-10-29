@@ -1,0 +1,57 @@
+"""Strict current-input native evidence; historical five-zoom runs remain historical."""
+from pathlib import Path
+import argparse,json,datetime,hashlib
+from refined_testlib import R
+from native_zoom_policy import canonical_build_inputs,compiler_paths,sha
+from audit_stage1 import specs,evidence
+
+NATIVE={
+ 'controls':'STAGE1_K_CONTROLS_PASS', 'zoom_controls':'NATIVE_ZOOM_CONTROLS_PASS',
+ 'k_keys75m':'STAGE1_K_KEYS_75M_PASS', 'bridge':'NATIVE_BRIDGE_PASS',
+ 'average':'NATIVE_DOWNSAMPLE_PASS','average_full':'NATIVE_DOWNSAMPLE_PASS source=2560x1440',
+ 'source_gate':'NATIVE_SOURCE_GATE_PASS','frame_store':'NATIVE_FRAME_STORE_PASS',
+ 'isp_full':'NATIVE_ISP_PASS','camera_full':'NATIVE_CAMERA_PASS fault0','camera_tail_fault':'NATIVE_CAMERA_PASS fault1',
+ 'read_adapter':'NATIVE_READ_ADAPTER_PASS','arbitration_low':'NATIVE_ARBITRATION_PASS','arbitration_dense':'NATIVE_ARBITRATION_PASS'}
+NATIVE.update({f'crop_phase{i}':'NATIVE_CROP_PASS' for i in range(4)})
+NATIVE.update({f'video_{z}_{r}':f'NATIVE_VIDEO_PASS zoom{z} rotate{r}' for z in range(3) for r in range(2)})
+from test_stage1_camera_readback import cases
+NATIVE.update({'camera_readback_'+n:'STAGE1_CAMERA_READBACK_PASS' for n,_,_ in cases})
+
+def native_evidence(name,marker):
+ for p in sorted((R/'build/sim/refined').glob('native_zoom_'+name+'_*/native_receipt.json'),reverse=True):
+  try:
+   d=json.loads(p.read_text(encoding='utf-8'));out=p.parent
+   if d['test']!=name:continue
+   modules={str((R/'rtl/color_regions'/n).resolve().relative_to(R)):h for n,h in d['rtl'].items()}
+   if not all(sha(R/n)==h for n,h in modules.items()):continue
+   if sha(out/'tb.sv')!=d['fixture_sha256']:continue
+   if sha(R/'scripts/test_native_zoom_core.py')!=d['producer_sha256']:continue
+   if not d['producer_inputs'] or not all(sha(R/n)==h for n,h in d['producer_inputs'].items()):continue
+   record=R/'reports/refined/regression'/(out.name+'.json');log=record.with_suffix('.log')
+   r=json.loads(record.read_text(encoding='utf-8'))
+   if r['exit_code'] or r['expected_failure'] or marker not in log.read_text(encoding='utf-8'):continue
+   if {(R/k).resolve().relative_to(R).as_posix():v for k,v in r['inputs'].items()}!={k.replace('\\','/'):v for k,v in modules.items()}:continue
+   return {'receipt':p.relative_to(R).as_posix(),'receipt_sha256':sha(p),'record':record.relative_to(R).as_posix(),
+    'record_sha256':sha(record),'log_sha256':sha(log),'inputs':modules,'fixture_sha256':d['fixture_sha256'],'producer_inputs':d['producer_inputs']}
+  except (OSError,ValueError,KeyError):continue
+ return None
+
+def audit():
+ inputs={p.relative_to(R).as_posix():sha(p) for p in compiler_paths()}
+ canonical_build_inputs(inputs)
+ # Reuse only checks of unchanged logic. The old integration records remain
+ # separately identified; none qualify a new camera/reader profile.
+ legacy={n:evidence(n,*s) for n,s in specs().items()}
+ new={n:native_evidence(n,m) for n,m in NATIVE.items()}
+ return {'status':'PASS' if all(legacy.values()) and all(new.values()) else 'INCOMPLETE',
+  'scope':'155 original-module regressions plus independent native-profile qualification; historical 3x/4x are not native cases',
+  'compiler_inputs':inputs,'native_required':len(new),'native_passed':sum(bool(x) for x in new.values()),
+  'legacy_required':len(legacy),'legacy_passed':sum(bool(x) for x in legacy.values()),
+  'native':new,'legacy_unchanged':legacy,'missing_native':[n for n,e in new.items() if not e],
+  'missing_legacy':[n for n,e in legacy.items() if not e]}
+
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--output',required=True);ap.add_argument('--require-pass',action='store_true');a=ap.parse_args()
+ result=audit();(R/a.output).write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding='utf-8')
+ print({k:v for k,v in result.items() if k not in ('compiler_inputs','native','legacy_unchanged')})
+ if a.require_pass and result['status']!='PASS':raise SystemExit(2)

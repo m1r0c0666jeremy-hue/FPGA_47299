@@ -1,0 +1,16 @@
+{
+  "sensor_width": 2592,
+  "sensor_height": 1944,
+  "crop_x": 16,
+  "crop_y": 252,
+  "crop_width": 2560,
+  "crop_height": 1440,
+  "logical_width": 1280,
+  "logical_height": 720,
+  "display_width": 1280,
+  "display_height": 720,
+  "video_height": 624,
+  "capture_fps_nominal": 30,
+  "zoom_values": [1, 1.5, 2],
+  "hardware_registration_status": "PENDING_JEREMY_GRAPH_CARD_CHECK"
+}
