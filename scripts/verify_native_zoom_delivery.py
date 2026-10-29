@@ -18,9 +18,9 @@ def verify(folder):
   soft=read('qualification/software.json');physical=read('qualification/physical.json');inputs=read('qualification/inputs.json')
   assert H(z.read('qualification/software.json'))==delivery['software_sha256']
   assert H(z.read('qualification/physical.json'))==delivery['physical_sha256']
-  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==57
+  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==58
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
-  assert len(soft['native'])==57 and len(soft['legacy_unchanged'])==155
+  assert len(soft['native'])==58 and 'transitions' in soft['native'] and len(soft['legacy_unchanged'])==155
   assert inputs==soft['compiler_inputs']
   assert inputs==read('qualification/place/inputs.json')==read('qualification/route/inputs.json')==read('qualification/route/inputs_after.json')
   assert len(inputs)==physical['compiler_input_count']==327
@@ -42,11 +42,13 @@ def verify(folder):
   assert H(z.read('scripts/native_zoom_policy.py'))==guard_record['policy_sha256']
   assert H(z.read('scripts/native_zoom_codegen.py'))==guard_record['codegen_sha256']
   for n,h in inputs.items():assert H(z.read(n))==h,n
-  for e in soft['native'].values():
+  for name,e in soft['native'].items():
    assert H(z.read(e['receipt']))==e['receipt_sha256'];r=read(e['receipt'])
+   assert r['test']==name
    assert H(z.read(e['record']))==e['record_sha256'];record=read(e['record'])
    assert record['exit_code']==0 and not record['expected_failure']
    log=str(PurePosixPath(e['record']).with_suffix('.log'));assert H(z.read(log))==e['log_sha256']
+   if name=='transitions':assert b'NATIVE_TRANSITIONS_PASS six_frames pixels4792320' in z.read(log)
    fixture=str(PurePosixPath(e['receipt']).parent/'tb.sv');assert H(z.read(fixture))==e['fixture_sha256']==r['fixture_sha256']
    for n,h in e['inputs'].items():assert H(z.read(n.replace('\\','/')))==h,n
    for n,h in e['producer_inputs'].items():assert H(z.read(n))==h,n

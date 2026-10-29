@@ -11,6 +11,7 @@ NATIVE={
  'average':'NATIVE_DOWNSAMPLE_PASS','average_full':'NATIVE_DOWNSAMPLE_PASS source=2560x1440',
  'source_gate':'NATIVE_SOURCE_GATE_PASS','frame_store':'NATIVE_FRAME_STORE_PASS',
  'isp_full':'NATIVE_ISP_PASS','camera_full':'NATIVE_CAMERA_PASS fault0','camera_tail_fault':'NATIVE_CAMERA_PASS fault1',
+ 'transitions':'NATIVE_TRANSITIONS_PASS six_frames pixels4792320',
  'read_adapter':'NATIVE_READ_ADAPTER_PASS','arbitration_low':'NATIVE_ARBITRATION_PASS','arbitration_dense':'NATIVE_ARBITRATION_PASS',
  'ingress':'NATIVE_INGRESS_PASS','sensor_rom':'NATIVE_SENSOR_ROM_PASS','selector_equivalence':'NATIVE_SELECTOR_EQUIVALENCE_PASS'}
 NATIVE.update({f'crop_phase{i}':'NATIVE_CROP_PASS' for i in range(4)})
