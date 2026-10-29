@@ -10,7 +10,7 @@ def verify(folder):
  for n,h in delivery['artifacts'].items():assert H((folder/n).read_bytes())==h,n
  with zipfile.ZipFile(folder/'native_zoom_same_source.zip') as z:
   names=z.namelist();assert len(names)==len(set(names))
-  assert all(not PurePosixPath(n).is_absolute() and '..' not in PurePosixPath(n).parts for n in names)
+  assert all(not PurePosixPath(n).is_absolute() and '..' not in PurePosixPath(n).parts and '\\' not in n and ':' not in n for n in names)
   manifest=json.loads(z.read('SOURCE_MANIFEST.json'))
   assert set(names)==set(manifest)|{'SOURCE_MANIFEST.json'}
   for n,h in manifest.items():assert H(z.read(n))==h,n
@@ -20,6 +20,7 @@ def verify(folder):
   assert H(z.read('qualification/physical.json'))==delivery['physical_sha256']
   assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==56
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
+  assert len(soft['native'])==56 and len(soft['legacy_unchanged'])==155
   assert inputs==soft['compiler_inputs']
   assert inputs==read('qualification/place/inputs.json')==read('qualification/route/inputs.json')==read('qualification/route/inputs_after.json')
   assert len(inputs)==physical['compiler_input_count']==327
@@ -28,7 +29,10 @@ def verify(folder):
    summary=read('qualification/'+stage+'/summary.json')
    assert summary['exit_code']==0 and summary['inputs_unchanged'] and summary['working_tree_matches']
   guard=soft['negative_guards'];assert guard['cases']==11 and H(z.read(guard['record']))==guard['sha256']
-  assert read(guard['record'])['inputs']==inputs
+  guard_record=read(guard['record']);assert guard_record['inputs']==inputs
+  assert guard_record['status']=='NATIVE_GUARDS_PASS' and guard_record['case_count']==11 and len(set(guard_record['rejected']))==11
+  assert H(z.read('scripts/test_native_zoom_guards.py'))==guard_record['producer_sha256']
+  assert H(z.read('scripts/native_zoom_policy.py'))==guard_record['policy_sha256']
   for n,h in inputs.items():assert H(z.read(n))==h,n
   for e in soft['native'].values():
    assert H(z.read(e['receipt']))==e['receipt_sha256'];r=read(e['receipt'])
@@ -51,6 +55,8 @@ def verify(folder):
   assert physical['resource_pass'] and physical['timing_pass'] and min(physical['slack_ns'].values())>=0
   limits={'slice':21216,'lut6':21216,'reg':42432,'eram':108,'dsp':40}
   assert all(physical['resources'][k]<=v for k,v in limits.items())
+  area=z.read('qualification/route/target_color_regions_phy.area').decode('utf-8')
+  assert all(int(re.search(r'^\s*#'+k+r'\s+(\d+)',area,re.M)[1])==v for k,v in physical['resources'].items())
   routing=physical['routing'];assert routing['routing_drc_pass'] and routing['final_over_count']==routing['final_over']==routing['final_worst']==0
   assert H(z.read('qualification/route/td.log'))==routing['log_sha256']
   log=z.read('qualification/route/td.log').decode('utf-8');start=log.rfind('RUN-1002 : start command "route"');assert start>=0
