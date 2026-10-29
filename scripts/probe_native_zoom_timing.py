@@ -25,7 +25,8 @@ exit
  (out/'run.tcl').write_text(t,encoding='utf-8')
  td=Path('D:/26_software/TangDynasty/bin/td_commands_prompt.exe');env=os.environ.copy();env['PATH']=str(td.parent)+os.pathsep+env.get('PATH','')
  print('NATIVE_TIMING_PROBE',out,flush=True)
- with (out/'td.log').open('w',encoding='utf-8') as log:code=subprocess.run([str(td),str(out/'run.tcl')],cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT).returncode
+ with (out/'td.log').open('w',encoding='utf-8') as log:code=subprocess.run([str(td),(out/'run.tcl').as_posix()],cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT).returncode
+ if code==0 and (not (out/'placed_diagnostic.ts').is_file() or 'NATIVE_TIMING_PROBE_COMPLETE' not in (out/'td.log').read_text(encoding='utf-8')):code=2
  assert sha(checkpoint)==summary['checkpoints'][checkpoint.name] and all(sha(R/n)==h for n,h in inputs.items())
  (out/'receipt.json').write_text(json.dumps({'exit_code':code,'parent':a.parent,'checkpoint_sha256':sha(checkpoint),'scope':'Manhattan estimate for diagnosis only; does not replace final routed timing'},indent=2),encoding='utf-8')
  print('NATIVE_TIMING_PROBE_RESULT',code,(out/'placed_diagnostic.ts').read_text(encoding='utf-8') if code==0 else (out/'td.log').read_text(encoding='utf-8'))

@@ -15,6 +15,7 @@ NATIVE={
  'ingress':'NATIVE_INGRESS_PASS','sensor_rom':'NATIVE_SENSOR_ROM_PASS'}
 NATIVE.update({f'crop_phase{i}':'NATIVE_CROP_PASS' for i in range(4)})
 NATIVE.update({f'video_{z}_{r}':f'NATIVE_VIDEO_PASS zoom{z} rotate{r}' for z in range(3) for r in range(2)})
+NATIVE.update({f'colors_{z}_{p}_{r}':f'NATIVE_COLOR_MODES_PASS zoom{z} rotate{r}' for z in range(3) for p in range(2) for r in range(2)})
 from test_stage1_camera_readback import cases
 NATIVE.update({'camera_readback_'+n:'STAGE1_CAMERA_READBACK_PASS' for n,_,_ in cases})
 

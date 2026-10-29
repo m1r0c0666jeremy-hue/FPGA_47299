@@ -18,7 +18,7 @@ def verify(folder):
   soft=read('qualification/software.json');physical=read('qualification/physical.json');inputs=read('qualification/inputs.json')
   assert H(z.read('qualification/software.json'))==delivery['software_sha256']
   assert H(z.read('qualification/physical.json'))==delivery['physical_sha256']
-  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==44
+  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==56
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
   assert inputs==soft['compiler_inputs']
   assert inputs==read('qualification/place/inputs.json')==read('qualification/route/inputs.json')==read('qualification/route/inputs_after.json')
