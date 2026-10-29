@@ -12,7 +12,7 @@ NATIVE={
  'source_gate':'NATIVE_SOURCE_GATE_PASS','frame_store':'NATIVE_FRAME_STORE_PASS',
  'isp_full':'NATIVE_ISP_PASS','camera_full':'NATIVE_CAMERA_PASS fault0','camera_tail_fault':'NATIVE_CAMERA_PASS fault1',
  'read_adapter':'NATIVE_READ_ADAPTER_PASS','arbitration_low':'NATIVE_ARBITRATION_PASS','arbitration_dense':'NATIVE_ARBITRATION_PASS',
- 'ingress':'NATIVE_INGRESS_PASS'}
+ 'ingress':'NATIVE_INGRESS_PASS','sensor_rom':'NATIVE_SENSOR_ROM_PASS'}
 NATIVE.update({f'crop_phase{i}':'NATIVE_CROP_PASS' for i in range(4)})
 NATIVE.update({f'video_{z}_{r}':f'NATIVE_VIDEO_PASS zoom{z} rotate{r}' for z in range(3) for r in range(2)})
 from test_stage1_camera_readback import cases

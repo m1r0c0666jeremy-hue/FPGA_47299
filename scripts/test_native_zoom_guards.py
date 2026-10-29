@@ -26,4 +26,4 @@ if __name__=='__main__':
  assert original=={p.relative_to(R).as_posix():sha(p) for p in compiler_paths()}
  record={'status':'NATIVE_GUARDS_PASS','rejected':rejected,'case_count':len(rejected),'no_live_input_mutation':True,
  'inputs':original,'producer_sha256':sha(__file__),'policy_sha256':sha(R/'scripts/native_zoom_policy.py')}
- (out/'receipt.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf-8');print(record)
+ (out/'receipt.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf-8');print({k:v for k,v in record.items() if k!='inputs'})
