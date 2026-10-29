@@ -45,10 +45,9 @@ module native_line_core #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TIME
  wire [7:0] source_addr=({1'b0,fetch_block}<<1)+fetch_block+fetch_word;
  wire source_we=(state==SEND || state==RECEIVE) && I_ddr_valid;
  wire [7:0] source_port=source_we?received:source_addr;
- wire [47:0] ordered_pair=linegroup >> ((job_rotate?pair_index[2:0]:7-pair_index[2:0])*48);
- wire [47:0] pair_rgb=job_rotate?{ordered_pair[23:0],ordered_pair[47:24]}:ordered_pair;
  wire [95:0] ordered_quad=linegroup >> ((job_rotate?pair_index[2:1]:3-pair_index[2:1])*96);
  wire [95:0] pixel_quad=job_rotate?{ordered_quad[23:0],ordered_quad[47:24],ordered_quad[71:48],ordered_quad[95:72]}:ordered_quad;
+ wire [47:0] pair_rgb=pair_index[0]?pixel_quad[47:0]:pixel_quad[95:48];
  wire [3:0] hit;stable_model_lane c0(I_ddr_clk,d_rst,pair_rgb[47:24],models,hit[1:0]);
  stable_model_lane c1(I_ddr_clk,d_rst,pair_rgb[23:0],models,hit[3:2]);
  reg [3:0] vp;reg [10:0] xp[0:3];reg [9:0] yp[0:3];reg [3:0] half_mask;

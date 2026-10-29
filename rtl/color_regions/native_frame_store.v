@@ -19,17 +19,23 @@ module native_frame_store #(parameter WORDS=691200,V4=0,MW=V4?768:640,SW=V4?852:
  reg [3:0] co,hit,eligible;
  // A bank cannot be selected until its ID comparison flags have settled.
  // Normal complete frames take 172800 writes, far longer than this one clock.
- reg [3:0] id_settled,newer[0:3],predecessor[0:3];wire [3:0] select_co=co & id_settled & qualified;
+ reg [3:0] settled_first;reg [3:0] id_settled,newer[0:3],predecessor[0:3];wire [3:0] select_co=co & id_settled & qualified;
  integer ai,aj;
  always @(posedge I_clk or negedge I_rst_n)begin
- if(!I_rst_n)begin id_settled<=0;for(ai=0;ai<4;ai=ai+1)begin newer[ai]<=0;predecessor[ai]<=0;end end
+ if(!I_rst_n)begin id_settled<=0;settled_first<=0;for(ai=0;ai<4;ai=ai+1)begin newer[ai]<=0;predecessor[ai]<=0;end end
  else begin
- id_settled<=known;if(I_begin)id_settled[I_bank]<=0;
- if(V4 && I_invalidate)id_settled<=0;
+ settled_first<=known;id_settled<=settled_first;if(I_begin)begin settled_first[I_bank]<=0;id_settled[I_bank]<=0;end
+ if(V4 && I_invalidate)begin settled_first<=0;id_settled<=0;end
  for(ai=0;ai<4;ai=ai+1)for(aj=0;aj<4;aj=aj+1)begin
  newer[ai][aj]<=$signed(ids[ai]-ids[aj])>0;
  predecessor[ai][aj]<=ids[ai]+32'd1==ids[aj];
  end end end
+ reg [1:0] newest_table[0:15];integer mi;reg [1:0] ml,mh;
+ always @(posedge I_clk)for(mi=0;mi<16;mi=mi+1)begin
+ ml=(mi&2) && (!(mi&1) || newer[1][0])?1:0;
+ mh=(mi&8) && (!(mi&4) || newer[3][2])?3:2;
+ newest_table[mi]<=((mi>>mh)&1) && (!((mi>>ml)&1) || newer[mh][ml])?mh:ml;
+ end
  reg [9:0] tags[0:3];
  reg found,new_result_found;reg [1:0] newest,chosen,write_slot,lo,hi;integer i;
  wire result_ok=I_result && I_meta[255] && I_meta[415:413]==(V4?4:3) && !(V4 && I_invalidate);
@@ -58,7 +64,7 @@ module native_frame_store #(parameter WORDS=691200,V4=0,MW=V4?768:640,SW=V4?852:
   // Three fixed comparisons replace nested variable-index comparison trees.
   lo=select_co[1] && (!select_co[0] || newer[1][0])?1:0;
   hi=select_co[3] && (!select_co[2] || newer[3][2])?3:2;
-  newest=select_co[hi] && (!select_co[lo] || newer[hi][lo])?hi:lo;
+  newest=newest_table[select_co];
   found=|select_co;
   chosen=newest;new_result_found=0;
   for(i=0;i<4;i=i+1)if(found && eligible[i] && predecessor[i][newest])begin chosen=i;new_result_found=1;end

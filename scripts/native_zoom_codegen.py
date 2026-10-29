@@ -177,6 +177,11 @@ endmodule
       'native_frame_zoom<=I_native_zoom;native_frame_x0<=I_native_x0;native_frame_y0<=I_native_y0;pixel_rotate<=I_rotate;x0<=view_x0;')
     s=replace(s,'req<=~req;',
       'req_native_zoom<=native_frame_zoom;req_native_x0<=native_frame_x0;req_native_y0<=native_frame_y0;req<=~req;')
+    s=replace(s,''' wire [47:0] ordered_pair=linegroup >> ((job_rotate?pair_index[2:0]:7-pair_index[2:0])*48);
+ wire [47:0] pair_rgb=job_rotate?{ordered_pair[23:0],ordered_pair[47:24]}:ordered_pair;
+''','')
+    s=replace(s,' wire [3:0] hit;stable_model_lane',
+      " wire [47:0] pair_rgb=pair_index[0]?pixel_quad[47:0]:pixel_quad[95:48];\n wire [3:0] hit;stable_model_lane")
     put('native_line_core',s)
     s=template('frame_store.v').replace('module refined_frame_store','module native_frame_store')
     s=s.replace('parameter WORDS=172800','parameter WORDS=691200')
@@ -200,6 +205,23 @@ endmodule
      source_seen[I_bank]<=0;source_good[I_bank]<=0;''')
     s=replace(s,'if(V4 && I_invalidate)begin known<=0;',
       'if(V4 && I_invalidate)begin source_seen<=0;source_good<=0;known<=0;')
+    # ID ordering settles long before a complete native frame. Cache the four-
+    # bank winner for every availability mask, off the snapshot address path.
+    s=replace(s,'reg [3:0] id_settled,newer','reg [3:0] settled_first;reg [3:0] id_settled,newer')
+    s=replace(s,'id_settled<=0;for(ai=','id_settled<=0;settled_first<=0;for(ai=')
+    s=replace(s,'id_settled<=known;if(I_begin)id_settled[I_bank]<=0;',
+      'settled_first<=known;id_settled<=settled_first;if(I_begin)begin settled_first[I_bank]<=0;id_settled[I_bank]<=0;end')
+    s=replace(s,'if(V4 && I_invalidate)id_settled<=0;',
+      'if(V4 && I_invalidate)begin settled_first<=0;id_settled<=0;end')
+    s=replace(s,'reg [9:0] tags[0:3];', '''reg [1:0] newest_table[0:15];integer mi;reg [1:0] ml,mh;
+ always @(posedge I_clk)for(mi=0;mi<16;mi=mi+1)begin
+ ml=(mi&2) && (!(mi&1) || newer[1][0])?1:0;
+ mh=(mi&8) && (!(mi&4) || newer[3][2])?3:2;
+ newest_table[mi]<=((mi>>mh)&1) && (!((mi>>ml)&1) || newer[mh][ml])?mh:ml;
+ end
+ reg [9:0] tags[0:3];''')
+    s=replace(s,'newest=select_co[hi] && (!select_co[lo] || newer[hi][lo])?hi:lo;',
+      'newest=newest_table[select_co];')
     put('native_frame_store',s)
     from generate_stage1 import assets as stage_assets
     base=stage_assets()
