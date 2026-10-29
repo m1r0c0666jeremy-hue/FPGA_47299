@@ -18,12 +18,12 @@ module native_downsample2 #(parameter WIDTH=2560,HEIGHT=1440)(
    sums[53-(p*3+c)*9-:9]={1'b0,rgb[95-(p*2*3+c)*8-:8]}+
                                       {1'b0,rgb[95-((p*2+1)*3+c)*8-:8]};
  end
- (* ram_style="block" *) reg [53:0] line_sums[0:GROUPS-1];
- reg [53:0] previous_sums,current_sums;reg reduce;
- always @(posedge clk)begin
-  if(take && !cy[0])line_sums[cx]<=sums;
-  if(take && cy[0])previous_sums<=line_sums[cx];
- end
+ localparam AB=$clog2(GROUPS);
+ wire [53:0] previous_sums;reg [53:0] current_sums;reg reduce;
+ // Explicit block storage also maps the 320-entry display reducer to ERAM.
+ native_line_ram #(.WIDTH(54),.ADDR_BITS(AB)) row_memory(
+ .clka(clk),.wea(take && !cy[0]),.addra(cx[AB-1:0]),.dia(sums),
+ .clkb(clk),.addrb(cx[AB-1:0]),.dob(previous_sums));
  reg [47:0] first_pair;reg have_pair;
  function [47:0] average;input [53:0] a,b;reg [9:0] total;integer j;begin
   for(j=0;j<6;j=j+1)begin

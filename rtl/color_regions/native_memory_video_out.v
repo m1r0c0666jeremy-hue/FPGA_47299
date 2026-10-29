@@ -10,7 +10,7 @@ module native_memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire [31:0] I_source_id,I_source_us,I_capture_us,I_board_us,I_latest_gray,
     input wire I_source_time_valid,input wire [1:0] I_model_state,input wire [41:0] I_quality,
     input wire I_camera_event,I_camera_ready,input wire [17:0] I_camera_status,
-    input wire I_sys_clk, input wire I_rst_n,
+    input wire I_sys_clk, input wire I_ddr_ref_clk,input wire I_rst_n,
     input wire I_process_rst_n, input wire [1:0] I_process_mode,
     input wire [2:0] I_zoom,
     input wire I_rotate,input wire [1:0] I_diag,
@@ -279,7 +279,7 @@ refined_video_in u_video_in(
     );
 
     refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper(
-        .I_sys_clk              ( I_sys_clk              ),
+        .I_sys_clk              ( I_ddr_ref_clk          ),
         .I_sys_rst_n            ( controller_reset_n     ),
 
         .O_ddr_clk              ( S_ddr_clk              ),

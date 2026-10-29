@@ -193,6 +193,8 @@ endmodule
     s=base['rtl/color_regions/stage1_memory_video_out.v'].replace('module stage1_memory_video_out','module native_memory_video_out')
     s=replace(s,'input wire [31:0] I_source_id',
       'input wire I_source_verdict,I_source_good,input wire [31:0] I_verdict_id,output wire O_verdict_ready,\n    input wire [31:0] I_source_id')
+    s=replace(s,'input wire I_sys_clk, input wire I_rst_n,','input wire I_sys_clk, input wire I_ddr_ref_clk,input wire I_rst_n,')
+    s=replace(s,'.I_sys_clk              ( I_sys_clk              )','.I_sys_clk              ( I_ddr_ref_clk          )')
     # Dense packing and reduced SOF can coincide. The writer must freeze the
     # source identity itself, not yesterday's registered detector frame ID.
     s=replace(s,'.I_camera_frame_id(capture_frame_id)', '.I_camera_frame_id(I_source_id)')
@@ -225,6 +227,7 @@ native_system_pll u_native_pll(.refclk(I_sys_clk),.reset(~I_rst_n),.lock(native_
     s=replace(s,'u_video (', '''u_video (
     .I_source_verdict(native_source_verdict),.I_source_good(native_source_good),
     .I_verdict_id(native_verdict_id),.O_verdict_ready(native_verdict_ready),''')
+    s=replace(s,'.I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n)', '.I_sys_clk(I_sys_clk),.I_ddr_ref_clk(S_100m_clk), .I_rst_n(S_rst_n)')
     s=replace(s,'.gain_changed(event_valid && event_data[3]!=event_previous[3])',
       '.gain_changed((event_valid && event_data[3]!=event_previous[3]) || (cal_active && native_source_verdict && native_verdict_ready && !native_source_good))')
     put('native_top',s)

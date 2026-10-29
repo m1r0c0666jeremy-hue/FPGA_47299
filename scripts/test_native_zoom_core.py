@@ -5,6 +5,9 @@ from refined_testlib import R,run
 
 RTL=R/'rtl/color_regions'
 def execute(name,tb,modules,**kw):
+    modules=list(modules)
+    if 'native_downsample2.v' in modules and 'native_line_ram.v' not in modules:modules.append('native_line_ram.v')
+    kw['compile_args']=[*kw.get('compile_args',()),'-DNATIVE_BEHAVIORAL_RAM']
     output=run('native_zoom_'+name,tb,[RTL/n for n in modules],**kw)
     record={'test':name,'output':output.relative_to(R).as_posix(),
             'fixture_sha256':hashlib.sha256((output/'tb.sv').read_bytes()).hexdigest(),

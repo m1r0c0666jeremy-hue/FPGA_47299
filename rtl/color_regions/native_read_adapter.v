@@ -20,7 +20,7 @@ module native_read_adapter(
  reg [8:0] accepted,returned,sent,received,words;
  reg [24:0] first_addr,line_address;
  reg [3:0] byte_offset;reg [6:0] group_index;reg [1:0] quad;
- reg [383:0] pixels;reg [511:0] assembly,next_assembly;
+ reg [383:0] pixels;reg [511:0] assembly;
  reg [3:0] flush_age;reg [17:0] elapsed;
  (* ram_style="block" *) reg [127:0] scratch[0:511];
  reg [127:0] scratch_q;reg [7:0] scratch_addr;
@@ -58,7 +58,9 @@ module native_read_adapter(
   scratch_q<=scratch[{process_index[0],scratch_addr}];
  end
  wire dense_valid=state==EMIT;
- wire [95:0] dense_rgb=pixels[383-quad*96-:96];
+ wire [95:0] dense_rgb=pixels[383:288];
+ // Share one byte aligner at both first-load and rolling-word boundaries.
+ wire [383:0] aligned_pixels=({assembly[511:128],scratch_q} << (byte_offset*8)) >> 128;
  wire reduced_sof,reduced_valid;wire [95:0] reduced_rgb;wire [32:0] unused_tag;
  native_downsample2 #(.WIDTH(1280),.HEIGHT(2)) average(
   clk,rst_n,1'b0,state==LOAD0 && !process_index[0] && !dense,dense_valid && !dense,
@@ -73,7 +75,7 @@ module native_read_adapter(
   slot_index[0]<=0;slot_index[1]<=0;slot_offset[0]<=0;slot_offset[1]<=0;
   dense<=0;bank<=0;base_x<=0;base_y<=0;logical_y<=0;
   accepted<=0;returned<=0;sent<=0;received<=0;words<=0;first_addr<=0;line_address<=0;
-  byte_offset<=0;group_index<=0;quad<=0;pixels<=0;assembly<=0;next_assembly<=0;flush_age<=0;elapsed<=0;
+  byte_offset<=0;group_index<=0;quad<=0;pixels<=0;assembly<=0;flush_age<=0;elapsed<=0;
   fault<=0;virtual_accepted<=0;
  end else begin
   if(issue)begin virtual_accepted<=virtual_accepted+1'b1;accepted<=accepted+1'b1;end
@@ -108,23 +110,23 @@ module native_read_adapter(
   LOAD2:begin assembly[383:256]<=scratch_q;state<=LOAD3;end
   LOAD3:begin assembly[255:128]<=scratch_q;state<=LOAD4;end
   LOAD4:begin assembly[127:0]<=scratch_q;state<=EMIT;quad<=0;
-   pixels<=({assembly[511:128],scratch_q} << (byte_offset*8)) >> 128;
+   pixels<=aligned_pixels;
   end
   EMIT:begin
    case(quad)
-   0:next_assembly[511:384]<=assembly[127:0];
-   1:next_assembly[383:256]<=scratch_q;
-   2:next_assembly[255:128]<=scratch_q;
+   0:assembly[511:384]<=assembly[127:0];
+   1:assembly[383:256]<=scratch_q;
+   2:assembly[255:128]<=scratch_q;
    default:begin end
    endcase
    if(quad==3)begin
     if(group_index==79)begin filled[process_index[0]]<=0;state<=FLUSH;flush_age<=0;end
     else begin
      group_index<=group_index+1'b1;quad<=0;
-     assembly<={next_assembly[511:128],scratch_q};
-     pixels<=({next_assembly[511:128],scratch_q} << (byte_offset*8)) >> 128;
+     assembly[127:0]<=scratch_q;
+     pixels<=aligned_pixels;
     end
-   end else quad<=quad+1'b1;
+   end else begin quad<=quad+1'b1;pixels<={pixels[287:0],96'd0};end
   end
   FLUSH:begin
    if(flush_age<15)flush_age<=flush_age+1'b1;
