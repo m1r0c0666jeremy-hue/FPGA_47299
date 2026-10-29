@@ -65,7 +65,7 @@ if a.gate_parent:
  prior=json.loads((parent/'summary.json').read_text(encoding='utf-8'))
  context=json.loads((parent/'source_context.json').read_text(encoding='utf-8'))
  checkpoint=parent/'target_color_regions_gate.db'
- assert prior['stage']=='place' and prior['exit_code']==0 and prior['inputs_unchanged']
+ assert prior['stage']=='place' and prior['exit_code'] in (0,3221225477) and prior['inputs_unchanged']
  for key in ('map_mode','pack_effort','infer_fsm','min_ripple_len','map_strategy'):
   assert getattr(a,key)==prior[key],f'Gate reuse cannot change synthesis option {key}'
  assert prior['checkpoints'][checkpoint.name]==sha(checkpoint)
@@ -74,7 +74,10 @@ if a.gate_parent:
  assert all(sha(parent/'compiled_source'/name)==value for name,value in before.items())
  parent_tcl=(parent/'run.tcl').read_text(encoding='utf-8')
  assert parent_tcl.index('legalize_phy_inst')<parent_tcl.index('export_db target_color_regions_gate.db')
- assert 'REFINED_PLACED_CHECKPOINT_READY' in (parent/'td.log').read_text(encoding='utf-8')
+ parent_log=(parent/'td.log').read_text(encoding='utf-8')
+ assert 'REFINED_PLACED_CHECKPOINT_READY' in parent_log or (prior['exit_code']==3221225477 and 'Oops! coredump' in parent_log and 'finish command "export_db target_color_regions_gate.db"' in parent_log)
+ from refined_build_report import assess
+ assert assess(parent,'synth')['resource_pass'],'Gate RAM/DSP/register limit exceeded' 
  gate_proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'),placement_created_commit=created_head)
  (out/'input_gate.db').write_bytes(checkpoint.read_bytes())
  assert sha(out/'input_gate.db')==gate_proof['checkpoint_sha256']

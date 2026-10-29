@@ -20,6 +20,7 @@ def main():
  for n in subprocess.check_output(['git','ls-files','-z'],cwd=R).decode('utf-8').split('\0'):
   if n and not n.startswith(('build/','reports/','tools/','release/','releases/')) and not n.endswith(('.bit','.zip','.vvp')):add(n)
  for n in soft['compiler_inputs']:add(n)
+ add(soft['negative_guards']['record'])
  for e in soft['native'].values():
   for n in (e['receipt'],e['record'],str(Path(e['record']).with_suffix('.log')),str(Path(e['receipt']).parent/'tb.sv')):add(n)
   for group in ('inputs','producer_inputs'):

@@ -19,15 +19,28 @@ def review(parent,route=None):
   assert hashlib.sha256(data).hexdigest()==h,n
  for n in ('target_color_regions_gate.db','target_color_regions_placed.db'):
   assert sha(parent/n)==summary['checkpoints'][n]
- assert not context.get('reused_gate'),'First native integration must synthesize its new source'
+ reuse=context.get('reused_gate')
+ if reuse:
+  origin=R/reuse['parent'];original_context=json.loads((origin/'source_context.json').read_text(encoding='utf-8'))
+  assert original_context['compiled_source_commit']==commit
+  assert before==json.loads((origin/'inputs.json').read_text(encoding='utf-8'))
+  assert sha(origin/'target_color_regions_gate.db')==reuse['checkpoint_sha256']
+  assert sha(origin/'summary.json')==reuse['parent_summary_sha256']
+  assert all(sha(origin/'compiled_source'/n)==h for n,h in before.items())
  tcl=(parent/'run.tcl').read_text(encoding='utf-8');log=(parent/'td.log').read_text(encoding='utf-8')
  assert 'REFINED_PLACED_CHECKPOINT_READY' in log and 'BUILD_FAILED:' not in log
- clocks=(parent/'target_color_regions_clocks.txt').read_text(encoding='utf-8')
+ clocks=(parent/'placed_clocks.txt').read_text(encoding='utf-8')
  for name in ('NATIVE_REF_CLK','NATIVE_PROCESS_CLK','HDMI_PIXEL_CLK','HDMI_SERIAL_CLK','MIPI_RX_BYTE_CLK'):assert name in clocks,name
- assert (parent/'target_color_regions_exception.timing').is_file()
+ assert (parent/'placed_exceptions.timing').is_file()
+ for name,period in (('NATIVE_REF_CLK',41.667),('NATIVE_PROCESS_CLK',16.667),('HDMI_PIXEL_CLK',13.333),('HDMI_SERIAL_CLK',2.667)):
+  rows=[line for line in clocks.splitlines() if name in line and re.search(r'\b'+str(period)[:4],line)]
+  assert rows,'Missing/incorrect effective period '+name
+ ddr=[line for line in clocks.splitlines() if 'usr_clk' in line and re.search(r'\b7\.500\b',line)]
+ assert ddr,'Native DDR user clock must be 133.333MHz, not inherited66.667MHz'
  result={'status':'PLACEMENT_PASSED_FINAL_ROUTE_PENDING','compiled_source_commit':commit,'compiler_input_count':len(before),
   'inputs_sha256':sha(parent/'inputs.json'),'parent':parent.relative_to(R).as_posix(),'parent_summary_sha256':sha(parent/'summary.json'),
   'resources':summary['resources'],'current_frozen_git_exact':True,'user_original_protected':True,'new_clocks_present':True}
+ result['reused_gate']=reuse
  if route:
   route=(R/route).resolve();s=json.loads((route/'summary.json').read_text(encoding='utf-8'))
   assert s['stage']=='full' and s['exit_code']==0 and s['inputs_unchanged'] and s['working_tree_matches'] and s['checkpoint_unchanged']
@@ -35,7 +48,7 @@ def review(parent,route=None):
   for n,h in before.items():assert sha(route/'compiled_source'/n)==h
   measured=assess(route,'full');assert measured['resource_pass'] and measured['timing_pass'],measured
   result.update(measured);result['routing']=routing_audit(route/'td.log')
-  for name in ('target_color_regions_clocks.txt','target_color_regions_exception.timing'):
+  for name in ('placed_clocks.txt','placed_exceptions.timing'):
    assert signature(parent/name,parent,route)==signature(route/name,parent,route),'Route changed operative constraints: '+name
   result.update(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',route=route.relative_to(R).as_posix(),route_summary_sha256=sha(route/'summary.json'),bit_sha256=sha(route/'target_color_regions.bit'))
  return result

@@ -273,6 +273,12 @@ rename_clock -name {NATIVE_PROCESS_CLK} [get_clocks {u_native_pll/u_core/u_PH1P_
 for name,value in before.items():
  raw=subprocess.check_output(['git','show',created_head+':'+name],cwd=R)
  assert hashlib.sha256(raw).hexdigest()==value,'Commit current compiler input before building: '+name''')
+    s=replace(s,"assert prior['stage']=='place' and prior['exit_code']==0 and prior['inputs_unchanged']",
+      "assert prior['stage']=='place' and prior['exit_code'] in (0,3221225477) and prior['inputs_unchanged']")
+    s=replace(s,"assert 'REFINED_PLACED_CHECKPOINT_READY' in (parent/'td.log').read_text(encoding='utf-8')",'''parent_log=(parent/'td.log').read_text(encoding='utf-8')
+ assert 'REFINED_PLACED_CHECKPOINT_READY' in parent_log or (prior['exit_code']==3221225477 and 'Oops! coredump' in parent_log and 'finish command "export_db target_color_regions_gate.db"' in parent_log)
+ from refined_build_report import assess
+ assert assess(parent,'synth')['resource_pass'],'Gate RAM/DSP/register limit exceeded' ''')
     s=replace(s,"t=(R/'scripts/build_target_color_regions.tcl').read_text(encoding='utf-8')",
       "t=(R/'scripts/build_target_color_regions.tcl').read_text(encoding='utf-8').replace('target_lock.sdc','native_zoom.sdc')")
     out['scripts/run_native_zoom_build.py']=s

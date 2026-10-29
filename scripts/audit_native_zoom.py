@@ -44,11 +44,16 @@ def audit():
  # separately identified; none qualify a new camera/reader profile.
  legacy={n:evidence(n,*s) for n,s in specs().items()}
  new={n:native_evidence(n,m) for n,m in NATIVE.items()}
- return {'status':'PASS' if all(legacy.values()) and all(new.values()) else 'INCOMPLETE',
+ guard=None
+ for p in sorted((R/'build').glob('native_zoom_guard_*/receipt.json'),reverse=True):
+  g=json.loads(p.read_text(encoding='utf-8'))
+  if g.get('inputs')==inputs and g.get('case_count')==11 and g.get('status')=='NATIVE_GUARDS_PASS' and g.get('producer_sha256')==sha(R/'scripts/test_native_zoom_guards.py') and g.get('policy_sha256')==sha(R/'scripts/native_zoom_policy.py'):
+   guard={'record':p.relative_to(R).as_posix(),'sha256':sha(p),'cases':11};break
+ return {'status':'PASS' if all(legacy.values()) and all(new.values()) and guard else 'INCOMPLETE',
   'scope':'155 original-module regressions plus independent native-profile qualification; historical 3x/4x are not native cases',
   'compiler_inputs':inputs,'native_required':len(new),'native_passed':sum(bool(x) for x in new.values()),
   'legacy_required':len(legacy),'legacy_passed':sum(bool(x) for x in legacy.values()),
-  'native':new,'legacy_unchanged':legacy,'missing_native':[n for n,e in new.items() if not e],
+  'native':new,'legacy_unchanged':legacy,'negative_guards':guard,'missing_native':[n for n,e in new.items() if not e],
   'missing_legacy':[n for n,e in legacy.items() if not e]}
 
 if __name__=='__main__':

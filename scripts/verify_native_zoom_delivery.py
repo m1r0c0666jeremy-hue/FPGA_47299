@@ -21,6 +21,8 @@ def verify(folder):
   assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']>=43
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
   assert inputs==soft['compiler_inputs']
+  guard=soft['negative_guards'];assert guard['cases']==11 and H(z.read(guard['record']))==guard['sha256']
+  assert read(guard['record'])['inputs']==inputs
   for n,h in inputs.items():assert H(z.read(n))==h,n
   for e in soft['native'].values():
    assert H(z.read(e['receipt']))==e['receipt_sha256'];r=read(e['receipt'])
