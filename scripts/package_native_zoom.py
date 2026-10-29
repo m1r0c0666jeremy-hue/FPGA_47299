@@ -40,6 +40,7 @@ def main():
  assert sha(reference)==json.loads((R/'vendor_reference/sc500cs_native_2592.json').read_text(encoding='utf-8'))['sha256']
  add_bytes('vendor_reference/sc500cs_official_fixed.c',reference.read_bytes())
  add('build/native_zoom_place_20261029_165246/compiled_source/rtl/color_regions/native_sensor_table.v')
+ add('build/native_zoom_place_20261029_210805/compiled_source/rtl/color_regions/native_frame_store.v')
  manifest={n:hashlib.sha256(b).hexdigest() for n,b in sorted(payload.items())}
  with zipfile.ZipFile(out/'native_zoom_same_source.zip','w',zipfile.ZIP_DEFLATED) as z:
   for n,b in sorted(payload.items()):z.writestr(n,b)
