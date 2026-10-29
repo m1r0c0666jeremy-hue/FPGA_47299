@@ -40,6 +40,7 @@ def verify(folder):
   assert guard_record['status']=='NATIVE_GUARDS_PASS' and guard_record['case_count']==11 and len(set(guard_record['rejected']))==11
   assert H(z.read('scripts/test_native_zoom_guards.py'))==guard_record['producer_sha256']
   assert H(z.read('scripts/native_zoom_policy.py'))==guard_record['policy_sha256']
+  assert H(z.read('scripts/native_zoom_codegen.py'))==guard_record['codegen_sha256']
   for n,h in inputs.items():assert H(z.read(n))==h,n
   for e in soft['native'].values():
    assert H(z.read(e['receipt']))==e['receipt_sha256'];r=read(e['receipt'])

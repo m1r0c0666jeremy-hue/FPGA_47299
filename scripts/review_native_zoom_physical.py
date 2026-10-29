@@ -56,6 +56,9 @@ def review(parent,route=None):
   assert sha(origin/'target_color_regions_gate.db')==reuse['checkpoint_sha256']
   assert sha(origin/'summary.json')==reuse['parent_summary_sha256']
   assert all(sha(origin/'compiled_source'/n)==h for n,h in before.items())
+  from native_gate_recovery import gate_recovery_proof
+  original_summary=json.loads((origin/'summary.json').read_text(encoding='utf-8'))
+  assert gate_recovery_proof(origin,original_summary['exit_code'],(origin/'td.log').read_text(encoding='utf-8'))==reuse['recovery']
  tcl=(parent/'run.tcl').read_text(encoding='utf-8');log=(parent/'td.log').read_text(encoding='utf-8')
  assert 'REFINED_PLACED_CHECKPOINT_READY' in log and 'BUILD_FAILED:' not in log
  clocks=(parent/'placed_clocks.txt').read_text(encoding='utf-8')

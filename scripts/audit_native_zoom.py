@@ -48,7 +48,7 @@ def audit():
  guard=None
  for p in sorted((R/'build').glob('native_zoom_guard_*/receipt.json'),reverse=True):
   g=json.loads(p.read_text(encoding='utf-8'))
-  if g.get('inputs')==inputs and g.get('case_count')==11 and g.get('status')=='NATIVE_GUARDS_PASS' and g.get('producer_sha256')==sha(R/'scripts/test_native_zoom_guards.py') and g.get('policy_sha256')==sha(R/'scripts/native_zoom_policy.py'):
+  if g.get('inputs')==inputs and g.get('case_count')==11 and g.get('status')=='NATIVE_GUARDS_PASS' and g.get('producer_sha256')==sha(R/'scripts/test_native_zoom_guards.py') and g.get('policy_sha256')==sha(R/'scripts/native_zoom_policy.py') and g.get('codegen_sha256')==sha(R/'scripts/native_zoom_codegen.py'):
    guard={'record':p.relative_to(R).as_posix(),'sha256':sha(p),'cases':11};break
  return {'status':'PASS' if all(legacy.values()) and all(new.values()) and guard else 'INCOMPLETE',
   'scope':'155 original-module regressions plus independent native-profile qualification; historical 3x/4x are not native cases',

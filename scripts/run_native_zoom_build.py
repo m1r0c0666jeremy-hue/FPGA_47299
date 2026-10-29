@@ -65,7 +65,7 @@ if a.gate_parent:
  prior=json.loads((parent/'summary.json').read_text(encoding='utf-8'))
  context=json.loads((parent/'source_context.json').read_text(encoding='utf-8'))
  checkpoint=parent/'target_color_regions_gate.db'
- assert prior['stage']=='place' and prior['exit_code'] in (0,1,3221225477) and prior['inputs_unchanged']
+ assert prior['stage']=='place' and prior['inputs_unchanged']
  for key in ('map_mode','pack_effort','infer_fsm','min_ripple_len','map_strategy'):
   assert getattr(a,key)==prior[key],f'Gate reuse cannot change synthesis option {key}'
  assert prior['checkpoints'][checkpoint.name]==sha(checkpoint)
@@ -75,11 +75,11 @@ if a.gate_parent:
  parent_tcl=(parent/'run.tcl').read_text(encoding='utf-8')
  assert parent_tcl.index('legalize_phy_inst')<parent_tcl.index('export_db target_color_regions_gate.db')
  parent_log=(parent/'td.log').read_text(encoding='utf-8')
- assert 'finish command "export_db target_color_regions_gate.db"' in parent_log
- assert 'REFINED_PLACED_CHECKPOINT_READY' in parent_log or (prior['exit_code']==3221225477 and 'Oops! coredump' in parent_log) or (prior['exit_code']==1 and "PHY-9053 ERROR: Design's slice number" in parent_log)
+ from native_gate_recovery import gate_recovery_proof
+ recovery=gate_recovery_proof(parent,prior['exit_code'],parent_log)
  from refined_build_report import assess
  assert assess(parent,'synth')['resource_pass'],'Gate RAM/DSP/register limit exceeded' 
- gate_proof=dict(parent=parent.relative_to(R).as_posix(),checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'),placement_created_commit=created_head)
+ gate_proof=dict(recovery=recovery,parent=parent.relative_to(R).as_posix(),checkpoint_sha256=sha(checkpoint),parent_summary_sha256=sha(parent/'summary.json'),parent_context_sha256=sha(parent/'source_context.json'),parent_inputs_sha256=sha(parent/'inputs.json'),placement_created_commit=created_head)
  (out/'input_gate.db').write_bytes(checkpoint.read_bytes())
  assert sha(out/'input_gate.db')==gate_proof['checkpoint_sha256']
  # The netlist was compiled from this parent's commit; retain that identity.
