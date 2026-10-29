@@ -222,6 +222,27 @@ endmodule
  reg [9:0] tags[0:3];''')
     s=replace(s,'newest=select_co[hi] && (!select_co[lo] || newer[hi][lo])?hi:lo;',
       'newest=newest_table[select_co];')
+    # Qualify each physical bank directly. A decoded variable array read put
+    # the 25-bit address/count mux in front of the snapshot selection path.
+    s=replace(s,' wire [1:0] committing=I_addr>=21000000?3:I_addr>=14000000?2:I_addr>=7000000?1:0;',
+      ''' wire [3:0] committing_each={I_addr>=21000000,
+  I_addr>=14000000 && I_addr<21000000,
+  I_addr>=7000000 && I_addr<14000000,I_addr<7000000};''')
+    s=replace(s,'''  if(I_write && known[committing])begin
+   if(I_addr!=expected[committing] || count[committing]>=WORDS)co[committing]=0;
+   else if(count[committing]==WORDS-1 && !write_bad[committing])co[committing]=1;
+  end''','''  for(i=0;i<4;i=i+1)if(I_write && known[i] && committing_each[i])begin
+   if(I_addr!=expected[i] || count[i]>=WORDS)co[i]=0;
+   else if(count[i]==WORDS-1 && !write_bad[i])co[i]=1;
+  end''')
+    s=replace(s,'''   if(I_write && known[committing])begin
+    if(I_addr!=expected[committing] || count[committing]>=WORDS)write_bad[committing]<=1;
+    else begin expected[committing]<=expected[committing]+8;count[committing]<=count[committing]+1'b1;end
+   end''','''   for(j=0;j<4;j=j+1)if(I_write && known[j] && committing_each[j])begin
+    if(I_addr!=expected[j] || count[j]>=WORDS)write_bad[j]<=1;
+    else begin expected[j]<=expected[j]+8;count[j]<=count[j]+1'b1;end
+   end''')
+    s=replace(s,'I_write && committing==I_bank','I_write && committing_each[I_bank]')
     put('native_frame_store',s)
     from generate_stage1 import assets as stage_assets
     base=stage_assets()

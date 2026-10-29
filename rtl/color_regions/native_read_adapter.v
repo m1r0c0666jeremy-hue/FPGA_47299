@@ -20,7 +20,7 @@ module native_read_adapter(
  reg [7:0] accepted,returned,sent,received,words;
  reg [24:0] first_addr,line_address;
  reg [3:0] byte_offset;reg [6:0] group_index;reg [1:0] quad;
- reg [383:0] pixels,assembly;
+ reg [127:0] current_word,next_word;reg [7:0] word_index;
  reg [3:0] flush_age;reg [17:0] elapsed;
  (* ram_style="block" *) reg [127:0] scratch[0:511];
  reg [127:0] scratch_q;reg [7:0] scratch_addr;
@@ -39,18 +39,13 @@ module native_read_adapter(
  wire [24:0] x_address=dense?({14'd0,base_x}<<1)+{14'd0,base_x}:
                                       fetch_index[1]?25'd1920:25'd0;
  wire [24:0] raw_address=base_for(bank)+y_address+x_address;
- wire [7:0] group_word=({1'd0,group_index}<<1)+{1'd0,group_index};
+ wire advance_word=byte_offset>=4;
  always @*begin
  case(state)
- LOAD1:scratch_addr=group_word+1'b1;
- LOAD2:scratch_addr=group_word+2'd2;
- LOAD3,LOAD4:scratch_addr=group_word+2'd3;
- EMIT:case(quad)
-  0:scratch_addr=group_word+3'd4;
-  1:scratch_addr=group_word+3'd5;
-  default:scratch_addr=group_word+3'd6;
- endcase
- default:scratch_addr=group_word[7:0];
+ LOAD1:scratch_addr=1;
+ LOAD2,LOAD3:scratch_addr=2;
+ EMIT:scratch_addr=word_index+8'd2+{7'd0,advance_word};
+ default:scratch_addr=word_index;
  endcase end
  always @(posedge clk)begin
   if((fetch_state==F_SEND || fetch_state==F_RECEIVE) && ddr_valid)
@@ -58,9 +53,9 @@ module native_read_adapter(
   scratch_q<=scratch[{process_index[0],scratch_addr}];
  end
  wire dense_valid=state==EMIT;
- wire [95:0] dense_rgb=pixels[383:288];
- // Share one byte aligner at both first-load and rolling-word boundaries.
- wire [383:0] aligned_pixels=({assembly,scratch_q} << (byte_offset*8)) >> 128;
+ wire [95:0] dense_rgb=({current_word,next_word} << (byte_offset*8)) >> 160;
+ // Align each 12-byte RGB group from two rolling DDR words.
+
  wire reduced_sof,reduced_valid;wire [95:0] reduced_rgb;wire [32:0] unused_tag;
  native_downsample2 #(.WIDTH(1280),.HEIGHT(2)) average(
   clk,rst_n,1'b0,state==LOAD0 && !process_index[0] && !dense,dense_valid && !dense,
@@ -75,7 +70,7 @@ module native_read_adapter(
   slot_index[0]<=0;slot_index[1]<=0;slot_offset[0]<=0;slot_offset[1]<=0;
   dense<=0;bank<=0;base_x<=0;base_y<=0;logical_y<=0;
   accepted<=0;returned<=0;sent<=0;received<=0;words<=0;first_addr<=0;line_address<=0;
-  byte_offset<=0;group_index<=0;quad<=0;pixels<=0;assembly<=0;flush_age<=0;elapsed<=0;
+  byte_offset<=0;group_index<=0;quad<=0;current_word<=0;next_word<=0;word_index<=0;flush_age<=0;elapsed<=0;
   fault<=0;virtual_accepted<=0;
  end else begin
   if(issue)begin virtual_accepted<=virtual_accepted+1'b1;accepted<=accepted+1'b1;end
@@ -103,29 +98,19 @@ module native_read_adapter(
    logical_y<=source_y;fetch_index<=0;process_index<=0;filled<=0;elapsed<=0;state<=WAIT_DATA;
   end
   WAIT_DATA:if(filled[process_index[0]] && slot_index[process_index[0]]==process_index)begin
-   byte_offset<=slot_offset[process_index[0]];group_index<=0;state<=LOAD0;
+   byte_offset<=slot_offset[process_index[0]];word_index<=0;group_index<=0;state<=LOAD0;
   end
   LOAD0:state<=LOAD1;
-  LOAD1:begin assembly[383:256]<=scratch_q;state<=LOAD2;end
-  LOAD2:begin assembly[255:128]<=scratch_q;state<=LOAD3;end
-  LOAD3:begin assembly[127:0]<=scratch_q;state<=LOAD4;end
-  LOAD4:begin state<=EMIT;quad<=0;
-   pixels<=aligned_pixels;
-  end
+  LOAD1:begin current_word<=scratch_q;state<=LOAD2;end
+  LOAD2:begin next_word<=scratch_q;state<=LOAD3;end
+  LOAD3:begin state<=EMIT;quad<=0;end
   EMIT:begin
-   case(quad)
-   0:assembly[383:256]<=scratch_q;
-   1:assembly[255:128]<=scratch_q;
-   2:assembly[127:0]<=scratch_q;
-   default:begin end
-   endcase
+   byte_offset<=byte_offset+4'd12;
+   if(advance_word)begin current_word<=next_word;next_word<=scratch_q;word_index<=word_index+1'b1;end
    if(quad==3)begin
     if(group_index==79)begin filled[process_index[0]]<=0;state<=FLUSH;flush_age<=0;end
-    else begin
-     group_index<=group_index+1'b1;quad<=0;
-     pixels<=aligned_pixels;
-    end
-   end else begin quad<=quad+1'b1;pixels<={pixels[287:0],96'd0};end
+    else begin group_index<=group_index+1'b1;quad<=0;end
+   end else quad<=quad+1'b1;
   end
   FLUSH:begin
    if(flush_age<15)flush_age<=flush_age+1'b1;
