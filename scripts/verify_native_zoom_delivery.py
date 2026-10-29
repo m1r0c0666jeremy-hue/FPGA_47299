@@ -18,9 +18,9 @@ def verify(folder):
   soft=read('qualification/software.json');physical=read('qualification/physical.json');inputs=read('qualification/inputs.json')
   assert H(z.read('qualification/software.json'))==delivery['software_sha256']
   assert H(z.read('qualification/physical.json'))==delivery['physical_sha256']
-  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==58
+  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==62
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
-  assert len(soft['native'])==58 and 'transitions' in soft['native'] and len(soft['legacy_unchanged'])==155
+  assert len(soft['native'])==62 and {'transitions','capture_shared_masks','capture_shared_full','capture_shared_fault','capture_shared_reducer'}<=set(soft['native']) and len(soft['legacy_unchanged'])==155
   assert inputs==soft['compiler_inputs']
   assert inputs==read('qualification/place/inputs.json')==read('qualification/route/inputs.json')==read('qualification/route/inputs_after.json')
   assert len(inputs)==physical['compiler_input_count']==327
@@ -49,6 +49,9 @@ def verify(folder):
    assert record['exit_code']==0 and not record['expected_failure']
    log=str(PurePosixPath(e['record']).with_suffix('.log'));assert H(z.read(log))==e['log_sha256']
    if name=='transitions':assert b'NATIVE_TRANSITIONS_PASS six_frames pixels4792320' in z.read(log)
+   if name.startswith('capture_shared_'):
+    markers={'capture_shared_masks':b'NATIVE_SHARED_MASKS_PASS','capture_shared_full':b'NATIVE_SHARED_CAPTURE_PASS frames10 pixels9216000','capture_shared_fault':b'NATIVE_SHARED_FAULT_PASS frames6','capture_shared_reducer':b'NATIVE_SHARED_REDUCER_PASS frames200 quads3200'}
+    assert markers[name] in z.read(log)
    fixture=str(PurePosixPath(e['receipt']).parent/'tb.sv');assert H(z.read(fixture))==e['fixture_sha256']==r['fixture_sha256']
    for n,h in e['inputs'].items():assert H(z.read(n.replace('\\','/')))==h,n
    for n,h in e['producer_inputs'].items():assert H(z.read(n))==h,n

@@ -13,6 +13,25 @@ def replace(s,old,new,n=1):
     assert old in s,'native generator anchor missing: '+old[:100]
     return s.replace(old,new,n)
 
+def share_native_capture(s):
+    # Only the native wrapper changes; original stage1 capture stays immutable.
+    a=s.index('module stage1_k_capture #');b=s.index('\nendmodule',a)+len('\nendmodule')
+    c=s[a:b]
+    c=replace(c,'reg [3:0] vp;reg [1:0] tags[0:3];reg [10:0] xp[0:3];reg [9:0] yp[0:3];',
+      'reg [4:0] vp;reg [1:0] tags[0:4];reg [10:0] xp[0:4];reg [9:0] yp[0:4];')
+    ga=c.index(' generate for(lane=0;lane<4;lane=lane+1)begin:classify');gb=c.index('endgenerate',ga)+len('endgenerate')
+    c=c[:ga]+" wire shared_mask_valid;\n native_shared_classifier classify(clk,rst_n,I_valid,I_rgb,pixel_models,shared_mask_valid,mask);"+c[gb:]
+    c=replace(c,'vp[3],xp[3],yp[3],tags[3]','vp[4],xp[4],yp[4],tags[4]')
+    c=replace(c,'vp<={vp[2:0],','vp<={vp[3:0],')
+    c=replace(c,'for(i=0;i<4;i=i+1)begin xp[i]','for(i=0;i<5;i=i+1)begin xp[i]')
+    c=replace(c,'for(i=1;i<4;i=i+1)begin xp[i]','for(i=1;i<5;i=i+1)begin xp[i]')
+    c=replace(c,'if(vp[3] && tags[3][1])begin raw_a[tags[3][0]]<=raw_a[tags[3][0]]+population(raw_mask_a);\n raw_b[tags[3][0]]<=raw_b[tags[3][0]]+population(raw_mask_b);',
+      'if(vp[4] && tags[4][1])begin raw_a[tags[4][0]]<=raw_a[tags[4][0]]+population(raw_mask_a);\n raw_b[tags[4][0]]<=raw_b[tags[4][0]]+population(raw_mask_b);')
+    assert 'vp[3]' not in c and 'tags[3]' not in c
+    return s[:a]+c+s[b:]+SHARED_CLASSIFIER
+
+SHARED_CLASSIFIER='// Native reducer emits nonadjacent valid quads. Two unchanged classifiers\n// process the two pixel pairs on successive clocks; masks gain one clock.\n`default_nettype none\nmodule native_shared_classifier(input wire clk,rst_n,valid,input wire [95:0] rgb,\n input wire [127:0] models,output wire ov,output wire [7:0] mask);\n reg second;reg [47:0] tail_rgb;reg [127:0] tail_models;reg [4:0] vp;\n reg [3:0] head_mask;wire [3:0] hit;\n wire [47:0] pair_rgb=second?tail_rgb:rgb[95:48];\n wire [127:0] pair_models=second?tail_models:models;\n stable_model_lane a(clk,rst_n,pair_rgb[47:24],pair_models,hit[1:0]);\n stable_model_lane b(clk,rst_n,pair_rgb[23:0],pair_models,hit[3:2]);\n assign ov=vp[4];assign mask={hit,head_mask};\n always @(posedge clk or negedge rst_n)\n if(!rst_n)begin second<=0;tail_rgb<=0;tail_models<=0;vp<=0;head_mask<=0;end\n else begin\n  second<=valid;vp<={vp[3:0],valid};\n  if(valid)begin tail_rgb<=rgb[47:0];tail_models<=models;end\n  if(vp[3])head_mask<=hit;\n end\nendmodule\n`default_nettype wire\n'
+
 def assets():
     out={}
     config=json.loads((R/'rtl/color_regions/native_zoom_config.json').read_text(encoding='utf-8'))
@@ -264,6 +283,7 @@ endmodule
     native_frame_store #(.V4(1)) u_frame_store(
         .I_source_verdict(source_ddr_valid),.I_source_good(source_ddr_data[32]),.I_source_id(source_ddr_data[31:0]),''')
     s=s.replace('refined_line_reader u_scaler','native_line_reader u_scaler')
+    s=share_native_capture(s)
     put('native_memory_video_out',s)
     s=base['rtl/color_regions/stage1_top.v']
     s=s.replace('stage1_controls u_controls','native_controls u_controls')

@@ -502,17 +502,17 @@ module stage1_k_capture #(parameter V4=0)(input wire I_clk,I_rst_n,I_sof,I_valid
  always @*begin ar=0;ag=0;ab=0;an=0;
  for(i=0;i<4;i=i+1)if(rx+i>=636 && rx+i<644 && ry>=356 && ry<364)begin
  ar=ar+I_rgb[95-24*i-:8];ag=ag+I_rgb[87-24*i-:8];ab=ab+I_rgb[79-24*i-:8];an=an+1'b1;end end
- reg [3:0] vp;reg [1:0] tags[0:3];reg [10:0] xp[0:3];reg [9:0] yp[0:3];
+ reg [4:0] vp;reg [1:0] tags[0:4];reg [10:0] xp[0:4];reg [9:0] yp[0:4];
  wire [7:0] mask;genvar lane;
  wire [3:0] raw_mask_a={mask[6],mask[4],mask[2],mask[0]},raw_mask_b={mask[7],mask[5],mask[3],mask[1]};
  // Calibration commits at pre-AWB SOF. The last two post-AWB groups of the
  // previous frame may still be in flight then: classify them with their bank's
  // frozen model, and select the new profile only at the post-AWB SOF itself.
  wire [127:0] pixel_models=sof?I_models:(have?models[cb]:I_models);
- generate for(lane=0;lane<4;lane=lane+1)begin:classify
- stable_model_lane u_lane(clk,rst_n,I_rgb[95-lane*24-:24],pixel_models,mask[lane*2+:2]);end endgenerate
+ wire shared_mask_valid;
+ native_shared_classifier classify(clk,rst_n,I_valid,I_rgb,pixel_models,shared_mask_valid,mask);
  wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [7:0] fa,fb;
- stable_filter4 filter(clk,rst_n,vp[3],xp[3],yp[3],tags[3],mask,fv,ft,fx,fy,fa,fb);
+ stable_filter4 filter(clk,rst_n,vp[4],xp[4],yp[4],tags[4],mask,fv,ft,fx,fy,fa,fb);
  reg gs,ts,wb;wire gb,gd,gfailed;wire [1023:0] candidates;wire [17:0] work_cycles;
  wire hist_valid;wire [83:0] hist_boxes;
  wire [9:0] hist_command;wire [15:0] hist_revision;wire [31:0] hist_frame;wire [4:0] hist_loss;wire [3:0] tip_bounds;
@@ -578,14 +578,14 @@ module stage1_k_capture #(parameter V4=0)(input wire I_clk,I_rst_n,I_sof,I_valid
  waiting_packet<=0;waiting_result<=0;O_frame_id<=0;O_valid<=0;O_dropped<=0;O_frame_us<=0;O_epoch<=0;O_time_valid<=0;time_valid<=0;
  for(i=0;i<2;i=i+1)begin bank_k[i]<=50;ids[i]<=0;cmds[i]<=0;models[i]<=0;revs[i]<=0;gains[i]<=0;mean[i]<=0;status[i]<=0;invalid_drain[i]<=0;
  raw_a[i]<=0;raw_b[i]<=0;filtered_a[i]<=0;filtered_b[i]<=0;end
- for(i=0;i<4;i=i+1)begin xp[i]<=0;yp[i]<=0;tags[i]<=0;end end
+ for(i=0;i<5;i=i+1)begin xp[i]<=0;yp[i]<=0;tags[i]<=0;end end
  else begin
  last_sof<=I_sof;gs<=0;ts<=0;O_valid<=0;
- vp<={vp[2:0],I_valid && (sof || have) && (sof || pixels<921600)};
+ vp<={vp[3:0],I_valid && (sof || have) && (sof || pixels<921600)};
  xp[0]<=rx;yp[0]<=ry;tags[0]<=sof?{take,nb}:{accepted,cb};
- for(i=1;i<4;i=i+1)begin xp[i]<=xp[i-1];yp[i]<=yp[i-1];tags[i]<=tags[i-1];end
- if(vp[3] && tags[3][1])begin raw_a[tags[3][0]]<=raw_a[tags[3][0]]+population(raw_mask_a);
- raw_b[tags[3][0]]<=raw_b[tags[3][0]]+population(raw_mask_b);end
+ for(i=1;i<5;i=i+1)begin xp[i]<=xp[i-1];yp[i]<=yp[i-1];tags[i]<=tags[i-1];end
+ if(vp[4] && tags[4][1])begin raw_a[tags[4][0]]<=raw_a[tags[4][0]]+population(raw_mask_a);
+ raw_b[tags[4][0]]<=raw_b[tags[4][0]]+population(raw_mask_b);end
  if(fv && ft[1])begin filtered_a[ft[0]]<=filtered_a[ft[0]]+population(fa[3:0]);filtered_b[ft[0]]<=filtered_b[ft[0]]+population(fb[3:0]);end
  for(i=0;i<2;i=i+1)if(invalid_drain[i]!=0)begin
  invalid_drain[i]<=invalid_drain[i]-1'b1;if(invalid_drain[i]==1)pending[i]<=1;end
@@ -840,5 +840,26 @@ module stage1_k_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  (found?chosen_reason:((a[120] || b[120])?2'd3:2'd0)),chosen_indices[3:2],chosen_indices[1:0]};
  done<=1;state<=0;end
  endcase end end
+endmodule
+`default_nettype wire
+// Native reducer emits nonadjacent valid quads. Two unchanged classifiers
+// process the two pixel pairs on successive clocks; masks gain one clock.
+`default_nettype none
+module native_shared_classifier(input wire clk,rst_n,valid,input wire [95:0] rgb,
+ input wire [127:0] models,output wire ov,output wire [7:0] mask);
+ reg second;reg [47:0] tail_rgb;reg [127:0] tail_models;reg [4:0] vp;
+ reg [3:0] head_mask;wire [3:0] hit;
+ wire [47:0] pair_rgb=second?tail_rgb:rgb[95:48];
+ wire [127:0] pair_models=second?tail_models:models;
+ stable_model_lane a(clk,rst_n,pair_rgb[47:24],pair_models,hit[1:0]);
+ stable_model_lane b(clk,rst_n,pair_rgb[23:0],pair_models,hit[3:2]);
+ assign ov=vp[4];assign mask={hit,head_mask};
+ always @(posedge clk or negedge rst_n)
+ if(!rst_n)begin second<=0;tail_rgb<=0;tail_models<=0;vp<=0;head_mask<=0;end
+ else begin
+  second<=valid;vp<={vp[3:0],valid};
+  if(valid)begin tail_rgb<=rgb[47:0];tail_models<=models;end
+  if(vp[3])head_mask<=hit;
+ end
 endmodule
 `default_nettype wire
