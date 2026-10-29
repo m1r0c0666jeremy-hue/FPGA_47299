@@ -28,6 +28,13 @@ def verify(folder):
   for stage in ('place','route'):
    summary=read('qualification/'+stage+'/summary.json')
    assert summary['exit_code']==0 and summary['inputs_unchanged'] and summary['working_tree_matches']
+  params=physical['effective_parameters']
+  assert H(z.read('qualification/place/effective_place.txt'))==params['place_sha256']
+  assert H(z.read('qualification/place/effective_route.txt'))==params['route_sha256']
+  assert params['route']['fix_hold']==params['route']['timing']=='on'
+  options=read('qualification/place/flow_options.json')['options']
+  assert params['place']['pr_strategy']==str(options['strategy']) and params['place']['max_fanout']==str(options['max_fanout'])
+  assert params['place']['effort']==options['place_effort'] and params['place']['macro_performance']==options['macro_performance']
   guard=soft['negative_guards'];assert guard['cases']==11 and H(z.read(guard['record']))==guard['sha256']
   guard_record=read(guard['record']);assert guard_record['inputs']==inputs
   assert guard_record['status']=='NATIVE_GUARDS_PASS' and guard_record['case_count']==11 and len(set(guard_record['rejected']))==11

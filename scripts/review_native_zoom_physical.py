@@ -5,6 +5,35 @@ from native_zoom_policy import R,sha,canonical_build_inputs,git
 from refined_build_report import assess
 from audit_stage1 import routing_audit,signature
 
+def parameters(parent,summary,context):
+ def settings(path):
+  pairs=[line.split('|') for line in path.read_text(encoding='utf-8').splitlines()]
+  return {p[0].strip():p[1].strip() for p in pairs if len(p)>=3 and re.fullmatch(r'[a-z_]+',p[0].strip())}
+ place=settings(parent/'effective_place.txt');route=settings(parent/'effective_route.txt')
+ expected={'pr_strategy':str(summary['placement_strategy']),'effort':summary['place_effort'],
+  'macro_performance':summary['macro_performance'],'max_fanout':str(summary['max_fanout']) if summary['max_fanout'] is not None else None}
+ for n,v in expected.items():
+  if v is not None:assert place.get(n)==v,'Actual place parameter differs: '+n
+ assert route.get('fix_hold')=='on' and route.get('timing')=='on','Route disabled hold/timing checks'
+ log=(parent/'td.log').read_text(encoding='utf-8');tcl=(parent/'run.tcl').read_text(encoding='utf-8')
+ official=summary.get('official_strategy')
+ if official:
+  assert sha(parent/'official_strategy_ph1.json')==official['sha256']
+  definitions=json.loads((parent/'official_strategy_ph1.json').read_text(encoding='utf-8'))
+  for name,definition in official['selected'].items():
+   assert definitions[name]==definition,'Official preset differs from frozen definition'
+   for item in definition['params']:
+    if context.get('reused_gate') and item['step'] in ('rtl','gate'):continue
+    command='set_param '+item['step']+' '+item['param']+' '+str(item['val'])
+    assert command in tcl and 'start command "'+command+'"' in log,'Preset was not applied: '+command
+ if not context.get('reused_gate'):
+  for stage,key,value in [('gate','map_mode',summary['map_mode']),('gate','pack_effort',summary['pack_effort']),
+    ('rtl','infer_fsm',summary['infer_fsm']),('rtl','min_ripple_len',summary['min_ripple_len'])]:
+   if value is None or value=='project':continue
+   command=f'set_param {stage} {key} {value}'
+   assert command in tcl and 'start command "'+command+'"' in log,'Synthesis setting not applied: '+command
+ return {'place':place,'route':route,'place_sha256':sha(parent/'effective_place.txt'),'route_sha256':sha(parent/'effective_route.txt')}
+
 def review(parent,route=None):
  parent=(R/parent).resolve();before=json.loads((parent/'inputs.json').read_text(encoding='utf-8'))
  canonical_build_inputs(before)
@@ -41,6 +70,7 @@ def review(parent,route=None):
   'inputs_sha256':sha(parent/'inputs.json'),'parent':parent.relative_to(R).as_posix(),'parent_summary_sha256':sha(parent/'summary.json'),
   'resources':summary['resources'],'current_frozen_git_exact':True,'user_original_protected':True,'new_clocks_present':True}
  result['reused_gate']=reuse
+ result['effective_parameters']=parameters(parent,summary,context)
  if route:
   route=(R/route).resolve();s=json.loads((route/'summary.json').read_text(encoding='utf-8'))
   assert s['stage']=='full' and s['exit_code']==0 and s['inputs_unchanged'] and s['working_tree_matches'] and s['checkpoint_unchanged']
