@@ -18,9 +18,15 @@ def verify(folder):
   soft=read('qualification/software.json');physical=read('qualification/physical.json');inputs=read('qualification/inputs.json')
   assert H(z.read('qualification/software.json'))==delivery['software_sha256']
   assert H(z.read('qualification/physical.json'))==delivery['physical_sha256']
-  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']>=43
+  assert soft['status']=='PASS' and soft['native_required']==soft['native_passed']==44
   assert soft['legacy_required']==soft['legacy_passed']==155 and not soft['missing_native'] and not soft['missing_legacy']
   assert inputs==soft['compiler_inputs']
+  assert inputs==read('qualification/place/inputs.json')==read('qualification/route/inputs.json')==read('qualification/route/inputs_after.json')
+  assert len(inputs)==physical['compiler_input_count']==327
+  assert physical['compiled_source_commit']==delivery['compiled_source_commit']
+  for stage in ('place','route'):
+   summary=read('qualification/'+stage+'/summary.json')
+   assert summary['exit_code']==0 and summary['inputs_unchanged'] and summary['working_tree_matches']
   guard=soft['negative_guards'];assert guard['cases']==11 and H(z.read(guard['record']))==guard['sha256']
   assert read(guard['record'])['inputs']==inputs
   for n,h in inputs.items():assert H(z.read(n))==h,n
@@ -32,6 +38,8 @@ def verify(folder):
    fixture=str(PurePosixPath(e['receipt']).parent/'tb.sv');assert H(z.read(fixture))==e['fixture_sha256']==r['fixture_sha256']
    for n,h in e['inputs'].items():assert H(z.read(n.replace('\\','/')))==h,n
    for n,h in e['producer_inputs'].items():assert H(z.read(n))==h,n
+   assert r['producer_inputs']==e['producer_inputs']
+   assert {n.replace('\\','/'):h for n,h in record['inputs'].items()}=={n.replace('\\','/'):h for n,h in e['inputs'].items()}
   for e in soft['legacy_unchanged'].values():
    assert H(z.read(e['record']))==e['record_sha256'];r=read(e['record'])
    assert r['exit_code']==0 and not r['expected_failure']
