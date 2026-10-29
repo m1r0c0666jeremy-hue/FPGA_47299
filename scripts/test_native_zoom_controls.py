@@ -8,7 +8,7 @@ from test_stage1_k_controls import CONTROLS
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--readback',action='store_true');ap.add_argument('--keys',action='store_true');a=ap.parse_args()
     if a.readback:
-        modules=['native_camera_config.v','native_sensor_table.v']
+        modules=['native_camera_config.v','native_sensor_table.v','native_gain_table.v']
         modules += [str(R/'user_source/hdl_source/uics500_cfg'/n) for n in ('uics500regAE.v','SC500GainTbl.v','uii2c.v')]
         modules += [str(R/'scripts/sc500_i2c_slave_model.v.txt')]
         fixture=readback.src.replace('refined_camera_config','native_camera_config')

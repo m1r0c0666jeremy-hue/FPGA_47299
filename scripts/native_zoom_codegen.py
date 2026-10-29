@@ -37,18 +37,27 @@ def assets():
     sensor=json.loads((R/'vendor_reference/sc500cs_native_2592.json').read_text(encoding='utf-8'))
     pairs=sensor['sequence']
     s='// SC500CS full-size table; fixed upstream commit and SHA in vendor_reference/sc500cs_native_2592.json.\n'
-    s+='// Boolean decode deliberately keeps this small table out of scarce ERAM.\n'
-    s+='module native_sensor_table(input wire [8:0] REG_INDEX,output wire [31:0] REG_DATA,output wire [8:0] REG_SIZE);\n'
-    s+=f"assign REG_SIZE=9'd{len(pairs)};\nwire [{len(pairs)-1}:0] decoded;\n"
-    for i in range(len(pairs)):s+=f"assign decoded[{i}]=REG_INDEX==9'd{i};\n"
-    for b in range(32):
-        mask=sum(((int(a+v,16)>>b)&1)<<i for i,(a,v) in enumerate(pairs))
-        s+=f"assign REG_DATA[{b}]=|(decoded & {len(pairs)}'h{mask:0{(len(pairs)+3)//4}x});\n"
-    s+='endmodule\n'
+    s+='module native_sensor_table(input wire [8:0] REG_INDEX,output reg [31:0] REG_DATA,output wire [8:0] REG_SIZE);\n'
+    s+=f"assign REG_SIZE=9'd{len(pairs)};\nalways @*case(REG_INDEX)\n"
+    for i,(a,v) in enumerate(pairs):s+=f"9'd{i}:REG_DATA={{16'h{a},8'h{v}}};\n"
+    s+="default:REG_DATA=0;endcase\nendmodule\n"
     put('native_sensor_table',s)
+    put('native_gain_table', '''// Exact algebraic form of the supplied SC500GainTbl, including invalid levels.
+module native_gain_table(input wire I_clk,I_rstn,input wire [6:0] I,output reg [15:0] O);
+ wire [4:0] upper_step=I-7'd74;
+ always @(posedge I_clk)begin
+ if(I<32)O<={8'h03,3'b001,I[4:0]};
+ else if(I<64)O<={8'h07,3'b001,I[4:0]};
+ else if(I<74)O<={8'h0f,3'b001,I[4:0]};
+ else if(I<=105)O<={8'h1f,3'b001,upper_step};
+ else O<=0;
+ end
+endmodule
+''')
     s=template('camera_config.v').replace('refined_camera_config','native_camera_config')
     s=s.replace('CYCLES_PER_MS=23810,CLK_DIV=239','CYCLES_PER_MS=24000,CLK_DIV=240')
     s=s.replace('uics500reg_720p60 table_init','native_sensor_table table_init')
+    s=replace(s,'SC500GainTbl gains','native_gain_table gains')
     s=s.replace('PLL clk1 is 23.809524 MHz. Round up so each millisecond is conservative.','Native camera reference is exactly 24 MHz; HDMI retains its original PLL.')
     s=replace(s,'index==114',f"index=={len(pairs)-2}")
     put('native_camera_config',s)

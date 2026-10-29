@@ -26,7 +26,7 @@ module native_camera_config #(
  wire bus_rst_n=rst_n && state!=BOOT && state!=RETRY && state!=DEAD;
  assign receiver_enable=bus_rst_n;
  native_sensor_table table_init(index,init_data,init_size);
- SC500GainTbl gains(clk,rst_n,gain_for_table-7'd16,gain_value);
+ native_gain_table gains(clk,rst_n,gain_for_table-7'd16,gain_value);
  uics500regAE table_gain(index,ae_data,ae_size,16'd1990,gain_value);
  uii2c #(.WMEN_LEN(4),.RMEN_LEN(1),.CLK_DIV(CLK_DIV)) bus(
  .I_clk(clk),.I_rstn(bus_rst_n),.O_iic_scl(scl),.IO_iic_sda(sda),.I_wr_data(write_data),
