@@ -1,6 +1,10 @@
 """Actual detector/FIFOs/banks/view/reader connected to the editor and candidate OSD."""
 from refined_testlib import R
 s=(R/'scripts/test_refined_live.py').read_text(encoding='utf-8')
+# Exercise the corrected production DDR user clock133.333MHz with unchanged
+# camera60MHz and pixel75MHz, including real asynchronous vendor FIFOs.
+read_clock="s=(R/'sim/tb_stable_live.sv').read_text(encoding='utf-8')"
+s=s.replace(read_clock,read_clock+"\ns=s.replace('always #7.5 dc=~dc;','always #3.75 dc=~dc;')")
 declarations='''
 wire [2:0] an,ae,aa;wire [3:0] ad,ast,ac,ao,acl,aerr,aserr;wire [15:0] arev,anc;wire [671:0] avs,asaved;wire [167:0] adraft;
 wire am,alarm,ab,at,amv;wire associated,area_video;wire [1:0] atrend;wire [10:0] adist;wire [19:0] adwell;

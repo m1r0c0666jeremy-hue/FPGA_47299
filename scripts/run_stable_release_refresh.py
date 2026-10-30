@@ -13,11 +13,10 @@ def main():
       'video84':[['test_stage1_video.py','--full','--faults','--workers','2','--reuse-current']],
       'live4':[['test_stage1_live.py','--reader','refined','--store','refined','--line-gap','160','--workers','1']],
       'k_capture':[['test_stage1_k_tracker.py'],['test_stage1_k_capture.py']],
-      'footer_and_interaction':[[p] for p in ('test_stage1_release1030.py','test_stage1_footer_numbers.py',
-        'test_stage1_footer_equivalence.py','test_stage1_camera_osd.py','test_stage1_k_ui.py','test_stage1_ui.py',
-        'test_stage1_project.py','test_stage1_teach_alarm.py','test_stage1_teach_ui.py','test_stage1_teach_pixels.py',
-        'test_stage1_buzzer_clock.py','test_stage1_camera.py','test_stage1_overlay.py','test_stage1_region_footer.py',
-        'test_stage1_footer.py')]+[['test_stage1_footer.py','--abort'],['test_stage1_footer.py','--wait']],
+      # DDR correction changes only the top and memory wrapper. Keep completed
+      # unchanged footer/geometry/colour results; refresh their actual consumers.
+      'changed_wiring':[[p] for p in ('test_stage1_release1030.py','test_stage1_teach_alarm.py',
+        'test_stage1_buzzer_clock.py','test_stage1_camera.py')],
     }
     record={'started':datetime.datetime.now().astimezone().isoformat(),'inputs':frozen,'jobs':{}}
     def save():

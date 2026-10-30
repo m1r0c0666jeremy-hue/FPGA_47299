@@ -70,6 +70,9 @@ def old_modules(progress=False):
 
 def specs():
     d={
+      'stage1_ddr_reference':('STAGE1_DDR_REFERENCE_PASS',('stage1_top','stage1_memory_video_out','refined_reset_bridge','refined_ddr_recovery')),
+      'stage1_ddr133_recovery_0':('STAGE1_DDR133_RECOVERY_PASS mode0',('refined_line_reader','refined_mc_to_user_interface','refined_ddr_recovery')),
+      'stage1_ddr133_recovery_1':('STAGE1_DDR133_RECOVERY_PASS mode1',('refined_line_reader','refined_mc_to_user_interface','refined_ddr_recovery')),
       'stage1_runtime':('STAGE1_RUNTIME_PASS vectors5000',('stage1_memory_video_out',)),
       'stage1_runtime_footer':('STAGE1_RUNTIME_FOOTER_PASS',('stage1_osd','stage1_ui_formatter')),
       'stage1_ry_bp_colours':('STAGE1_RY_BP_COLOURS_PASS defaults4 families1440',('stable_calibration',)),

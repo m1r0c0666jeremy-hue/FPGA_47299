@@ -9,7 +9,10 @@ def route_execution(base,summary,log,tcl):
  assert starts,'Missing actual route command'
  prefix=log[:starts[-1].start()];overrides={}
  for match in re.finditer(r'^RUN-1002 : start command "set_param route ([a-z_]+) ([A-Za-z0-9_.-]+)"\s*$',prefix,re.M):
-  key,value=match.groups();assert key in base,'Unknown route override '+key
+  key,value=match.groups()
+  # TD6.2 omits this documented preset option from report_param output.
+  # Accept only the fixed TimingUltra value actually logged and in frozen Tcl.
+  assert key in base or (key=='postrt_opt_extra_round' and value=='4'),'Unknown route override '+key
   assert f'set_param route {key} {value}' in tcl,'Route setting is not in frozen Tcl'
   overrides[key]=value
  actual={**base,**overrides}
@@ -87,13 +90,19 @@ def review(parent,route=None):
  manifest=json.loads((R/'build/target_region_sequence_stage1_20261028_170103/source_files.json').read_text(encoding='utf-8'))
  baseline='build/stage1_place_20261028_160918/placed_clocks.txt'
  assert sha(R/baseline)==manifest[baseline]
- expected=clocks(R/baseline);actual=clocks(parent/'placed_clocks.txt')
- assert actual==expected,('Stable clock periods changed',actual,expected)
- assert next(v for n,v in actual.items() if n.endswith('/usr_clk'))==15.0,'Old stable DDR user clock must remain66.667MHz'
+ from stage1_ddr_contract import contract
+ corrected=contract(R)
+ expected=clocks(R/baseline)
+ # Only the two clocks downstream of the approved DDR reference correction
+ # change. Camera/HDMI/control/board clocks and all constraint files stay exact.
+ expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk']=7.5
+ expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk']=19.687
+ actual=clocks(parent/'placed_clocks.txt')
+ assert actual==expected,('Unexpected clock periods after DDR correction',actual,expected)
  measured=assess(parent,'place');assert measured['resource_pass'] and measured['resources']==s['resources']
  result=dict(status='PLACE_VERIFIED_FINAL_ROUTE_PENDING',parent=parent.relative_to(R).as_posix(),compiled_source_commit=commit,
   compiler_input_count=len(inputs),current_frozen_git_exact=True,resources=measured['resources'],clocks_ns=actual,
-  effective_parameters=parameters(parent,s,ctx),parent_summary_sha256=sha(parent/'summary.json'))
+  effective_parameters=parameters(parent,s,ctx),parent_summary_sha256=sha(parent/'summary.json'),ddr_reference_contract=corrected)
  if route:
   from audit_stage1 import build_audit
   result['build']=build_audit(route,review_place=False)
