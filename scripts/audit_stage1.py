@@ -210,7 +210,7 @@ def gate_reuse_audit(parent,before,commit):
                 compiled_source_commit=commit,placement_created_commit=creator,inputs_verified=len(before))
 
 
-def build_audit(attempt):
+def build_audit(attempt,review_place=True):
     out=(R/attempt).resolve();assert out.is_relative_to(R/'build')
     s=json.loads((out/'summary.json').read_text());a=assess(out,'full')
     assert s['stage']=='full' and s['exit_code']==0 and s['inputs_unchanged'] and s['resource_pass'] and s['timing_pass']
@@ -247,6 +247,11 @@ def build_audit(attempt):
     for n in ('placed_clocks.txt','placed_exceptions.timing'):assert signature(parent/n,parent,out)==signature(out/n,parent,out),n
     for n,h in s.get('route_checkpoints',{}).items():assert sha(out/n)==h
     assert (out/'target_color_regions.bit').is_file()
+    if review_place:
+        from review_stable_release import review
+        place_proof=review(parent.relative_to(R).as_posix(),None)
+        from review_stable_release import route_execution
+        route_execution(place_proof['effective_parameters']['route'],s,(out/'td.log').read_text(encoding='utf-8'),(out/'run.tcl').read_text(encoding='utf-8'))
     timing=(out/'target_color_regions_pr.timing').read_text()
     return dict(attempt=out.relative_to(R).as_posix(),summary=s,compiled_source_commit=commit,
                 git_blob_inputs_verified=len(before),reused_gate=reused_gate,bit_sha256=sha(out/'target_color_regions.bit'),routing=routing,
