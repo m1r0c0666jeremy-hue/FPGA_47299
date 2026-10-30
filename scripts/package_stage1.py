@@ -38,6 +38,11 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
     for folder in ('scripts','sim','rtl'):
         paths|={p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.tcl','.txt','.sv','.v','.json')}
     paths|={p for p in (R/'assets/osd/anlogic').iterdir() if p.is_file()}
+    # Keep the source TD configurations used by deterministic generation, and
+    # the exact historical clock evidence used by the new DDR reference review.
+    paths|={p for p in (R/'td_project').iterdir() if p.is_file() and p.suffix in ('.al','.adc','.sdc','.json')}
+    paths|={R/'build/target_region_sequence_stage1_20261028_170103/source_files.json',
+            R/'build/stage1_place_20261028_160918/placed_clocks.txt'}
     paths|={R/'README.md',R/'reports/stage1/validation.md',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',
             R/'docs/示教录制回放与运动状态_操作与验证.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
