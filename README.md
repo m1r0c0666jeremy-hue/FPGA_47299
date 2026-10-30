@@ -5,7 +5,7 @@ Maintainer: Fle & Jeremy
 
 正式入口为 `td_project/target_color_regions_stage1.al`，停止原生高清。默认红A黄B、备用蓝A紫B，新增有效新图像FPS、持久故障线索和同帧底栏。新候选仍在验证，尚无本轮最终物理与上板通过。操作、风险及验收见 [说明](docs/Final_Mode_红黄蓝紫_FPS与稳定性_操作验收.md)。接续入口 `build/current_ry_bp_path.txt`。
 
-发现旧DDR50MHz参考与100MHz配置不一致；Jeremy已批准独立100MHz参考和局部复位释放桥，并增加一轮正式构建（总上限3）。不更改厂家IP或相机／HDMI时钟，不以此认定花屏根因或稳定性已修复。旧候选、native独立归档、所有失败取消记录保持。本轮不推送、上板或Flash。以下为历史记录。
+发现旧DDR50MHz参考与100MHz配置不一致；Jeremy已批准独立100MHz参考和局部复位释放桥；随后取消构建次数上限。当前同源CongestionHigh整机构建在进行，原TimingUltra布局工具崩溃记录保留。不更改厂家IP或相机／HDMI时钟，不以此认定花屏根因或稳定性已修复。旧候选、native独立归档、所有失败取消记录保持。本轮不推送、上板或Flash。以下为历史记录。
 
 
 ## 2026-10-30 10:18：方案二当前验证全过，唯一新布线101718
