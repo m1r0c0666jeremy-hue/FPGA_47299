@@ -37,6 +37,21 @@ module native_line_core #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TIME
  reg [17:0] job_cycles,bus_wait,return_wait,drain_cycles;reg [8:0] issued;
  reg close_done,timeout_event;reg [3:0] timeout_cause;reg [1:0] failed_jobs;
  reg [31:0] accepted_base;wire [31:0] accepted_delta=I_accepted_reads-accepted_base;
+ // Since 4 == 1 (mod 3), sum the five base-4 digits (range 0..15).
+ function [1:0] row_mod3;input [9:0] n;reg [3:0] sum;begin
+ sum={2'd0,n[1:0]}+{2'd0,n[3:2]}+{2'd0,n[5:4]}+
+     {2'd0,n[7:6]}+{2'd0,n[9:8]};
+ case(sum)
+ 0,3,6,9,12,15:row_mod3=0;
+ 1,4,7,10,13:row_mod3=1;
+ 2,5,8,11,14:row_mod3=2;
+ default:row_mod3=2'bxx;
+ endcase end endfunction
+ // Retain the original expression's 25-bit subtraction/multiplication wrap,
+ // including req_y > 719. Truncating to 10 bits here would change bad inputs.
+ wire [24:0] address_y=(req_first?req_rotate:frame_rotate)?
+                         25'd719-{15'd0,req_y}:{15'd0,req_y};
+ wire [24:0] row_offset=(address_y<<11)-(address_y<<7);
  function [24:0] base_for;input [1:0] b;begin case(b)0:base_for=0;1:base_for=7000000;2:base_for=14000000;3:base_for=21000000;endcase end endfunction
  wire [9:0] rgb_write_addr=(slot<<8)+(slot<<6)+pair_index[9:1];
  wire [6:0] fetch_group=group_index+(state==CLASS && group_index<79?7'd1:7'd0);
@@ -54,7 +69,7 @@ module native_line_core #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TIME
  reg filter_valid;reg [10:0] filter_x;reg [9:0] filter_y;reg [7:0] filter_mask;
  wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [7:0] fa,fb;
  stable_filter4 filter(I_ddr_clk,d_rst,filter_valid,filter_x,filter_y,2'd0,filter_mask,fv,ft,fx,fy,fa,fb);
- wire [1:0] mask_slot=fy%3;wire [9:0] mask_addr=(mask_slot<<8)+(mask_slot<<6)+fx[10:2];
+ wire [1:0] mask_slot=row_mod3(fy);wire [9:0] mask_addr=(mask_slot<<8)+(mask_slot<<6)+fx[10:2];
  wire mask_finish=fv && fx==1276;wire notify_ready,notify;wire [77:0] notice;
  reg [77:0] notice0,notice1;reg [1:0] notice_count;
  wire notice_send=notice_count!=0 && notify_ready;
@@ -103,7 +118,7 @@ module native_line_core #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TIME
  O_job_zoom<=req_native_zoom;O_job_x0<=req_native_x0;O_job_y0<=req_native_y0;slot<=req_slot;job_y<=req_y;job_epoch<=req_epoch;
  job_rotate<=req_first?req_rotate:frame_rotate;
  if(req_first)begin frame_rotate<=req_rotate;frame_base<=base_for(req_image);image<=req_image;image_id<=req_id;models<=req_models;end
- line_base<=(req_first?base_for(req_image):frame_base)+((req_first?req_rotate:frame_rotate)?10'd719-req_y:req_y)*25'd1920;
+ line_base<=(req_first?base_for(req_image):frame_base)+row_offset;
  sent<=0;received<=0;part<=0;group_index<=0;job_cycles<=0;bus_wait<=0;return_wait<=0;issued<=0;accepted_base<=I_accepted_reads;close_done<=0;state<=WAIT_BUS;end
  WAIT_BUS:if(!I_write_busy && !I_write_en)state<=SEND;
  SEND:if(O_read_en)begin if(sent==239)state<=RECEIVE;else sent<=sent+1'b1;end
@@ -179,8 +194,8 @@ module native_line_core #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_TIME
  reg [31:0] epoch;reg vs_old;reg [3:0] offset_d;reg [1:0] moffset_d;reg good_d,vs_d,hs_d,de_d;
  wire [10:0] view_x0=I_rotate?1280-view_width-I_x0:I_x0;
  wire [9:0] view_y0=I_rotate?720-view_height-I_y0:I_y0;
- wire [10:0] sx=x0+source_x;wire [9:0] sy=y0+source_y;wire [1:0] pb=sy%3;
- wire [1:0] next_slot=prefetch%3;wire good=frame_live && !abort_frame && live2 && ready[pb] && tags[pb]==sy;
+ wire [10:0] sx=x0+source_x;wire [9:0] sy=y0+source_y;wire [1:0] pb=row_mod3(sy);
+ wire [1:0] next_slot=row_mod3(prefetch);wire good=frame_live && !abort_frame && live2 && ready[pb] && tags[pb]==sy;
  reg diagnostic_vs_old,diagnostic_de_seen;reg fault_recorded;reg [17:0] pixel_clock,ready_time[0:2];reg [2:0] used_line;
  always @(posedge I_pixel_clk or negedge p_global)begin
  if(!p_global)begin diagnostic_vs_old<=0;diagnostic_de_seen<=0;O_pixel_diag<=0;O_pixel_diag[126:109]<=18'h3ffff;fault_recorded<=0;pixel_clock<=0;used_line<=0;ready_time[0]<=0;ready_time[1]<=0;ready_time[2]<=0;end

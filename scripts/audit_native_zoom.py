@@ -6,6 +6,7 @@ from native_zoom_policy import canonical_build_inputs,compiler_paths,sha
 from audit_stage1 import specs,evidence
 
 NATIVE={
+ 'fixed_arithmetic':'NATIVE_FIXED_ARITHMETIC_PASS modulo1024 three_paths addresses32768',
  'controls':'STAGE1_K_CONTROLS_PASS', 'zoom_controls':'NATIVE_ZOOM_CONTROLS_PASS',
  'k_keys75m':'STAGE1_K_KEYS_75M_PASS', 'bridge':'NATIVE_BRIDGE_PASS',
  'average':'NATIVE_DOWNSAMPLE_PASS','average_full':'NATIVE_DOWNSAMPLE_PASS source=2560x1440',

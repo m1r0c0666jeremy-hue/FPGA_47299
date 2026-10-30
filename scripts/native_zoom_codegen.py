@@ -201,6 +201,26 @@ endmodule
 ''','')
     s=replace(s,' wire [3:0] hit;stable_model_lane',
       " wire [47:0] pair_rgb=pair_index[0]?pixel_quad[47:0]:pixel_quad[95:48];\n wire [3:0] hit;stable_model_lane")
+    # Exact bounded arithmetic only; preserve buffers and every pipeline stage.
+    s=replace(s,' function [24:0] base_for;', ''' // Since 4 == 1 (mod 3), sum the five base-4 digits (range 0..15).
+ function [1:0] row_mod3;input [9:0] n;reg [3:0] sum;begin
+ sum={2'd0,n[1:0]}+{2'd0,n[3:2]}+{2'd0,n[5:4]}+
+     {2'd0,n[7:6]}+{2'd0,n[9:8]};
+ case(sum)
+ 0,3,6,9,12,15:row_mod3=0;
+ 1,4,7,10,13:row_mod3=1;
+ 2,5,8,11,14:row_mod3=2;
+ default:row_mod3=2'bxx;
+ endcase end endfunction
+ // Retain the original expression's 25-bit subtraction/multiplication wrap,
+ // including req_y > 719. Truncating to 10 bits here would change bad inputs.
+ wire [24:0] address_y=(req_first?req_rotate:frame_rotate)?
+                         25'd719-{15'd0,req_y}:{15'd0,req_y};
+ wire [24:0] row_offset=(address_y<<11)-(address_y<<7);
+ function [24:0] base_for;''')
+    for signal in ('fy','sy','prefetch'):
+        s=replace(s,signal+'%3','row_mod3('+signal+')')
+    s=replace(s,"((req_first?req_rotate:frame_rotate)?10'd719-req_y:req_y)*25'd1920",'row_offset')
     put('native_line_core',s)
     s=template('frame_store.v').replace('module refined_frame_store','module native_frame_store')
     s=s.replace('parameter WORDS=172800','parameter WORDS=691200')
