@@ -47,6 +47,7 @@ def main():
   name='qualification/route/td.log';assert b'No abnormal timing path.' in p[name]
   p[name]=p[name].replace(b'No abnormal timing path.',b'Abnormal timing path.')
   d['routing']['log_sha256']=H(p[name])
+  d['route_execution']['log_sha256']=H(p[name])
  cases['actual_abnormal_path']=lambda p:phys(p,abnormal)
  def failed_bound(d,p):
   name='qualification/route/td.log';raw=p[name]
@@ -57,13 +58,27 @@ def main():
   # Keep an unrelated pass message so a generic text search cannot qualify it.
   final=final[:bound.start()]+b'Unrelated check: Check Pass.\n'+bound[1]+body+bound[3]+final[bound.end():]
   p[name]=raw[:start]+final;d['routing']['log_sha256']=H(p[name])
+  d['route_execution']['log_sha256']=H(p[name])
  cases['actual_bound_failed_rehashed']=lambda p:phys(p,failed_bound)
  def premature_finish(d,p):
   name='qualification/route/td.log';raw=p[name];marker=b'REFINED_CHECKPOINT_FULL_COMPLETED';assert marker in raw
   raw=raw.replace(marker,b'REFINED_COMPLETION_REMOVED_FOR_NEGATIVE_TEST')
   start=raw.rfind(b'RUN-1002 : start command "route"');assert start>=0
   at=raw.index(b'\n',start)+1;p[name]=raw[:at]+marker+b'\n'+raw[at:];d['routing']['log_sha256']=H(p[name])
+  d['route_execution']['log_sha256']=H(p[name])
  cases['completion_before_route_finish']=lambda p:phys(p,premature_finish)
+ def wrong_final_effort(d,p):
+  e=d['route_execution'];e['final_effort']='normal' if e['final_effort']=='routability' else 'routability'
+ cases['final_route_effort_record_mismatch']=lambda p:phys(p,wrong_final_effort)
+ def wrong_executed_effort(d,p):
+  name='qualification/route/td.log';raw=p[name]
+  start=raw.rfind(b'RUN-1002 : start command "route"');assert start>=0
+  prefix=raw[:start]
+  matches=list(re.finditer(rb'RUN-1002 : start command "set_param route effort (normal|routability)"',prefix));assert matches
+  match=matches[-1];value=b'normal' if match[1]==b'routability' else b'routability'
+  p[name]=raw[:match.start(1)]+value+raw[match.end(1):]
+  d['routing']['log_sha256']=H(p[name]);d['route_execution']['log_sha256']=H(p[name])
+ cases['actual_final_route_effort_rehashed']=lambda p:phys(p,wrong_executed_effort)
  cases['archive_traversal']=lambda p:p.update({'../unexpected.txt':b'unsafe member'})
  rejected=[]
  for label,mutate in cases.items():

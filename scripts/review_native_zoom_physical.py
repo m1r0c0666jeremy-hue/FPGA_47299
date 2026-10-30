@@ -5,6 +5,31 @@ from native_zoom_policy import R,sha,canonical_build_inputs,git
 from refined_build_report import assess
 from audit_stage1 import routing_audit,signature
 
+def route_execution(base,summary,log,tcl):
+ starts=list(re.finditer(r'^RUN-1002 : start command "route"\s*$',log,re.M))
+ assert starts,'Missing actual route command'
+ prefix=log[:starts[-1].start()];overrides={}
+ for match in re.finditer(r'^RUN-1002 : start command "set_param route ([a-z_]+) ([A-Za-z0-9_.-]+)"\s*$',prefix,re.M):
+  key,value=match.groups();assert key in base,'Unknown route override '+key
+  assert f'set_param route {key} {value}' in tcl,'Route setting is not in frozen Tcl'
+  overrides[key]=value
+ actual={**base,**overrides}
+ assert actual.get('fix_hold')==actual.get('timing')=='on'
+ performed='ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY' in prefix
+ assert performed==summary['route_retry_performed']
+ assert len(starts)==(2 if performed else 1),'Unexpected number of route attempts'
+ expected=summary['route_effort']
+ if performed:
+  assert summary['retry_routability'] and expected=='normal'
+  marker=prefix.index('ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY')
+  assert re.search(r'RUN-1003 : finish command "route"',prefix[starts[0].end():marker])
+  expected='routability'
+ assert expected==summary['final_route_effort']==actual.get('effort')
+ assert expected in ('normal','routability')
+ return {'scope':'Final route command parameters; parent checkpoint plus executed overrides',
+  'initial_effort':summary['route_effort'],'final_effort':expected,'retry_performed':performed,
+  'route_command_count':len(starts),'overrides':overrides,'final_parameters':actual}
+
 def parameters(parent,summary,context):
  def settings(path):
   pairs=[line.split('|') for line in path.read_text(encoding='utf-8').splitlines()]
@@ -81,6 +106,9 @@ def review(parent,route=None):
   for n,h in before.items():assert sha(route/'compiled_source'/n)==h
   measured=assess(route,'full');assert measured['resource_pass'] and measured['timing_pass'],measured
   result.update(measured);result['routing']=routing_audit(route/'td.log')
+  result['route_execution']=route_execution(result['effective_parameters']['route'],s,
+    (route/'td.log').read_text(encoding='utf-8'),(route/'run.tcl').read_text(encoding='utf-8'))
+  result['route_execution'].update(log_sha256=sha(route/'td.log'),tcl_sha256=sha(route/'run.tcl'))
   for name in ('placed_clocks.txt','placed_exceptions.timing'):
    assert signature(parent/name,parent,route)==signature(route/name,parent,route),'Route changed operative constraints: '+name
   result.update(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',route=route.relative_to(R).as_posix(),route_summary_sha256=sha(route/'summary.json'),bit_sha256=sha(route/'target_color_regions.bit'))

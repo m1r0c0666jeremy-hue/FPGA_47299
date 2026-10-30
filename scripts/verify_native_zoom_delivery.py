@@ -21,6 +21,34 @@ def verify_final_route_log(log):
  assert finish>=0 and final.find('REFINED_CHECKPOINT_FULL_COMPLETED',finish)>finish,'Final completion is missing or out of order'
  assert 'BUILD_FAILED:' not in final
 
+def verify_route_execution(log,tcl,base,summary,record):
+ # Derive runtime overrides from TD's executed-command log, independently of
+ # the producer's metadata. The checkpoint's settings alone are insufficient.
+ positions=[m.start() for m in re.finditer(r'^RUN-1002 : start command "route"\s*$',log,re.M)]
+ assert positions
+ commands=log[:positions[-1]];overrides={}
+ for line in commands.splitlines():
+  match=re.fullmatch(r'RUN-1002 : start command "set_param route ([a-z_]+) ([A-Za-z0-9_.-]+)"',line.strip())
+  if match:
+   key,value=match.groups();assert key in base
+   assert 'set_param route '+key+' '+value in tcl
+   overrides[key]=value
+ actual=dict(base);actual.update(overrides)
+ assert actual.get('timing')==actual.get('fix_hold')=='on'
+ retried='ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY' in commands
+ assert retried==summary['route_retry_performed']
+ assert len(positions)==(2 if retried else 1)
+ initial=summary['route_effort'];effort='routability' if retried else initial
+ assert effort in ('normal','routability') and effort==summary['final_route_effort']==actual.get('effort')
+ if retried:
+  assert initial=='normal' and summary['retry_routability']
+  failed=commands[:commands.index('ROUTE_NORMAL_FAILED_RETRY_ROUTABILITY')]
+  assert 'RUN-1003 : finish command "route"' in failed[positions[0]:]
+ expected={'scope':'Final route command parameters; parent checkpoint plus executed overrides',
+  'initial_effort':initial,'final_effort':effort,'retry_performed':retried,
+  'route_command_count':len(positions),'overrides':overrides,'final_parameters':actual}
+ assert record==expected,'Final route settings or retry provenance mismatch'
+
 def verify(folder):
  folder=Path(folder);delivery=json.loads((folder/'delivery.json').read_text(encoding='utf-8'))
  assert delivery['status']=='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING'
@@ -46,10 +74,18 @@ def verify(folder):
   for stage in ('place','route'):
    summary=read('qualification/'+stage+'/summary.json')
    assert summary['exit_code']==0 and summary['inputs_unchanged'] and summary['working_tree_matches']
+  assert H(z.read('qualification/place/summary.json'))==physical['parent_summary_sha256']
+  assert H(z.read('qualification/route/summary.json'))==physical['route_summary_sha256']
   params=physical['effective_parameters']
   assert H(z.read('qualification/place/effective_place.txt'))==params['place_sha256']
   assert H(z.read('qualification/place/effective_route.txt'))==params['route_sha256']
   assert params['route']['fix_hold']==params['route']['timing']=='on'
+  execution=dict(physical['route_execution'])
+  assert execution.pop('log_sha256')==H(z.read('qualification/route/td.log'))
+  assert execution.pop('tcl_sha256')==H(z.read('qualification/route/run.tcl'))
+  verify_route_execution(z.read('qualification/route/td.log').decode('utf-8'),
+    z.read('qualification/route/run.tcl').decode('utf-8'),params['route'],
+    read('qualification/route/summary.json'),execution)
   options=read('qualification/place/flow_options.json')['options']
   assert params['place']['pr_strategy']==str(options['strategy']) and params['place']['max_fanout']==str(options['max_fanout'])
   assert params['place']['effort']==options['place_effort'] and params['place']['macro_performance']==options['macro_performance']
