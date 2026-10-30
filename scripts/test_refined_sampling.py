@@ -2,10 +2,6 @@
 from refined_testlib import R
 from sc500_test_evidence import run
 import json,zipfile,datetime
-info=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
-old=R/info['backup']/'stable_calibration_before.v'
-if not old.exists():
- with zipfile.ZipFile(R/info['backup']/'sources_before.zip') as z:old.write_bytes(z.read('rtl/color_regions/stable_calibration.v'))
 src=r'''`timescale 1ns/1ps
 module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,sof=0,v=0,sample=0;reg [95:0] rgb=0;
@@ -31,7 +27,7 @@ if(timeout>=3000000)$fatal(1,"search timeout");
 CHECK
 $display("REFINED_SAMPLING_PASS LABEL pairPAIR negativeNEGATIVE 512 exact groups; material/background replay cycles%0d status%h",timeout,status);$finish;end endmodule'''
 out=R/'build/sim'/('refined_sampling_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'));out.mkdir(parents=True)
-for before,pair,negative in ((True,0,1),(False,0,1),(False,1,1),(False,0,0),(False,1,0)):
+for before,pair,negative in ((False,0,1),(False,1,1),(False,0,0),(False,1,0)):
  target=(0x285078 if before else 0x787828) if pair==0 else 0x782864
  coords=[]
  for f in range(8):

@@ -7,39 +7,72 @@ R=Path(__file__).resolve().parents[1]
 ARCHIVE=R/'build/target_color_regions_osd_memory_20261019_234705/osd_memory_same_source.zip'
 BASE_AUDIT=R/'reports/osd_memory/final_audit_20261019_2344.json'
 
-def old_modules():
+def old_modules(progress=False):
     assert sha(ARCHIVE)=='9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3'
-    old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={};refreshed=[]
-    refresh={'camera_frame_admission':'REFINED_CAMERA_GATE_PASS',
-             'camera_real_i2c':'REFINED_CAMERA_PASS',
-             'camera_relay_production_real_i2c':'CAMERA_RELAY_SUPERVISOR_PASS'}
+    old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={};refreshed=[];missing=[]
+    refresh={'camera_frame_admission':('REFINED_CAMERA_GATE_PASS',('stable_camera_capture','refined_camera_config')),
+             'camera_real_i2c':('REFINED_CAMERA_PASS',('refined_camera_config',)),
+             'camera_relay_production_real_i2c':('CAMERA_RELAY_SUPERVISOR_PASS',('refined_camera_config',))}
     for i in range(6):
-        refresh['camera_supervisor_'+str(i)]='REFINED_CAMERA_'
-        refresh['camera_relay_production_'+str(i)]='CAMERA_RELAY_SUPERVISOR_PASS'
+        refresh['camera_supervisor_'+str(i)]=('REFINED_CAMERA_',('refined_camera_config',))
+        refresh['camera_relay_production_'+str(i)]=('CAMERA_RELAY_SUPERVISOR_PASS',('refined_camera_config',))
+    calibration={'calibration_calibration_acquisition':'RING_CALIBRATION_PASS','model_state_quality':'REFINED_MODEL_STATE_PASS'}
+    calibration.update({f'sampling_after_{p}_{n}':'REFINED_SAMPLING_PASS' for p in (0,1) for n in (0,1)})
+    for n in ('broad_cluster','polluted_frames','dark_blue_background','inseparable_background','purple_dark_bias',
+              'yellow_dark_bias','blue_metal_reflection','purple_neutral_background','yellow_bright_neutral'):
+        calibration['calibration_after_'+n]='RING_DISTRIBUTION_PASS '+n
+    assert len(calibration)==15 and len(refresh)==15
+    video_names={f'refined_video_{p}_{z}_{m}_{r}_f0_n1' for p in (0,1) for z in range(5) for m in range(4) for r in (0,1)}
+    video_names.update({f'refined_video_0_0_0_{r}_f1_n2' for r in (0,1)}|{f'refined_video_0_1_0_{r}_f0_n2' for r in (0,1)})
+    live_names={f'refined_v4_live_{p}_{r}' for p in (0,1) for r in (0,1)}
+    assert len(video_names)==84 and len(live_names)==4
+    approved=set(refresh)|set(calibration)|video_names|live_names
+    assert approved.issubset(old['regression']),sorted(approved-set(old['regression']))
     with zipfile.ZipFile(ARCHIVE) as z:
         assert BASE_AUDIT.read_bytes()==z.read(BASE_AUDIT.relative_to(R).as_posix())
         for name,e in old['regression'].items():
-            rp=e['record'].replace('\\','/');lp=str(Path(rp).with_suffix('.log')).replace('\\','/')
+            rp=e['record'].replace(chr(92),'/');lp=str(Path(rp).with_suffix('.log')).replace(chr(92),'/')
             assert hashlib.sha256(z.read(rp)).hexdigest()==e['record_sha256'],name
             assert hashlib.sha256(z.read(lp)).hexdigest()==e['log_sha256'],name
             changed=[]
             for n,h in e['inputs'].items():
-                n=n.replace('\\','/');p=R/n
+                n=n.replace(chr(92),'/');p=R/n
                 data=p.read_bytes() if p.is_file() else z.read(n)
                 if hashlib.sha256(data).hexdigest()!=h:changed.append(n)
-            if changed:
-                assert name in refresh and set(changed)=={'rtl/color_regions/refined_camera_config.v'},'Unreviewed baseline dependency change '+str(changed)
-                current=evidence(name,refresh[name],('refined_camera_config',))
-                assert current,'Missing current camera baseline replacement '+name
-                result[name]=current;refreshed.append(name)
-            else:result[name]=e
-    assert len(result)==160
-    assert len(refreshed)==15,'Expected all 15 changed camera dependencies to be rerun'
-    return dict(scope='145 unchanged archived checks plus 15 current-source camera replacements; new behavior has separate checks',
-                archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result,current_replacements=refreshed)
+            if not changed:result[name]=e;continue
+            assert name in approved,'Unreviewed baseline dependency change '+name
+            prefix=name
+            if name in refresh:
+                marker,mods=refresh[name]
+                expected={'rtl/color_regions/refined_camera_config.v'}
+                if name=='camera_frame_admission':expected.add('rtl/color_regions/stable_camera_capture.v')
+            elif name in calibration:
+                marker=calibration[name];mods=('stable_calibration',);expected={'rtl/color_regions/stable_calibration.v'}
+            else:
+                prefix=name.replace('refined_video_','stage1_video_').replace('refined_v4_live_','stage1_v4_live_')
+                if name in live_names:prefix+='_refined_g160'
+                marker='STABLE_VIDEO_PASS:' if name in video_names else 'STAGE1_LIVE_EDITOR_PASS'
+                mods=('stable_preprocess','refined_line_reader','stage1_osd')
+                expected={'rtl/color_regions/stable_preprocess.v'}
+            assert set(changed)==expected,(name,changed,expected)
+            current=evidence(prefix,marker,mods)
+            if current:
+                result[name]=dict(current,archived_check=name,replacement_check=prefix,changed_dependencies=sorted(changed));refreshed.append(name)
+            else:missing.append(name)
+    assert len(old['regression'])==160
+    if not progress:
+        assert not missing,'Missing current baseline replacements: '+', '.join(missing)
+        assert len(result)==160 and len(refreshed)==118
+    return dict(scope='42 unchanged archived checks; 118 current-source replacements including 88 shared stage1 video/live qualifications',
+                archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result,current_replacements=refreshed,
+                required=160,passed=len(result),missing=missing)
+
 
 def specs():
     d={
+      'stage1_runtime':('STAGE1_RUNTIME_PASS vectors5000',('stage1_memory_video_out',)),
+      'stage1_runtime_footer':('STAGE1_RUNTIME_FOOTER_PASS',('stage1_osd','stage1_ui_formatter')),
+      'stage1_ry_bp_colours':('STAGE1_RY_BP_COLOURS_PASS defaults4 families1440',('stable_calibration',)),
       'stage1_footer_numbers':('STAGE1_FOOTER_NUMBERS_PASS cases=512',('stage1_ui_formatter',)),
       'stage1_footer_equivalence':('STAGE1_FOOTER_EQUIVALENCE_PASS cases=256 glyphs=32768',('stage1_osd','stage1_ui_formatter','stage1_render')),
       'stage1_render_equivalence':('STAGE1_RENDER_EQUIVALENCE_PASS cases=14 pixels=11182080',('stage1_render',)),
@@ -222,7 +255,7 @@ def build_audit(attempt):
 def audit(attempt=None,progress=False):
     check_branch(R);baseline_inputs(R);check_protected()
     subprocess.run([sys.executable,'-X','utf8',str(R/'scripts/generate_stage1.py'),'--check'],cwd=R,check=True)
-    result=dict(branch=git(R,'branch','--show-current'),head=git(R,'rev-parse','HEAD'),baseline=old_modules(),
+    result=dict(branch=git(R,'branch','--show-current'),head=git(R,'rev-parse','HEAD'),baseline=old_modules(progress=progress),
                 original_protection_pass=True,generator_pass=True,hardware_status='PENDING')
     result['regression']={};missing=[]
     for n,(marker,mods) in specs().items():

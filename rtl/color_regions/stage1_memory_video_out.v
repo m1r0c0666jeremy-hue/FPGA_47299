@@ -851,7 +851,7 @@ module stage1_runtime_stats(input wire clk,rst_n,input wire [31:0] now_us,
  reg [11:0] old_timeout;reg [3:0] old_camera;
  (* async_reg="true" *)reg [2:0] lane_sync;
  assign lane_seen=lane_sync[2];
- wire fresh=sample && (!seen || image_id!=last_id || epoch!=last_epoch);
+ wire fresh=sample && (!seen || epoch!=last_epoch || $signed(image_id-last_id)>0);
  wire [31:0] elapsed=now_us-window_start;
  always @(posedge clk or negedge rst_n)begin
  if(!rst_n)begin started<=0;seen<=0;window_start<=0;last_id<=0;last_epoch<=0;

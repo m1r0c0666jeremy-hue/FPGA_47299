@@ -25,7 +25,7 @@ module stage1_osd #(parameter RUNTIME_INFO=0)(
  if(!I_rst_n)stage_camera_snapshot<=0;
  else if(I_de && y==625 && x==0)stage_camera_snapshot<=I_camera[16:9];
  reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
- reg [7:0] runtime_glyph;reg [7:0] ffault;reg [15:0] frecoveries;reg flane;
+ reg runtime_override;reg [1:0] fruntime_teach;reg [7:0] runtime_glyph;reg [7:0] ffault;reg [15:0] frecoveries;reg flane;
  reg flat_valid;reg [31:0] flatency,fage;
  always @*begin
  status_id=!ftracking?0:{1'b0,fm[36:33]};
@@ -136,7 +136,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason,I_k_value,I_k_adjust,footer_numbers);
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
- ffault<=0;frecoveries<=0;flane<=0;flat_valid<=0;flatency<=0;fage<=0;
+ fruntime_teach<=0;ffault<=0;frecoveries<=0;flane<=0;flat_valid<=0;flatency<=0;fage<=0;
  fm<=0;fimage<=0;fmode<=0;fzoom<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
  format_state<=0;format_col<=0;format_row<=0;footer_ready<=0;number_word_q<=0;hex_word_q<=0;number_digit_q<=0;hex_digit_q<=0;
  end else begin
@@ -147,40 +147,117 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
  6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
- 7:begin characters[(format_row?COLS:0)+format_col]<=RUNTIME_INFO && format_row && format_col>=16 && format_col<40?runtime_glyph:format_row && stage_camera_dead && format_col>=42?stage_glyph:fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=RUNTIME_INFO && runtime_override && !(format_row && stage_camera_dead && format_col>=42)?runtime_glyph:format_row && stage_camera_dead && format_col>=42?stage_glyph:fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
  endcase
  if(I_de && y==625 && x==0)begin
- ffault<=I_fault;frecoveries<=I_recovery[31:16];flane<=I_lane_seen;flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
+ fruntime_teach<=I_teaching[55:54];ffault<=I_fault;frecoveries<=I_recovery[31:16];flane<=I_lane_seen;flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  footer_ready<=0;format_state<=1;
  end end end
- always @*begin runtime_glyph=0;case(format_col)
-16:runtime_glyph=8'd0;
-17:runtime_glyph=8'd16;
-18:runtime_glyph=8'd26;
-19:runtime_glyph=8'd29;
-20:runtime_glyph=8'd0;
-21:runtime_glyph=8'd1+footer_numbers[40+:4];
-22:runtime_glyph=8'd1+footer_numbers[36+:4];
-23:runtime_glyph=8'd1+footer_numbers[32+:4];
-24:runtime_glyph=8'd0;
-25:runtime_glyph=8'd15;
-26:runtime_glyph=8'd1+ffault[4+:4];
-27:runtime_glyph=8'd1+ffault[0+:4];
-28:runtime_glyph=8'd0;
-29:runtime_glyph=8'd28;
-30:runtime_glyph=8'd1+frecoveries[12+:4];
-31:runtime_glyph=8'd1+frecoveries[8+:4];
-32:runtime_glyph=8'd1+frecoveries[4+:4];
-33:runtime_glyph=8'd1+frecoveries[0+:4];
+ always @*begin runtime_override=0;runtime_glyph=0;
+if(fm[567:565]!=0)begin if(!format_row)begin runtime_override=format_col>=24 && format_col<64;case(format_col)
+24:runtime_glyph=8'd16;
+25:runtime_glyph=8'd26;
+26:runtime_glyph=8'd29;
+27:runtime_glyph=8'd1+footer_numbers[40+:4];
+28:runtime_glyph=8'd1+footer_numbers[36+:4];
+29:runtime_glyph=8'd1+footer_numbers[32+:4];
+30:runtime_glyph=8'd0;
+31:runtime_glyph=8'd15;
+32:runtime_glyph=8'd1+ffault[4+:4];
+33:runtime_glyph=8'd1+ffault[0+:4];
 34:runtime_glyph=8'd0;
-35:runtime_glyph=8'd22;
-36:runtime_glyph=flane?8'd2:8'd1;
+35:runtime_glyph=8'd28;
+36:runtime_glyph=8'd1+frecoveries[12+:4];
+37:runtime_glyph=8'd1+frecoveries[8+:4];
+38:runtime_glyph=8'd1+frecoveries[4+:4];
+39:runtime_glyph=8'd1+frecoveries[0+:4];
+40:runtime_glyph=8'd0;
+41:runtime_glyph=8'd22;
+42:runtime_glyph=flane?8'd2:8'd1;
  default:runtime_glyph=0;endcase end
+end
+else if(stage_snapshot_mode!=3)begin if(format_row)begin runtime_override=format_col>=13 && format_col<42;case(format_col)
+13:runtime_glyph=8'd16;
+14:runtime_glyph=8'd26;
+15:runtime_glyph=8'd29;
+16:runtime_glyph=8'd1+footer_numbers[40+:4];
+17:runtime_glyph=8'd1+footer_numbers[36+:4];
+18:runtime_glyph=8'd1+footer_numbers[32+:4];
+19:runtime_glyph=8'd0;
+20:runtime_glyph=8'd15;
+21:runtime_glyph=8'd1+ffault[4+:4];
+22:runtime_glyph=8'd1+ffault[0+:4];
+23:runtime_glyph=8'd0;
+24:runtime_glyph=8'd28;
+25:runtime_glyph=8'd1+frecoveries[12+:4];
+26:runtime_glyph=8'd1+frecoveries[8+:4];
+27:runtime_glyph=8'd1+frecoveries[4+:4];
+28:runtime_glyph=8'd1+frecoveries[0+:4];
+29:runtime_glyph=8'd0;
+30:runtime_glyph=8'd22;
+31:runtime_glyph=flane?8'd2:8'd1;
+ default:runtime_glyph=0;endcase end
+end
+else if(format_row)begin
+if(fruntime_teach==3)begin
+case(format_col)
+21:begin runtime_override=1;runtime_glyph=8'd16;end
+22:begin runtime_override=1;runtime_glyph=8'd26;end
+23:begin runtime_override=1;runtime_glyph=8'd29;end
+24:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[40+:4];end
+25:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[36+:4];end
+26:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[32+:4];end
+27:begin runtime_override=1;runtime_glyph=8'd22;end
+28:begin runtime_override=1;runtime_glyph=flane?8'd2:8'd1;end
+ default:begin end endcase
+case(format_col)38:begin runtime_override=1;runtime_glyph=8'd15;end
+39:begin runtime_override=1;runtime_glyph=8'd1+ffault[7:4];end
+40:begin runtime_override=1;runtime_glyph=8'd1+ffault[3:0];end
+42:begin runtime_override=1;runtime_glyph=8'd28;end
+43:begin runtime_override=1;runtime_glyph=8'd1+frecoveries[12+:4];end
+44:begin runtime_override=1;runtime_glyph=8'd1+frecoveries[8+:4];end
+45:begin runtime_override=1;runtime_glyph=8'd1+frecoveries[4+:4];end
+46:begin runtime_override=1;runtime_glyph=8'd1+frecoveries[0+:4];end
+default:begin end endcase
+end else if(fruntime_teach==2)begin
+case(format_col)
+24:begin runtime_override=1;runtime_glyph=8'd16;end
+25:begin runtime_override=1;runtime_glyph=8'd26;end
+26:begin runtime_override=1;runtime_glyph=8'd29;end
+27:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[40+:4];end
+28:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[36+:4];end
+29:begin runtime_override=1;runtime_glyph=8'd1+footer_numbers[32+:4];end
+30:begin runtime_override=1;runtime_glyph=8'd22;end
+31:begin runtime_override=1;runtime_glyph=flane?8'd2:8'd1;end
+ default:begin end endcase
+end else begin runtime_override=format_col>=44 && format_col<63;case(format_col)
+44:runtime_glyph=8'd16;
+45:runtime_glyph=8'd26;
+46:runtime_glyph=8'd29;
+47:runtime_glyph=8'd1+footer_numbers[40+:4];
+48:runtime_glyph=8'd1+footer_numbers[36+:4];
+49:runtime_glyph=8'd1+footer_numbers[32+:4];
+50:runtime_glyph=8'd0;
+51:runtime_glyph=8'd15;
+52:runtime_glyph=8'd1+ffault[4+:4];
+53:runtime_glyph=8'd1+ffault[0+:4];
+54:runtime_glyph=8'd0;
+55:runtime_glyph=8'd28;
+56:runtime_glyph=8'd1+frecoveries[12+:4];
+57:runtime_glyph=8'd1+frecoveries[8+:4];
+58:runtime_glyph=8'd1+frecoveries[4+:4];
+59:runtime_glyph=8'd1+frecoveries[0+:4];
+60:runtime_glyph=8'd0;
+61:runtime_glyph=8'd22;
+62:runtime_glyph=flane?8'd2:8'd1;
+ default:runtime_glyph=0;endcase end
+end
+end
  wire geometry_ready;wire [251:0] geometry;
  wire [639:0] point_geometry=I_point[22]?{I_meta[639:100],I_point[20:0],I_meta[78:0]}:I_meta[639:0];
  refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,point_geometry,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);

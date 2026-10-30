@@ -38,4 +38,9 @@ s=s.replace("cfus,cepoch,ctime);", "cfus,cepoch,ctime,8'd50);")
 
 k_guard='if(!active[249] || {active[248],active[230:224]}!==8\'d50)$fatal(1,"same-image K metadata lost");\nif(active[603:595]'
 s=s.replace('def execute(job):', 's=s.replace('+repr('if(active[603:595]')+','+repr(k_guard)+')\n'+'def execute(job):')
+# Rebuild both physical colour fixtures while retaining independent geometry.
+read="s=(R/'sim/tb_stable_live.sv').read_text(encoding='utf-8')"
+patch="\ns=s.replace(\"PAIR_MODE?24'hc8c820:24'hc82020\",\"PAIR_MODE?24'h2020c8:24'hc82020\").replace(\"PAIR_MODE?24'hb420c8:24'h2020c8\",\"PAIR_MODE?24'hb420c8:24'hc8c820\")"
+patch+="\ns=s.replace(\"{model(285,302),model(52,69)}:{model(255,330),model(45,75)}\",\"{model(285,302),model(232,249)}:{model(255,330),model(195,255)}\").replace(\"{model(232,249),model(352,9)}:{model(195,255),model(345,30)}\",\"{model(52,69),model(352,9)}:{model(45,75),model(345,30)}\")"
+s=s.replace(read,read+patch)
 exec(compile(s,str(R/'scripts/test_refined_live.py'),'exec'),{'__name__':'__main__','__file__':__file__})
