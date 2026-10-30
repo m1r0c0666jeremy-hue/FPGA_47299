@@ -3,6 +3,24 @@ from pathlib import Path,PurePosixPath
 import argparse,hashlib,json,zipfile,re
 H=lambda b:hashlib.sha256(b).hexdigest()
 
+def verify_final_route_log(log):
+ start=log.rfind('RUN-1002 : start command "route"');assert start>=0
+ final=log[start:]
+ drcs=list(re.finditer(r'^PHY-1001 : Stage (\d+) \| Routing DRC\s*$',final,re.M))
+ assert len(drcs)==1,'Missing or ambiguous final Routing DRC'
+ drc=drcs[0];stage=drc[1]
+ end=re.search(r'^PHY-1001 : End Stage '+stage+r' \| Routing DRC;',final,re.M)
+ assert end and end.start()>drc.end(),'Incomplete Routing DRC'
+ values=re.findall(r'over cnt = (\d+)\([^)]*\), over = (\d+), worst = (\d+)',final[:drc.start()])
+ assert values and tuple(map(int,values[-1]))==(0,0,0),'Final routing conflicts remain'
+ body=final[drc.end():end.start()]
+ assert 'No multi-drive.' in body and 'No abnormal timing path.' in body
+ bound=re.search(r'^PHY-1001 : Stage '+stage+r'\.6 \| Bound Check\s*$(.*?)^PHY-1001 : End Stage '+stage+r'\.6 \| Bound Check;',body,re.M|re.S)
+ assert bound and 'Check Pass.' in bound[1],'Final Bound Check did not pass'
+ finish=final.find('RUN-1003 : finish command "route"',end.end())
+ assert finish>=0 and final.find('REFINED_CHECKPOINT_FULL_COMPLETED',finish)>finish,'Final completion is missing or out of order'
+ assert 'BUILD_FAILED:' not in final
+
 def verify(folder):
  folder=Path(folder);delivery=json.loads((folder/'delivery.json').read_text(encoding='utf-8'))
  assert delivery['status']=='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING'
@@ -72,12 +90,7 @@ def verify(folder):
   assert all(int(re.search(r'^\s*#'+k+r'\s+(\d+)',area,re.M)[1])==v for k,v in physical['resources'].items())
   routing=physical['routing'];assert routing['routing_drc_pass'] and routing['final_over_count']==routing['final_over']==routing['final_worst']==0
   assert H(z.read('qualification/route/td.log'))==routing['log_sha256']
-  log=z.read('qualification/route/td.log').decode('utf-8');start=log.rfind('RUN-1002 : start command "route"');assert start>=0
-  log=log[start:];m=re.search(r'Stage (\d+) \| Routing DRC\s*\n',log);assert m
-  end=re.search(r'End Stage '+m[1]+r' \| Routing DRC;',log);assert end and end.start()>m.end()
-  values=re.findall(r'over cnt = (\d+)\([^)]*\), over = (\d+), worst = (\d+)',log[:m.start()]);assert tuple(map(int,values[-1]))==(0,0,0)
-  body=log[m.end():end.start()];assert all(s in body for s in ('No multi-drive.','No abnormal timing path.','Check Pass.'))
-  assert 'REFINED_CHECKPOINT_FULL_COMPLETED' in log and 'BUILD_FAILED:' not in log
+  verify_final_route_log(z.read('qualification/route/td.log').decode('utf-8'))
   timing=z.read('qualification/route/target_color_regions_phy.ts').decode('utf-8')
   for k,v in physical['slack_ns'].items():assert float(re.search(k+r':\s*([-\d.]+)ns',timing)[1])==v
  return {'status':'INDEPENDENT_SAME_SOURCE_PASS','archive_name':delivery['archive_name'],'file_count':len(manifest),

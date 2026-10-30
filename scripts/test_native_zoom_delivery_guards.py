@@ -48,6 +48,22 @@ def main():
   p[name]=p[name].replace(b'No abnormal timing path.',b'Abnormal timing path.')
   d['routing']['log_sha256']=H(p[name])
  cases['actual_abnormal_path']=lambda p:phys(p,abnormal)
+ def failed_bound(d,p):
+  name='qualification/route/td.log';raw=p[name]
+  start=raw.rfind(b'RUN-1002 : start command "route"');assert start>=0
+  final=raw[start:];drc=re.search(rb'^PHY-1001 : Stage (\d+) \| Routing DRC\s*$',final,re.M);assert drc
+  bound=re.search(rb'(^PHY-1001 : Stage '+drc[1]+rb'\.6 \| Bound Check[^\n]*\n)(.*?)(^PHY-1001 : End Stage '+drc[1]+rb'\.6 \| Bound Check;)',final,re.M|re.S);assert bound and b'Check Pass.' in bound[2]
+  body=bound[2].replace(b'Check Pass.',b'Check Failed.')
+  # Keep an unrelated pass message so a generic text search cannot qualify it.
+  final=final[:bound.start()]+b'Unrelated check: Check Pass.\n'+bound[1]+body+bound[3]+final[bound.end():]
+  p[name]=raw[:start]+final;d['routing']['log_sha256']=H(p[name])
+ cases['actual_bound_failed_rehashed']=lambda p:phys(p,failed_bound)
+ def premature_finish(d,p):
+  name='qualification/route/td.log';raw=p[name];marker=b'REFINED_CHECKPOINT_FULL_COMPLETED';assert marker in raw
+  raw=raw.replace(marker,b'REFINED_COMPLETION_REMOVED_FOR_NEGATIVE_TEST')
+  start=raw.rfind(b'RUN-1002 : start command "route"');assert start>=0
+  at=raw.index(b'\n',start)+1;p[name]=raw[:at]+marker+b'\n'+raw[at:];d['routing']['log_sha256']=H(p[name])
+ cases['completion_before_route_finish']=lambda p:phys(p,premature_finish)
  cases['archive_traversal']=lambda p:p.update({'../unexpected.txt':b'unsafe member'})
  rejected=[]
  for label,mutate in cases.items():
