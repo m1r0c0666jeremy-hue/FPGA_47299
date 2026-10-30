@@ -1,5 +1,6 @@
 """Profile quality/state are frame-frozen and share publication/cancel priority."""
-from refined_testlib import R,run
+from refined_testlib import R
+from sc500_test_evidence import run
 src=r'''module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,sof=0,pair=0,cancel=0,changed=0;
 wire [11:0] gr,gb;wire [127:0] models;wire [15:0] rev;wire active,needs,fp;wire [7:0] status,fs;wire [23:0] gains;

@@ -6,7 +6,7 @@
 module stage1_memory_video_out #(parameter integer DEBUG_MODE = 0) (
     input wire [7:0] I_k_value,input wire I_k_adjust,input wire [1:0] I_ui_mode,input wire I_key_down2,I_key2,I_key3,I_key4,I_key_cancel,
     input wire I_gain_busy,I_gain_failed,input wire [2:0] I_gain_slot,input wire [6:0] I_gain_target,output wire O_area_alarm,
-    input wire [31:0] I_source_id,I_source_us,I_capture_us,I_board_us,I_latest_gray,
+    input wire I_lane_seen,input wire [31:0] I_source_id,I_source_us,I_capture_us,I_board_us,I_latest_gray,
     input wire I_source_time_valid,input wire [1:0] I_model_state,input wire [41:0] I_quality,
     input wire I_camera_event,I_camera_ready,input wire [17:0] I_camera_status,
     input wire I_sys_clk, input wire I_rst_n,
@@ -368,14 +368,18 @@ refined_video_in u_video_in(
      .run_state(area_state),.completed(area_completed),.occupied(area_occupied),.expected_area(area_expected),.actual_area(area_actual),.muted(area_muted),.alarm(stage1_raw_area_alarm),
      .trend(area_trend),.distance(area_distance),.dwell_ms(area_dwell),.edit_error(area_edit_error),.start_error(area_start_error),.busy(area_busy),.tip_live(area_tip),.metrics_valid(area_metrics_valid),.saved_vertices(area_saved_vertices),.draft_vertices(area_draft_vertices),.tip_reason(area_tip_reason),.image_healthy(teaching_image_ok),.image_reason(teaching_image_reason),
      .shown_point(teach_active_point),.desired_point(teach_desired_point),.teaching(teaching_status));
-    stage1_osd u_osd (.I_k_value(I_k_value),.I_k_adjust(I_k_adjust),.I_teaching(teaching_status),.I_point(teach_active_point[22:0]),
+    wire [7:0] runtime_fps,runtime_fault;wire runtime_lane;
+    stage1_runtime_stats runtime_stats(I_pixel_clk,I_process_rst_n,I_board_us,
+     S_hdmi_out_de && video_ok && image_time_valid,selected_frame_id,image_epoch,
+     I_camera_status,ddr_ui,pixel_diagnostics,recovery_ui,I_lane_seen,runtime_fps,runtime_fault,runtime_lane);
+    stage1_osd #(.RUNTIME_INFO(1)) u_osd (.I_k_value(I_k_value),.I_k_adjust(I_k_adjust),.I_teaching(teaching_status),.I_point(teach_active_point[22:0]),
      .I_ui_mode(I_ui_mode),.I_region_vertices(area_saved_vertices),.I_region_draft(area_draft_vertices),.I_region_counts(area_counts),.I_region_closed(area_closed),
      .I_area_count(area_count),.I_draft_count(area_draft),.I_run_state(area_state),.I_completed(area_completed),.I_occupied(area_occupied),
      .I_expected_area(area_expected),.I_actual_area(area_actual),.I_area_muted(area_muted),.I_area_trend(area_trend),.I_area_distance(area_distance),.I_area_dwell(area_dwell),
      .I_edit_error(area_edit_error),.I_start_error(area_start_error),.I_area_busy(area_busy || (area_tip && area_count!=0 && !area_metrics_valid)),.I_tip_live(area_tip),
      .I_gain_busy(I_gain_busy),.I_gain_failed(I_gain_failed),.I_gain_slot(I_gain_slot),.I_gain_target(I_gain_target),.I_tip_reason(area_tip_reason),
         .I_latency_valid(latency_valid),.I_latency_us(latency_us),.I_frame_age(frame_age),
-        .I_ddr_diag(ddr_ui),.I_pixel_diag(pixel_diagnostics),.I_recovery(recovery_ui),.I_camera(I_camera_status),
+        .I_fps(runtime_fps),.I_fault(runtime_fault),.I_lane_seen(runtime_lane),.I_ddr_diag(ddr_ui),.I_pixel_diag(pixel_diagnostics),.I_recovery(recovery_ui),.I_camera(I_camera_status),
         .I_geometry_commit(frame_commit),
         .I_rotate(active_rotate),.I_diag(diag_at_vs),.I_image_id(selected_frame_id),
         .I_clk(S_hdmi_pixel_clk),.I_rst_n(I_process_rst_n),
@@ -835,3 +839,38 @@ module stage1_k_tracker(input wire clk,rst_n,start,input wire [31:0] frame_id,
  endcase end end
 endmodule
 `default_nettype wire
+
+// Pixel-domain telemetry. Input sample means an actual valid video pixel.
+module stage1_runtime_stats(input wire clk,rst_n,input wire [31:0] now_us,
+ input wire sample,input wire [31:0] image_id,input wire [15:0] epoch,
+ input wire [17:0] camera,input wire [127:0] ddr_diag,pixel_diag,
+ input wire [38:0] recovery,input wire lane_async,
+ output reg [7:0] fps,fault,output wire lane_seen);
+ reg started,seen;reg [31:0] window_start,last_id;reg [15:0] last_epoch;
+ reg [7:0] count;reg [15:0] old_recoveries,old_underflow,old_unexpected;
+ reg [11:0] old_timeout;reg [3:0] old_camera;
+ (* async_reg="true" *)reg [2:0] lane_sync;
+ assign lane_seen=lane_sync[2];
+ wire fresh=sample && (!seen || image_id!=last_id || epoch!=last_epoch);
+ wire [31:0] elapsed=now_us-window_start;
+ always @(posedge clk or negedge rst_n)begin
+ if(!rst_n)begin started<=0;seen<=0;window_start<=0;last_id<=0;last_epoch<=0;
+ count<=0;fps<=0;fault<=0;old_recoveries<=0;old_underflow<=0;old_unexpected<=0;old_timeout<=0;old_camera<=0;lane_sync<=0;end
+ else begin
+ lane_sync<={lane_sync[1:0],lane_async};
+ if(!started)begin started<=1;window_start<=now_us;count<=fresh?1:0;end
+ else if(elapsed>=1000000)begin
+ // A sample exactly at a window boundary belongs to the next window.
+ fps<=elapsed>=2000000?0:count;window_start<=now_us;count<=fresh?1:0;
+ end else if(fresh && count!=255)count<=count+1'b1;
+ if(fresh)begin seen<=1;last_id<=image_id;last_epoch<=epoch;end
+ old_camera<=camera[12:9];old_recoveries<=recovery[31:16];
+ old_timeout<=ddr_diag[87:76];old_unexpected<=ddr_diag[119:104];old_underflow<=pixel_diag[19:4];
+ // Codes are domain-prefixed hexadecimal, retained after recovery.
+ if(pixel_diag[19:4]!=old_underflow)fault<={4'h4,pixel_diag[3:0]};
+ if(ddr_diag[119:104]!=old_unexpected)fault<=8'h31;
+ if(ddr_diag[87:76]!=old_timeout)fault<={4'h3,ddr_diag[75:72]};
+ if(recovery[31:16]!=old_recoveries || recovery[38])fault<={4'h2,recovery[37:34]};
+ if(camera[12:9]!=0 && camera[12:9]!=old_camera)fault<={4'h1,camera[12:9]};
+ end end
+endmodule

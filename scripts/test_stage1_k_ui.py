@@ -54,7 +54,7 @@ initial begin repeat(4)@(negedge clk);rst=1;
     commands=[];expected=[]
     def line_for(k,page=0,status=15,busy=0,failed=0,show=1,actual=90,target=105):
         line=[' ']*64
-        put(line,0,'HILITE');put(line,8,' ZOOM ');put(line,14,'1.5X');put(line,19,'R/B');put(line,23,'180')
+        put(line,0,'HILITE');put(line,8,' ZOOM ');put(line,14,'1.5X');put(line,19,'R/Y');put(line,23,'180')
         gains=(16,32,48,64,80,90,105)
         put(line,27,f'BRT{actual:03d}');put(line,34,f'{gains.index(actual)+1 if actual in gains else "-"}/7');put(line,38,'MARK');put(line,43,'ON' if show else 'OFF')
         put(line,47,f'K{k//100}.{k%100:02d}');put(line,53,SHORT_STATES[status])

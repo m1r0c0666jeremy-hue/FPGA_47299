@@ -1,6 +1,7 @@
 """Exact eight-frame sampling and same-scene directed-negative comparison."""
-from refined_testlib import R,run
-import json,zipfile
+from refined_testlib import R
+from sc500_test_evidence import run
+import json,zipfile,datetime
 info=json.loads((R/'reports/refined/protected_inputs.json').read_text(encoding='utf-8'))
 old=R/info['backup']/'stable_calibration_before.v'
 if not old.exists():
@@ -29,9 +30,9 @@ while((dut.state!=0 || timeout==0) && timeout<3000000)begin @(negedge clk);timeo
 if(timeout>=3000000)$fatal(1,"search timeout");
 CHECK
 $display("REFINED_SAMPLING_PASS LABEL pairPAIR negativeNEGATIVE 512 exact groups; material/background replay cycles%0d status%h",timeout,status);$finish;end endmodule'''
-out=R/'build/sim/refined_sampling';out.mkdir(parents=True,exist_ok=True)
+out=R/'build/sim'/('refined_sampling_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'));out.mkdir(parents=True)
 for before,pair,negative in ((True,0,1),(False,0,1),(False,1,1),(False,0,0),(False,1,0)):
- target=0x285078 if pair==0 else 0x782864
+ target=(0x285078 if before else 0x787828) if pair==0 else 0x782864
  coords=[]
  for f in range(8):
   points=[(52+160*i+8*f,(17+90*j if before else 27+120*j)+8*((3*f)%8)) for j in range(8 if before else 6) for i in range(8)]

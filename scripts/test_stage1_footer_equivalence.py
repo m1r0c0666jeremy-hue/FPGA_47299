@@ -22,7 +22,7 @@ reg gb,gf,kp,muted,tip,tracking,show,video_ok,pair,detection,sample,rotate,lv;
 reg [31:0] image_id,latency,age;reg [17:0] camera;
 stage1_osd dut(PORTS);
 reference_stage1_osd original(PORTS);
-integer c,j,cycles;reg [31:0] seed=32'h1256abef;
+integer c,j,cycles;reg [7:0] wanted;reg [31:0] seed=32'h1256abef;
 function [31:0] rand32;input unused;begin seed=seed^(seed<<13);seed=seed^(seed>>17);seed=seed^(seed<<5);rand32=seed;end endfunction
 task inputs_next;begin
 mode=rand32(0);process_mode=rand32(0);state=rand32(0)%8;n=rand32(0)%5;draft=rand32(0)%3;
@@ -53,8 +53,16 @@ for(c=0;c<256;c=c+1)begin
  @(negedge clk);de=0;inputs_next;end
  repeat(1500)@(negedge clk);
  if(!dut.footer_ready || !original.footer_ready)$fatal(1,"footer completion deadline case%0d",c);
- for(j=0;j<128;j=j+1)if(dut.characters[j]!==original.characters[j])
+ for(j=0;j<128;j=j+1)begin
+ wanted=original.characters[j];
+ // Only the explicitly changed pair names differ from the frozen oracle.
+ begin
+ if(j==19 && original.fpair && original.characters[19]==35)wanted=12;
+ if(j==21 && !original.fpair && original.characters[21]==12)wanted=35;
+ end
+ if(dut.characters[j]!==wanted)
  $fatal(1,"footer equivalence case%0d char%0d new%0d old%0d",c,j,dut.characters[j],original.characters[j]);
+end
 end
 $display("STAGE1_FOOTER_EQUIVALENCE_PASS cases=256 glyphs=32768 snapshot/overlap/reset/deadline/all-modes/numeric-boundaries");$finish;
 end endmodule'''.replace('PORTS',ports)

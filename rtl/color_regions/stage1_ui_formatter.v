@@ -177,9 +177,9 @@ function [7:0] normal_char;input [5:0] column;begin normal_char=0;case(column)
 6'd15:normal_char=fzoom==0?8'd34:fzoom==1?8'd39:fzoom==2?8'd34:fzoom==3?8'd34:8'd34;
 6'd16:normal_char=fzoom==0?8'd0:fzoom==1?8'd6:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
 6'd17:normal_char=fzoom==0?8'd0:fzoom==1?8'd34:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
-6'd19:normal_char=fpair?8'd35:8'd28;
+6'd19:normal_char=fpair?8'd12:8'd28;
 6'd20:normal_char=fpair?8'd42:8'd42;
-6'd21:normal_char=fpair?8'd26:8'd12;
+6'd21:normal_char=fpair?8'd26:8'd35;
 6'd23:normal_char=frotate?8'd2:8'd1;
 6'd24:normal_char=frotate?8'd9:8'd1;
 6'd25:normal_char=frotate?8'd1:8'd1;
@@ -232,9 +232,9 @@ function [7:0] busy_char;input [5:0] column;begin busy_char=0;case(column)
 6'd14:busy_char=8'd31;
 6'd15:busy_char=8'd29;
 6'd16:busy_char=8'd35;
-6'd19:busy_char=fpair?8'd35:8'd28;
+6'd19:busy_char=fpair?8'd12:8'd28;
 6'd20:busy_char=fpair?8'd42:8'd42;
-6'd21:busy_char=fpair?8'd26:8'd12;
+6'd21:busy_char=fpair?8'd26:8'd35;
 6'd23:busy_char=frotate?8'd2:8'd1;
 6'd24:busy_char=frotate?8'd9:8'd1;
 6'd25:busy_char=frotate?8'd1:8'd1;
@@ -290,7 +290,7 @@ function [7:0] failed_char;input [5:0] column;begin failed_char=0;case(column)
 6'd18:failed_char=8'd13;
 6'd19:failed_char=8'd11;
 6'd20:failed_char=8'd23;
-6'd21:failed_char=fpair?8'd26:8'd12;
+6'd21:failed_char=fpair?8'd26:8'd35;
 6'd23:failed_char=frotate?8'd2:8'd1;
 6'd24:failed_char=frotate?8'd9:8'd1;
 6'd25:failed_char=frotate?8'd1:8'd1;

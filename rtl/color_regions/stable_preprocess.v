@@ -10,7 +10,7 @@ module stable_preprocess(input wire I_clk,I_rst_n,input wire [1:0] I_mode,input 
  else begin O_vs<=I_vs;O_hs<=I_hs;O_de<=I_de;O_mode<=I_mode;
  case(I_mode)
  0:O_rgb<=I_rgb;
- 1:O_rgb<=I_mask[0]?(I_pair?24'hffff40:24'hff6060):I_mask[1]?(I_pair?24'he080ff:24'h6090ff):{2'd0,gray[7:2],2'd0,gray[7:2],2'd0,gray[7:2]};
+ 1:O_rgb<=I_mask[0]?(I_pair?24'h6090ff:24'hff6060):I_mask[1]?(I_pair?24'he080ff:24'hffff40):{2'd0,gray[7:2],2'd0,gray[7:2],2'd0,gray[7:2]};
  2:O_rgb<={gray,gray,gray};3:O_rgb<=I_mask!=0?24'hffffff:0;
  endcase end end
 endmodule

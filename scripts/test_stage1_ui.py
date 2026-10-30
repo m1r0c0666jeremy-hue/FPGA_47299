@@ -67,7 +67,7 @@ initial begin fd=$fopen("OUTPUT","w");repeat(3)@(negedge clk);rst=1;
             if d['muted']:put(60,'MUTE')
         else:
             put(0,('RAW','HILITE','GRAY','MASK')[d['proc']].ljust(8));put(8,' ZOOM ');put(14,('1X  ','1.5X','2X  ','3X  ','4X  ')[d['zm']])
-            put(19,'R/B');put(23,'180');put(27,f"BRT{d['gain']:03d}")
+            put(19,'R/Y');put(23,'180');put(27,f"BRT{d['gain']:03d}")
             gains=(16,32,48,64,80,90,105);put(34,f"{gains.index(d['gain'])+1 if d['gain'] in gains else '-'}/7")
             put(38,'MARK');put(43,'ON' if d['show'] else 'OFF');put(47,'K0.50');put(53,'TRACKING')
             if d['gf']:put(0,'BRT FAILED. CHECK CAM')

@@ -52,7 +52,7 @@ def ui_assets():
     for i in range(8):normal[i]=':'.join(f"fprocess=={j}?8'd{ids[s[i]]}" for j,s in enumerate(modes[:-1]))+f":8'd{ids[modes[-1][i]]}"
     put(normal,8,' ZOOM ')
     for i in range(4):normal[14+i]=':'.join(f"fzoom=={j}?8'd{ids[s[i]]}" for j,s in enumerate(['1X  ','1.5X','2X  ','3X  ']))+f":8'd{ids['4X  '[i]]}"
-    for i in range(3):normal[19+i]=f"fpair?8'd{ids['Y/P'[i]]}:8'd{ids['R/B'[i]]}"
+    for i in range(3):normal[19+i]=f"fpair?8'd{ids['B/P'[i]]}:8'd{ids['R/Y'[i]]}"
     for i in range(3):normal[23+i]=f"frotate?8'd{ids['180'[i]]}:8'd{ids['000'[i]]}"
     put(normal,27,'BRT')
     for i in range(3):normal[30+i]=f"8'd1+gain_bcd[{8-4*i}+:4]"

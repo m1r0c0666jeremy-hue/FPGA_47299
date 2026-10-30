@@ -1,7 +1,7 @@
 // Generated upright UI. Source geometry is mapped through the committed view.
 // One shared decimal converter formats the selected footer before row624.
 `default_nettype none
-module stage1_osd(
+module stage1_osd #(parameter RUNTIME_INFO=0)(
  input wire [1:0] I_ui_mode,input wire [671:0] I_region_vertices,input wire [167:0] I_region_draft,input wire [15:0] I_region_counts,input wire [3:0] I_region_closed,
  input wire [2:0] I_area_count,I_expected_area,I_actual_area,input wire [3:0] I_draft_count,I_run_state,I_completed,I_occupied,
  input wire I_area_muted,input wire [1:0] I_area_trend,input wire [10:0] I_area_distance,input wire [19:0] I_area_dwell,
@@ -13,7 +13,7 @@ module stage1_osd(
  output reg O_vs,O_hs,O_de,output reg [23:0] O_rgb,
  input wire I_rotate,input wire [1:0] I_diag,input wire [31:0] I_image_id,input wire I_geometry_commit,
  input wire I_latency_valid,input wire [31:0] I_latency_us,I_frame_age,
- input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason,input wire [79:0] I_teaching,input wire [22:0] I_point,input wire [7:0] I_k_value,input wire I_k_adjust
+ input wire [127:0] I_ddr_diag,I_pixel_diag,input wire [38:0] I_recovery,input wire [17:0] I_camera,input wire [6:0] I_gain_target,input wire [3:0] I_tip_reason,input wire [79:0] I_teaching,input wire [22:0] I_point,input wire [7:0] I_k_value,input wire I_k_adjust,input wire [7:0] I_fps,I_fault,input wire I_lane_seen
 );
  localparam FONT=16,CHAR_WIDTH=8,COLS=64;
  reg [10:0] x;reg [9:0] y;reg vs_last;
@@ -25,6 +25,7 @@ module stage1_osd(
  if(!I_rst_n)stage_camera_snapshot<=0;
  else if(I_de && y==625 && x==0)stage_camera_snapshot<=I_camera[16:9];
  reg [4:0] status_id;wire [1:0] model_id=fm[722:721];
+ reg [7:0] runtime_glyph;reg [7:0] ffault;reg [15:0] frecoveries;reg flane;
  reg flat_valid;reg [31:0] flatency,fage;
  always @*begin
  status_id=!ftracking?0:{1'b0,fm[36:33]};
@@ -108,9 +109,9 @@ decoded_glyph=0;case(token_data[15:13])
 1:decoded_glyph=fzoom==0?8'd34:fzoom==1?8'd39:fzoom==2?8'd34:fzoom==3?8'd34:8'd34;
 2:decoded_glyph=fzoom==0?8'd0:fzoom==1?8'd6:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
 3:decoded_glyph=fzoom==0?8'd0:fzoom==1?8'd34:fzoom==2?8'd0:fzoom==3?8'd0:8'd0;
-4:decoded_glyph=fpair==0?8'd28:8'd35;
+4:decoded_glyph=fpair==0?8'd28:8'd12;
 5:decoded_glyph=fpair==0?8'd42:8'd42;
-6:decoded_glyph=fpair==0?8'd12:8'd26;
+6:decoded_glyph=fpair==0?8'd35:8'd26;
 7:decoded_glyph=frotate==0?8'd1:8'd2;
 8:decoded_glyph=frotate==0?8'd1:8'd9;
 9:decoded_glyph=frotate==0?8'd1:8'd1;
@@ -127,7 +128,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  I_x0,I_y0,I_zoom,I_rotate,I_run_state,I_completed,I_expected_area,I_actual_area,x,y,I_de,
  region_pixel,region_color,region_label_on,region_label_glyph,region_label_gx,region_label_gy,region_label_color,region_ready,region_underrun,I_region_draft,I_area_count,I_draft_count!=0);
  stage1_footer_numbers numeric_engine(I_clk,I_rst_n,I_de && y==625 && x==0,
- I_latency_us,I_frame_age,I_area_dwell,I_camera[6:0],I_gain_target,I_k_value,I_teaching,footer_numbers,footer_numbers_ready);
+ I_latency_us,(RUNTIME_INFO?{24'd0,I_fps}:I_frame_age),I_area_dwell,I_camera[6:0],I_gain_target,I_k_value,I_teaching,footer_numbers,footer_numbers_ready);
  stage1_teach_text #(.SHARED_NUMBERS(1)) teaching_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,format_row,I_ui_mode,I_teaching,
  I_run_state,I_occupied,I_expected_area,I_actual_area,I_area_dwell,teaching_glyph,teaching_override,I_k_value,footer_numbers);
  stage1_ui_formatter #(.SHARED_NUMBERS(1)) region_text(I_clk,I_rst_n,I_de && y==625 && x==0,format_col,I_ui_mode,I_run_state,I_area_count,3'd0,I_expected_area,I_actual_area,
@@ -135,7 +136,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  I_gain_slot,I_show,stage_glyph,stage_override,stage_force_footer,stage_snapshot_state,stage_snapshot_mode,format_row,I_camera[6:0],I_gain_target,I_zoom,I_mode,I_pair,I_rotate,status_id,I_tip_reason,I_k_value,I_k_adjust,footer_numbers);
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin
- flat_valid<=0;flatency<=0;fage<=0;
+ ffault<=0;frecoveries<=0;flane<=0;flat_valid<=0;flatency<=0;fage<=0;
  fm<=0;fimage<=0;fmode<=0;fzoom<=0;fstate<=6;fpair<=0;frotate<=1;ftracking<=0;fshow<=1;fvideo<=0;fdetection<=0;fsample<=0;
  format_state<=0;format_col<=0;format_row<=0;footer_ready<=0;number_word_q<=0;hex_word_q<=0;number_digit_q<=0;hex_digit_q<=0;
  end else begin
@@ -146,24 +147,47 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  4:format_state<=5;
  5:begin number_word_q<=numbers[token_data[8]];hex_word_q<=hex_value;format_state<=6;end
  6:begin number_digit_q<=number_word_q>>(token_data[3:0]*4);hex_digit_q<=hex_word_q>>(token_data[3:0]*4);format_state<=7;end
- 7:begin characters[(format_row?COLS:0)+format_col]<=format_row && stage_camera_dead && format_col>=42?stage_glyph:fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
+ 7:begin characters[(format_row?COLS:0)+format_col]<=RUNTIME_INFO && format_row && format_col>=16 && format_col<40?runtime_glyph:format_row && stage_camera_dead && format_col>=42?stage_glyph:fm[567:565]==0 && teaching_override?teaching_glyph:fm[567:565]==0 && stage_override?stage_glyph:decoded_glyph;
  format_state<=3;
  if(format_col==COLS-1)begin format_col<=0;if(format_row)begin footer_ready<=1;format_state<=0;end else format_row<=1;end
  else format_col<=format_col+1'b1;end
  endcase
  if(I_de && y==625 && x==0)begin
- flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
+ ffault<=I_fault;frecoveries<=I_recovery[31:16];flane<=I_lane_seen;flat_valid<=I_latency_valid;flatency<=I_latency_us;fage<=I_frame_age;
  fm<=I_meta;fimage<=I_image_id;fmode<=I_mode;fzoom<=I_zoom;fstate<=I_state;
  fpair<=I_pair;frotate<=I_rotate;ftracking<=I_tracking;fshow<=I_show;fvideo<=I_video_ok;fdetection<=I_detection_valid;fsample<=I_sample_valid;
  footer_ready<=0;format_state<=1;
  end end end
+ always @*begin runtime_glyph=0;case(format_col)
+16:runtime_glyph=8'd0;
+17:runtime_glyph=8'd16;
+18:runtime_glyph=8'd26;
+19:runtime_glyph=8'd29;
+20:runtime_glyph=8'd0;
+21:runtime_glyph=8'd1+footer_numbers[40+:4];
+22:runtime_glyph=8'd1+footer_numbers[36+:4];
+23:runtime_glyph=8'd1+footer_numbers[32+:4];
+24:runtime_glyph=8'd0;
+25:runtime_glyph=8'd15;
+26:runtime_glyph=8'd1+ffault[4+:4];
+27:runtime_glyph=8'd1+ffault[0+:4];
+28:runtime_glyph=8'd0;
+29:runtime_glyph=8'd28;
+30:runtime_glyph=8'd1+frecoveries[12+:4];
+31:runtime_glyph=8'd1+frecoveries[8+:4];
+32:runtime_glyph=8'd1+frecoveries[4+:4];
+33:runtime_glyph=8'd1+frecoveries[0+:4];
+34:runtime_glyph=8'd0;
+35:runtime_glyph=8'd22;
+36:runtime_glyph=flane?8'd2:8'd1;
+ default:runtime_glyph=0;endcase end
  wire geometry_ready;wire [251:0] geometry;
  wire [639:0] point_geometry=I_point[22]?{I_meta[639:100],I_point[20:0],I_meta[78:0]}:I_meta[639:0];
  refined_overlay_geometry coordinates(I_clk,I_rst_n,I_geometry_commit,point_geometry,I_x0,I_y0,I_zoom,I_rotate,geometry_ready,geometry);
  function border;input signed [13:0] xx,yy,x0,x1,y0,y1;reg signed [13:0] l,r,t,b;begin
  l=xx-x0;r=x1-xx;t=yy-y0;b=y1-yy;
  border=!(l[13] || r[13] || t[13] || b[13]) && (l[13:1]==0 || r[13:1]==0 || t[13:1]==0 || b[13:1]==0);end endfunction
- wire [23:0] color_a=I_pair?24'hffff40:24'hff6060,color_b=I_pair?24'he080ff:24'h6090ff;
+ wire [23:0] color_a=I_pair?24'h6090ff:24'hff6060,color_b=I_pair?24'he080ff:24'hffff40;
  reg [5:0] footer_col;reg [4:0] footer_px;
  reg [7:0] footer_glyph;reg [4:0] footer_gy;reg footer_text,footer_row;
  reg [7:0] label_glyph;reg [3:0] label_gx,label_gy;reg [6:0] label_width;reg label_text,back_on,logo_on;
@@ -171,7 +195,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  reg signed [13:0] xx,yy,bx0,bx1,by0,by1,lx,ly,ldx,ldy;
  integer j,lc;reg [9:0] logo_y;reg [10:0] logo_x;
  localparam [87:0] WAIT_WORD={8'd33,8'd11,8'd19,8'd30,8'd0,8'd28,8'd15,8'd29,8'd31,8'd22,8'd30};
- wire footer_current=stage_snapshot_state==I_run_state && stage_snapshot_mode==I_ui_mode && footer_ready && I_tracking==ftracking && I_video_ok==fvideo && I_detection_valid==fdetection && I_state==fstate;
+ wire footer_current=footer_ready;
  always @*begin
  footer_glyph=0;footer_gy=0;footer_text=0;footer_row=0;label_glyph=0;label_gx=0;label_gy=0;label_text=0;label_width=0;
  back_on=0;back=24'h101824;ink=24'hf0f4ff;logo_on=0;logo_addr=0;logo_y=0;logo_x=0;
@@ -194,7 +218,7 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
  by0=$signed(geometry[j*56+28+:14]);by1=$signed(geometry[j*56+42+:14]);
  if(valid_box && bx1>=0 && bx0<1280 && by1>=0 && by0<624)begin
  if(border(xx,yy,bx0,bx1,by0,by1))begin back_on=1;back=j==0?color_a:color_b;end
- label_width=j==0?(I_pair?72:48):(I_pair?72:56);
+ label_width=j==0?(I_pair?56:48):(I_pair?72:72);
  lx=bx0<0?0:bx0>(1280-label_width)?(1280-label_width):bx0;ly=by0>=18?by0-18:by1+3;
  if(ly>608)ly=608;if(ly<0)ly=0;ldx=xx-lx;ldy=yy-ly;
  if(ldx>=0 && ldx<label_width && ldy[13:4]==0)begin
@@ -206,18 +230,9 @@ wire [3:0] region_pixel,stage_snapshot_state;wire [1:0] stage_snapshot_mode;
 2:label_glyph=8'd14;
 3:label_glyph=8'd0;
 4:label_glyph=8'd11;
-5:label_glyph=8'd2;
+5:label_glyph=8'd3;
 endcase
 2'd1:case(lc)
-0:label_glyph=8'd12;
-1:label_glyph=8'd22;
-2:label_glyph=8'd31;
-3:label_glyph=8'd15;
-4:label_glyph=8'd0;
-5:label_glyph=8'd12;
-6:label_glyph=8'd2;
-endcase
-2'd2:case(lc)
 0:label_glyph=8'd35;
 1:label_glyph=8'd15;
 2:label_glyph=8'd22;
@@ -225,8 +240,17 @@ endcase
 4:label_glyph=8'd25;
 5:label_glyph=8'd33;
 6:label_glyph=8'd0;
-7:label_glyph=8'd11;
-8:label_glyph=8'd2;
+7:label_glyph=8'd12;
+8:label_glyph=8'd3;
+endcase
+2'd2:case(lc)
+0:label_glyph=8'd12;
+1:label_glyph=8'd22;
+2:label_glyph=8'd31;
+3:label_glyph=8'd15;
+4:label_glyph=8'd0;
+5:label_glyph=8'd11;
+6:label_glyph=8'd3;
 endcase
 2'd3:case(lc)
 0:label_glyph=8'd26;
@@ -237,7 +261,7 @@ endcase
 5:label_glyph=8'd15;
 6:label_glyph=8'd0;
 7:label_glyph=8'd12;
-8:label_glyph=8'd2;
+8:label_glyph=8'd3;
 endcase
 endcase
  end end end

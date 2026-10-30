@@ -1,13 +1,19 @@
 """Preserve the existing full calibration fixtures with isolated output/logs."""
-from refined_testlib import R,run
+from refined_testlib import R
+from sc500_test_evidence import run
 import ast,datetime,re,sys,types
-stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 out=R/'build/sim'/('refined_calibration_'+stamp);out.mkdir(parents=True,exist_ok=False)
 def adapted(name,src,modules):
  src=re.sub(r'(stable_calibration\s+dut\([^;]+)(\);)',r'\1,,\2',src)
  old='if(dut.rx!=52+160*(dut.groups%8)+8*dut.frames || dut.ry!=17+90*(dut.groups/8)+8*((3*dut.frames)%8))'
  new='if(!(dut.rx>=636 && dut.rx<644 && dut.ry>=356 && dut.ry<364) && (dut.rx!=52+160*(dut.background_groups%8)+8*dut.frames || dut.ry!=27+120*(dut.background_groups/8)+8*((3*dut.frames)%8)))'
  src=src.replace(old,new)
+ # Physical mark identities are now red/yellow and blue/purple.
+ if 'task frames;' in src:
+  src=src.replace("kind==2 && x+i>=638 && x+i<641)px=24'h142896", "kind==2 && x+i>=638 && x+i<641)px=24'hc8c814")
+  src=src.replace("kind==5 && x+i>=638 && x+i<641)px=24'hc8c814", "kind==5 && x+i>=638 && x+i<641)px=24'h142896")
+  src=src.replace('models[62:54]!=52 || models[53:45]!=69', 'models[62:54]!=222 || models[53:45]!=239')
  if 'task frames;' in src:
   src=src.replace('if(n>=3000000)$fatal', '$display("REFINED_CALIBRATION_STEP kind%0d status%h",kind,status);\nif(n>=3000000)$fatal')
  run('calibration_'+name,src,modules)

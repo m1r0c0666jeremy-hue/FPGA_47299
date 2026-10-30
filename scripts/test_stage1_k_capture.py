@@ -9,7 +9,7 @@ reg clk=0;always #5 clk=~clk;reg rst=0,sof=0,valid=0;
 reg [95:0] rgb=0;reg [7:0] kval=50,session=1;
 reg [31:0] fid=0;wire [31:0] out_id,dropped;wire ov;wire [767:0] meta;
 function [63:0] model(input integer lo,hi);begin model=64'h8000000000000000|(64'(lo)<<54)|(64'(hi)<<45)|(64'd32<<37)|(64'd16<<29)|(64'd1<<27);end endfunction
-wire [127:0] models={model(195,255),model(345,30)};
+wire [127:0] models={model(45,75),model(345,30)};
 stage1_k_capture #(.V4(1)) dut(.I_clk(clk),.I_rst_n(rst),.I_sof(sof),.I_valid(valid),.I_fault(1'b0),
  .I_rgb(rgb),.I_pair(1'b0),.I_enable(1'b1),.I_session(session),.I_models(models),.I_revision(16'd1),
  .I_gains(24'h400400),.I_cal_status(8'd0),.I_cal_active(1'b0),.I_needs_cal(1'b0),.I_result_ready(1'b1),
@@ -19,7 +19,7 @@ integer f,x,y,j,count=0,tips=0,tag_k,tag_s;
 function [23:0] pixel(input integer x,y);begin
  pixel=24'h303030;
  if(x>=600 && x<=632 && y>=342 && y<=366)pixel=24'hc82020;
- if(x>=480 && x<=512 && y>=342 && y<=366)pixel=24'h2020c8;
+ if(x>=480 && x<=512 && y>=342 && y<=366)pixel=24'hc8c820;
 end endfunction
 always @(negedge clk)if(rst && ov && meta[31:0]<=10)begin
  count=count+1;

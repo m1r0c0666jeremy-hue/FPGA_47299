@@ -18,7 +18,7 @@ task group(input integer first);begin @(negedge clk);sof=first;v=1;end endtask
 task no_forward;begin if(rawvalid || rawsof || dv || ds || pv || ps)$fatal(1,"unready or partial frame escaped");end endtask
 integer j;reg old_complete;
 initial begin
-force dut.S_csi_rx_clk=clk;force dut.receiver_enable=1'b1;force dut.O_camera_ready=ready;
+force dut.S_lane_error=2'b00;force dut.S_csi_rx_clk=clk;force dut.receiver_enable=1'b1;force dut.O_camera_ready=ready;
 force dut.raw_rgb_internal=96'h804020804020804020804020;force dut.raw_sof_internal=sof;force dut.raw_valid_internal=v;
 force dut.detect_sof_internal=detect_sof;force dut.detect_valid_internal=detect_valid;force dut.S_ISP_O_tuser=packed_sof;force dut.S_ISP_O_tvalid=packed_valid;
 repeat(8)@(negedge clk);rst=1;repeat(8)@(negedge clk);old_complete=dut.complete_toggle;
@@ -28,5 +28,8 @@ ready=1;repeat(8)@(negedge clk);no_forward;
 group(1);#1;if(!rawsof || !rawvalid)$fatal(1,"ready whole frame not admitted");group(0);repeat(8)@(negedge clk);if(!pv || !dv)$fatal(1,"downstream gates not admitted");
 ready=0;repeat(8)@(negedge clk);no_forward;ready=1;repeat(8)@(negedge clk);no_forward;
 group(1);group(0);repeat(8)@(negedge clk);if(!pv || !dv)$fatal(1,"next complete boundary not restored");
+force dut.S_lane_error=2'b11;repeat(3)@(negedge clk);if(!dut.O_lane_seen)$fatal(1,"lane flag missing");
+force dut.S_lane_error=2'b00;force dut.receiver_enable=1'b0;repeat(4)@(negedge clk);if(!dut.O_lane_seen)$fatal(1,"local receiver reset erased lane observation");
+force dut.receiver_enable=1'b1;repeat(4)@(negedge clk);rst=0;@(negedge clk);if(dut.O_lane_seen)$fatal(1,"global reset did not clear observation");
 $display("REFINED_CAMERA_GATE_PASS full-source monitor, no pre-ready output, gain/restart truncates frame, re-ready waits for fresh SOF");$finish;end endmodule'''
 run('camera_frame_admission',src,[R/'rtl/color_regions'/f'{n}.v' for n in ('stable_camera_capture','refined_camera_config','refined_reset_bridge')],compile_args=['-i'])

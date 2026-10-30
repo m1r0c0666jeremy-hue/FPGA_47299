@@ -24,11 +24,11 @@ def main():
                ('purple_neutral_background',[(100,60,100)]*2048,[(28,24,28)]*2048,True),
                ('yellow_bright_neutral',[(120,120,60)]*2048,[(248,248,220)]*2048,True)]
     for name,pixels,bg,success in cases:
-        cp=int(name.startswith(('purple','yellow')))
+        cp=int(name.startswith(('purple','yellow'))) if a.baseline else int(not name.startswith('yellow'))
         (O/(name+'.hex')).write_text(packed(pixels),encoding='ascii')
         (O/(name+'_bg.hex')).write_text(packed(bg),encoding='ascii')
         setup='' if a.baseline else f'''$readmemh("{(O/(name+'_bg.hex')).as_posix()}",dut.background);dut.background_valid=1;'''
-        is_a=name.startswith('yellow');phase=(2 if a.baseline else 3) if is_a else (3 if a.baseline else 4);busy=5 if a.baseline else 4
+        is_a=name.startswith('yellow') if a.baseline else not name.startswith(('purple','yellow'));phase=(2 if a.baseline else 3) if is_a else (3 if a.baseline else 4);busy=5 if a.baseline else 4
         model='dut.staged_a' if is_a else f'dut.profiles[{cp}][127:64]'
         check=f'if(dut.phase!={phase+1 if is_a else 0} || status[3:0]!=0)$fatal(1,"expected valid distribution %h",status);' if success else 'if(dut.phase==0 || status[3:0]==0 || dut.profiles[0]!==saved)$fatal(1,"unsafe distribution accepted %h",status);'
         if name in ('dark_blue_background','purple_dark_bias','yellow_dark_bias'):

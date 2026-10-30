@@ -1,4 +1,4 @@
-// Independent volatile red/blue and yellow/purple profiles. Acquisition is
+// Independent volatile red/yellow and blue/purple profiles. Acquisition is
 // frame-validated; 512 four-pixel words preserve eight 16x16 source windows.
 // Hue and quantiles run serially after sampling. A failed/cancelled transaction
 // cannot partially replace a production profile.
@@ -12,8 +12,8 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  function [63:0] model;input [8:0] lo,hi;input [7:0] mv,dc;input [1:0] sc;begin
  model={1'b1,lo,hi,mv,dc,sc,27'd0};end endfunction
  function [127:0] defaults;input p;begin defaults=p?
- {model(255,330,32,16,1),model(45,75,32,16,1)}:
- {model(195,255,32,16,1),model(345,30,32,16,1)};end endfunction
+ {model(255,330,32,16,1),model(195,255,32,16,1)}:
+ {model(45,75,32,16,1),model(345,30,32,16,1)};end endfunction
  reg [127:0] profiles[0:1];reg [11:0] gr[0:1],gb[0:1];reg [1:0] calibrated,required;
  reg [2:0] phase;reg cp;reg [3:0] error;reg [11:0] staged_r,staged_b;reg [63:0] staged_a,staged_model;
  reg [11:0] active_r,active_b;reg [127:0] active_models;reg active_need;
@@ -104,8 +104,8 @@ module stable_calibration(input wire clk,rst_n,sof,valid,input wire [95:0] rgb,
  if(mx==r)begin hn=60*($signed({1'b0,g})-$signed({1'b0,b}));if(hn<0)hn=hn+360*(mx-mn);end
  else if(mx==g)hn=120*(mx-mn)+60*($signed({1'b0,b})-$signed({1'b0,r}));
  else hn=240*(mx-mn)+60*($signed({1'b0,r})-$signed({1'b0,g}));
- family=cp?(phase==3?(hue>=30 && hue<90):(hue>=255 && hue<345)):
- (phase==3?(hue>=330 || hue<45):(hue>=165 && hue<270));
+ family=cp?(phase==3?(hue>=165 && hue<270):(hue>=255 && hue<345)):
+ (phase==3?(hue>=330 || hue<45):(hue>=30 && hue<90));
  diff=$signed({2'd0,hue})-$signed({2'd0,peak});if(diff>180)diff=diff-360;if(diff< -180)diff=diff+360;
  in_cluster=diff>= -30 && diff<=30;
  hist_addr=0;hist_write=0;hist_data=0;
