@@ -24,7 +24,12 @@ def baseline_inputs(root):
     record=root/'build/target_color_regions_osd_memory_20261019_234705/inputs.json'
     assert sha(record)=='970d0781b9c66096ac5a2aba9fd3206a82d29649a49c4075dc7185154084a265','Archived baseline manifest changed'
     baseline=json.loads(record.read_text(encoding='utf-8'))
+    retimed_display_inputs={'rtl/color_regions/refined_line_reader.v': '2f0d4feeabbddb4d95acc4ad63c3617e227bc4751d46c2e81be20e871632c5c2', 'rtl/color_regions/refined_overlay_geometry.v': '2b7b108d34e06364805e4cf7cf13f6b3fc8c1aeae2917d40053bfe2762c0fc7a'}
     for name,value in baseline.items():
+        if name in retimed_display_inputs and sha(root/name)!=value:
+            assert git(root,'branch','--show-current')=='Final_Mode_1028'
+            assert sha(root/name)==retimed_display_inputs[name],'Unrecognized display pipeline change: '+name
+            continue
         if name=='rtl/color_regions/refined_frame_store.v' and sha(root/name)!=value:
             # Explicitly authorized fixed-bank rewrite, pinned to the adopted
             # candidate. Formal full-word-count and live evidence is mandatory.

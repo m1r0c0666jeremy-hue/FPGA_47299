@@ -44,9 +44,13 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
  wire [47:0] pair_rgb=job_rotate?{ordered_pair[23:0],ordered_pair[47:24]}:ordered_pair;
  wire [95:0] ordered_quad=linegroup >> ((job_rotate?pair_index[2:1]:3-pair_index[2:1])*96);
  wire [95:0] pixel_quad=job_rotate?{ordered_quad[23:0],ordered_quad[47:24],ordered_quad[71:48],ordered_quad[95:72]}:ordered_quad;
- wire [3:0] hit;stable_model_lane c0(I_ddr_clk,d_rst,pair_rgb[47:24],models,hit[1:0]);
- stable_model_lane c1(I_ddr_clk,d_rst,pair_rgb[23:0],models,hit[3:2]);
- reg [3:0] vp;reg [10:0] xp[0:3];reg [9:0] yp[0:3];reg [3:0] half_mask;
+ // One shared 48-bit input register isolates the line-group barrel mux.
+ reg [47:0] class_pair_q;
+ always @(posedge I_ddr_clk or negedge d_rst)
+ if(!d_rst)class_pair_q<=0;else class_pair_q<=pair_rgb;
+ wire [3:0] hit;stable_model_lane c0(I_ddr_clk,d_rst,class_pair_q[47:24],models,hit[1:0]);
+ stable_model_lane c1(I_ddr_clk,d_rst,class_pair_q[23:0],models,hit[3:2]);
+ reg [4:0] vp;reg [10:0] xp[0:4];reg [9:0] yp[0:4];reg [3:0] half_mask;
  reg filter_valid;reg [10:0] filter_x;reg [9:0] filter_y;reg [7:0] filter_mask;
  wire fv;wire [1:0] ft;wire [10:0] fx;wire [9:0] fy;wire [7:0] fa,fb;
  stable_filter4 filter(I_ddr_clk,d_rst,filter_valid,filter_x,filter_y,2'd0,filter_mask,fv,ft,fx,fy,fa,fb);
@@ -73,7 +77,7 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
  job_cycles<=0;bus_wait<=0;return_wait<=0;drain_cycles<=0;issued<=0;accepted_base<=0;close_done<=0;timeout_event<=0;timeout_cause<=0;failed_jobs<=0;notice0<=0;notice1<=0;notice_count<=0;
  frame_base<=0;line_base<=0;sent<=0;received<=0;part<=0;group_index<=0;assembly<=0;linegroup<=0;next_linegroup<=0;pair_index<=0;pos<=0;
  class_valid<=0;class_x<=0;class_y<=0;close_wait<=0;vp<=0;half_mask<=0;filter_valid<=0;filter_x<=0;filter_y<=0;filter_mask<=0;
- for(j=0;j<4;j=j+1)begin xp[j]<=0;yp[j]<=0;end end
+ for(j=0;j<5;j=j+1)begin xp[j]<=0;yp[j]<=0;end end
  else begin
  timeout_event<=0;
  if(state!=IDLE && job_cycles!=262143)job_cycles<=job_cycles+1'b1;
@@ -87,12 +91,12 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
   2'b11:if(notice_count==1)notice0<={job_epoch,image_id,image,fy,mask_slot};else begin notice0<=notice1;notice1<={job_epoch,image_id,image,fy,mask_slot};end
  endcase
  req1<=req;req2<=req1;class_valid<=state==CLASS;pos<=pair_index[2:0];class_x<={pair_index,1'b0};class_y<=job_y;
- vp<={vp[2:0],state==CLASS};xp[0]<={pair_index,1'b0};yp[0]<=job_y;
- for(j=1;j<4;j=j+1)begin xp[j]<=xp[j-1];yp[j]<=yp[j-1];end
+ vp<={vp[3:0],state==CLASS};xp[0]<={pair_index,1'b0};yp[0]<=job_y;
+ for(j=1;j<5;j=j+1)begin xp[j]<=xp[j-1];yp[j]<=yp[j-1];end
  filter_valid<=0;
- if(vp[3])begin
- if(!xp[3][1])half_mask<=hit;
- else begin filter_valid<=1;filter_x<=xp[3]-2;filter_y<=yp[3];filter_mask<={hit,half_mask};end end
+ if(vp[4])begin
+ if(!xp[4][1])half_mask<=hit;
+ else begin filter_valid<=1;filter_x<=xp[4]-2;filter_y<=yp[4];filter_mask<={hit,half_mask};end end
  case(state)
  IDLE:if(req2!=ack)begin
  slot<=req_slot;job_y<=req_y;job_epoch<=req_epoch;
@@ -114,7 +118,7 @@ module refined_line_reader #(parameter integer JOB_TIMEOUT_CYCLES=133334,DRAIN_T
  else begin pair_index<=pair_index+1'b1;if(pair_index[2:0]==7)begin group_index<=group_index+1'b1;linegroup<=next_linegroup;end end
  end
  CLOSE:begin if(close_wait!=511)close_wait<=close_wait+1'b1;
- if((job_y==0 && close_wait>=12) || (mask_finish && fy==(job_y==719?719:job_y-1)))close_done<=1;
+ if((job_y==0 && close_wait>=13) || (mask_finish && fy==(job_y==719?719:job_y-1)))close_done<=1;
  if(close_done && notice_count==0)begin ack<=req2;state<=IDLE;failed_jobs<=0;end end
  DRAIN:begin
   if(I_ddr_valid)received<=received+1'b1;

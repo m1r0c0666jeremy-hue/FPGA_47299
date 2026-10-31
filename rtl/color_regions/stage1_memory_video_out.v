@@ -217,6 +217,10 @@ refined_video_in u_video_in(
     target_mailbox #(.WIDTH(852)) u_snapshot_response(
         .S_clk(S_ddr_clk),.S_rst_n(ddr_rst_n),.S_send(store_snapshot),.S_data(store_data),.S_ready(snapshot_ready),
         .D_clk(I_pixel_clk),.D_rst_n(stream_pixel_n),.D_valid(pixel_snapshot),.D_data(pixel_data));
+    reg [1:0] viewport_ui_last;
+    always @(posedge I_pixel_clk or negedge I_process_rst_n)
+    if(!I_process_rst_n)viewport_ui_last<=0;else viewport_ui_last<=I_ui_mode;
+    wire viewport_abort=I_key_cancel || I_key4 || !I_camera_ready || I_gain_busy || I_ui_mode!=viewport_ui_last;
     stage1_viewport #(.V4(1)) u_viewport(
         .O_image_us(image_us),.O_epoch(image_epoch),.O_time_valid(image_time_valid),
         .I_rotate(rotate_at_vs),.O_rotate(active_rotate),
@@ -225,7 +229,7 @@ refined_video_in u_video_in(
         .I_live(video_ok && I_camera_ready && stream_pixel_n),.I_session(I_session),.I_zoom(zoom_at_vs),.I_mode(mode_at_vs),
         .O_commit(frame_commit),.O_bank(selected_bank),.O_frame_id(selected_frame_id),
         .O_cx(active_cx),.O_cy(active_cy),.O_x0(roi_x),.O_y0(roi_y),.O_zoom(active_zoom),.O_mode(frame_mode),
-        .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status),.I_point(teach_desired_point),.O_point(teach_active_point));
+        .O_detection_valid(detection_valid),.O_meta(active_meta),.O_show(active_show),.O_sample_valid(sample_valid),.O_state(active_status),.I_point(teach_desired_point),.O_point(teach_active_point),.I_abort(viewport_abort));
     refined_line_reader u_scaler (
         .I_stream_n(stream_async_n),.O_fault_toggle(read_fault_toggle),.O_ddr_diag(ddr_diagnostics),.O_pixel_diag(pixel_diagnostics),
         .I_accepted_reads(accepted_reads),.I_unexpected_return(unexpected_return),

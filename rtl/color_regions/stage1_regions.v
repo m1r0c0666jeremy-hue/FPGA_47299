@@ -431,7 +431,7 @@ module stage1_viewport #(parameter STALE_DISPLAY_FRAMES=15,V4=0,MW=V4?768:640,SW
  output reg [10:0] O_cx,O_x0,output reg [9:0] O_cy,O_y0,
  output reg [2:0] O_zoom,output reg [1:0] O_mode,output reg [MW-1:0] O_meta,
  output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state,input wire I_rotate,output reg O_rotate,
- output reg [31:0] O_image_us,output reg [15:0] O_epoch,output reg O_time_valid,input wire [38:0] I_point,output reg [38:0] O_point);
+ output reg [31:0] O_image_us,output reg [15:0] O_epoch,output reg O_time_valid,input wire [38:0] I_point,output reg [38:0] O_point,input wire I_abort);
  reg vs_last,in_blank,associated;reg [7:0] age,session;
  wire match=I_data[MW+34] && I_data[255] && I_data[415:413]==(V4?4:3) && I_data[31:0]==I_data[MW+:32] &&
  (!V4 || I_data[719:704]==I_data[SW-2-:16]) &&
@@ -439,39 +439,68 @@ module stage1_viewport #(parameter STALE_DISPLAY_FRAMES=15,V4=0,MW=V4?768:640,SW
  assign O_detection_valid=associated && I_tracking && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247];
  assign O_sample_valid=associated && I_live && session==I_session && O_pair==I_pair && age<STALE_DISPLAY_FRAMES && O_meta[247] && O_meta[408];
  assign O_state=I_conflict?5:!I_live?6:age>=STALE_DISPLAY_FRAMES?7:!I_tracking?0:!O_detection_valid?1:O_meta[32]?2:O_meta[36:33]==8?4:1;
- reg signed [12:0] dx,dy;reg [10:0] cx,hx;reg [9:0] cy,hy;
- wire [10:0] view_width;wire [9:0] view_height;
- refined_zoom_geometry view_geometry(I_zoom,I_rotate,view_width,view_height,,,,);
+ // D_data from u_snapshot_response is held until its next D_valid. A newer
+ // I_snapshot restarts preparation. No second 852-bit metadata copy is needed.
+ // Frame publication is delayed four clocks; every public field commits once.
+ reg [2:0] phase;reg [38:0] pending_point;
+ reg [31:0] pending_id;reg [7:0] pending_session;
+ reg pending_pair,pending_tracking,pending_rotate,pending_show,pending_match,pending_move,pending_cal;
+ reg [2:0] pending_zoom;reg [1:0] pending_mode;
+ reg signed [12:0] dx_q,dy_q;
+ reg [10:0] min_x,max_x,step_x,clamp_x;reg [9:0] min_y,max_y,step_y,clamp_y;
+ wire [10:0] width;wire [9:0] height;
+ refined_zoom_geometry view_geometry(I_zoom,I_rotate,width,height,,,,);
+ wire context_ok=I_session==pending_session && I_pair==pending_pair && I_tracking==pending_tracking &&
+ I_mode==pending_mode && I_point[22]==pending_point[22] && I_data[MW+:32]==pending_id;
+ wire [10:0] source_x=pending_point[10:0];wire [9:0] source_y=pending_point[20:11];
+ reg [10:0] next_x;reg [9:0] next_y;
  always @*begin
- dx=$signed({2'd0,(I_point[22]?I_point[10:0]:I_data[89:79])})-$signed({2'd0,O_cx});dy=$signed({3'd0,(I_point[22]?I_point[20:11]:I_data[99:90])})-$signed({3'd0,O_cy});
- cx=O_cx;cy=O_cy;
- if(dx>4)cx=O_cx+(dx>24?24:dx);if(dx< -4)cx=O_cx+(dx< -24?-24:dx);
- if(dy>4)cy=O_cy+(dy>24?24:dy);if(dy< -4)cy=O_cy+(dy< -24?-24:dy);
- if(!match || (I_point[22]?!I_point[21]:(!I_data[32] || I_data[MW+:32]==O_frame_id)))begin cx=O_cx;cy=O_cy;end
- hx=view_width>>1;hy=view_height>>1;
- if(cx<hx)cx=hx;if(cx>1280-view_width+hx)cx=1280-view_width+hx;
- if(cy<hy)cy=hy;if(cy>720-view_height+hy)cy=720-view_height+hy;
+ next_x=O_cx;next_y=O_cy;
+ if(pending_move)begin
+ if(dx_q>4)next_x=O_cx+(dx_q>24?24:dx_q);if(dx_q< -4)next_x=O_cx+(dx_q< -24?-24:dx_q);
+ if(dy_q>4)next_y=O_cy+(dy_q>24?24:dy_q);if(dy_q< -4)next_y=O_cy+(dy_q< -24?-24:dy_q);
+ end
  end
  always @(posedge I_clk or negedge I_rst_n)begin
  if(!I_rst_n)begin vs_last<=0;in_blank<=0;associated<=0;age<=0;session<=0;O_commit<=0;O_bank<=0;O_frame_id<=0;
- O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;O_rotate<=1;O_image_us<=0;O_epoch<=0;O_time_valid<=0;O_point<=0;end
+ O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;O_meta<=0;O_show<=1;O_pair<=0;O_rotate<=1;O_image_us<=0;O_epoch<=0;O_time_valid<=0;O_point<=0;
+ phase<=0;pending_point<=0;pending_id<=0;pending_session<=0;pending_pair<=0;pending_tracking<=0;pending_rotate<=0;pending_show<=0;
+ pending_match<=0;pending_move<=0;pending_cal<=0;pending_zoom<=0;pending_mode<=0;dx_q<=0;dy_q<=0;min_x<=0;max_x<=0;min_y<=0;max_y<=0;step_x<=0;step_y<=0;clamp_x<=0;clamp_y<=0;end
  else begin
  vs_last<=I_vs;O_commit<=0;
  if(I_vs && !vs_last)begin
- in_blank<=1;O_show<=I_show;if(age<255)age<=age+1'b1;
+ in_blank<=1;phase<=0;O_show<=I_show;if(age<255)age<=age+1'b1;
  if(I_tracking && session!=I_session)begin O_cx<=640;O_cy<=360;end
  end
- if(I_de)in_blank<=0;
+ if(I_de)begin in_blank<=0;phase<=0;end
  if(session!=I_session || O_pair!=I_pair || O_meta[244]!=I_tracking)associated<=0;
- if(I_snapshot && in_blank && !I_de)begin
- in_blank<=0;O_commit<=1;O_point<=I_point[22]?I_point:{16'd0,1'b0,I_data[32],I_data[99:79]};O_bank<=I_data[MW+32+:2];O_frame_id<=I_data[MW+:32];
+ if(phase!=0 && (!context_ok || I_abort))phase<=0;
+ // I_live contains intentional reader blanking. It is an immediate validity
+ // gate above, not a reason to discard the new frame being prepared in blank.
+ if(phase!=0 && context_ok && !I_de && !I_snapshot && !I_abort && !(I_vs && !vs_last))case(phase)
+ 1:begin dx_q<=$signed({2'd0,source_x})-$signed({2'd0,O_cx});dy_q<=$signed({3'd0,source_y})-$signed({3'd0,O_cy});phase<=2;end
+ 2:begin step_x<=next_x;step_y<=next_y;phase<=3;end
+ 3:begin clamp_x<=step_x<min_x?min_x:step_x>max_x?max_x:step_x;
+ clamp_y<=step_y<min_y?min_y:step_y>max_y?max_y:step_y;phase<=4;end
+ 4:begin
+ in_blank<=0;phase<=0;O_commit<=1;O_point<=pending_point;O_bank<=I_data[MW+32+:2];O_frame_id<=pending_id;
  if(V4)begin O_image_us<=I_data[803+:32];O_epoch<=I_data[835+:16];O_time_valid<=I_data[851] && I_data[802];end
- O_zoom<=I_zoom;O_mode<=I_mode;O_rotate<=I_rotate;O_pair<=I_pair;O_show<=I_show;session<=I_session;associated<=match;
- O_meta<=match?I_data[MW-1:0]:0;if(I_data[MW+:32]!=O_frame_id)age<=0;
- O_cx<=cx;O_cy<=cy;O_x0<=cx-hx;O_y0<=cy-hy;
- if(match && I_data[567:565]!=0)begin
- O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;
+ O_zoom<=pending_zoom;O_mode<=pending_mode;O_rotate<=pending_rotate;O_pair<=pending_pair;O_show<=pending_show;session<=pending_session;associated<=pending_match;
+ O_meta<=pending_match?I_data[MW-1:0]:0;if(pending_id!=O_frame_id)age<=0;
+ O_cx<=clamp_x;O_cy<=clamp_y;O_x0<=clamp_x-min_x;O_y0<=clamp_y-min_y;
+ if(pending_cal)begin O_cx<=640;O_cy<=360;O_x0<=0;O_y0<=48;O_zoom<=0;O_mode<=0;end
  end
- end end end
+ default:phase<=0;
+ endcase
+ if(I_snapshot && in_blank && !I_de && !I_abort)begin
+ phase<=1;pending_point<=I_point[22]?I_point:{16'd0,1'b0,I_data[32],I_data[99:79]};pending_id<=I_data[MW+:32];
+ pending_session<=I_session;pending_pair<=I_pair;pending_tracking<=I_tracking;pending_rotate<=I_rotate;pending_show<=I_show;
+ pending_zoom<=I_zoom;pending_mode<=I_mode;pending_match<=match;pending_cal<=match && I_data[567:565]!=0;
+ pending_move<=match && (I_point[22]?I_point[21]:(I_data[32] && I_data[MW+:32]!=O_frame_id));
+ min_x<=width>>1;min_y<=height>>1;max_x<=1280-width+(width>>1);max_y<=720-height+(height>>1);
+ // A newer response wins over an older publication due on this same clock.
+ O_commit<=0;
+ end
+ end end
 endmodule
 `default_nettype wire

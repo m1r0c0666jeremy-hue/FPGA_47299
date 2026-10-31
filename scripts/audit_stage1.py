@@ -7,6 +7,22 @@ R=Path(__file__).resolve().parents[1]
 ARCHIVE=R/'build/target_color_regions_osd_memory_20261019_234705/osd_memory_same_source.zip'
 BASE_AUDIT=R/'reports/osd_memory/final_audit_20261019_2344.json'
 
+def timing_baseline_specs():
+    return {
+      'final_missing_snapshot':('REFINED_SNAPSHOT_FAULT_PASS',('refined_line_reader',)),
+      'failed_bus_wait_peak':('FAILED_BUS_PEAK_PASS',('refined_line_reader',)),
+      'final_video_drain_0':('REFINED_DRAIN_PASS',('refined_line_reader',)),
+      'final_video_drain_1':('REFINED_RECOVERY_PASS',('refined_line_reader',)),
+      'final_video_drain_2':('REFINED_RECOVERY_PASS',('refined_line_reader',)),
+      'arbitration_bw240_recover':('ARBITRATION_PASS BW240',('refined_line_reader',)),
+      'rational_overlay_geometry':('REFINED_GEOMETRY_PASS',('refined_overlay_geometry',)),
+      'osd_english_ui':('OSD_ENGLISH_UI_PASS',('refined_overlay_geometry',)),
+      'osd_english_abort':('OSD_ENGLISH_ABORT_PASS',('refined_overlay_geometry',)),
+      'osd_english_overlay':('OSD_ENGLISH_OVERLAY_PASS',('refined_overlay_geometry',)),
+      'osd_english_wait':('OSD_ENGLISH_WAIT_PASS',('refined_overlay_geometry',)),
+      'osd_packed_program_equivalence':('OSD_PACKED_PROGRAM_PASS',('refined_overlay_geometry',)),
+    }
+
 def old_modules(progress=False):
     assert sha(ARCHIVE)=='9ec0eb66550b2c67db809c6ce4e5cc69258b0187d89d891bf0f99f6469ead9d3'
     old=json.loads(BASE_AUDIT.read_text(encoding='utf-8'));result={};refreshed=[];missing=[]
@@ -28,7 +44,8 @@ def old_modules(progress=False):
     assert len(video_names)==84 and len(live_names)==4
     store_names={'store_cached_id_comparison':('REFINED_STORE_EQUIVALENT_PASS',('refined_frame_store','stable_frame_store')),
                  'refined_v4_frame_store_and_display':('REFINED_V4_STORE_PASS',('refined_frame_store','stable_display','refined_zoom_geometry'))}
-    approved=set(refresh)|set(calibration)|video_names|live_names|set(store_names)
+    timing_refresh=timing_baseline_specs()
+    approved=set(refresh)|set(calibration)|video_names|live_names|set(store_names)|set(timing_refresh)
     assert approved.issubset(old['regression']),sorted(approved-set(old['regression']))
     with zipfile.ZipFile(ARCHIVE) as z:
         assert BASE_AUDIT.read_bytes()==z.read(BASE_AUDIT.relative_to(R).as_posix())
@@ -44,7 +61,10 @@ def old_modules(progress=False):
             if not changed:result[name]=e;continue
             assert name in approved,'Unreviewed baseline dependency change '+name
             prefix=name
-            if name in refresh:
+            if name in timing_refresh:
+                marker,mods=timing_refresh[name];prefix='stage1_baseline_'+name
+                expected={'rtl/color_regions/'+m+'.v' for m in mods}
+            elif name in refresh:
                 marker,mods=refresh[name]
                 expected={'rtl/color_regions/refined_camera_config.v'}
                 if name=='camera_frame_admission':expected.add('rtl/color_regions/stable_camera_capture.v')
@@ -59,6 +79,8 @@ def old_modules(progress=False):
                 marker='STABLE_VIDEO_PASS:' if name in video_names else 'STAGE1_LIVE_EDITOR_PASS'
                 mods=('stable_preprocess','refined_line_reader','stage1_osd')
                 expected={'rtl/color_regions/stable_preprocess.v'}
+                expected.update({'rtl/color_regions/refined_line_reader.v','rtl/color_regions/refined_overlay_geometry.v'} &
+                                {n.replace(chr(92),'/') for n in e['inputs']})
                 if name in live_names:
                     if 'rtl/color_regions/refined_frame_store.v' in changed:
                         expected.add('rtl/color_regions/refined_frame_store.v')
@@ -71,7 +93,7 @@ def old_modules(progress=False):
     assert len(old['regression'])==160
     baseline_store=next(h for n,h in old['regression']['store_cached_id_comparison']['inputs'].items()
                         if n.replace(chr(92),'/')=='rtl/color_regions/refined_frame_store.v')
-    replacement_count=120 if sha(R/'rtl/color_regions/refined_frame_store.v')!=baseline_store else 118
+    replacement_count=(120 if sha(R/'rtl/color_regions/refined_frame_store.v')!=baseline_store else 118)+len(timing_refresh)
     if not progress:
         assert not missing,'Missing current baseline replacements: '+', '.join(missing)
         assert len(result)==160 and len(refreshed)==replacement_count
@@ -82,6 +104,8 @@ def old_modules(progress=False):
 
 def specs():
     d={
+      'stage1_viewport_pipeline':('STAGE1_VIEWPORT_PIPELINE_PASS cases600',('stage1_regions','refined_zoom_geometry')),
+      'stage1_overlay_pipeline':('STAGE1_OVERLAY_PIPELINE_PASS 960',('refined_overlay_geometry',)),
       'stage1_fixed_bank_small':('STAGE1_FIXED_BANK_SMALL_PASS frames18000',('refined_frame_store',)),
       'stage1_fixed_bank_production':('STAGE1_FIXED_BANK_PRODUCTION_PASS frames24',('refined_frame_store',)),
       'stage1_ddr_reference':('STAGE1_DDR_REFERENCE_PASS',('stage1_top','stage1_memory_video_out','refined_reset_bridge','refined_ddr_recovery')),
