@@ -25,7 +25,7 @@ def viewport():
         rows.append((packet,point,z,rot,cx,cy,x0,y0))
     stim='\n'.join(f"data=852'h{v[0]:0213x};point=39'd{v[1]};zoom=3'd{v[2]};rotate=1'b{v[3]};frame; if(cx!={v[4]} || cy!={v[5]} || x0!={v[6]} || y0!={v[7]})$fatal(1,\"oracle {i}\");" for i,v in enumerate(rows))
     tb=r'''module tb;
-reg clk=0;always #5 clk=~clk;reg rst=0,vs=0,de=0,snap=0,abort=0,rotate=0;reg [851:0] data=0;reg [38:0] point=0;
+reg clk=0;always #5 clk=~clk;reg rst=0,vs=0,de=0,snap=0,rotate=0;reg [1:0] abort=0;reg [851:0] data=0;reg [38:0] point=0;
 reg [7:0] session=1;reg tracking=1,pair=0;reg [2:0] zoom=0;reg [1:0] mode=0;
 wire commit,gcommit;wire [1:0] bank,gbank,om,gom;wire [31:0] id,gid,us,gus;wire [15:0] epoch,gepoch;
 wire [10:0] cx,x0,gcx,gx0;wire [9:0] cy,y0,gcy,gy0;wire [2:0] oz,goz;wire [767:0] meta,gmeta;wire [38:0] shown,gshown;
@@ -51,7 +51,16 @@ for(kind=0;kind<7;kind=kind+1)for(phase=0;phase<4;phase=phase+1)begin
 vs=1;@(negedge clk);vs=0;@(negedge clk);held=pub;snap=1;@(negedge clk);snap=0;
 repeat(phase)@(negedge clk);
 case(kind)0:abort=1;1:de=1;2:session=2;3:pair=1;4:tracking=0;5:mode=1;6:point[22]=!point[22];endcase
-repeat(6)begin @(negedge clk);if(commit || pub!==held)$fatal(1,"cancel leaked kind%0d phase%0d",kind,phase);end
+if(kind<2)begin
+repeat(6)begin @(negedge clk);if(commit || pub!==held)$fatal(1,"fault/deadline leaked kind%0d phase%0d",kind,phase);end
+end else begin
+// Replacing the point source/configuration must keep the healthy image.
+// No old payload can publish on the clock that detects the changed context.
+repeat(4)begin @(negedge clk);if(commit || pub!==held)$fatal(1,"stale point published kind%0d phase%0d",kind,phase);end
+@(negedge clk);
+if(!commit || shown!==(point[22]?point:{16'd0,1'b0,data[32],data[99:79]}))$fatal(1,"context reprepare lost frame kind%0d phase%0d",kind,phase);
+@(negedge clk);if(commit)$fatal(1,"context duplicate commit");
+end
 abort=0;de=0;session=1;pair=0;tracking=1;mode=0;
 end
 for(phase=0;phase<4;phase=phase+1)begin
@@ -60,9 +69,16 @@ data[31:0]=1000+phase;data[799:768]=1000+phase;snap=1;held=pub;
 @(negedge clk);snap=0;repeat(3)begin @(negedge clk);if(commit || pub!==held)$fatal(1,"old snapshot leaked");end
 @(negedge clk);if(!commit || id!=1000+phase)$fatal(1,"new snapshot not published");@(negedge clk);
 end
+// A stop event and route-state update on the publication edge must not emit
+// the pre-stop virtual point. The new real source appears one clock later.
+vs=1;@(negedge clk);vs=0;@(negedge clk);point[22]=1;snap=1;
+@(negedge clk);snap=0;repeat(3)@(negedge clk);abort=2;
+@(negedge clk);if(commit)$fatal(1,"stop edge emitted old replay point");abort=0;point[22]=0;
+repeat(4)begin @(negedge clk);if(commit)$fatal(1,"source transition emitted stale point");end
+@(negedge clk);if(!commit || shown[22] || shown[20:0]!==data[99:79])$fatal(1,"stop did not resume real image/point");@(negedge clk);
 vs=1;@(negedge clk);vs=0;@(negedge clk);snap=1;@(negedge clk);snap=0;@(negedge clk);rst=0;
 @(negedge clk);rst=1;repeat(8)@(negedge clk);if(commit || id!=0)$fatal(1,"old publication after reset");
-$display("STAGE1_VIEWPORT_PIPELINE_PASS cases600 cancel28 replace4 reset blanking-live-low atomic");$finish;end endmodule'''.replace('STIMULUS',stim)
+$display("STAGE1_VIEWPORT_PIPELINE_PASS cases600 fault8 reprepare20 replace4 reset blanking-live-low atomic");$finish;end endmodule'''.replace('STIMULUS',stim)
     run('stage1_viewport_pipeline',tb,[R/'rtl/color_regions/stage1_regions.v',R/'rtl/color_regions/stage1_sequence.v',R/'rtl/color_regions/refined_zoom_geometry.v',R/'sim/stage1_viewport_before_retime.v'],timeout=60)
 
 def overlay():

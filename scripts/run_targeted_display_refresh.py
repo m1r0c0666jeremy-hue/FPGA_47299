@@ -1,10 +1,11 @@
 """Bounded current-source regressions after the three targeted display repairs."""
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
-import json,datetime,subprocess,sys,hashlib
+import json,datetime,subprocess,sys,hashlib,argparse
 R=Path(__file__).resolve().parents[1]
 
 def main():
+    ap=argparse.ArgumentParser();ap.add_argument('--resume',action='store_true');a=ap.parse_args()
     phase=R/(R/'build/current_targeted_display_retime_path.txt').read_text().strip()
     out=phase/('software_refresh_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'));out.mkdir()
     from stage1_policy import compiler_paths
@@ -21,12 +22,32 @@ def main():
     short += [['test_stage1_real_keys.py','--faults'],['test_stage1_rect.py','--geometry']]
     short += [['test_stage1_footer.py',*a] for a in ([],['--abort'],['--wait'])]
     baseline=[['test_stage1_timing_baseline.py',n,*a] for n,a in (
-      ('test_refined_geometry.py',[]),('test_refined_fault_v4.py',[]),('test_refined_arbitration.py',[]),
+      ('test_refined_geometry.py',[]),('test_refined_fault_v4.py',[]),('test_refined_arbitration.py',['240','--recover']),
       ('test_osd_memory_ui.py',[]),('test_osd_memory_ui.py',['--abort']),('test_osd_memory_ui.py',['--wait']),
       ('test_osd_memory_overlay.py',[]),('test_osd_packed_program.py',[]))]
     jobs={'short_current':short,'baseline12':baseline,
-      'video84':[['test_stage1_video.py','--full','--faults','--workers','2','--reuse-current']],
-      'live4':[['test_stage1_live.py','--reader','refined','--store','refined','--line-gap','160','--workers','1']]}
+      'video84':[['test_stage1_video.py','--full','--faults','--workers','4','--reuse-current']],
+      'live4':[['test_stage1_live.py','--reader','refined','--store','refined','--line-gap','160','--workers','4']]}
+    if a.resume:
+        # Select scripts from actual invalidated dependency hashes. Unchanged
+        # footer/video geometry/calibration proofs must not be rerun wholesale.
+        previous=json.loads((R/'reports/stage1/software_targeted_progress_20261031_2051.json').read_text())
+        needed=set();invalid=set()
+        for name,e in previous['regression'].items():
+            if any(not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h
+                   for group in (e['inputs'],e['fixture_inputs'],e['producer_inputs']) for n,h in group.items()):
+                invalid.add(name)
+                needed.update(Path(n).name for n in e['producer_inputs'] if Path(n).name.startswith('test_'))
+        selected=[]
+        for cmd in short:
+            if cmd[0] not in needed:continue
+            if cmd[0]=='test_stage1_release1030.py' and cmd[-1]=='footer' and 'stage1_runtime_footer' not in invalid:continue
+            selected.append(cmd)
+        jobs['short_current']=selected
+        from audit_stage1 import timing_baseline_specs,evidence
+        unchanged=all(evidence('stage1_baseline_'+n,marker,mods) for n,(marker,mods) in timing_baseline_specs().items())
+        if unchanged:del jobs['baseline12']
+        print('RESUME_CURRENT_HASHES',len(selected),'short commands; inherited12 reused',unchanged,flush=True)
     record={'started':datetime.datetime.now().astimezone().isoformat(),'inputs':frozen,'jobs':{}}
     def save(): (out/'progress.json').write_text(json.dumps(record,indent=2),encoding='utf-8')
     def execute(name,commands):

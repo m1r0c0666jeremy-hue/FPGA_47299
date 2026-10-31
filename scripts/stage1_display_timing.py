@@ -34,12 +34,15 @@ def decorate(out):
     s=out['rtl/color_regions/stage1_memory_video_out.v']
     needle='    stage1_viewport #(.V4(1)) u_viewport('
     assert s.count(needle)==1
-    s=s.replace(needle,'''    reg [1:0] viewport_ui_last;
+    s=s.replace(needle,'''    // Gesture cancellation belongs to editing/teaching, not image transport.
+    // Only a genuine camera/configuration pause may withdraw a video frame.
+    wire viewport_abort=!I_camera_ready || I_gain_busy;
+    reg [1:0] viewport_ui_last;
     always @(posedge I_pixel_clk or negedge I_process_rst_n)
     if(!I_process_rst_n)viewport_ui_last<=0;else viewport_ui_last<=I_ui_mode;
-    wire viewport_abort=I_key_cancel || I_key4 || !I_camera_ready || I_gain_busy || I_ui_mode!=viewport_ui_last;
+    wire viewport_reprepare=I_key_cancel || I_key4 || I_ui_mode!=viewport_ui_last;
 '''+needle)
     needle='.I_point(teach_desired_point),.O_point(teach_active_point));'
     assert s.count(needle)==1
-    s=s.replace(needle,'.I_point(teach_desired_point),.O_point(teach_active_point),.I_abort(viewport_abort));')
+    s=s.replace(needle,'.I_point(teach_desired_point),.O_point(teach_active_point),.I_abort({viewport_reprepare,viewport_abort}));')
     out['rtl/color_regions/stage1_memory_video_out.v']=s

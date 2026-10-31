@@ -104,6 +104,7 @@ def old_modules(progress=False):
 
 def specs():
     d={
+      'stage1_gesture_video':('STAGE1_GESTURE_VIDEO_PASS',('stage1_regions','stage1_memory_video_out','refined_line_reader')),
       'stage1_viewport_pipeline':('STAGE1_VIEWPORT_PIPELINE_PASS cases600',('stage1_regions','refined_zoom_geometry')),
       'stage1_overlay_pipeline':('STAGE1_OVERLAY_PIPELINE_PASS 960',('refined_overlay_geometry',)),
       'stage1_fixed_bank_small':('STAGE1_FIXED_BANK_SMALL_PASS frames18000',('refined_frame_store',)),

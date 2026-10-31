@@ -28,7 +28,7 @@ end else begin vs=0;snapshot=0;end
 stage1_viewport #(.V4(1)) view(.I_clk(clk),.I_rst_n(rst),.I_vs(vs),.I_de(reader_de),.I_snapshot(snapshot),.I_data(packet),
 .I_tracking(tracking && camera),.I_show(show),.I_conflict(1'b0),.I_live(camera),.I_session(session),.I_zoom(zoom),.I_mode(2'd0),
 .I_pair(pair),.I_rotate(rotate),.O_commit(commit),.O_frame_id(image),.O_x0(x0),.O_y0(y0),.O_meta(meta),
-.O_detection_valid(det),.O_image_us(image_us),.O_epoch(epoch),.O_time_valid(time_valid),.I_point(desired),.O_point(shown),.I_abort(cancel || k4 || !camera || gb));
+.O_detection_valid(det),.O_image_us(image_us),.O_epoch(epoch),.O_time_valid(time_valid),.I_point(desired),.O_point(shown),.I_abort({(cancel || k4),(!camera || gb)}));
 stage1_input_guard real_guard(clk,rst,rst,tracking && camera,camera,gb,raw_video,reader_de,commit,session,pair,image,epoch,image_us,time_valid,meta,associated,area_video);
 wire image_associated=meta[255] && meta[247] && meta[31:0]==image && meta[671:640]==image_us && meta[719:704]==epoch &&
  meta[242:235]==session && meta[243]==pair && meta[244]==(tracking && camera) && time_valid;

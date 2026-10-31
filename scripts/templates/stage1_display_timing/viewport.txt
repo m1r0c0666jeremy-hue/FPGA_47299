@@ -6,7 +6,7 @@ module stage1_viewport #(parameter STALE_DISPLAY_FRAMES=15,V4=0,MW=V4?768:640,SW
  output reg [10:0] O_cx,O_x0,output reg [9:0] O_cy,O_y0,
  output reg [2:0] O_zoom,output reg [1:0] O_mode,output reg [MW-1:0] O_meta,
  output reg O_show,O_pair,output wire O_detection_valid,output wire O_sample_valid,output wire [2:0] O_state,input wire I_rotate,output reg O_rotate,
- output reg [31:0] O_image_us,output reg [15:0] O_epoch,output reg O_time_valid,input wire [38:0] I_point,output reg [38:0] O_point,input wire I_abort);
+ output reg [31:0] O_image_us,output reg [15:0] O_epoch,output reg O_time_valid,input wire [38:0] I_point,output reg [38:0] O_point,input wire [1:0] I_abort);
  reg vs_last,in_blank,associated;reg [7:0] age,session;
  wire match=I_data[MW+34] && I_data[255] && I_data[415:413]==(V4?4:3) && I_data[31:0]==I_data[MW+:32] &&
  (!V4 || I_data[719:704]==I_data[SW-2-:16]) &&
@@ -49,10 +49,11 @@ module stage1_viewport #(parameter STALE_DISPLAY_FRAMES=15,V4=0,MW=V4?768:640,SW
  end
  if(I_de)begin in_blank<=0;phase<=0;end
  if(session!=I_session || O_pair!=I_pair || O_meta[244]!=I_tracking)associated<=0;
- if(phase!=0 && (!context_ok || I_abort))phase<=0;
+ // Bit0 withdraws a truly faulty image; bit1 cancels only pending point work.
+ if(phase!=0 && I_abort[0])phase<=0;
  // I_live contains intentional reader blanking. It is an immediate validity
  // gate above, not a reason to discard the new frame being prepared in blank.
- if(phase!=0 && context_ok && !I_de && !I_snapshot && !I_abort && !(I_vs && !vs_last))case(phase)
+ if(phase!=0 && context_ok && !I_de && !I_snapshot && I_abort==0 && !(I_vs && !vs_last))case(phase)
  1:begin dx_q<=$signed({2'd0,source_x})-$signed({2'd0,O_cx});dy_q<=$signed({3'd0,source_y})-$signed({3'd0,O_cy});phase<=2;end
  2:begin step_x<=next_x;step_y<=next_y;phase<=3;end
  3:begin clamp_x<=step_x<min_x?min_x:step_x>max_x?max_x:step_x;
@@ -67,7 +68,10 @@ module stage1_viewport #(parameter STALE_DISPLAY_FRAMES=15,V4=0,MW=V4?768:640,SW
  end
  default:phase<=0;
  endcase
- if(I_snapshot && in_blank && !I_de && !I_abort)begin
+ // A point-source/configuration change invalidates the pending coordinates,
+ // not the healthy camera frame. Reprepare from the same held mailbox data;
+ // do not turn a normal stop/gesture into a reader missing-snapshot fault.
+ if((I_snapshot || (phase!=0 && (!context_ok || I_abort[1]))) && in_blank && !I_de && !I_abort[0] && !(I_vs && !vs_last))begin
  phase<=1;pending_point<=I_point[22]?I_point:{16'd0,1'b0,I_data[32],I_data[99:79]};pending_id<=I_data[MW+:32];
  pending_session<=I_session;pending_pair<=I_pair;pending_tracking<=I_tracking;pending_rotate<=I_rotate;pending_show<=I_show;
  pending_zoom<=I_zoom;pending_mode<=I_mode;pending_match<=match;pending_cal<=match && I_data[567:565]!=0;
