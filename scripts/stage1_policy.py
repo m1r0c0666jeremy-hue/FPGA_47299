@@ -25,6 +25,12 @@ def baseline_inputs(root):
     assert sha(record)=='970d0781b9c66096ac5a2aba9fd3206a82d29649a49c4075dc7185154084a265','Archived baseline manifest changed'
     baseline=json.loads(record.read_text(encoding='utf-8'))
     for name,value in baseline.items():
+        if name=='rtl/color_regions/refined_frame_store.v' and sha(root/name)!=value:
+            # Explicitly authorized fixed-bank rewrite, pinned to the adopted
+            # candidate. Formal full-word-count and live evidence is mandatory.
+            assert git(root,'branch','--show-current')=='Final_Mode_1028'
+            assert sha(root/name)=='22fc395008eb5e3068007847811fc44d3e2c598cf661e69b1608442ff0194d75'
+            continue
         if name in ('rtl/color_regions/refined_camera_config.v','rtl/color_regions/stable_calibration.v','rtl/color_regions/stable_camera_capture.v','rtl/color_regions/stable_preprocess.v') and sha(root/name)!=value:
             # Approved stable release changes: ID/gain readback, RY/BP calibration,
             # and diagnostic-only capture lane flag. All other baseline members

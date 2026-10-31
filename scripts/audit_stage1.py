@@ -26,7 +26,9 @@ def old_modules(progress=False):
     video_names.update({f'refined_video_0_0_0_{r}_f1_n2' for r in (0,1)}|{f'refined_video_0_1_0_{r}_f0_n2' for r in (0,1)})
     live_names={f'refined_v4_live_{p}_{r}' for p in (0,1) for r in (0,1)}
     assert len(video_names)==84 and len(live_names)==4
-    approved=set(refresh)|set(calibration)|video_names|live_names
+    store_names={'store_cached_id_comparison':('REFINED_STORE_EQUIVALENT_PASS',('refined_frame_store','stable_frame_store')),
+                 'refined_v4_frame_store_and_display':('REFINED_V4_STORE_PASS',('refined_frame_store','stable_display','refined_zoom_geometry'))}
+    approved=set(refresh)|set(calibration)|video_names|live_names|set(store_names)
     assert approved.issubset(old['regression']),sorted(approved-set(old['regression']))
     with zipfile.ZipFile(ARCHIVE) as z:
         assert BASE_AUDIT.read_bytes()==z.read(BASE_AUDIT.relative_to(R).as_posix())
@@ -48,12 +50,18 @@ def old_modules(progress=False):
                 if name=='camera_frame_admission':expected.add('rtl/color_regions/stable_camera_capture.v')
             elif name in calibration:
                 marker=calibration[name];mods=('stable_calibration',);expected={'rtl/color_regions/stable_calibration.v'}
+            elif name in store_names:
+                marker,mods=store_names[name];prefix='stage1_'+name
+                expected={'rtl/color_regions/refined_frame_store.v'}
             else:
                 prefix=name.replace('refined_video_','stage1_video_').replace('refined_v4_live_','stage1_v4_live_')
                 if name in live_names:prefix+='_refined_g160'
                 marker='STABLE_VIDEO_PASS:' if name in video_names else 'STAGE1_LIVE_EDITOR_PASS'
                 mods=('stable_preprocess','refined_line_reader','stage1_osd')
                 expected={'rtl/color_regions/stable_preprocess.v'}
+                if name in live_names:
+                    expected.add('rtl/color_regions/refined_frame_store.v')
+                    mods+=('refined_frame_store',)
             assert set(changed)==expected,(name,changed,expected)
             current=evidence(prefix,marker,mods)
             if current:
@@ -62,14 +70,16 @@ def old_modules(progress=False):
     assert len(old['regression'])==160
     if not progress:
         assert not missing,'Missing current baseline replacements: '+', '.join(missing)
-        assert len(result)==160 and len(refreshed)==118
-    return dict(scope='42 unchanged archived checks; 118 current-source replacements including 88 shared stage1 video/live qualifications',
+        assert len(result)==160 and len(refreshed)==120
+    return dict(scope='40 unchanged archived checks; 120 current-source replacements including 88 shared stage1 video/live qualifications',
                 archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result,current_replacements=refreshed,
                 required=160,passed=len(result),missing=missing)
 
 
 def specs():
     d={
+      'stage1_fixed_bank_small':('STAGE1_FIXED_BANK_SMALL_PASS frames18000',('refined_frame_store',)),
+      'stage1_fixed_bank_production':('STAGE1_FIXED_BANK_PRODUCTION_PASS frames24',('refined_frame_store',)),
       'stage1_ddr_reference':('STAGE1_DDR_REFERENCE_PASS',('stage1_top','stage1_memory_video_out','refined_reset_bridge','refined_ddr_recovery')),
       'stage1_ddr133_recovery_0':('STAGE1_DDR133_RECOVERY_PASS mode0',('refined_line_reader','refined_mc_to_user_interface','refined_ddr_recovery')),
       'stage1_ddr133_recovery_1':('STAGE1_DDR133_RECOVERY_PASS mode1',('refined_line_reader','refined_mc_to_user_interface','refined_ddr_recovery')),
