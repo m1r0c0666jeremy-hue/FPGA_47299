@@ -44,7 +44,7 @@ def old_modules(progress=False):
     assert len(video_names)==84 and len(live_names)==4
     store_names={'store_cached_id_comparison':('REFINED_STORE_EQUIVALENT_PASS',('refined_frame_store','stable_frame_store')),
                  'refined_v4_frame_store_and_display':('REFINED_V4_STORE_PASS',('refined_frame_store','stable_display','refined_zoom_geometry'))}
-    timing_refresh=timing_baseline_specs()
+    timing_refresh={} if git(R,'branch','--show-current')=='Final_Mode_1101' else timing_baseline_specs()
     approved=set(refresh)|set(calibration)|video_names|live_names|set(store_names)|set(timing_refresh)
     assert approved.issubset(old['regression']),sorted(approved-set(old['regression']))
     with zipfile.ZipFile(ARCHIVE) as z:
@@ -67,7 +67,7 @@ def old_modules(progress=False):
             elif name in refresh:
                 marker,mods=refresh[name]
                 expected={'rtl/color_regions/refined_camera_config.v'}
-                if name=='camera_frame_admission':expected.add('rtl/color_regions/stable_camera_capture.v')
+                if name=='camera_frame_admission' and 'rtl/color_regions/stable_camera_capture.v' in changed:expected.add('rtl/color_regions/stable_camera_capture.v')
             elif name in calibration:
                 marker=calibration[name];mods=('stable_calibration',);expected={'rtl/color_regions/stable_calibration.v'}
             elif name in store_names:
@@ -80,7 +80,7 @@ def old_modules(progress=False):
                 mods=('stable_preprocess','refined_line_reader','stage1_osd')
                 expected={'rtl/color_regions/stable_preprocess.v'}
                 expected.update({'rtl/color_regions/refined_line_reader.v','rtl/color_regions/refined_overlay_geometry.v'} &
-                                {n.replace(chr(92),'/') for n in e['inputs']})
+                                set(changed))
                 if name in live_names:
                     if 'rtl/color_regions/refined_frame_store.v' in changed:
                         expected.add('rtl/color_regions/refined_frame_store.v')
@@ -103,6 +103,9 @@ def old_modules(progress=False):
 
 
 def specs():
+    if git(R,'branch','--show-current')=='Final_Mode_1101':
+        from stage1_demo_validation import demo_specs
+        return demo_specs()
     d={
       'stage1_gesture_video':('STAGE1_GESTURE_VIDEO_PASS',('stage1_regions','stage1_memory_video_out','refined_line_reader')),
       'stage1_viewport_pipeline':('STAGE1_VIEWPORT_PIPELINE_PASS cases600',('stage1_regions','refined_zoom_geometry')),

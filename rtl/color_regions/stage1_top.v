@@ -160,7 +160,6 @@ always @(posedge S_100m_clk or negedge S_rst_n) begin
 end
 
 assign O_screen_pwm = S_heart_cnt[25];   // 100 MHz / 2^26 ~= 0.75 s toggle
-wire lane_seen_async;
 stable_camera_capture #(.TIMING(1)) u_camera (
     .I_time_gray(time_gray),.O_source_id(source_id),.O_source_us(source_us),.O_now_us(capture_us),.O_latest_gray(latest_id_gray),.O_time_valid(source_time_valid),
     .O_parameter_event(camera_parameter_event),.O_camera_ready(camera_ready),.O_camera_fault(camera_fault),
@@ -175,7 +174,7 @@ stable_camera_capture #(.TIMING(1)) u_camera (
     .O_detect_rgb(detect_rgb),.O_detect_sof(detect_sof),.O_detect_valid(detect_valid),
     .O_capture_clk(S_csi_rx_clk), .O_rgb128(S_ISP_O_tdata),
     .O_data_valid(S_ISP_O_tvalid), .O_frame_start(S_ISP_O_tuser),
-    .O_lane_seen(lane_seen_async),.O_status_async(camera_status_async)
+    .O_status_async(camera_status_async)
 );
 // These four independent sticky flags are not a coherent multi-bit data bus.
 status_sync u_status_sync (
@@ -187,7 +186,7 @@ stage1_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_gain_busy(stage_gain_busy),.I_gain_failed(stage_gain_failed),.I_gain_slot(stage_gain_slot),.I_gain_target(stage_gain_target),.O_area_alarm(stage_alarm),
     .I_source_id(source_id),.I_source_us(source_us),.I_capture_us(capture_us),.I_source_time_valid(source_time_valid),
     .I_board_us(board_us),.I_latest_gray(latest_id_gray),.I_model_state(frame_model_state),.I_quality(frame_quality),
-    .I_camera_event(camera_event_sync[1]),.I_camera_ready(camera_ready_sync[1]),.I_camera_status(camera_ui_status),.I_lane_seen(lane_seen_async),
+    .I_camera_event(camera_event_sync[1]),.I_camera_ready(camera_ready_sync[1]),.I_camera_status(camera_ui_status),
     .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
     .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking && camera_ready_sync[1]),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),

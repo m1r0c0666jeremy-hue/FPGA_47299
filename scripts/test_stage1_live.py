@@ -24,13 +24,13 @@ endcase end
 extra="2'd1,asaved,adraft,anc,acl,an,ae,aa,ad,ast,ac,ao,am,atrend,adist,adwell,aerr,aserr,ab,at,1'b0,1'b0,3'd5,"
 replacement="s=s.replace('stable_osd osd', 'stage1_osd osd')\ns=s.replace('stage1_osd osd(', "+repr(declarations)+"+'stage1_osd osd('+"+repr(extra)+")"
 s=s.replace("s=s.replace('stable_osd osd','refined_osd osd')",replacement)
-s=s.replace("39'd0,18'd0);","39'd0,18'd90,7'd105,4'd0,80'd0,23'd0,8'd50,1'b0,8'd0,8'd0,1'b0);")
+s=s.replace("39'd0,18'd0);","39'd0,18'd90,7'd105,4'd0,80'd0,23'd0,8'd50,1'b0);")
 s=s.replace('rtl/color_regions/refined_osd.v','rtl/color_regions/stage1_osd.v')
 coverage='''if(real_downs==0 || real_clicks==0 || ad!=1 || an!=0 || area_observations<3 || avs[20:0]===21'd0)$fatal(1,"live editor coverage points%0d areas%0d observations%0d phase%0d live%b source%b age%0d",ad,an,area_observations,point_phase,at,regions.source_ok,regions.tip_age);$display("STAGE1_LIVE_EDITOR_PASS observations%0d point%0d/%0d",area_observations,avs[10:0],avs[20:11]);$display("STABLE_LIVE_PASS'''
 s=s.replace('\ndef execute(job):',"\nfrom stage1_test_sources import EXTRA_OSD\nmods += EXTRA_OSD+[R/'rtl/color_regions'/n for n in ('stage1_sequence.v','stage1_regions.v','stage1_controls.v','stage1_memory_video_out.v')]\n"+
 "s=s.replace("+repr('$display("STABLE_LIVE_PASS')+','+repr(coverage)+")\n\ndef execute(job):")
 s=s.replace("f'{a.reader}_v4_live_","f'stage1_v4_live_").replace('REFINED_LIVE_ALL_PASS','STAGE1_LIVE_ALL_PASS')
-s=s.replace('def execute(job):',"s=s.replace('frame==5','frame==12').replace('checked!=5*1280*624','checked!=12*1280*624').replace('transactions<5','transactions<12').replace('#200000000;','#500000000;')\ns=s.replace('stable_display #(.V4(1)) view(', 'stage1_viewport #(.V4(1)) view(').replace(\"state,1'(ROTATE),,shown_us,shown_epoch,shown_time);\",\"state,1'(ROTATE),,shown_us,shown_epoch,shown_time,39'd0,,2'b0);\")\ns=s.replace('regions.source_ok','regions.real_controller.source_ok').replace('regions.tip_age','regions.real_controller.tip_age')\n\ndef execute(job):")
+s=s.replace('def execute(job):',"s=s.replace('frame==5','frame==12').replace('checked!=5*1280*624','checked!=12*1280*624').replace('transactions<5','transactions<12').replace('#200000000;','#500000000;')\ns=s.replace('stable_display #(.V4(1)) view(', 'stage1_viewport #(.V4(1)) view(').replace(\"state,1'(ROTATE),,shown_us,shown_epoch,shown_time);\",\"state,1'(ROTATE),,shown_us,shown_epoch,shown_time,39'd0,); \")\ns=s.replace('regions.source_ok','regions.real_controller.source_ok').replace('regions.tip_age','regions.real_controller.tip_age')\n\ndef execute(job):")
 s=s.replace("5*jobs,'frames',3993600*jobs","12*jobs,'frames',9584640*jobs")
 s=s.replace('timeout=3600','timeout=10800')
 s=s.replace("s=s.replace('stable_capture capture(', 'stable_capture #(.V4(1)) capture(')", "s=s.replace('stable_capture capture(', 'stage1_k_capture #(.V4(1)) capture(')")

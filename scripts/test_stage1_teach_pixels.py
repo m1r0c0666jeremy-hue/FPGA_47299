@@ -13,7 +13,7 @@ wire [2:0] active_zoom;wire active_rotate;wire [23:0] rgb;wire ode;
 wire [38:0] desired={16'd500,use_point,1'b1,10'd376,11'd720};
 stage1_viewport #(.V4(1)) view(.I_clk(clk),.I_rst_n(rst),.I_vs(vs),.I_de(de),.I_snapshot(snapshot),.I_data(packet),
 .I_tracking(1'b0),.I_show(show),.I_conflict(1'b0),.I_live(1'b1),.I_session(8'd1),.I_zoom(zoom),.I_mode(2'd0),
-.I_pair(1'b0),.I_rotate(rotate),.O_commit(commit),.O_meta(meta),.O_x0(x0),.O_y0(y0),.O_zoom(active_zoom),.O_rotate(active_rotate),.I_point(desired),.O_point(shown),.I_abort(2'b0));
+.I_pair(1'b0),.I_rotate(rotate),.O_commit(commit),.O_meta(meta),.O_x0(x0),.O_y0(y0),.O_zoom(active_zoom),.O_rotate(active_rotate),.I_point(desired),.O_point(shown));
 stage1_osd osd(.I_clk(clk),.I_rst_n(rst),.I_vs(vs),.I_hs(1'b0),.I_de(de),.I_rgb(24'h123456),
 .I_meta(meta),.I_x0(x0),.I_y0(y0),.I_zoom(active_zoom),.I_mode(2'd0),.I_state(3'd0),
 .I_tracking(1'b0),.I_show(show),.I_video_ok(1'b1),.I_pair(1'b0),.I_detection_valid(1'b0),.I_sample_valid(1'b0),

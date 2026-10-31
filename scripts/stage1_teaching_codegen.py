@@ -4,8 +4,15 @@ import re
 R=Path(__file__).resolve().parents[1]
 
 def viewport_source():
-    from stage1_display_timing import viewport_source as timed_viewport
-    return timed_viewport()
+    s=(R/'rtl/color_regions/stable_display.v').read_text(encoding='utf-8')
+    s=s.replace('module stable_display #','module stage1_viewport #')
+    s=s.replace('output reg O_time_valid);','output reg O_time_valid,input wire [38:0] I_point,output reg [38:0] O_point);')
+    s=s.replace('I_data[89:79]','(I_point[22]?I_point[10:0]:I_data[89:79])')
+    s=s.replace('I_data[99:90]','(I_point[22]?I_point[20:11]:I_data[99:90])')
+    s=s.replace('!I_data[32] || I_data[MW+:32]==O_frame_id','(I_point[22]?!I_point[21]:(!I_data[32] || I_data[MW+:32]==O_frame_id))')
+    s=s.replace('O_time_valid<=0;end','O_time_valid<=0;O_point<=0;end')
+    s=s.replace('O_commit<=1;','O_commit<=1;O_point<=I_point[22]?I_point:{16\'d0,1\'b0,I_data[32],I_data[99:79]};')
+    return s
 
 def decorate(out):
     v=out['rtl/color_regions/stage1_memory_video_out.v']

@@ -20,7 +20,7 @@ module stable_camera_capture #(parameter TIMING=0)(
     output wire O_parameter_event,O_camera_ready,output wire [3:0] O_camera_fault,
     output wire [1:0] O_camera_retries,output wire [3:0] O_camera_phase,output wire [6:0] O_camera_gain,
     input wire [31:0] I_time_gray,output wire [31:0] O_source_id,O_source_us,O_now_us,O_latest_gray,
-    output wire O_time_valid,output reg O_lane_seen
+    output wire O_time_valid
 );
 wire        	S_100m_clk;
 wire        	S_24m_clk;
@@ -57,11 +57,6 @@ wire 			S_raw_tvalid;
 wire        	S_rst_n;
 wire cfg_rst_n,receiver_enable,control_rst_n,capture_rst_n;
 (* async_reg="true" *) reg [1:0] ready_capture;
-// Diagnostic only: lane flag semantics are not documented by the byte aligner.
-// Retain across local receiver reconfiguration; never gate frames or reset IP.
-always @(posedge S_csi_rx_clk or negedge I_rst_n)
- if(!I_rst_n)O_lane_seen<=0;
- else if(ready_capture[1] && |S_lane_error)O_lane_seen<=1;
 wire [32:0] axis_tag,raw_tag,detect_tag;wire raw_known,detect_known;
 reg detect_forward;
 refined_stamp_source stamps(S_csi_rx_clk,I_rst_n,I_time_gray,S_csi_frame_start,S_raw10_frame_start,S_axis_tuser,

@@ -1,0 +1,1069 @@
+{
+  "source_commit": "4081ad0a067c7f1cca31fed15fc1bed8b210d704",
+  "auditor_sha256": "2dcb8308b64de1253f5fb9b48b23a5327c9101fdd2a84533572b7c3f8630f54d",
+  "checks": {
+    "stage1_footer_numbers": [
+      "STAGE1_FOOTER_NUMBERS_PASS cases=512",
+      [
+        "stage1_ui_formatter"
+      ]
+    ],
+    "stage1_footer_equivalence": [
+      "STAGE1_FOOTER_EQUIVALENCE_PASS cases=256 glyphs=32768",
+      [
+        "stage1_osd",
+        "stage1_ui_formatter",
+        "stage1_render"
+      ]
+    ],
+    "stage1_render_equivalence": [
+      "STAGE1_RENDER_EQUIVALENCE_PASS cases=14 pixels=11182080",
+      [
+        "stage1_render"
+      ]
+    ],
+    "stage1_render_labels": [
+      "STAGE1_RENDER_LABELS_PASS cases=20 pixels=15974400",
+      [
+        "stage1_render"
+      ]
+    ],
+    "stage1_camera_osd": [
+      "STAGE1_CAMERA_OSD_PASS cases=22",
+      [
+        "stage1_osd",
+        "stage1_ui_formatter",
+        "stage1_ui_text"
+      ]
+    ],
+    "stage1_k_tracker": [
+      "STAGE1_K_TRACKER_PASS cases=18524",
+      [
+        "stage1_memory_video_out"
+      ]
+    ],
+    "stage1_k_capture": [
+      "STAGE1_K_CAPTURE_PASS frames10 pixels9216000",
+      [
+        "stage1_memory_video_out",
+        "stable_model_lane",
+        "stable_filter4",
+        "stable_grid"
+      ]
+    ],
+    "stage1_k_controls": [
+      "STAGE1_K_CONTROLS_PASS",
+      [
+        "stage1_controls"
+      ]
+    ],
+    "stage1_k_route_identity": [
+      "STAGE1_K_ROUTE_PASS",
+      [
+        "stage1_regions",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_k_editor": [
+      "STAGE1_K_EDITOR_PASS",
+      [
+        "stage1_regions",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_k_ui": [
+      "STAGE1_K_UI_PASS",
+      [
+        "stage1_ui_formatter",
+        "stage1_ui_text"
+      ]
+    ],
+    "stage1_k_teach_ui": [
+      "STAGE1_K_TEACH_UI_PASS",
+      [
+        "stage1_ui_formatter",
+        "stage1_ui_text"
+      ]
+    ],
+    "stage1_k_keys_75m": [
+      "STAGE1_K_KEYS_75M_PASS actual75000-cycles-per-ms",
+      [
+        "stage1_controls"
+      ]
+    ],
+    "stage1_shared_dwell_1": [
+      "STAGE1_SHARED_DWELL_PASS period=1",
+      [
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_shared_dwell_3": [
+      "STAGE1_SHARED_DWELL_PASS period=3",
+      [
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_rect_observer": [
+      "STAGE1_RECT_OBSERVER_PASS cases=1200",
+      [
+        "stage1_regions"
+      ]
+    ],
+    "stage1_scene_observer": [
+      "STAGE1_SCENE_OBSERVER_PASS",
+      [
+        "stage1_regions",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_teach_route": [
+      "STAGE1_TEACH_ROUTE_PASS 30s",
+      [
+        "stage1_regions"
+      ]
+    ],
+    "stage1_teach_pause_transactions": [
+      "STAGE1_TEACH_COMMANDS_PASS phases5/6/7 play/stop/restart/cancel",
+      [
+        "stage1_regions"
+      ]
+    ],
+    "stage1_teach_replay30": [
+      "STAGE1_TEACH_REPLAY30_PASS record600 replay30000ms independent30001-vectors",
+      [
+        "stage1_regions"
+      ]
+    ],
+    "stage1_teach_alarm": [
+      "STAGE1_TEACH_ALARM_PASS fail/stop/restart/no-old-alarm",
+      [
+        "stage1_regions",
+        "stage1_sequence",
+        "stage1_controls",
+        "stage1_memory_video_out"
+      ]
+    ],
+    "stage1_teach_transactions": [
+      "STAGE1_TEACH_TRANSACTIONS_PASS collisions=10",
+      [
+        "stage1_regions"
+      ]
+    ],
+    "stage1_teach_integration": [
+      "STAGE1_TEACH_INTEGRATION_PASS",
+      [
+        "stage1_regions",
+        "stage1_sequence",
+        "stage1_controls",
+        "refined_zoom_geometry"
+      ]
+    ],
+    "stage1_teach_ui": [
+      "STAGE1_TEACH_UI_PASS cases=37",
+      [
+        "stage1_ui_formatter"
+      ]
+    ],
+    "stage1_teach_pixels": [
+      "STAGE1_TEACH_PIXELS_PASS cases=12 pixels=9584640",
+      [
+        "stage1_regions",
+        "stage1_osd",
+        "stage1_ui_formatter"
+      ]
+    ],
+    "stage1_teach_keys_75m": [
+      "STAGE1_TEACH_KEYS_75M_PASS",
+      [
+        "stage1_controls"
+      ]
+    ],
+    "stage1_real_keys": [
+      "STAGE1_REAL_KEYS_PASS durations50/100/300",
+      [
+        "stage1_controls",
+        "stage1_regions",
+        "refined_line_reader",
+        "stable_display"
+      ]
+    ],
+    "stage1_real_keys_faults": [
+      "STAGE1_REAL_KEYS_FAULTS_PASS",
+      [
+        "stage1_controls",
+        "stage1_regions",
+        "refined_line_reader",
+        "stable_display"
+      ]
+    ],
+    "stage1_transactions": [
+      "STAGE1_TRANSACTIONS_PASS",
+      [
+        "stage1_regions",
+        "stage1_render",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_project_guards": [
+      "STAGE1_PROJECT_GUARDS_PASS",
+      []
+    ],
+    "stage1_controls": [
+      "STAGE1_CONTROLS_PASS",
+      [
+        "stage1_controls"
+      ]
+    ],
+    "stage1_sequence": [
+      "STAGE1_SEQUENCE_PASS",
+      [
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_age_equivalence_1": [
+      "STAGE1_AGE_EQUIVALENCE_PASS period=1 cycles=1284003",
+      [
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_age_equivalence_3": [
+      "STAGE1_AGE_EQUIVALENCE_PASS period=3 cycles=3452003",
+      [
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_regions": [
+      "STAGE1_EDIT_RENDER_PASS point_pixels=134400",
+      [
+        "stage1_regions",
+        "stage1_sequence",
+        "stage1_render"
+      ]
+    ],
+    "stage1_buzzer": [
+      "STAGE1_BUZZER_PASS",
+      [
+        "stage1_buzzer"
+      ]
+    ],
+    "stage1_buzzer_75m": [
+      "STAGE1_BUZZER_75M_PASS",
+      [
+        "stage1_buzzer",
+        "stage1_top"
+      ]
+    ],
+    "stage1_camera_0": [
+      "NACK=0 retries=0",
+      [
+        "stage1_controls",
+        "stage1_top"
+      ]
+    ],
+    "stage1_camera_1": [
+      "NACK=1 retries=1",
+      [
+        "stage1_controls",
+        "stage1_top"
+      ]
+    ],
+    "stage1_render_14_624": [
+      "STAGE1_RENDER_PASS cases=14 pixels=11182080",
+      [
+        "stage1_render"
+      ]
+    ],
+    "stage1_rect_capacity": [
+      "RECT_CAPACITY_PASS",
+      [
+        "stage1_regions",
+        "stage1_render",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_rect_geometry": [
+      "RECT_GEOMETRY_PASS cases=1024",
+      [
+        "stage1_regions",
+        "stage1_sequence"
+      ]
+    ],
+    "stage1_render_guards": [
+      "STAGE1_RENDER_GUARDS_PASS",
+      [
+        "stage1_render"
+      ]
+    ],
+    "stage1_overlay": [
+      "STAGE1_OVERLAY_PASS cases=8 pixels=6389760",
+      [
+        "stage1_osd",
+        "stage1_render"
+      ]
+    ],
+    "stage1_ui": [
+      "STAGE1_UI_CONTRACT_PASS",
+      [
+        "stage1_ui_formatter",
+        "stage1_ui_text"
+      ]
+    ],
+    "stage1_region_footer": [
+      "STAGE1_REGION_FOOTER_PASS cases=13 pixels=1597440",
+      [
+        "stage1_osd",
+        "stage1_ui_formatter"
+      ]
+    ],
+    "stage1_english_ui": [
+      "STAGE1_ENGLISH_UI_PASS 45 cases 5529600 pixels",
+      [
+        "stage1_osd"
+      ]
+    ],
+    "stage1_english_abort": [
+      "STAGE1_ENGLISH_ABORT_PASS 2 cases 245760 pixels",
+      [
+        "stage1_osd"
+      ]
+    ],
+    "stage1_english_wait": [
+      "STAGE1_ENGLISH_WAIT_PASS 1 cases 122880 pixels",
+      [
+        "stage1_osd"
+      ]
+    ],
+    "stage1_camera_readback_all_presets": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_reserved_bits": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_0": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_1": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_2": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_3": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_4": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_mismatch_5": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_persistent_mismatch": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_id_high": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_id_low": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_read_nack": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_write_nack": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_timeout": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_superseded_first": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_superseded_last": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_reset_read": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_camera_readback_persistent_read_nack": [
+      "STAGE1_CAMERA_READBACK_PASS",
+      [
+        "refined_camera_config"
+      ]
+    ],
+    "stage1_video_0_0_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_2_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_3_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_4_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_0_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_1_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_2_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_3_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_0_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_0_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_1_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_1_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_2_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_2_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_3_0_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_1_4_3_1_f0_n1": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_0_0_f1_n2": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_0_0_1_f1_n2": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_0_0_f0_n2": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_video_0_1_0_1_f0_n2": [
+      "STABLE_VIDEO_PASS:",
+      [
+        "stage1_osd",
+        "refined_line_reader"
+      ]
+    ],
+    "stage1_v4_live_0_0_refined_g160": [
+      "STAGE1_LIVE_EDITOR_PASS",
+      [
+        "stage1_regions",
+        "stage1_osd",
+        "stage1_memory_video_out",
+        "refined_frame_store"
+      ]
+    ],
+    "stage1_v4_live_0_1_refined_g160": [
+      "STAGE1_LIVE_EDITOR_PASS",
+      [
+        "stage1_regions",
+        "stage1_osd",
+        "stage1_memory_video_out",
+        "refined_frame_store"
+      ]
+    ],
+    "stage1_v4_live_1_0_refined_g160": [
+      "STAGE1_LIVE_EDITOR_PASS",
+      [
+        "stage1_regions",
+        "stage1_osd",
+        "stage1_memory_video_out",
+        "refined_frame_store"
+      ]
+    ],
+    "stage1_v4_live_1_1_refined_g160": [
+      "STAGE1_LIVE_EDITOR_PASS",
+      [
+        "stage1_regions",
+        "stage1_osd",
+        "stage1_memory_video_out",
+        "refined_frame_store"
+      ]
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json,re,subprocess
 BASELINE='607db22c9a570969df40b2f5c333981b3f63e9cd'
-BRANCHES=('feature/region-sequence-stage1','Behaviour_region_1024','Teach_auto_routine_1027','Final_Mode_1028')
+BRANCHES=('feature/region-sequence-stage1','Behaviour_region_1024','Teach_auto_routine_1027','Final_Mode_1028','Final_Mode_1101')
 ORIGINAL=Path('D:/aaa_FPGA/transparent-ring-stability')
 PROTECTED={
  'td_project/target_color_regions.al':'4467601011e2e6df3603c786579b175bcc71a537469bfc75c6b533ffee05de64',
@@ -40,7 +40,7 @@ def baseline_inputs(root):
             # Approved stable release changes: ID/gain readback, RY/BP calibration,
             # and diagnostic-only capture lane flag. All other baseline members
             # remain byte exact. Current tests/frozen inputs/raw Git bind changes.
-            assert git(root,'branch','--show-current') in ('Teach_auto_routine_1027','Final_Mode_1028')
+            assert git(root,'branch','--show-current') in ('Teach_auto_routine_1027','Final_Mode_1028','Final_Mode_1101')
             continue
         assert sha(root/name)==value,'Archived compiler input changed: '+name
     return len(baseline)

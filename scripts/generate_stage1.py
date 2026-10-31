@@ -132,11 +132,8 @@ stage1_buzzer #(.CLOCK_HZ(75000000)) buzzer_driver(S_hdmi_pixel_clk,process_rst_
     decorate_k(out)
     from stage1_display_shared import decorate as decorate_display
     decorate_display(out)
-    from stage1_release1030 import decorate as decorate_release
-    decorate_release(out)
-    from stage1_display_timing import assets as timing_assets,decorate as timing_decorate
-    timing_decorate(out)
-    out.update(timing_assets())
+    from stage1_demo1101 import decorate as decorate_demo
+    decorate_demo(out)
     return out
 
 def main():

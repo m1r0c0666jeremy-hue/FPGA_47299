@@ -43,7 +43,7 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
     paths|={p for p in (R/'td_project').iterdir() if p.is_file() and p.suffix in ('.al','.adc','.sdc','.json')}
     paths|={R/'build/target_region_sequence_stage1_20261028_170103/source_files.json',
             R/'build/stage1_place_20261028_160918/placed_clocks.txt'}
-    paths|={R/'README.md',R/'reports/stage1/validation.md',
+    paths|={R/'README.md',R/'docs/Final_Mode_1101_配色与帧率演示版.md',R/'reports/stage1/validation.md',
             R/'docs/区域顺序_第一阶段_执行记录.md',R/'docs/区域顺序_第一阶段_操作与实测.md',
             R/'docs/示教录制回放与运动状态_操作与验证.md',R/'reports/osd_memory/final_audit_20261019_2344.json',
             R/'docs/Final_Mode_红黄蓝紫_FPS与稳定性_操作验收.md',R/'docs/实物反馈答疑与后续改进_20261027.md',R/'docs/原生细节采集可行性_20261027.md',
@@ -78,7 +78,7 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
     ddr_contract=contract(R)
     legacy=ddr_contract.get('correction_deferred_by_user',False)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name=('Final_Mode 红黄双色与FPS小改候选（沿用旧DDR配置）' if legacy else 'Final_Mode 红黄双色、有效FPS与画面稳定性候选'),branch=proof['branch'],head=proof['head'],
+      archive_name=('Final_Mode_1101 配色与帧率演示候选（沿用旧DDR配置）' if proof['branch']=='Final_Mode_1101' else ('Final_Mode 红黄双色与FPS小改候选（沿用旧DDR配置）' if legacy else 'Final_Mode 红黄双色、有效FPS与画面稳定性候选')),branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),

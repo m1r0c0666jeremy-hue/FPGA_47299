@@ -15,9 +15,9 @@ short_states={'IDLE':'IDLE','CENTER SELECT':'CENTER SEL','CONFIRMING':'CONFIRMIN
               'KEY CONFLICT':'KEY CONFL','NO NEW FRAME':'NO NEW FR','WAIT RESULT':'WAIT RESULT'}
 s=s.replace("    errors=[''",f"    short_states={short_states!r}\n    errors=[''")
 s=s.replace("f'{mode:<8} {zoom} {pair} {direction} STATE:{status:<16} {model:<8}'","f'{mode:<8} ZOOM {zoom} {pair} {direction} BRT090 6/7 MARK ON  K0.50 {short_states[status]:<11}'")
-s=s.replace("39'd0,18'd0);","39'd0,18'd90,7'd105,4'd0,80'd0,23'd0,8'd50,1'b0,8'd0,8'd0,1'b0);")
+s=s.replace("39'd0,18'd0);","39'd0,18'd90,7'd105,4'd0,80'd0,23'd0,8'd50,1'b0);")
 s=s.replace("pair='R/B'","pair='R/Y'").replace("pair='Y/P'","pair='B/P'")
 # A late tracking transition must keep the already frozen frame, not erase it.
-s=s.replace("case('wait_transition',['WAIT RESULT',''])", "case('wait_transition',overview())")
+
 s=s.replace('osd_english_','stage1_english_')
 exec(compile(s,str(R/'scripts/test_osd_memory_ui.py'),'exec'),{'__name__':'__main__','__file__':__file__})
