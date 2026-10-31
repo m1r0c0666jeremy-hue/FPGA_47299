@@ -1,0 +1,51 @@
+{
+  "status": "CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING",
+  "archive_name": "Final_Mode_1101 配色与帧率演示候选（沿用旧DDR配置）",
+  "branch": "Final_Mode_1101",
+  "head": "b4a0548b8dd3d3a5e51e902fae6b2a4e7be14b1f",
+  "compiled_source_commit": "27da04b18bf1ed71d445a852be23d075f0eaf9db",
+  "attempt": "build/stage1_route_20261101_012413_644824",
+  "directory": "build/target_region_sequence_stage1_20261101_024300",
+  "bit_sha256": "7998532c9ef6678883f1035e7fea374ed977065c73694ab8288ee98ba4866bd4",
+  "source_zip_sha256": "c6a789d29bfbecb60900d42c33380d3aca5d0f10aef5a9b614fee8d7f44de8ef",
+  "source_file_count": 2223,
+  "audit": "reports/stage1/final_audit_20261101_024300.json",
+  "audit_sha256": "4ef5a263e2cf12bbff2b29801cd4c8d6c13f9661296b8d80287d9d3316f6f1d1",
+  "resources": {
+    "slice": 19009,
+    "lut6": 18772,
+    "reg": 22180,
+    "eram": 98,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": 0.006,
+    "HWNS": 0.02
+  },
+  "baseline_module_checks": 160,
+  "stage1_checks": 158,
+  "software_receipt": "reports/stage1/software_current_demo1101_20261101_0241.json",
+  "safety_receipts": {
+    "reports/stage1/routing_guards_20261101_012352.json": "99f555ec9e7d289de0e44804d174a5aa47f05b47974df6f798b60dcd92057ade",
+    "reports/stage1/guards_20261101_012353.json": "45829399bed2d28088543d1366f1c4d1be9e7bffa73c56c21885178e8a3d21ee",
+    "reports/stage1/gate_reuse_guards_20261101_012351.json": "f09648d386aca458acab4eeceb83a07b237cbcc7ea09557c55c65d4424b9b994"
+  },
+  "ddr_reference_contract": {
+    "profile": "LEGACY_50MHZ_REFERENCE_CORRECTION_DEFERRED",
+    "reference_mhz": 50,
+    "ip_nominal_reference_mhz": 100,
+    "supervisor_mhz": 50,
+    "vco_mhz": 533.3333333333334,
+    "user_mhz": 66.66666666666667,
+    "user_period_ns": 15.0,
+    "reader_timeout_cycles": 133334,
+    "reader_timeout_us": 2000.01,
+    "configuration_matched": false,
+    "correction_deferred_by_user": true,
+    "risk": "Actual50MHz reference differs from nominal100MHz IP; VCO below documented minimum. Flower root cause unresolved; board verification required.",
+    "timeout_note": "Legacy elapsed reader timeout about2ms retained.",
+    "analog_or_board_pass": false
+  },
+  "stability_claim": "NOT_ESTABLISHED; severe flower corruption requires board verification",
+  "hardware_status": "PENDING; no board download or Flash write"
+}

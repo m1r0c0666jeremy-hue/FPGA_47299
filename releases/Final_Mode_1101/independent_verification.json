@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "directory": "build/target_region_sequence_stage1_20261101_024300",
+  "bit_sha256": "7998532c9ef6678883f1035e7fea374ed977065c73694ab8288ee98ba4866bd4",
+  "source_zip_sha256": "c6a789d29bfbecb60900d42c33380d3aca5d0f10aef5a9b614fee8d7f44de8ef",
+  "verified_members": 2223,
+  "current_stage1_checks": 158,
+  "compiled_inputs": 304,
+  "hardware_status": "PENDING"
+}

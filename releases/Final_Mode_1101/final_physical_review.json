@@ -1,0 +1,232 @@
+{
+  "status": "CANDIDATE_PHYSICAL_PASS_HARDWARE_PENDING",
+  "parent": "build/stage1_place_20261101_005315",
+  "compiled_source_commit": "27da04b18bf1ed71d445a852be23d075f0eaf9db",
+  "compiler_input_count": 304,
+  "current_frozen_git_exact": true,
+  "resources": {
+    "slice": 19009,
+    "lut6": 18772,
+    "reg": 22180,
+    "eram": 98,
+    "dsp": 40
+  },
+  "clocks_ns": {
+    "MIPI_RX_BYTE_CLK": 16.668,
+    "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk": 15.0,
+    "HDMI_PIXEL_CLK": 13.333,
+    "sys_clk_50m": 20.0,
+    "pll_clk_24m": 42.0,
+    "pll_clk_100m": 10.0,
+    "HDMI_SERIAL_CLK": 2.666,
+    "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk": 39.374
+  },
+  "effective_parameters": {
+    "place": {
+      "effort": "high",
+      "hfn_opt_effort": "high",
+      "logic_level_opt": "on",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "128",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "route": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    },
+    "place_sha256": "03b4c57a8b6ccb13c6985e2ca9ec99be3e5e2923f952323a5ee3cdcff232618f",
+    "route_sha256": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "parent_summary_sha256": "3ba7c0e5ca693f57eab2db4380f5e2c4de7c0b29941fca8e8d2046ee8c8b6a3e",
+  "ddr_reference_contract": {
+    "profile": "LEGACY_50MHZ_REFERENCE_CORRECTION_DEFERRED",
+    "reference_mhz": 50,
+    "ip_nominal_reference_mhz": 100,
+    "supervisor_mhz": 50,
+    "vco_mhz": 533.3333333333334,
+    "user_mhz": 66.66666666666667,
+    "user_period_ns": 15.0,
+    "reader_timeout_cycles": 133334,
+    "reader_timeout_us": 2000.01,
+    "configuration_matched": false,
+    "correction_deferred_by_user": true,
+    "risk": "Actual50MHz reference differs from nominal100MHz IP; VCO below documented minimum. Flower root cause unresolved; board verification required.",
+    "timeout_note": "Legacy elapsed reader timeout about2ms retained.",
+    "analog_or_board_pass": false
+  },
+  "build": {
+    "attempt": "build/stage1_route_20261101_012413_644824",
+    "summary": {
+      "stage": "full",
+      "head": "27da04b18bf1ed71d445a852be23d075f0eaf9db",
+      "head_after": "27da04b18bf1ed71d445a852be23d075f0eaf9db",
+      "route_effort": "normal",
+      "placement_strategy": 2,
+      "map_mode": "area_prior",
+      "pack_effort": "high",
+      "infer_fsm": "sequential",
+      "min_ripple_len": 64,
+      "map_strategy": null,
+      "macro_performance": "macro_congestion",
+      "pack_mode": null,
+      "place_effort": "high",
+      "max_fanout": 128,
+      "exit_code": 0,
+      "inputs_unchanged": true,
+      "working_tree_matches": true,
+      "official_strategy": {
+        "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+        "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+        "selected": {
+          "TimingUltra": {
+            "description": "Applies some aggressive optimization especially for rams, and makes highest effort on post-route optimization to achive timing closure on complicated designs.",
+            "is_syn": "phy",
+            "params": [
+              {
+                "step": "place",
+                "param": "effort",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "opt_timing",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "logic_level_opt",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "aggressive_opt",
+                "val": "21"
+              },
+              {
+                "step": "place",
+                "param": "aggr_neighbor_dist",
+                "val": "5"
+              },
+              {
+                "step": "place",
+                "param": "enhanced_beeline_opt",
+                "val": "3"
+              },
+              {
+                "step": "place",
+                "param": "timing_driven_mode",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "shifter_opt",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "crit_path_opt",
+                "val": "on"
+              },
+              {
+                "step": "place",
+                "param": "post_place_opt",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "hfn_opt_effort",
+                "val": "high"
+              },
+              {
+                "step": "place",
+                "param": "split_data_from_clock",
+                "val": "on"
+              },
+              {
+                "step": "route",
+                "param": "post_route_opt",
+                "val": "high"
+              },
+              {
+                "step": "route",
+                "param": "postrt_opt_extra_round",
+                "val": "4"
+              }
+            ]
+          }
+        }
+      },
+      "reused_gate": null,
+      "checkpoint_provenance": {
+        "parent": "build/stage1_place_20261101_005315",
+        "checkpoint_name": "target_color_regions_placed.db",
+        "checkpoint_sha256": "7c3a54d7f32dbc85891650d57e188a2b4c30e7a25f6df7649d99c4e24dc049fc",
+        "parent_summary_sha256": "3ba7c0e5ca693f57eab2db4380f5e2c4de7c0b29941fca8e8d2046ee8c8b6a3e",
+        "parent_context_sha256": "d71c4cdde927143b59a62ccb8c378e38097467a951c643c3e142bf2f245fc22c",
+        "parent_inputs_sha256": "7fe5595bae3fbb09e88bf49e2743e2ecc4093b9568fedbfbdd45ce193b56257d"
+      },
+      "checkpoint_unchanged": true,
+      "replaced_strategy": null,
+      "flow_threads": 16,
+      "retry_routability": true,
+      "route_retry_performed": false,
+      "final_route_effort": "normal",
+      "route_checkpoints": {
+        "target_color_regions_routed.db": "05f86492a4b9345be210de5ffe273292d5a3b1c7fbd9ea07d27aed9b10e1d7c2"
+      },
+      "resources": {
+        "slice": 19009,
+        "lut6": 18772,
+        "reg": 22180,
+        "eram": 98,
+        "dsp": 40
+      },
+      "gate_estimate": false,
+      "resource_pass": true,
+      "placement_required": false,
+      "slack_ns": {
+        "SWNS": 0.006,
+        "HWNS": 0.02
+      },
+      "timing_pass": true
+    },
+    "compiled_source_commit": "27da04b18bf1ed71d445a852be23d075f0eaf9db",
+    "git_blob_inputs_verified": 304,
+    "reused_gate": null,
+    "bit_sha256": "7998532c9ef6678883f1035e7fea374ed977065c73694ab8288ee98ba4866bd4",
+    "routing": {
+      "final_over_count": 0,
+      "final_over": 0,
+      "final_worst": 0,
+      "routing_drc_pass": true,
+      "log_sha256": "36a675ba0ee959e3c7022e06b051c5f0ff61a51634730a2d4ec24bec5cd63cc0"
+    },
+    "sta_coverage_percent": 98.79
+  },
+  "route_execution": {
+    "scope": "Final route command parameters; parent checkpoint plus executed overrides",
+    "initial_effort": "normal",
+    "final_effort": "normal",
+    "retry_performed": false,
+    "route_command_count": 1,
+    "overrides": {
+      "effort": "normal",
+      "post_route_opt": "high",
+      "postrt_opt_extra_round": "4"
+    },
+    "final_parameters": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on",
+      "postrt_opt_extra_round": "4"
+    }
+  }
+}
