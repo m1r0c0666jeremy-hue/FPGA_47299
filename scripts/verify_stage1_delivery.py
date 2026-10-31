@@ -32,6 +32,12 @@ def verify(directory):
     proof=audit(d['attempt']);assert proof['passed']==d['stage1_checks'] and not proof['missing']
     assert proof['build']['compiled_source_commit']==d['compiled_source_commit']
     assert proof['build']['summary']['resources']==d['resources'] and proof['build']['summary']['slack_ns']==d['slack_ns']
+    if 'ddr_reference_contract' in d:
+        from stage1_ddr_contract import contract
+        assert d['ddr_reference_contract']==contract(R),'DDR profile or deferred-risk declaration differs'
+        assert d['stability_claim']=='NOT_ESTABLISHED; severe flower corruption requires board verification'
+        if d['ddr_reference_contract'].get('correction_deferred_by_user'):
+            assert '沿用旧DDR配置' in d['archive_name']
     if 'safety_receipts' in d:
         assert len(d['safety_receipts'])==3
         expected={'ROUTING_GUARDS_PASS':('test_stage1_routing_guards.py',6),

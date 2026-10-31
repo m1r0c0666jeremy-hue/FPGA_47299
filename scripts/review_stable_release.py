@@ -95,8 +95,11 @@ def review(parent,route=None):
  expected=clocks(R/baseline)
  # Only the two clocks downstream of the approved DDR reference correction
  # change. Camera/HDMI/control/board clocks and all constraint files stay exact.
- expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk']=7.5
- expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk']=19.687
+ if corrected['reference_mhz']==100:
+  expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/usr_clk']=7.5
+  expected['u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/mcu_clk']=19.687
+ else:
+  assert corrected['profile']=='LEGACY_50MHZ_REFERENCE_CORRECTION_DEFERRED'
  actual=clocks(parent/'placed_clocks.txt')
  assert actual==expected,('Unexpected clock periods after DDR correction',actual,expected)
  measured=assess(parent,'place');assert measured['resource_pass'] and measured['resources']==s['resources']

@@ -41,31 +41,11 @@ endmodule
 
 def decorate(out):
     top=out['rtl/color_regions/stage1_top.v']
-    # The DDR IP is configured for100MHz. Keep the independent supervisor on
-    # the board50MHz clock; only the controller reference/APB use existing100MHz.
-    old='.I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n)'
-    assert top.count(old)==1
-    top=top.replace(old,'.I_sys_clk(I_sys_clk),.I_ddr_ref_clk(S_100m_clk), .I_rst_n(S_rst_n)',1)
     top=top.replace('stable_camera_capture #', 'wire lane_seen_async;\nstable_camera_capture #',1)
     top=top.replace('.O_status_async(camera_status_async)', '.O_lane_seen(lane_seen_async),.O_status_async(camera_status_async)',1)
     top=top.replace('.I_camera_status(camera_ui_status)', '.I_camera_status(camera_ui_status),.I_lane_seen(lane_seen_async)',1)
     out['rtl/color_regions/stage1_top.v']=top
     video=out['rtl/color_regions/stage1_memory_video_out.v']
-    old='input wire I_sys_clk, input wire I_rst_n,'
-    assert video.count(old)==1
-    video=video.replace(old,'input wire I_sys_clk, input wire I_ddr_ref_clk,input wire I_rst_n,',1)
-    old='    refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper('
-    assert video.count(old)==1
-    video=video.replace(old,'''    // Async assertion and100MHz synchronous release for reference/APB reset.
-    wire ddr_ref_reset_n;
-    refined_reset_bridge ddr_reference_reset(I_ddr_ref_clk,controller_reset_n,ddr_ref_reset_n);
-    refined_ph1p35_ddr_wrapper u_ph1p35_324_ddr_wrapper(''',1)
-    old='.I_sys_clk              ( I_sys_clk              )'
-    assert video.count(old)==1
-    video=video.replace(old,'.I_sys_clk              ( I_ddr_ref_clk          )',1)
-    old='.I_sys_rst_n            ( controller_reset_n     )'
-    assert video.count(old)==1
-    video=video.replace(old,'.I_sys_rst_n            ( ddr_ref_reset_n        )',1)
     video=video.replace('input wire [31:0] I_source_id', 'input wire I_lane_seen,input wire [31:0] I_source_id',1)
     hook='''wire [7:0] runtime_fps,runtime_fault;wire runtime_lane;
     stage1_runtime_stats runtime_stats(I_pixel_clk,I_process_rst_n,I_board_us,

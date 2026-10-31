@@ -14,9 +14,7 @@ module refined_frame_store #(parameter WORDS=172800,V4=0,MW=V4?768:640,SW=V4?852
  reg [3:0] write_bad;reg [18:0] count[0:3];reg [24:0] expected[0:3];
  // Accepted FIFO commands can outlive a camera bank switch. Commit each actual
  // PAXI write against its address bank, never against the latest camera bank.
- wire [3:0] committing_each={I_addr>=21000000,
-  I_addr>=14000000 && I_addr<21000000,
-  I_addr>=7000000 && I_addr<14000000,I_addr<7000000};
+ wire [1:0] committing=I_addr>=21000000?3:I_addr>=14000000?2:I_addr>=7000000?1:0;
  reg [3:0] co,hit,eligible;
  // A bank cannot be selected until its ID comparison flags have settled.
  // Normal complete frames take 172800 writes, far longer than this one clock.
@@ -46,9 +44,9 @@ module refined_frame_store #(parameter WORDS=172800,V4=0,MW=V4?768:640,SW=V4?852
    if(V4)hit[i]=hit[i] && epochs[i]==I_meta[719:704] && timed[i] && I_meta[720] && stamps[i]==I_meta[671:640];
    if(hit[i])write_slot=i;
   end
-  for(i=0;i<4;i=i+1)if(I_write && known[i] && committing_each[i])begin
-   if(I_addr!=expected[i] || count[i]>=WORDS)co[i]=0;
-   else if(count[i]==WORDS-1 && !write_bad[i])co[i]=1;
+  if(I_write && known[committing])begin
+   if(I_addr!=expected[committing] || count[committing]>=WORDS)co[committing]=0;
+   else if(count[committing]==WORDS-1 && !write_bad[committing])co[committing]=1;
   end
   if(I_begin)co[I_bank]=0;
   if(V4 && I_invalidate)co=0;
@@ -75,12 +73,12 @@ module refined_frame_store #(parameter WORDS=172800,V4=0,MW=V4?768:640,SW=V4?852
    complete<=co;
    if(|hit)begin has_meta[write_slot]<=1;tags[write_slot]<=result_tag;end
    O_snapshot<=0;
-   for(j=0;j<4;j=j+1)if(I_write && known[j] && committing_each[j])begin
-    if(I_addr!=expected[j] || count[j]>=WORDS)write_bad[j]<=1;
-    else begin expected[j]<=expected[j]+8;count[j]<=count[j]+1'b1;end
+   if(I_write && known[committing])begin
+    if(I_addr!=expected[committing] || count[committing]>=WORDS)write_bad[committing]<=1;
+    else begin expected[committing]<=expected[committing]+8;count[committing]<=count[committing]+1'b1;end
    end
    if(I_begin)begin
-     count[I_bank]<=0;expected[I_bank]<=base_for(I_bank);write_bad[I_bank]<=I_write && committing_each[I_bank];
+     count[I_bank]<=0;expected[I_bank]<=base_for(I_bank);write_bad[I_bank]<=I_write && committing==I_bank;
      known[I_bank]<=1;has_meta[I_bank]<=0;ids[I_bank]<=I_frame_id;
      stamps[I_bank]<=I_frame_us;epochs[I_bank]<=I_epoch;timed[I_bank]<=I_time_valid;
    end

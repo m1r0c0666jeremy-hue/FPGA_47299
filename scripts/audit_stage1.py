@@ -60,7 +60,8 @@ def old_modules(progress=False):
                 mods=('stable_preprocess','refined_line_reader','stage1_osd')
                 expected={'rtl/color_regions/stable_preprocess.v'}
                 if name in live_names:
-                    expected.add('rtl/color_regions/refined_frame_store.v')
+                    if 'rtl/color_regions/refined_frame_store.v' in changed:
+                        expected.add('rtl/color_regions/refined_frame_store.v')
                     mods+=('refined_frame_store',)
             assert set(changed)==expected,(name,changed,expected)
             current=evidence(prefix,marker,mods)
@@ -68,10 +69,13 @@ def old_modules(progress=False):
                 result[name]=dict(current,archived_check=name,replacement_check=prefix,changed_dependencies=sorted(changed));refreshed.append(name)
             else:missing.append(name)
     assert len(old['regression'])==160
+    baseline_store=next(h for n,h in old['regression']['store_cached_id_comparison']['inputs'].items()
+                        if n.replace(chr(92),'/')=='rtl/color_regions/refined_frame_store.v')
+    replacement_count=120 if sha(R/'rtl/color_regions/refined_frame_store.v')!=baseline_store else 118
     if not progress:
         assert not missing,'Missing current baseline replacements: '+', '.join(missing)
-        assert len(result)==160 and len(refreshed)==120
-    return dict(scope='40 unchanged archived checks; 120 current-source replacements including 88 shared stage1 video/live qualifications',
+        assert len(result)==160 and len(refreshed)==replacement_count
+    return dict(scope=f'{160-replacement_count} unchanged archived checks; {replacement_count} current-source replacements including 88 shared stage1 video/live qualifications',
                 archive=ARCHIVE.relative_to(R).as_posix(),archive_sha256=sha(ARCHIVE),checks=result,current_replacements=refreshed,
                 required=160,passed=len(result),missing=missing)
 
@@ -145,6 +149,16 @@ def specs():
     for p,z,m,r,f,n in jobs:d[f'stage1_video_{p}_{z}_{m}_{r}_f{f}_n{n}']=('STABLE_VIDEO_PASS:',('stage1_osd','refined_line_reader'))
     for p in (0,1):
         for r in (0,1):d[f'stage1_v4_live_{p}_{r}_refined_g160']=('STAGE1_LIVE_EDITOR_PASS',('stage1_regions','stage1_osd','stage1_memory_video_out','refined_frame_store'))
+    from stage1_ddr_contract import contract
+    if contract(R)['reference_mhz']==50:
+        # Deferred implementations have different clocks and must not supply
+        # evidence for the exact old-clock profile authorized by Jeremy.
+        for name in ('stage1_fixed_bank_small','stage1_fixed_bank_production',
+                     'stage1_ddr_reference','stage1_ddr133_recovery_0','stage1_ddr133_recovery_1'):
+            del d[name]
+        d['stage1_legacy_ddr_reference']=('STAGE1_LEGACY_DDR_REFERENCE_PASS',('stage1_top','stage1_memory_video_out','refined_ddr_recovery'))
+        for mode in (0,1):
+            d['stage1_legacy_ddr66_recovery_'+str(mode)]=('STAGE1_LEGACY_DDR66_RECOVERY_PASS mode'+str(mode),('refined_line_reader','refined_mc_to_user_interface','refined_ddr_recovery'))
     return d
 
 def evidence(prefix,marker,modules):

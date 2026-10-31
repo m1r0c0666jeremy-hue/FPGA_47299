@@ -188,7 +188,7 @@ stage1_memory_video_out #(.DEBUG_MODE(DEBUG_MODE)) u_video (
     .I_source_id(source_id),.I_source_us(source_us),.I_capture_us(capture_us),.I_source_time_valid(source_time_valid),
     .I_board_us(board_us),.I_latest_gray(latest_id_gray),.I_model_state(frame_model_state),.I_quality(frame_quality),
     .I_camera_event(camera_event_sync[1]),.I_camera_ready(camera_ready_sync[1]),.I_camera_status(camera_ui_status),.I_lane_seen(lane_seen_async),
-    .I_sys_clk(I_sys_clk),.I_ddr_ref_clk(S_100m_clk), .I_rst_n(S_rst_n),
+    .I_sys_clk(I_sys_clk), .I_rst_n(S_rst_n),
     .I_process_rst_n(process_rst_n), .I_process_mode(image_mode_pending),
     .I_pair(ui_pair),.I_zoom(ui_zoom),.I_tracking(ui_tracking && camera_ready_sync[1]),.I_show(ui_show),.I_session(ui_session),.I_conflict(ui_conflict),
     .I_detect_rgb(detect_rgb),.I_detect_sof(detect_sof),.I_detect_valid(detect_valid),

@@ -74,8 +74,11 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
               'target_color_regions_clocks.txt','target_color_regions_exception.timing','placed_clocks.txt','placed_exceptions.timing','td.log'):
         if (build/n).is_file():shutil.copy2(build/n,dest/n)
     write_new(dest/'source_files.json',manifest)
+    from stage1_ddr_contract import contract
+    ddr_contract=contract(R)
+    legacy=ddr_contract.get('correction_deferred_by_user',False)
     delivery=dict(status='CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING',
-      archive_name='Final_Mode 红黄双色、有效FPS与画面稳定性候选',branch=proof['branch'],head=proof['head'],
+      archive_name=('Final_Mode 红黄双色与FPS小改候选（沿用旧DDR配置）' if legacy else 'Final_Mode 红黄双色、有效FPS与画面稳定性候选'),branch=proof['branch'],head=proof['head'],
       compiled_source_commit=proof['build']['compiled_source_commit'],attempt=proof['build']['attempt'],
       directory=dest.relative_to(R).as_posix(),bit_sha256=sha(dest/'target_color_regions.bit'),
       source_zip_sha256=sha(archive),source_file_count=len(manifest),audit=report.relative_to(R).as_posix(),audit_sha256=sha(report),
@@ -83,6 +86,8 @@ def package(attempt,software,routing_guards,release_guards,gate_reuse_guards):
       baseline_module_checks=160,stage1_checks=proof['passed'],
       software_receipt=software_report.relative_to(R).as_posix(),
       safety_receipts={p.relative_to(R).as_posix():sha(p) for p in safety_reports},
+      ddr_reference_contract=ddr_contract,
+      stability_claim='NOT_ESTABLISHED; severe flower corruption requires board verification',
       hardware_status='PENDING; no board download or Flash write')
     write_new(dest/'delivery.json',delivery)
     with (dest/'SHA256SUMS.txt').open('x',encoding='utf-8') as f:
