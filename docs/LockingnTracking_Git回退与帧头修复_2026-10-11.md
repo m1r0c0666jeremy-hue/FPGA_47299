@@ -1,12 +1,12 @@
 # LockingnTracking：Git 回到单色候选存档，仅保留帧头丢字修复
 
-> 后续发布状态（2026-10-11）：代码存档提交 `fc383a5066740a4cb1b6a425cea64da554ca3cca`，名称“LockingnTracking：恢复单色候选并修复帧头丢字”；为保留原 GitHub 历史，合并提交 `b41f0602f92076eb088c5a545f39017a089d44b4` 已普通推送到 `origin/LockingnTracking`。当前活动树内容仍以本说明列出的 f395 功能基线加 `video_in.v` 修复为准。下文“未提交、未推送”等句子记录的是推送前状态。
+> 后续发布状态（2026-10-11）：代码存档提交 `fc383a5066740a4cb1b6a425cea64da554ca3cca`，名称"LockingnTracking：恢复单色候选并修复帧头丢字"；为保留原 GitHub 历史，合并提交 `b41f0602f92076eb088c5a545f39017a089d44b4` 已普通推送到 `origin/LockingnTracking`。当前活动树内容仍以本说明列出的 f395 功能基线加 `video_in.v` 修复为准。下文"未提交、未推送"等句子记录的是推送前状态。
 
-2026-10-11，按 Jeremy 确认的计划完成。当前路径仍为 `D:/aaa_FPGA/criticalwork`。
+2026-10-11，按 使用者 确认的计划完成。当前路径仍为 `D:/aaa_FPGA/criticalwork`。
 
 ## 当前 Git 与源码
 
-- 源码基线为 **f395cc011ef4c21f15863192ce148938834bd639**，即“存档单色候选框与中文诊断联调版本”；发布提交见上方状态说明。
+- 源码基线为 **f395cc011ef4c21f15863192ce148938834bd639**，即"存档单色候选框与中文诊断联调版本"；发布提交见上方状态说明。
 - 2827个原有受Git管理的文件逐字节核对，唯一差异为 `user_source/hdl_source/video_in.v`，原样来自 cf8b7c463a415bd8741fed4ec68ff3eeac252455。
 - 修复SHA256：`6c02b617ef32c478ab39bf17e0fe5e48a3f6e38eca1796bf628cb19052c7838b`。帧头数据先暂存，等待DDR换帧、FIFO复位、新地址发布后再放行；端口兼容，未放宽完整帧检查。
 - 判色、面积、填充、除法、OSD、按键、跟踪、模式和倍率全部采用f395。红蓝80/32/3:2；黄紫80/24/5:4/平衡2倍；面积64～20000、填充至少30%、间距16～600。
@@ -34,6 +34,6 @@ bit SHA256：`92fba519873b691074582b614f03eb081b45b07735934e846767956599803b7d`�
 
 TD关闭时保存的工程文件另存 `D:/aaa_FPGA/archives/criticalwork_before_git_return_20261011_203250_td_saved/td_project/target_lock_candidates_ingress.al`，未覆盖原版本。目录被占用时采用逐文件移动，空目录保留，没有删除文件。完整清单：`D:/aaa_FPGA/archives/git_return_record_20261011_203250.json`。
 
-以 [git_return_restore_manifest.json](../reports/git_return_restore_manifest.json) 的当前Git状态为准。README和candidate_ingress历史报告中的“HEAD仍cf8”等正文保持，仅代表此前交付状态。P0/robust不在当前活动工程；生成器采用f395，不支持`--color-diag`。
+以 [git_return_restore_manifest.json](../reports/git_return_restore_manifest.json) 的当前Git状态为准。README和candidate_ingress历史报告中的"HEAD仍cf8"等正文保持，仅代表此前交付状态。P0/robust不在当前活动工程；生成器采用f395，不支持`--color-diag`。
 
 本组合仍需上板检查闪屏、黑块、视频就绪、模式、倍率及按键。960→720是已复现的丢字路径，不能证明它是所有实物闪屏的唯一原因；软件通过不能证明颜色识别或硬件验收通过。本轮未下载板卡、未烧Flash。
