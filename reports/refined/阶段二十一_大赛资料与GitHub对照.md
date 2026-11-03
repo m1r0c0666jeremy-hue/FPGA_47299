@@ -16,12 +16,12 @@ ZIP内的历史route.qor为12358 Slice、40 ERAM、8 DSP，Setup WNS1408ps、Hol
 
 来源：D:/26_software/TangDynasty/doc/SWUG。
 
-- SWUG105 PDF29页/正文23页：PH1布局策略1～11，route effort为normal/routability。不得把错误提示中的“high”当作合法route effort；High保持修复模式仅PH2支持。
+- SWUG105 PDF29页/正文23页：PH1布局策略1～11，route effort为normal/routability。不得把错误提示中的"high"当作合法route effort；High保持修复模式仅PH2支持。
 - SWUG105 PDF75～77页/正文69～71页：report_hfn报告高扇出，report_analysis报告拥塞；可先定位具体网络及拥塞区域，再决定布局或RTL措施。
 - SWUG106 PDF40～41页/正文33～34页：局部max_fanout会通过复制instance降低扇出；可能增加资源，不能假定全局降低扇出必然改善。暂不修改正式RTL或运行中的设置。
 - SWUG201 PDF77及80页/正文73及76页：负Setup/Hold Slack分别表示对应时序不满足；不以临时布局正值或单一Setup通过替代最终检查。
 
-SWUG105旧手册列fix_hold默认为off；本机TD V6.2.168116的实际report_param -detail -stage route显示fix_hold为on、默认也为on，hold_fix_iteration为5。原厂脚本的drHoldFix也为on。因此当前不能把“漏开保持修复”作为根因，需以实际工具报告为准。完整构建最终仍须两项非负。
+SWUG105旧手册列fix_hold默认为off；本机TD V6.2.168116的实际report_param -detail -stage route显示fix_hold为on、默认也为on，hold_fix_iteration为5。原厂脚本的drHoldFix也为on。因此当前不能把"漏开保持修复"作为根因，需以实际工具报告为准。完整构建最终仍须两项非负。
 
 手册SHA、完整页文本及已视觉核对的PDF29页表格保存在build/refined_reference_review_20261018_1638；不调整原ADC/SDC。
 

@@ -1,16 +1,5 @@
-# Behaviour_region_1024：矩形区域示教与顺序报警候选存档
+# Behaviour_region_1024_存档说明
 
-存档分支：`Behaviour_region_1024`。功能源码提交：`78858ad46d9bc020574478c3401fc39a09ceb6e1`。本次从独立校验完成的`7fdaffc4a1dc80cd2d7a1f1afba08220471ac3cb`建立存档分支，未改动RTL、约束或旧交付。
+本页是历史开发记录入口。当前操作见 [使用手册](USER_GUIDE.md)，工程和 bit 选择见 [编译与下载](BUILD.md)。
 
-最新可供SRAM上板测试的bit：
-`build/target_region_sequence_stage1_20261024_130549/target_color_regions.bit`
-
-bit SHA256：`57cea17e19e4a34969e2c1c2d4e0f0f43fc6f3d7ff9d01e0e2569ec826911b17`。
-
-四个轴对齐矩形A-D，每区两个对角点；保留进入/停留/顺序报警、删除、静音、暂停和重测，以及原视频/配色/倍率/校准/跟踪。任意多边形、精确距离和接近远离暂缓。操作说明见[中文操作与实测](区域顺序_第一阶段_操作与实测.md)。
-
-107项当前软件与最终物理通过：零冲突、DRC通过、无异常时序路径；建立+0.005ns、保持+0.020ns；18089 Slice、96 ERAM、40 DSP。实物尚待验收，未进行自动下载或Flash写入。
-
-原交付清单保留原构建分支与提交，这是冻结制品的来源记录。审计/构建脚本仍保留原开发分支保护，存档分支不为了改名而修改这些已验证文件。
-
-Git保存完整工程源码、原始验证证据、候选bit及交付清单；147023284字节的同源ZIP保留在本地交付目录，没有加入本分支。ZIP SHA256为`34f2551bda8300d3b5ecb376d1b2a63a0727608fdd6da3a29e363d205fab2de1`。
+需要追查原始过程、测试数字或旧版本决策时，请阅读 [归档原文](https://github.com/m1r0c0666jeremy-hue/FPGA_47299/blob/328223258882ea4a9bec284ea60a0acd8a88c81e/docs/Behaviour_region_1024_%E5%AD%98%E6%A1%A3%E8%AF%B4%E6%98%8E.md)，并按原文所列提交和产物理解。
