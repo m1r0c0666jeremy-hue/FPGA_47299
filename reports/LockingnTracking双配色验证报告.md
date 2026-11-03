@@ -8,7 +8,7 @@
 
 颜色配置在采集帧起点锁定，256位结果携带原始配色、启用和会话。跟踪／显示拒绝迟到的旧配置结果。显隐与底栏配色在显示帧边界提交，标签在视频区内按T/A/B避让，必要时使用左上固定说明区。
 
-本轮没有添加滤波／锐化／双线性或修复旧采集链路。此前帧头丢数据复现继续保留，原日志 `reports/target_ingress_probe.log` 未修改；没有放宽帧完整性检查。新版本即使软件及TD通过，也仍是联调版本，不能宣称完整采集接入或实物验收通过。
+此版本没有添加滤波／锐化／双线性或修复旧采集链路。此前帧头丢数据复现继续保留，原日志 `reports/target_ingress_probe.log` 未修改；没有放宽帧完整性检查。新版本即使软件及TD通过，也仍是联调版本，不能宣称完整采集接入或实物验收通过。
 
 ## 验证项目
 
@@ -52,12 +52,12 @@
 
 构建输入及验后清单分别为 `reports/dualcolor_build_inputs.json`、`reports/dualcolor_build_manifest.json`；完整构建日志为 `reports/dualcolor_build.log`，资源、时序和例外报告在新build目录。原target_lock、scaling_test和imagepreprocess_10_3的bit哈希均未改变。
 
-交付状态为 **SOFTWARE_AND_BUILD_PASS_INTEGRATION_PENDING（软件与构建通过，集成待验）**。新bit与当前源码同源；旧采集帧头丢数据问题仍在，不能将这次结果写成完整相机采集通过或离焦问题已修复。开发基线为061cfd7；2026-10-09按Jeremy后续明确要求，以“LockingnTracking：存档中文标注、双配色与KEY3长短按联调版本”为名保存本次源码、bit、文档及验证证据，上传目标仅为GitHub的LockingnTracking，不合并main。
+交付状态为 **SOFTWARE_AND_BUILD_PASS_INTEGRATION_PENDING（软件与构建通过，集成待验）**。新bit与当前源码同源；旧采集帧头丢数据问题仍在，不能将这次结果写成完整相机采集通过或离焦问题已修复。开发基线为061cfd7；2026-10-09按使用者后续明确要求，以"LockingnTracking：存档中文标注、双配色与KEY3长短按联调版本"为名保存本次源码、bit、文档及验证证据，上传目标仅为GitHub的LockingnTracking，不合并main。
 
 ## 来源、复现及实物待验
 
 先复用大赛Lab1采集／ISP／DDR接口和Lab3字模／OSD来源，vendor_reference和登记的厂家工作副本无新增修改；中文缺字仍由本机黑体生成。Red_Tracker仅作判色／准心思路参考，未复制其平台RTL。新增黄紫判据为整数比较，常数比例使用明确的移位加法，控制DSP资源占用。
 
-使用独立target_lock_dualcolor工程，保持旧bit及旧报告；构建前保存输入哈希，构建后将实际输入、bit与测试日志绑定。原target审计保留其完整采集验收门槛，不将其改为“已通过”。新审计状态为SOFTWARE_AND_BUILD_PASS_INTEGRATION_PENDING。
+使用独立target_lock_dualcolor工程，保持旧bit及旧报告；构建前保存输入哈希，构建后将实际输入、bit与测试日志绑定。原target审计保留其完整采集验收门槛，不将其改为"已通过"。新审计状态为SOFTWARE_AND_BUILD_PASS_INTEGRATION_PENDING。
 
-队友仍需测试两套实际色环、红蓝板背景／黄紫物体干扰、清晰与离焦对照、倾斜尖端误差、失锁和重锁、全部按键以及标签可读性。黄紫阈值只是初值，换色不能保证避免所有背景误识别。未下载、未烧Flash；Git存档上传依据Jeremy后续明确请求，不表示实物验收完成。
+队友仍需测试两套实际色环、红蓝板背景／黄紫物体干扰、清晰与离焦对照、倾斜尖端误差、失锁和重锁、全部按键以及标签可读性。黄紫阈值只是初值，换色不能保证避免所有背景误识别。未下载、未烧Flash；Git存档上传依据使用者后续明确请求，不表示实物验收完成。
