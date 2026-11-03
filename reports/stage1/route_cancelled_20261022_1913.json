@@ -1,0 +1,15 @@
+{
+  "status": "CANCELLED_DIAGNOSTIC_NOT_A_FINAL_ROUTING_OR_TIMING_RESULT",
+  "deliverable": false,
+  "cancelled_at": "2026-10-22T19:14:37.927398",
+  "reason": "After more than two hours, two hot-zone recoveries and nineteen Phase-1 iterations, global congestion remained 23990; stop the unfinished diagnostic to quantify independently pixel-verified structural alternatives before another formal attempt.",
+  "attempt": "build/stage1_route_20261022_171017_601880",
+  "last_iteration": 19,
+  "last_intermediate_over": 23990,
+  "best_intermediate_over": 16773,
+  "final_timing_available": false,
+  "formal_sources_unchanged": 308,
+  "log_sha256": "a7b7b831ce364daaa85d9d0ec8b091ffe258d966e30acfe257cb3b44e9b961a8",
+  "inputs_sha256": "15890d42f7e6caf70ba9326ec0fd05f61114523f46ae9ac05e8e55a104f005ea",
+  "source_context_sha256": "d16afd788f50f6cb2166799b014a89413af1d09b9434f983b82b9a85328d24e3"
+}

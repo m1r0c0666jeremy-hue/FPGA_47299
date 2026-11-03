@@ -1,0 +1,97 @@
+// Simulation-only SC500 model. Protocol decisions observe SCL/SDA, never master state.
+module sc500_i2c_slave_model # (parameter RESERVED_NOISE=0)(
+ input wire rst_n,scl,inout wire sda,
+ input wire inject_arm,input wire [1:0] inject_kind,input wire inject_persistent,
+ input wire [15:0] inject_address,input wire [7:0] inject_xor,
+ output reg injected,output integer writes,reads,restarts,protocol_errors,
+ output reg [15:0] last_read_address,output reg [7:0] last_read_value);
+ localparam RECEIVE=0,SLAVE_ACK=1,TRANSMIT=2,MASTER_NACK=3,WAIT_STOP=4;
+ reg drive_low,active,pointer_valid,read_restart,ack_low,ack_seen,after_ack_read;
+ integer state,stage,bits;
+ reg [7:0] shift,transmit_byte,address_high;
+ reg [15:0] pointer;
+ reg [7:0] registers[0:65535];
+ assign sda=drive_low?1'b0:1'bz;
+ task reset_registers;integer j;begin
+  for(j=0;j<65536;j=j+1)registers[j]=0;
+  registers[16'h3107]=8'hee;registers[16'h3108]=8'h27;
+ end endtask
+ task reset_model;begin
+  drive_low=0;active=0;pointer_valid=0;read_restart=0;ack_low=0;ack_seen=0;after_ack_read=0;
+  state=WAIT_STOP;stage=0;bits=0;shift=0;transmit_byte=0;address_high=0;pointer=0;
+  injected=0;writes=0;reads=0;restarts=0;protocol_errors=0;last_read_address=0;last_read_value=0;
+  reset_registers;
+ end endtask
+ initial reset_model;
+ always @(negedge rst_n)reset_model;
+ // START and repeated START are detected on the wire while SCL is high.
+ always @(negedge sda)if(rst_n && scl===1'b1 && !drive_low)begin
+  read_restart=active && pointer_valid;
+  if(active)restarts=restarts+1;
+  active=1;state=RECEIVE;stage=0;bits=0;shift=0;ack_seen=0;after_ack_read=0;
+ end
+ always @(posedge sda)if(rst_n && scl===1'b1 && !drive_low)begin
+  if(active && stage==3 && state!=WAIT_STOP)protocol_errors=protocol_errors+1;
+  active=0;pointer_valid=0;state=WAIT_STOP;
+ end
+ always @(posedge scl)if(rst_n && active)begin
+  case(state)
+   RECEIVE:begin
+    shift={shift[6:0],sda};bits=bits+1;
+    if(bits==8)begin
+     bits=0;ack_low=1;ack_seen=0;after_ack_read=0;
+     case(stage)
+      0:begin
+       if(shift==8'h6c)begin stage=1;pointer_valid=0;end
+       else if(shift==8'h6d)begin
+        if(!read_restart || !pointer_valid)protocol_errors=protocol_errors+1;
+        after_ack_read=1;transmit_byte=registers[pointer];
+        if(RESERVED_NOISE && pointer==16'h3e03)transmit_byte=transmit_byte|8'ha0;
+        if(RESERVED_NOISE && pointer==16'h3e02)transmit_byte=transmit_byte|8'h05;
+        if(inject_arm && pointer==inject_address && (inject_persistent || !injected))begin
+         if(inject_kind==2)begin ack_low=0;transmit_byte=8'hff;injected=1;end
+         if(inject_kind==3)begin transmit_byte=transmit_byte^inject_xor;injected=1;end
+        end
+       end else begin ack_low=0;protocol_errors=protocol_errors+1;end
+      end
+      1:begin address_high=shift;stage=2;end
+      2:begin pointer={address_high,shift};pointer_valid=1;stage=3;end
+      3:begin
+       if(inject_arm && inject_kind==1 && pointer==inject_address && (inject_persistent || !injected))begin ack_low=0;injected=1;end
+       else begin
+        if(pointer==16'h0103 && shift==1)reset_registers;
+        registers[pointer]=shift;writes=writes+1;
+       end
+       stage=4;
+      end
+      default:begin ack_low=0;protocol_errors=protocol_errors+1;end
+     endcase
+     state=SLAVE_ACK;
+    end
+   end
+   SLAVE_ACK:ack_seen=1;
+   TRANSMIT:begin bits=bits+1;if(bits==8)state=MASTER_NACK;end
+   MASTER_NACK:begin
+    // Every diagnostic read is one byte; the master must terminate it with NACK.
+    if(sda!==1'b1)protocol_errors=protocol_errors+1;
+    reads=reads+1;last_read_address=pointer;last_read_value=transmit_byte;state=WAIT_STOP;
+   end
+   default:begin end
+  endcase
+ end
+ always @(negedge scl)if(rst_n && active)begin
+  case(state)
+   SLAVE_ACK:begin
+    if(!ack_seen)drive_low=ack_low;
+    else begin
+     drive_low=0;ack_seen=0;bits=0;
+     if(after_ack_read)begin state=TRANSMIT;drive_low=!transmit_byte[7];end
+     else state=RECEIVE;
+    end
+   end
+   TRANSMIT:drive_low=!transmit_byte[7-bits];
+   MASTER_NACK,WAIT_STOP:drive_low=0;
+   default:begin end
+  endcase
+ end
+endmodule

@@ -1,0 +1,26 @@
+{
+  "status": "RELEASE_GUARDS_PASS",
+  "checks": {
+    "over_capacity": "REJECTED",
+    "negative_setup": "REJECTED",
+    "negative_hold": "REJECTED",
+    "stale_source": "REJECTED"
+  },
+  "auditor_sha256": "dfaae848662055da70adf031fa38699b5401a389863b58cff3ce6f987487eac9",
+  "producer_sha256": "3d61e9d5ed3fcbaed0c343600358d11c6fcc34a97ee079889637098511e42b69",
+  "fixtures": {
+    "build/stage1_release_guards_20261026_214655/artificial_tb.sv": "f877274d7522fb134deea6111b2014f03ed6aafe3c460842266e2c5b2b0bd3e3",
+    "build/stage1_release_guards_20261026_214655/negative_hold/summary.json": "030db5f09699ecaf70deb656c99496e248dbdf46f37061de14a3d6ae7cb5cec4",
+    "build/stage1_release_guards_20261026_214655/negative_hold/target_color_regions_phy.area": "3c809045eaf01a4419d02cc56a1cb7492ba171238d1f0784819dba6295765038",
+    "build/stage1_release_guards_20261026_214655/negative_hold/target_color_regions_phy.ts": "801a12c47b5e99b7eaea8ae9763925edf05e071492b8de6e233dc5bc01dce33c",
+    "build/stage1_release_guards_20261026_214655/negative_setup/summary.json": "e42e54dbbdd4c58a075aba0636c9048ab42ce07077e10e713c340036c8f1e3f4",
+    "build/stage1_release_guards_20261026_214655/negative_setup/target_color_regions_phy.area": "3c809045eaf01a4419d02cc56a1cb7492ba171238d1f0784819dba6295765038",
+    "build/stage1_release_guards_20261026_214655/negative_setup/target_color_regions_phy.ts": "afc01083b9fcf7118e4731a2bf03f61dc9f28bf4337466c5eca72b3fd4c660c4",
+    "build/stage1_release_guards_20261026_214655/over_capacity/summary.json": "92d25fc445f1650e351f323d4983c3aa57c4a8322291b9cd885b78750840ac74",
+    "build/stage1_release_guards_20261026_214655/over_capacity/target_color_regions_phy.area": "07ea4eda6684d961bc7d24ae05b228a656aff262792582b7f8f6f62ca1285270",
+    "build/stage1_release_guards_20261026_214655/over_capacity/target_color_regions_phy.ts": "605d0fd5713f03d2c10630f98352c3708fe16f8a4f9b4ac61d20de06590d635f",
+    "reports/refined/regression/private_guard_stale_20261026_214655_fixture.json": "1493831fe3fc008aee556a716ac9be8a0efe80e68e54fc177d4e45f07f722dd3",
+    "reports/refined/regression/private_guard_stale_20261026_214655_fixture.log": "5676446425ef293ba9c6d6b914dd733c2d5eb72ce3bdf67116c44a886664f39b"
+  },
+  "scope": "Artificial negative fixtures only; not board or functional evidence"
+}

@@ -1,0 +1,16 @@
+STAGE1_RENDER_CASE_PASS case0 zoom0 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case1 zoom0 rotate1 rows624
+STAGE1_RENDER_CASE_PASS case2 zoom1 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case3 zoom1 rotate1 rows624
+STAGE1_RENDER_CASE_PASS case4 zoom2 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case5 zoom2 rotate1 rows624
+STAGE1_RENDER_CASE_PASS case6 zoom3 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case7 zoom3 rotate1 rows624
+STAGE1_RENDER_CASE_PASS case8 zoom4 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case9 zoom4 rotate1 rows624
+STAGE1_RENDER_CASE_PASS case10 zoom0 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case11 zoom0 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case12 zoom1 rotate0 rows624
+STAGE1_RENDER_CASE_PASS case13 zoom0 rotate0 rows624
+STAGE1_RENDER_PASS cases=14 pixels=11182080
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_serial_snapshot_v3_stage1_render_14_624_20261024_073021_141664\tb.sv:32: $finish called at 145544316 (1s)

@@ -1,0 +1,2 @@
+OSD_ENGLISH_OVERLAY_PASS 6389760 image pixels, 6375424 non-text equal, 13184 independent label pixels; corners, overlap, pairs and orientations
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\osd_english_overlay_20261019_230918_170517\tb.sv:45: $finish called at 63901150 (1s)

@@ -1,0 +1,32 @@
+{
+  "status": "NORMAL_NATIVE_FAILURE_ROUTABILITY_RETRY_RUNNING",
+  "normal_best": {
+    "iteration": 27,
+    "over_count": 2790,
+    "over": 2793,
+    "worst": 2
+  },
+  "normal_last": {
+    "iteration": 33,
+    "over_count": 4181,
+    "over": 4185,
+    "worst": 2
+  },
+  "retry_best": {
+    "iteration": 10,
+    "over_count": 11569,
+    "over": 11595,
+    "worst": 2
+  },
+  "retry_last": {
+    "iteration": 13,
+    "over_count": 12085,
+    "over": 12109,
+    "worst": 2
+  },
+  "normal_segment_sha256": "dd110ccd2a038e5d7b4a024fea26bf22f774d8abf7c535f62a6b7629a8dc61f8",
+  "compiled_source": "8413a1c3f0cd130057c516b69214c32a4556c2cb",
+  "software": "reports/stage1/software_current_compact_20261026_1421.json",
+  "software_passed": 121,
+  "hardware_status": "PENDING; no final DRC/setup/hold result"
+}

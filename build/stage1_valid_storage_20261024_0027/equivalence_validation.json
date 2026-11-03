@@ -1,0 +1,28 @@
+{
+  "status": "PRIVATE_CONTROL_EQUIVALENCE_PASSED_NOT_ADOPTED",
+  "record": "reports/refined/regression/private_valid_storage_equivalence_20261024_002649_303283.json",
+  "record_sha256": "1ccfa9d414851cbcb283a4d6e311b0b7208af07b1075e1c4d6f3d443337fb617",
+  "log_sha256": "b350113d3a269ce8088ccbdb4ebe7f43813ee25cf13eea729911fa02db8052a7",
+  "bench": "build/sim/refined/private_valid_storage_equivalence_20261024_002649_303283/tb.sv",
+  "bench_sha256": "658094d9880b13866b38afea710132fe63930bde6df6b95d1736dc3b8f5e8a30",
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build\\stage1_valid_storage_20261024_0027\\stage1_regions.v": "e23775297eb9ae5cb7a349c153706be36a8c6ce8caa06c9a9965a8bef48e4874",
+    "build\\stage1_valid_storage_20261024_0027\\stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97",
+    "build\\stage1_valid_storage_20261024_0027\\stage1_regions_reference.v": "c65dad62fab30bc551c134eb374a78d41c8d29fdc4eb847623cc4a59e14e9173"
+  },
+  "fixtures": {
+    "build/sim/refined/stage1_regions_20261023_195807_094520/tb.sv": "91012f20b2bc613f96792e293f2efbe766c3f0de1b2ad4cb5bffb1dc0b76a532"
+  },
+  "producers": {
+    "scripts/test_stage1_regions.py": "8a6eee76a38c4b3bdc717275c5a446346b91405b2df0989c295a6e6e1bc7f557",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  },
+  "producer_sha256": "6536268fe649fe7f214e7ee517aa5cbc215d13775e17b083559413cbfff309c8",
+  "reference_sha256": "ee5caf2a6c1191e1172dba7131b3597953cfc3917001175bb82864826f0ae094"
+}

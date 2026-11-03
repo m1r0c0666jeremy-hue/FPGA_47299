@@ -1,0 +1,106 @@
+{
+  "stage": "place",
+  "head": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "head_after": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "route_effort": "normal",
+  "placement_strategy": 10,
+  "map_mode": "area_prior",
+  "pack_effort": "high",
+  "infer_fsm": "sequential",
+  "min_ripple_len": 64,
+  "map_strategy": null,
+  "macro_performance": "macro_congestion",
+  "pack_mode": "adaptive_pin_density",
+  "place_effort": null,
+  "max_fanout": 128,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": {
+    "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+    "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+    "selected": {
+      "CongestionHigh": {
+        "description": "Makes extra optimization on macros besides those actions on unit cells to get lower congestion result.",
+        "is_syn": "phy",
+        "params": [
+          {
+            "step": "place",
+            "param": "opt_timing",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "ofv",
+            "val": "70"
+          },
+          {
+            "step": "place",
+            "param": "opt_max_density",
+            "val": "50"
+          },
+          {
+            "step": "place",
+            "param": "target_density",
+            "val": "0.6"
+          },
+          {
+            "step": "place",
+            "param": "target_density_pp",
+            "val": "0.7"
+          },
+          {
+            "step": "place",
+            "param": "aggressive_opt",
+            "val": "20"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_beeline_opt",
+            "val": "2"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_gp",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "non_crit_opt",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "post_place_opt",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "enable_congestion_recovery",
+            "val": "on"
+          },
+          {
+            "step": "route",
+            "param": "post_route_opt",
+            "val": "high"
+          }
+        ]
+      }
+    }
+  },
+  "reused_gate": null,
+  "checkpoints": {
+    "target_color_regions_gate.db": "302f6674e12b591019c0cc8b87c6c2e2cb98df4249a7bbf64e39e8634f5d4e4b",
+    "target_color_regions_placed.db": "7e087b33564ec15c247a2da96dec8d73adf9a7ced386f3940c29462abfc4c895"
+  },
+  "resources": {
+    "slice": 20205,
+    "lut6": 19965,
+    "reg": 23758,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

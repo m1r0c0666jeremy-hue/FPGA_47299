@@ -1,0 +1,2 @@
+OSD_PACKED_PROGRAM_PASS 240 contexts, 30720 characters and original formatter timing; four complete frames 3686416 cycles RGB/HS/VS/DE; two pairs, two orientations, labels at boundaries and calibration
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\osd_packed_program_equivalence_20261019_230531_631277\tb.sv:32: $finish called at 42630590 (1s)

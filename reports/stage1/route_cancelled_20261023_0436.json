@@ -1,0 +1,167 @@
+{
+  "status": "CANCELLED_TO_QUANTIFY_VERIFIED_BOUNDED_ARITHMETIC_NOT_A_FINAL_ROUTE_FAILURE",
+  "time": "2026-10-23T04:36:08.264058+08:00",
+  "attempt": "build/stage1_route_20261023_033019_769700",
+  "reason": "About65minutes. Minimum11203 at14; two hotspot passes did not establish a lower minimum, latest over15988 at20 took690.05s. Preserve every output and quantify separately validated bounded arithmetic; source/constraints were unchanged during route.",
+  "td_pid": 58004,
+  "td_start": "2026-10-23T03:30:21+08:00",
+  "terminal_session": 43619,
+  "terminal_exit_code": 1,
+  "active_td_after_stop": 0,
+  "last_completed": {
+    "iteration": 20,
+    "over_count": 15940,
+    "over": 15988,
+    "worst": 2,
+    "seconds": 690.05
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 35883,
+      "over": 37014,
+      "worst": 4,
+      "seconds": 43.56
+    },
+    {
+      "iteration": 2,
+      "over_count": 28924,
+      "over": 29394,
+      "worst": 4,
+      "seconds": 27.9
+    },
+    {
+      "iteration": 3,
+      "over_count": 25224,
+      "over": 25491,
+      "worst": 3,
+      "seconds": 33.59
+    },
+    {
+      "iteration": 4,
+      "over_count": 20544,
+      "over": 20733,
+      "worst": 3,
+      "seconds": 65.24
+    },
+    {
+      "iteration": 5,
+      "over_count": 19151,
+      "over": 19294,
+      "worst": 2,
+      "seconds": 54.62
+    },
+    {
+      "iteration": 6,
+      "over_count": 18652,
+      "over": 18766,
+      "worst": 2,
+      "seconds": 53.58
+    },
+    {
+      "iteration": 7,
+      "over_count": 18177,
+      "over": 18274,
+      "worst": 2,
+      "seconds": 84.38
+    },
+    {
+      "iteration": 8,
+      "over_count": 16522,
+      "over": 16612,
+      "worst": 3,
+      "seconds": 149.48
+    },
+    {
+      "iteration": 9,
+      "over_count": 16165,
+      "over": 16231,
+      "worst": 2,
+      "seconds": 151.57
+    },
+    {
+      "iteration": 10,
+      "over_count": 16338,
+      "over": 16411,
+      "worst": 2,
+      "seconds": 186.85
+    },
+    {
+      "iteration": 11,
+      "over_count": 16562,
+      "over": 16634,
+      "worst": 2,
+      "seconds": 180.1
+    },
+    {
+      "iteration": 12,
+      "over_count": 17081,
+      "over": 17144,
+      "worst": 2,
+      "seconds": 276.57
+    },
+    {
+      "iteration": 13,
+      "over_count": 13558,
+      "over": 13577,
+      "worst": 2,
+      "seconds": 95.83
+    },
+    {
+      "iteration": 14,
+      "over_count": 11196,
+      "over": 11203,
+      "worst": 2,
+      "seconds": 108.61
+    },
+    {
+      "iteration": 15,
+      "over_count": 12161,
+      "over": 12179,
+      "worst": 2,
+      "seconds": 85.85
+    },
+    {
+      "iteration": 16,
+      "over_count": 13365,
+      "over": 13394,
+      "worst": 2,
+      "seconds": 348.22
+    },
+    {
+      "iteration": 17,
+      "over_count": 14728,
+      "over": 14772,
+      "worst": 2,
+      "seconds": 299.68
+    },
+    {
+      "iteration": 18,
+      "over_count": 15882,
+      "over": 15952,
+      "worst": 2,
+      "seconds": 373.79
+    },
+    {
+      "iteration": 19,
+      "over_count": 14243,
+      "over": 14266,
+      "worst": 2,
+      "seconds": 323.27
+    },
+    {
+      "iteration": 20,
+      "over_count": 15940,
+      "over": 15988,
+      "worst": 2,
+      "seconds": 690.05
+    }
+  ],
+  "td_log_sha256_at_stop": "8d12c7b7a578b7d1b4f9ce4220efb9966191fbc109fefaa1c05d732bc9b943fe",
+  "formal_inputs_unchanged": 308,
+  "compiled_source_commit": "707b11717da48923815aa6e865ccdac80c1cd1ba",
+  "software_proof": "reports/stage1/software_current_20261023_0002.json",
+  "software_proof_sha256": "3915e1c82df7a0e35067d48f9a6b82b05a6295b33439af06c375066703b32c8f",
+  "has_final_routing_or_timing_result": false,
+  "hardware_status": "PENDING"
+}

@@ -1,0 +1,41 @@
+{
+  "status": "VERIFIED_GATE_CHECKPOINT_RUNTIME_PARAMETERS_READ_ONLY",
+  "inspection": "build/stage1_gate_param_check_20261023_2204/inspection_20261023_222318",
+  "review_sha256": "117b5a3f7fbee608340a96cb184f85bc523dd30088ef0defdb4c79a08b3e00fe",
+  "settings": {
+    "inherited_flow": {
+      "enable_seed": "off",
+      "hfn_to_clock": "1000000000",
+      "message": "standard",
+      "qor_monitor": "on",
+      "speedup_effort": "0",
+      "syn_ip_flow": "off",
+      "thread": "auto"
+    },
+    "inherited_place": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "128",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "10",
+      "preplace_floorplan": "off"
+    },
+    "inherited_route": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "scope": "Gate checkpoint actual registered parameters, not final route/timing credit. No missing-setting bug asserted.",
+  "planned_physical_changes": {
+    "pr_strategy": 2,
+    "max_fanout": 999999
+  },
+  "formal_software_current": 110,
+  "formal_compiler_inputs_unchanged": true
+}

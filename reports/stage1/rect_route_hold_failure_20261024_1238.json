@@ -1,0 +1,25 @@
+{
+  "status": "ZERO_ROUTE_CONFLICTS_BUT_HOLD_FAILED_NOT_DELIVERABLE",
+  "attempt": "build/stage1_route_20261024_122442_611169",
+  "resources": {
+    "slice": 18066,
+    "lut6": 17782,
+    "reg": 20833,
+    "eram": 96,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": 0.104,
+    "HWNS": -0.298
+  },
+  "path_from": "u_video/area_controller/sequence_controller/muted_reg",
+  "path_to": "buzzer_driver/enable_sync_reg[0]",
+  "clock_from": "HDMI_PIXEL_CLK 75MHz",
+  "clock_to": "sys_clk_50m",
+  "clock_skew_ns": 1.326,
+  "summary_sha256": "2e75f62bcf6388409cbc8567cb6a09fe683f2e91cb0051f2cbad0589e9d94ff2",
+  "timing_sha256": "5237de805f4db7a1023af2f28ba84c85b794e073489ef34f3c9d40b8d5a0d1a7",
+  "repair": "Move buzzer to the same75MHz pixel domain with process_rst_n and parameter-sized1-second counter. Keep2kHz,200ms per second, original constraints and all other RTL unchanged. Current video/live dependencies exclude top/buzzer/generator/auditor; only buzzer and top camera evidence refresh is required.",
+  "new_expected_checks": 107,
+  "no_flash_or_board": true
+}

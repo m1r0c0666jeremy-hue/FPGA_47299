@@ -1,0 +1,17 @@
+{
+  "status": "PRIVATE_RESETFREE_SNAPSHOT_REJECTED_NO_RESOURCE_GAIN",
+  "scope": "Same connected local gate comparison only; no whole-chip benefit claimed; formal source unchanged",
+  "resources": {
+    "slice": 4017,
+    "lut6": 1745,
+    "reg": 4191,
+    "eram": 3,
+    "dsp": 0
+  },
+  "comparison": "build/stage1_snapshot_resetfree_20261023_2100/gate_comparison_20261023_210751.json",
+  "comparison_sha256": "8d9498b831e515e5d7059b38571f3d87241eccf92baf809c6513753ae0713f98",
+  "formal_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "formal_renderer_sha256": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c",
+  "formal_software": "reports/stage1/software_current_20261023_203938.json",
+  "formal_software_sha256": "ee5caf2a6c1191e1172dba7131b3597953cfc3917001175bb82864826f0ae094"
+}

@@ -1,0 +1,7 @@
+{
+  "status": "PRIVATE_NOT_ADOPTED_NO_CAD",
+  "baseline_source": "rtl/color_regions/stage1_render.v",
+  "baseline_sha256": "1cfb54e3c607d62c7f664be02a690b9e516d87b0d98d86817317bb365a78fbf2",
+  "candidate_sha256": "bb261e888134ff18a2ef4cb35b0da1c495915aecc87901af5a72189d94d81af1",
+  "intent": "Pack 256x16 edge state and 640x32 line masks into one 1024x32 dual-port memory; target two ERAM instead of three, unmeasured. Pixel read port continuous; state/stamp access share other port by existing mutually exclusive FSM states. No new states/interfaces/cycles; FIFO and RGB image storage untouched."
+}

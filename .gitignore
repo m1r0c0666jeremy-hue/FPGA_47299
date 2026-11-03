@@ -26,11 +26,3 @@ __pycache__/
 # Local operating-system metadata
 Thumbs.db
 Desktop.ini
-
-# Local simulation runtimes and generated delivery packages
-/tools/native_sim/
-/tools/iverilog/ucrt64/
-/tools/iverilog/*.zst
-/tools/iverilog/*.db
-/build/baseline_720p/
-/build/delivery_720p_*/

@@ -1,0 +1,205 @@
+{
+  "status": "CANCELLED_BY_AGENT_NOT_DELIVERABLE",
+  "time": "2026-10-24T06:20:05.380843+08:00",
+  "reason": "E normal about67 minutes; iteration20 minimum10714 followed by11260/12274/13085. About22 minutes without new low; next-round stopping rule announced before iteration23, no new broader hotspot recovery. Quantify proven private shared-region-memory alternative instead of more blind long routing. This is incomplete cancellation, not a final native failure or pass.",
+  "attempt": "build/stage1_route_20261024_051241_605588",
+  "process_id": 21588,
+  "process_started": "2026-10-24T05:12:43.9004247+08:00",
+  "session_exit_code": 1,
+  "route_result": "CANCELLED_INCOMPLETE_NO_FINAL_ROUTING_OR_TIMING_RESULT",
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 47519,
+      "over": 50233,
+      "worst": 4,
+      "seconds": 36.97
+    },
+    {
+      "iteration": 2,
+      "over_count": 40154,
+      "over": 41473,
+      "worst": 3,
+      "seconds": 22.62
+    },
+    {
+      "iteration": 3,
+      "over_count": 36603,
+      "over": 37480,
+      "worst": 3,
+      "seconds": 21.42
+    },
+    {
+      "iteration": 4,
+      "over_count": 29991,
+      "over": 30277,
+      "worst": 3,
+      "seconds": 34.79
+    },
+    {
+      "iteration": 5,
+      "over_count": 27633,
+      "over": 27849,
+      "worst": 2,
+      "seconds": 29.69
+    },
+    {
+      "iteration": 6,
+      "over_count": 25788,
+      "over": 25952,
+      "worst": 2,
+      "seconds": 26.76
+    },
+    {
+      "iteration": 7,
+      "over_count": 24336,
+      "over": 24468,
+      "worst": 2,
+      "seconds": 23.16
+    },
+    {
+      "iteration": 8,
+      "over_count": 17975,
+      "over": 18018,
+      "worst": 2,
+      "seconds": 68.41
+    },
+    {
+      "iteration": 9,
+      "over_count": 16177,
+      "over": 16200,
+      "worst": 2,
+      "seconds": 39.99
+    },
+    {
+      "iteration": 10,
+      "over_count": 16364,
+      "over": 16417,
+      "worst": 2,
+      "seconds": 49.8
+    },
+    {
+      "iteration": 11,
+      "over_count": 16837,
+      "over": 16912,
+      "worst": 2,
+      "seconds": 65.3
+    },
+    {
+      "iteration": 12,
+      "over_count": 14358,
+      "over": 14421,
+      "worst": 2,
+      "seconds": 146.13
+    },
+    {
+      "iteration": 13,
+      "over_count": 13814,
+      "over": 13869,
+      "worst": 2,
+      "seconds": 150.82
+    },
+    {
+      "iteration": 14,
+      "over_count": 11879,
+      "over": 11913,
+      "worst": 2,
+      "seconds": 113.36
+    },
+    {
+      "iteration": 15,
+      "over_count": 12154,
+      "over": 12188,
+      "worst": 2,
+      "seconds": 139.17
+    },
+    {
+      "iteration": 16,
+      "over_count": 11204,
+      "over": 11236,
+      "worst": 2,
+      "seconds": 282.55
+    },
+    {
+      "iteration": 17,
+      "over_count": 11156,
+      "over": 11188,
+      "worst": 2,
+      "seconds": 292.09
+    },
+    {
+      "iteration": 18,
+      "over_count": 11603,
+      "over": 11654,
+      "worst": 2,
+      "seconds": 257.85
+    },
+    {
+      "iteration": 19,
+      "over_count": 12172,
+      "over": 12212,
+      "worst": 2,
+      "seconds": 270.16
+    },
+    {
+      "iteration": 20,
+      "over_count": 10685,
+      "over": 10714,
+      "worst": 2,
+      "seconds": 402.16
+    },
+    {
+      "iteration": 21,
+      "over_count": 11229,
+      "over": 11260,
+      "worst": 2,
+      "seconds": 377.87
+    },
+    {
+      "iteration": 22,
+      "over_count": 12230,
+      "over": 12274,
+      "worst": 2,
+      "seconds": 473.74
+    },
+    {
+      "iteration": 23,
+      "over_count": 13042,
+      "over": 13085,
+      "worst": 2,
+      "seconds": 498.82
+    }
+  ],
+  "td_log_sha256": "b2f570ab6e567c79c3c0ec63b090fa3c7075b08de9f7257219d13ad8b38a4514",
+  "source_context": {
+    "compiled_source_commit": "69a8e6993424ea822e42b55380f9eb4ef67de7b8",
+    "creation_time": "20261024_051241_605588",
+    "input_count": 308,
+    "inputs_sha256": "9783cd197495ab59674a355c904d8fd5e07d072ff9d81440b759e9d9be2124d6",
+    "reused_gate": null,
+    "placed_checkpoint": {
+      "parent": "build/stage1_place_20261024_044722",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "87bfd90dac7a07862313e6f9fe0ec1adda9acfca9b2c7b78442e3863142f8b76",
+      "parent_summary_sha256": "1298b5d3071e5990170b085ed4505df1f976a71369bbe6d3cce578f9ec471873",
+      "parent_context_sha256": "2ad1c021784a6cd11915061bd7379b3553ff0787b74219733ebbb49e24cb42f7",
+      "parent_inputs_sha256": "9783cd197495ab59674a355c904d8fd5e07d072ff9d81440b759e9d9be2124d6"
+    },
+    "replaced_strategy": null,
+    "retry_routability": true,
+    "flow_threads": 16
+  },
+  "input_count": 308,
+  "inputs_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "placed_checkpoint_unchanged": true,
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "final_timing_available": false,
+  "deliverable": false,
+  "software_report": "reports/stage1/software_current_20261024_0532.json",
+  "software_checks": 110,
+  "continuing_authorized_task": true,
+  "new_timer_created": false,
+  "producer_sha256": "a7be2bf00fedf85d0b4b929c5a248f46d314d35c23f51c19888e6ea54bf9698a"
+}

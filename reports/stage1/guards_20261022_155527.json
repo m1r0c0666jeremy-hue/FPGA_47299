@@ -1,0 +1,10 @@
+{
+  "status": "RELEASE_GUARDS_PASS",
+  "checks": {
+    "over_capacity": "REJECTED",
+    "negative_setup": "REJECTED",
+    "negative_hold": "REJECTED",
+    "stale_source": "REJECTED"
+  },
+  "scope": "Artificial negative fixtures only; not board or functional evidence"
+}

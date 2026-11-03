@@ -1,0 +1,16 @@
+{
+  "status": "SELECTED_FRESH_BASELINE_IDENTICAL_TO_FINAL_110",
+  "partial_report": "reports/stage1/software_valid_banks_progress_20261024_0504.json",
+  "partial_sha256": "67a7282e6aa7e381c0ebe21b36645be6d87ac7270d6194d76464c76712673dab",
+  "full_report": "reports/stage1/software_current_20261024_0532.json",
+  "full_sha256": "be494d089edb4b3755f4f85d19312c8aa4da7d77ded84e62c1524c276f947aba",
+  "selected_checks": [
+    "stage1_render_guards",
+    "stage1_regions",
+    "stage1_render_14_624",
+    "stage1_overlay"
+  ],
+  "checks_identical": true,
+  "all_110_dependencies_current": true,
+  "proof_sha256": "878b9240566b4079fe4d0174e8ea7c87efa39df85e0d75b0cd17c8d1ffafef0d"
+}

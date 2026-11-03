@@ -1,0 +1,121 @@
+{
+  "stage": "place",
+  "head": "c0f842d89dd6627e9e034393a46828addc1dfcf1",
+  "head_after": "c0f842d89dd6627e9e034393a46828addc1dfcf1",
+  "route_effort": "normal",
+  "placement_strategy": 2,
+  "map_mode": "balance_explore",
+  "pack_effort": "high",
+  "infer_fsm": "sequential",
+  "min_ripple_len": 64,
+  "map_strategy": null,
+  "macro_performance": "macro_congestion",
+  "pack_mode": "adaptive_pin_density",
+  "place_effort": null,
+  "max_fanout": 128,
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "working_tree_matches": true,
+  "official_strategy": {
+    "source_path": "D:/26_software/TangDynasty/doc/strategies/official_strategy_ph1.json",
+    "sha256": "b264a5c4ae939a4be0fcf5d2c242a8005132c4812f01d4d060590adee2030729",
+    "selected": {
+      "AreaOptimizeMedium": {
+        "description": "Does mapping with more effort to reduce area.",
+        "is_syn": "syn",
+        "params": [
+          {
+            "step": "gate",
+            "param": "add_map_lut_struct",
+            "val": "on"
+          },
+          {
+            "step": "gate",
+            "param": "multi_thread_mapping",
+            "val": "partition"
+          },
+          {
+            "step": "gate",
+            "param": "map_mode",
+            "val": "balance_explore"
+          }
+        ]
+      },
+      "CongestionMedium": {
+        "description": "Makes some placement optimization to reduce congestion for easier routing.",
+        "is_syn": "phy",
+        "params": [
+          {
+            "step": "place",
+            "param": "opt_timing",
+            "val": "high"
+          },
+          {
+            "step": "place",
+            "param": "ofv",
+            "val": "70"
+          },
+          {
+            "step": "place",
+            "param": "opt_max_density",
+            "val": "50"
+          },
+          {
+            "step": "place",
+            "param": "target_density",
+            "val": "0.7"
+          },
+          {
+            "step": "place",
+            "param": "target_density_pp",
+            "val": "0.75"
+          },
+          {
+            "step": "place",
+            "param": "aggressive_opt",
+            "val": "20"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_beeline_opt",
+            "val": "2"
+          },
+          {
+            "step": "place",
+            "param": "enhanced_gp",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "non_crit_opt",
+            "val": "on"
+          },
+          {
+            "step": "place",
+            "param": "post_place_opt",
+            "val": "high"
+          },
+          {
+            "step": "route",
+            "param": "post_route_opt",
+            "val": "high"
+          }
+        ]
+      }
+    }
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "22783ea5dfb75615b52e00ed5eb8ac5b889c99cf197d1fa70eab2153c435f6fa",
+    "target_color_regions_placed.db": "f350fdd91852462b9659fadb48fd1d3b6af890acf50d05ea58f15c367b3d5f77"
+  },
+  "resources": {
+    "slice": 20467,
+    "lut6": 20138,
+    "reg": 23808,
+    "eram": 99,
+    "dsp": 40
+  },
+  "gate_estimate": false,
+  "resource_pass": true,
+  "placement_required": false
+}

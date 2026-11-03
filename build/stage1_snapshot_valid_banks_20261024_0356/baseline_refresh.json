@@ -1,0 +1,16 @@
+{
+  "status": "SELECTED_FRESH_BASELINE_IDENTICAL_TO_FINAL_110",
+  "partial_report": "reports/stage1/software_valid_lanes_progress_20261024_0345.json",
+  "partial_sha256": "24a34a8fa12d925664f0a7ed8c007f01f245be8a85658ea360eb65bcdd66ac52",
+  "full_report": "reports/stage1/software_current_20261024_0406.json",
+  "full_sha256": "e16a1361f32d6e664489131842a90f3c4fbe2fc141e0237b8c7c5c61efd91a69",
+  "selected_checks": [
+    "stage1_render_guards",
+    "stage1_regions",
+    "stage1_render_14_624",
+    "stage1_overlay"
+  ],
+  "checks_identical": true,
+  "all_110_dependencies_current": true,
+  "proof_sha256": "80173d52ce7c6fd902a16ca49d6ad6a5c4085a7cd5e7f39c45f23f69790c7aed"
+}

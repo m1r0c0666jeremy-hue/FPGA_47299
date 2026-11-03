@@ -1,0 +1,57 @@
+[
+  {
+    "pdf_page": 52,
+    "term": "逻辑组",
+    "text": "x18-bit\n的有符号乘法器。LU 是 54-bit 的逻辑操作单元。SIOU 单元是 DSP 模块的控制核心，\n提供运算和逻辑单元的所有控制、输入、输出信号，包括信号的锁存、直通、切换，这\n种总线式架构为用户提供了灵活可配置的多种运算和逻辑组合功能 ，用户可以通过 IP \nGenerator 中自定义实现方式。 \n"
+  },
+  {
+    "pdf_page": 130,
+    "term": "floorplan",
+    "text": "anout 全局 fanout 的阈值 999999 \nopt_timing 布局中的时序优化级别 MEDIUM \npost_place_opt 布局后时序优化级别 AUTO \npr_strategy 布局布线策略 1 \npreplace_floorplan 是否使用 floorplan 指导布局 OFF \n各参数的可选项及其说明，可查看 9.6 软件界面 Properties 可选项说明 \n \n  "
+  },
+  {
+    "pdf_page": 172,
+    "term": "区域约束",
+    "text": "前视图 \n \n回到默认视图，即 Chip Viewer 刚打开时的视图 \n \n按下后可以拖动视图平移 \n 按下后可拖动鼠标选中一组 cell/器件 \n/  最大化/恢复 Chip Viewer 窗口大小 \n \n显示布线资源 \n \n按下后进入区域约束管理模式 \n \n按下后可查看 Hierarchy 信息 \n工具栏如下按钮仅在 flow 运行完成 Optimize Placement 之后可见 \n \n时序超图信息， 可查看DSP、RAM、PAD、HARD \nIP 等类型的逻辑单元之间的连接关系 \n ECO 操作开关，按下后可进行 ECO 操作 \n \n按下后可查看 Clock buffer / nets 信息 \n \nLayout 有三种视图模式:  \nSELECT(选择，默认模式)、AREA_SELECTION(框选) 、 PAN(平移)。 \na) SELECT 模式 \n"
+  },
+  {
+    "pdf_page": 173,
+    "term": "区域约束",
+    "text": "固定比例缩小(如 zoom -0.5)、回到默认视图(zoom fit)，如右下图 \n    \n \nb) AREA_SELECTION 模式： \n鼠标拖拽            -- 选中线框中的 cell，CTRL 按下时可多选；在进入\n区域约束管理模式时，可基于线框选中的 cells 创建新的 bound \n \nc) PAN 模式 \n  鼠标拖拽            -- 平移当前视图 \n往左上方拖拽 \n 往右上方拖拽 \n往左下方拖拽 \n 往右下方拖拽 \n拖拽起点 "
+  },
+  {
+    "pdf_page": 186,
+    "term": "区域约束",
+    "text": "  \n185                              http://www.anlogic.com  \n8.2.2 Region Constraint \n按下 Toolbar 中的   按钮后，Chip Viewer 进入区域约束管理模式，界面左上\n方的约束管理器会分类显示在 ADC 文件中定义的所有 bound，右下方的 instance 树将\n按层级显示各单元所占用的逻辑资源，可以选择一组 instance 加到新的 bound 或已有的\nbound 中。约束管理器的主要作用是对 bound 的增删查改。 \nRegion Constraint 约束管理器的顶层界面显示如下图所示： \n \n用户若需要进行区域约束的设置， 需要Flow 已运行完成 Syn 但还未运行 Phy 之前，\n否则界面会出现如下弹窗提示： \n \nBound mode 主要分为两类：Soft，Fixed。其中，Soft Bound 只提供参考位置，最\n终位置不一定在 Soft Bound 中；Fixed Mode 则是将 Bound 固定在既定的大小和位置\n处。 \n"
+  },
+  {
+    "pdf_page": 188,
+    "term": "区域约束",
+    "text": "com  \n当 mode 为 fixed 时，除 effort 的属性不可更改外，其他属性均可按需填写，width\n和 height 的范围取决于所选器件系列及封装，origin 为起始位置坐标（以 bound 区域左\n下角为准） 。在执行区域约束时，若勾选reserved 则会预留该区域，excluded 中勾选\nslice、dsp、bram 则会在所选 instances 中排除勾选项。 \n点击 create 即可在相应 mode 下看到新创建的 bound。 \n   \n \n完成新建 bound 后，可以在 Hierarchy 中选择所需的 instances，并右键选择 add to \nnew bound，新建一个 bound 并添加当前选择的 instances。 \n \n或者右键选择 add to bound，选择一个已有的 bound 并添加当前选择的 instances。 \n  \n \n对于 fixed 模式的 bound，加入 instances 时各种类型的 instances 个数不能超过由\n"
+  },
+  {
+    "pdf_page": 190,
+    "term": "区域约束",
+    "text": "TangDynasty          软件手册   \n189                              http://www.anlogic.com  \n   \n \n完成区域约束后，可以在 ADC Region Constraint Manager 中选中任何一栏，右键\n菜单选择 save to ADC file，即可将区域约束的设置写入 adc 文件中。 \n \n若直接关闭 Chip Viewer 且区域约束未保存，界面会有如下弹框提示。 \n \n \n8.2.3 ECO 操作 \nChip Viewer 支持实时根据前后端反馈信息对布局布线等进行调整，即 ECO 操作。\n因此需要对 ChipViewer ECO 操作进行设计与完善，并对操作结果进行可视化。当 Flow\n运行完 Optimize Placement 之后，可以按下界面 Toolbar 的 进行 ECO 操作。 \n8.2.3.1 Move Inst \nFlow 运行完 Optimize Placement 之后且未运行 Optimize Routing 之前，Move 功能\n"
+  },
+  {
+    "pdf_page": 195,
+    "term": "区域约束",
+    "text": "w，即不会让 syn out-of-date。 \n具体操作流程如下： \n1. Flow 在 Optimize Gate 之后打开 ChipViewer，打开工具栏中的 Region Constraint\n（以下简称 RegCons）栏，进入区域约束功能。 \n2. 在 RegCons 栏中对 bound 进行增删改，或者在 Hierarchy 中将 module/inst 加到\nbound 中，进行区域约束相关操作。 \n3. 在 RegCons 栏中右键可以选择 Save to adc file 或者 Save to phy-only adc file。 \n4. Save to adc file ：将所有约束信息写到 normal adc 里面。会清空 phy-only adc 的\n所有内容，会导致 syn 和 phy 的 out-of-date。 \n \n5. Save to phy-only adc：将区域约束相关的新增操作写到 phy-only adc 中，如果不\n存在会弹窗提示新建 phy-only adc，已经存在的情况下会往该 adc 中追加新增操\n作。不会修改 normal adc 的内容，只会导致 phy 的 out-of-date。 \n \n8.2.5 反标固定 Instance \n一键反标固定功能用于 Optimize Placemetn 之后， 把指定类型或者用户选择的inst(s)\n根据布局的位置，使用 set_inst_assignment 固定住，该功能会把相关约束写到 phy-only \nadc 文件中，不会使 syn out-of-date。 \n"
+  },
+  {
+    "pdf_page": 262,
+    "term": "区域约束",
+    "text": "未支持的类型 请咨询技术支持 \nPHY-9176 综合网表或用户输入存在非法的物理\n设置 请咨询技术支持 \nPHY-9177 MCLK Instance 扇出的时钟 buffer sector\n存在冲突 请咨询技术支持 \nPHY-9179 区域约束冲突 请检查 ADC 文件是否正确或者咨询技术\n支持 \nPHY CIRITCAL-WARNING Message \nID 说明 建议 \n(PHY) Physical critical-warning message \nPHY-5007 没有选择器件导致布线失败 请先选择器件再执行命令 \nPHY-5012 ECO 导入后 Net 未连接 请咨询技术支持 \nPHY-5024 忽略无效的单元位置信息 请检查 ADC 文件是否正确 \nPHY-5025 Instance 模型缺失 请咨询技术支持 \nPHY-5028 用户约束位置冲突 请检查 ADC 文件是否正确 \nPHY-5029 用户约束 z 值无效 请检查 ADC 文件是否正确 \nPHY-5045 时钟 buffer 存在悬空 control/output pin 请咨询技术支持 \nPHY-5047 生成 feedthrough 失败 请咨询技术支持 \nPHY-5056 无法例化 bankref 的 Instance 请咨询技术支持 \nPHY-5057 Port 连接多个线网 请咨询技术支持 \nPHY-5058 用户例化的时钟 buffer 输出驱动混合\n类型 请检查设计中该时钟 buffer 的连接关系 "
+  },
+  {
+    "pdf_page": 263,
+    "term": "区域约束",
+    "text": "et_inst_assignment约束该类型的\ninstance \nPHY-5072 时钟极性传递失败 \n请检查 BUFGMUX/CBUF 的连接关系，尝\n试更换 buffer 的位置； 或者请咨询技术支\n持 \nPHY-5073 布线相关区域约束检查失败 请咨询技术支持 \nPHY-7002 没有遵循相应的单元位置约束信息 请检查 ADC 文件是否正确 \nPHY-7018 时序分析发生异常 具体请参考时序相关信息 \nPHY-8032 实例的输入或者输出没有连接 请检查设计中的实例连接关系是否正确 \nPHY-8052 未布局的 Instance 驱动了 SCLK 导致布\n局失败 请咨询技术支持 \nPHY-9159 用户指定位置无效，Instance 的 z 是无\n效值 请咨询技术支持 \nPHY-9178 Macro 初始化失败 请检查设计中 macro 的 R_POSITION 是否\n正确 \n \nOPT ERROR/CRITICAL-WARNING \nOPT ERROR Message \nID 说明 建议 \n(OPT) Optimization error message \nOPT-8001 启动时序引擎失败 工具内部错误，请咨询技术支持 \nOPT-8002 命令使用错误，phys_opt 参数设定值非\n法 \n参照报错信息提示， 正确使用phys_opt 命\n令 \nOPT-8003 启动时序分析引擎失败 工具内部错误，请咨询技术支持 \nOPT-8004 物理优化 phys_opt 出现非预期的错误 \n参照报错信息提示， 尝试通过“set_param \nplace xxx_opt off” 关掉出错的步骤进行规\n避  \nOPT-8005 布局后对 QoR 合理性检查发现时序不\n佳，布局布线难以跑出结果 \n可在当前 Phy Run 处右键选择 Show Flow \nStatus 查看，参照其中的 QoR Evaluation\n建议进行修改和尝试 \nOPT-8006 布局后对 QoR 合理性检查发现拥塞情\n况不佳，布局布线难以跑出结果 \n可在当前 Phy Run 处右键选择 Show Flow \nStatus 查看，参照其中的 QoR Evaluation\n建议进行修改和尝试 \nOPT-8007 命令使用错误，report_qor –step 指定\n的步骤错误 修改-step 为当前步骤 "
+  },
+  {
+    "pdf_page": 283,
+    "term": "floorplan",
+    "text": "\n5 - 9 时序优化 \n10 - 17 优化措施随着数字\n增加而增强 \n对于无法收敛的工程，建议根据工\n程的实际情况选择相应策略尝试。 \n随着优化措施的增强，提高时序和\n减少拥塞的可能性越高，但运行时\n间会增加。 \npreplace_ \nfloorplan \nPH1 \nPH2 \noff 不使用 floorplace 指导布\n局 \n用户希望根据层级关系进行布局时\n建议打开，打开后可以在一定程度\n上减少修改设计引起的结果波动。 on 使用 floorplace 指导布局 \nOptimize Routing \nOption 适用器件 可选项 选项描述 使用效果及建议 \neffort ALL \nnormal 常规优化 针对拥塞较高的工程可尝试使用\nroutability，将尝试更多次优化，\n但可能更加耗时。 routability 尝试更多算法避开拥塞 \nfix_hold ALL \noff 不开启 hold fix 功能 布线结束后需要修复 hold 的时序\n违例，可选择 on 或者 high，但如\n果是约束或者设计不合理造成的\nhold，打开会比较耗时。 \non 开启 hold fix 功能 \nHigh \n（仅支持 PH2） 强力 hold fix \npost_route_opt PH1 \nPH2 \nauto 自动调整布线后时序优化\n力度 \n力度越大，优化效果越好，但是运\n行时间会越长。 \nmedium 中等力度的布线后时序优\n化 \nhigh 大力度的布线后时序优化 \nultra 最大力度的布线后时序优\n化 \noff 不进行布线后针对时序的\n优化 "
+  }
+]

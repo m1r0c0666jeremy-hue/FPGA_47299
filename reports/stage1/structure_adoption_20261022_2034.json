@@ -1,0 +1,36 @@
+{
+  "scope": "STRUCTURAL CHANGE; fresh regression/place/route required",
+  "compiler_input_count": 308,
+  "original_baseline_count": 297,
+  "protected": 5,
+  "changes": {
+    "rtl/color_regions/stage1_memory_video_out.v": {
+      "before": "ca6e123d0d6f4663a693fab4f15e2fd4026efaad3735555236f71a90b17e44bd",
+      "after": "98156f42dc2f1aefceb722c0136a977d5a1d753526858bf9f3ee7772c78f8045"
+    },
+    "rtl/color_regions/stage1_osd.v": {
+      "before": "87d96890e608e27acada304f9038288404065e69dcf14f7c37623486629e74c4",
+      "after": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d"
+    },
+    "rtl/color_regions/stage1_point.v": {
+      "before": "0529d5fd78e64e92687a4fd2ef73e45f5a2ffc3aa3fa0a15a1ae796c9522afbc",
+      "after": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94"
+    },
+    "rtl/color_regions/stage1_regions.v": {
+      "before": "eaa229c6a982579d5b1ede7f22407638373dd6cb5a07f5a6eaf50b5d03c7de21",
+      "after": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32"
+    },
+    "rtl/color_regions/stage1_render.v": {
+      "before": "35e104f40a82be36b2ac1f994c0666f508f4628276231e695f8ee8035090833e",
+      "after": "ae2d68ced066bacb04503ba0e97ce4d77f57cf6ce26950ec3a90fb0a42667464"
+    },
+    "rtl/color_regions/stage1_validate.v": {
+      "before": "1df2971687ffe6698bc811d755b887957e1194e4eef267713ad446f5eadd3772",
+      "after": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7"
+    }
+  },
+  "private_proof": "build/stage1_split_draft_20261022_1833/stamp_validation.json",
+  "local_gate_only_slice_saving": 644,
+  "local_gate_only_extra_eram": 3,
+  "delivery_status": "NOT READY"
+}

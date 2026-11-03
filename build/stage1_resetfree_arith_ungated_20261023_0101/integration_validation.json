@@ -1,0 +1,117 @@
+{
+  "status": "PRIVATE_RESETFREE_INTEGRATION_PASS_NOT_ADOPTED",
+  "candidate_sha256": "3ceb34f995c7b87e4ec6b42fd95210979d10a84f32b286d3a1334a05c236d464",
+  "producer_sha256": "e851f84c1663a7df16140ea6f5891bbd089901aea2a240b1d3e551177bf3500d",
+  "baseline_proof": "reports/stage1/software_current_20261023_0002.json",
+  "baseline_proof_sha256": "3915e1c82df7a0e35067d48f9a6b82b05a6295b33439af06c375066703b32c8f",
+  "checks": {
+    "stage1_point": {
+      "record": "reports/refined/regression/stage1_private_resetfree_replay_stage1_point_20261023_010238_562303.json",
+      "record_sha256": "ef1decb38b0e741a4023d9edfa57b4bedf9ca90161ec8de39f3ecb64063c6a19",
+      "log_sha256": "5804c8bb54a75fe1cc0a358c5a7fd820e380a085791d01d1248504d0af559903",
+      "inputs": {
+        "build\\stage1_resetfree_arith_ungated_20261023_0101\\stage1_arith.v": "3ceb34f995c7b87e4ec6b42fd95210979d10a84f32b286d3a1334a05c236d464",
+        "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94"
+      },
+      "fixtures": {
+        "build/stage1_geometry_vectors/point.hex": "938220c03af28b4c95f82a18daa33358d894540bd107b0b4e6bb38436bd12baf",
+        "build/sim/refined/stage1_private_resetfree_replay_stage1_point_20261023_010238_562303/tb.sv": "656886c2bb92e6dad0dc123166189683af85ddeeedd84020d9dd86c648641133"
+      },
+      "producers": {
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "reference_record": "reports/refined/regression/stage1_point_20261022_203321_818860.json",
+      "reference_record_sha256": "512b007451c1f0d0108347331e386930f76dc346164dae1087c3ce7f3397482e",
+      "reference_inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94"
+      },
+      "reference_fixtures": {
+        "build/stage1_geometry_vectors/point.hex": "938220c03af28b4c95f82a18daa33358d894540bd107b0b4e6bb38436bd12baf",
+        "build/sim/refined/stage1_point_20261022_203321_818860/tb.sv": "656886c2bb92e6dad0dc123166189683af85ddeeedd84020d9dd86c648641133"
+      },
+      "reference_producers": {
+        "scripts/test_stage1_geometry.py": "9be1c31e3d2630f5b66ceef910caff6471e0d475a6a42f6bfa92f68f73131693",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      }
+    },
+    "stage1_validate": {
+      "record": "reports/refined/regression/stage1_private_resetfree_replay_stage1_validate_20261023_010245_411605.json",
+      "record_sha256": "02fc0f1d1facb6a2129e05814027d040053973e3f530882e8c6e84ad217411ca",
+      "log_sha256": "dc7f2602211aa79687dd760c33f7dcaea719ee7e67167153da27017e6cf0be08",
+      "inputs": {
+        "build\\stage1_resetfree_arith_ungated_20261023_0101\\stage1_arith.v": "3ceb34f995c7b87e4ec6b42fd95210979d10a84f32b286d3a1334a05c236d464",
+        "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7"
+      },
+      "fixtures": {
+        "build/stage1_geometry_vectors/validate.hex": "6d56f94c5cd4000404ac04bfc577fcd8d5e83fc83e171a02d1b77e6292cc762a",
+        "build/sim/refined/stage1_private_resetfree_replay_stage1_validate_20261023_010245_411605/tb.sv": "4eaf3675cd68a449888704c94811c7b74332722c0994951aab4233aaf3139f9a"
+      },
+      "producers": {
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "reference_record": "reports/refined/regression/stage1_validate_20261022_203328_226659.json",
+      "reference_record_sha256": "b54f5352e4f43142c032bea67c45b1096ed04689d1bdc28284b8c897df96aac8",
+      "reference_inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7"
+      },
+      "reference_fixtures": {
+        "build/stage1_geometry_vectors/validate.hex": "6d56f94c5cd4000404ac04bfc577fcd8d5e83fc83e171a02d1b77e6292cc762a",
+        "build/sim/refined/stage1_validate_20261022_203328_226659/tb.sv": "4eaf3675cd68a449888704c94811c7b74332722c0994951aab4233aaf3139f9a"
+      },
+      "reference_producers": {
+        "scripts/test_stage1_geometry.py": "9be1c31e3d2630f5b66ceef910caff6471e0d475a6a42f6bfa92f68f73131693",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      }
+    },
+    "stage1_regions": {
+      "record": "reports/refined/regression/stage1_private_resetfree_replay_stage1_regions_20261023_010255_346553.json",
+      "record_sha256": "bfda1822f0216ca884362a55d14a559eb24dcb6a6f4588012dc6a0d8cb3d1416",
+      "log_sha256": "736db314edf24da600f234d03ae52ee713d835142c36220a7dffb0e335de675c",
+      "inputs": {
+        "build\\stage1_resetfree_arith_ungated_20261023_0101\\stage1_arith.v": "3ceb34f995c7b87e4ec6b42fd95210979d10a84f32b286d3a1334a05c236d464",
+        "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl\\color_regions\\stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+        "rtl\\color_regions\\stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6"
+      },
+      "fixtures": {
+        "build/sim/refined/stage1_private_resetfree_replay_stage1_regions_20261023_010255_346553/tb.sv": "91012f20b2bc613f96792e293f2efbe766c3f0de1b2ad4cb5bffb1dc0b76a532"
+      },
+      "producers": {
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "reference_record": "reports/refined/regression/stage1_regions_20261022_231806_305866.json",
+      "reference_record_sha256": "0a20888db98587bed92176693359e5cd28a3a6acbd469eee6fb211e878e911d4",
+      "reference_inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_regions.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+        "rtl/color_regions/stage1_render.v": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6"
+      },
+      "reference_fixtures": {
+        "build/sim/refined/stage1_regions_20261022_231806_305866/tb.sv": "91012f20b2bc613f96792e293f2efbe766c3f0de1b2ad4cb5bffb1dc0b76a532"
+      },
+      "reference_producers": {
+        "scripts/test_stage1_regions.py": "8a6eee76a38c4b3bdc717275c5a446346b91405b2df0989c295a6e6e1bc7f557",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      }
+    }
+  }
+}

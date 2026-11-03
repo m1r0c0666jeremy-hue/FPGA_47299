@@ -1,0 +1,42 @@
+{
+  "status": "PAUSED_BY_USER_NOT_DELIVERABLE",
+  "time": "2026-10-22T22:27:02.819490",
+  "reason": "User explicitly requested pause; interrupt active route and retain all files.",
+  "attempt": "build/stage1_route_20261022_205748_044232",
+  "process_id": 51644,
+  "process_started": "2026-10-22 20:57:52",
+  "session_exit_code": 1,
+  "route_result": "CANCELLED_AT_USER_REQUEST_NOT_A_FINAL_ROUTING_OR_TIMING_RESULT",
+  "last_completed_iteration": {
+    "iteration": 27,
+    "over_count": 5586,
+    "over": 5599,
+    "worst": 2
+  },
+  "td_log_sha256": "bcc09218b2e7e13561f43af4da22669afeadcb382858d392ae98dd7f25c7013d",
+  "source_context": {
+    "compiled_source_commit": "84c060744931b8a63059dcccfa53d7039c356560",
+    "creation_time": "20261022_205748_044232",
+    "input_count": 308,
+    "inputs_sha256": "dc11dd957b5ff51784ddbaec8d822aa34e53b74f10f6d010b87c687e40619fc9",
+    "placed_checkpoint": {
+      "parent": "build/stage1_place_20261022_203511",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "3773f61fc1c2346be72ae256fb654ccf6e73140bb98cc6664996f78ca0336841",
+      "parent_summary_sha256": "423bade498c191b126e87ece43d696856ea053f200af0c2c0d3e8f779e5da634",
+      "parent_context_sha256": "2f31cf11e0de1f50044ad9e4f97f4599e3ad1372263029ae0e78be6a8ddaa518",
+      "parent_inputs_sha256": "dc11dd957b5ff51784ddbaec8d822aa34e53b74f10f6d010b87c687e40619fc9"
+    },
+    "replaced_strategy": null,
+    "retry_routability": true,
+    "flow_threads": 16
+  },
+  "inputs_unchanged": true,
+  "final_timing_available": false,
+  "deliverable": false,
+  "software_report": "reports/stage1/software_current_20261022_2123.json",
+  "software_checks": 109,
+  "private_four_rows": "PASSED PRIVATE PIXEL REPLAY ONLY; NOT ADOPTED; gate not run",
+  "resume_requires_explicit_user_request": true,
+  "new_timer_created": false
+}

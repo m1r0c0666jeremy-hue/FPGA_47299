@@ -1,0 +1,2 @@
+STAGE1_BUZZER_PASS high-silent/reset/2kHz/cadence/mute
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\stage1_buzzer_20261023_195818_466877\tb.sv:10: $finish called at 400130 (1s)

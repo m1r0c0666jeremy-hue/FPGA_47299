@@ -1,0 +1,179 @@
+{
+  "status": "PAUSED_BY_USER_NOT_DELIVERABLE",
+  "time": "2026-10-24T10:00:33.906066+08:00",
+  "reason": "Jeremy requested pause and read-only assessment of replacing arbitrary polygons with axis-aligned rectangles. Stop completion Python first, then route wrapper; both sessions exited1 by explicit Ctrl-C. This is an incomplete user cancellation, not a native final routing failure or pass.",
+  "attempt": "build/stage1_route_20261024_092334_800316",
+  "native_pid": 38760,
+  "route_session": 11752,
+  "completion_pid": 2512,
+  "completion_session": 63685,
+  "processes_stopped": true,
+  "session_exit_code": 1,
+  "td_log_sha256": "4f4c6576a1963a9009b30bee7430449bf11604bf4f6ebb42bb329fa2475721f8",
+  "source_context": {
+    "compiled_source_commit": "555020828e32058ec6b7a3c7f61045b4c5cbbcab",
+    "creation_time": "20261024_092334_800316",
+    "input_count": 308,
+    "inputs_sha256": "8ccdd606b554f580f48110ea7e7cc617043d77e918bafe498cf57794af591880",
+    "reused_gate": null,
+    "placed_checkpoint": {
+      "parent": "build/stage1_place_20261024_090145",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "3ab519782c26569356f0c7cf4a0b79d1f0f3eb119e9e2f83eab5b30ab05ab749",
+      "parent_summary_sha256": "b934688b409c9230399eccdbdeb11a78a0ca9503b44e5173cbfbb4c5114dc4aa",
+      "parent_context_sha256": "a8c4993fd5ecf2459f502fde07931ecbf1bcbce36031d6c821527b442c373197",
+      "parent_inputs_sha256": "8ccdd606b554f580f48110ea7e7cc617043d77e918bafe498cf57794af591880"
+    },
+    "replaced_strategy": null,
+    "retry_routability": true,
+    "flow_threads": 16
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 46173,
+      "over": 49274,
+      "worst": 4,
+      "seconds": 42.43
+    },
+    {
+      "iteration": 2,
+      "over_count": 39650,
+      "over": 41209,
+      "worst": 4,
+      "seconds": 32.34
+    },
+    {
+      "iteration": 3,
+      "over_count": 35533,
+      "over": 36425,
+      "worst": 4,
+      "seconds": 20.45
+    },
+    {
+      "iteration": 4,
+      "over_count": 27509,
+      "over": 27768,
+      "worst": 3,
+      "seconds": 44.43
+    },
+    {
+      "iteration": 5,
+      "over_count": 24524,
+      "over": 24687,
+      "worst": 3,
+      "seconds": 29.83
+    },
+    {
+      "iteration": 6,
+      "over_count": 23075,
+      "over": 23214,
+      "worst": 3,
+      "seconds": 27.04
+    },
+    {
+      "iteration": 7,
+      "over_count": 22043,
+      "over": 22169,
+      "worst": 3,
+      "seconds": 28.08
+    },
+    {
+      "iteration": 8,
+      "over_count": 17104,
+      "over": 17134,
+      "worst": 2,
+      "seconds": 59.36
+    },
+    {
+      "iteration": 9,
+      "over_count": 15497,
+      "over": 15510,
+      "worst": 2,
+      "seconds": 35.96
+    },
+    {
+      "iteration": 10,
+      "over_count": 16215,
+      "over": 16252,
+      "worst": 2,
+      "seconds": 48.81
+    },
+    {
+      "iteration": 11,
+      "over_count": 16454,
+      "over": 16516,
+      "worst": 2,
+      "seconds": 69.2
+    },
+    {
+      "iteration": 12,
+      "over_count": 13596,
+      "over": 13660,
+      "worst": 2,
+      "seconds": 120.31
+    },
+    {
+      "iteration": 13,
+      "over_count": 12442,
+      "over": 12497,
+      "worst": 2,
+      "seconds": 127.5
+    },
+    {
+      "iteration": 14,
+      "over_count": 10894,
+      "over": 10915,
+      "worst": 2,
+      "seconds": 143.73
+    },
+    {
+      "iteration": 15,
+      "over_count": 11062,
+      "over": 11102,
+      "worst": 2,
+      "seconds": 106.99
+    },
+    {
+      "iteration": 16,
+      "over_count": 9784,
+      "over": 9804,
+      "worst": 2,
+      "seconds": 218.71
+    },
+    {
+      "iteration": 17,
+      "over_count": 9778,
+      "over": 9804,
+      "worst": 2,
+      "seconds": 242.72
+    },
+    {
+      "iteration": 18,
+      "over_count": 9794,
+      "over": 9826,
+      "worst": 2,
+      "seconds": 252.29
+    },
+    {
+      "iteration": 19,
+      "over_count": 10020,
+      "over": 10056,
+      "worst": 2,
+      "seconds": 204.41
+    }
+  ],
+  "input_count": 308,
+  "current_and_frozen_inputs_unchanged": true,
+  "placed_checkpoint_unchanged": true,
+  "baseline_input_count": 297,
+  "protected_files": 5,
+  "software_report": "reports/stage1/software_current_20261024_0944.json",
+  "software_report_sha256": "4541522cd6005d975b99a054fe760a161f5df66289e8c7b36c6662653eb82c17",
+  "current_checks": 112,
+  "final_timing_available": false,
+  "deliverable": false,
+  "no_new_build_simulation_or_package": true,
+  "noon_heartbeat_must_honor_this_later_pause": true,
+  "producer_sha256": "c4fbda1905a43cb0c0d08c971bc55715dd1bac5af257eb51a68ce7d923fa2335"
+}

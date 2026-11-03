@@ -1,0 +1,17 @@
+{
+  "status": "PLACEMENT_RESOURCE_ONLY_NO_RESUMABLE_DB",
+  "attempt": "build/stage1_place_20261026_214652",
+  "cause": "Initial new build omitted --checkpoint; process exited0 but checkpoint exports were not requested.",
+  "resources": {
+    "slice": 18927,
+    "lut6": 18539,
+    "reg": 21875,
+    "eram": 98,
+    "dsp": 40
+  },
+  "previous_review": "reports/stage1/lean_teaching_place_review_20261026_220437.json",
+  "route_admission": false,
+  "source_unchanged": true,
+  "software_rerun_required": false,
+  "notes": "Review producer now requires both checkpoints and clocks/exception snapshots; old report/logs kept. Repeat physical build only for required DB export."
+}

@@ -1,0 +1,481 @@
+{
+  "status": "READ_ONLY_VIRTUAL_EIGHT_ROW_REUSE_REVIEW_NOT_RESTORED",
+  "time": "2026-10-23T21:35:40.016704+08:00",
+  "virtual_files": {
+    "rtl/color_regions/stage1_render.v": {
+      "sha256": "ae2d68ced066bacb04503ba0e97ce4d77f57cf6ce26950ec3a90fb0a42667464",
+      "size": 15742
+    },
+    "scripts/test_stage1_render.py": {
+      "sha256": "7ac07351103f173213ac458ad9ae924a0b9bcaec073f50ee2072fc7e92abdedf",
+      "size": 5930
+    }
+  },
+  "selected_checks": 110,
+  "evidence_mismatches": [],
+  "compiler_input_count": 308,
+  "virtual_compiler_mismatches": [],
+  "changes_from_current_compiler": [
+    "rtl/color_regions/stage1_render.v"
+  ],
+  "old_layout": "build/stage1_place_20261022_203511",
+  "old_layout_compiled_source_commit": "84c060744931b8a63059dcccfa53d7039c356560",
+  "resources": {
+    "slice": 20203,
+    "lut6": 20005,
+    "reg": 23676,
+    "eram": 101,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "4f1b84fb599857c8f71a4637b3865f081ef6c5c3c3eae8b3f77bec365dad0e5b",
+    "target_color_regions_placed.db": "3773f61fc1c2346be72ae256fb654ccf6e73140bb98cc6664996f78ca0336841"
+  },
+  "old_software_reference": "reports/stage1/software_current_20261022_2123.json",
+  "old_software_sha256": "01f419b19ced4a04262c8cc95fce8769adf0d99aa32ba5983889df658274b430",
+  "current_math_reference": "reports/stage1/software_current_20261023_203938.json",
+  "current_math_reference_sha256": "ee5caf2a6c1191e1172dba7131b3597953cfc3917001175bb82864826f0ae094",
+  "selected_records": {
+    "stage1_point": {
+      "record": "reports/refined/regression/stage1_point_20261022_203321_818860.json",
+      "record_sha256": "512b007451c1f0d0108347331e386930f76dc346164dae1087c3ce7f3397482e"
+    },
+    "stage1_validate": {
+      "record": "reports/refined/regression/stage1_validate_20261022_203328_226659.json",
+      "record_sha256": "b54f5352e4f43142c032bea67c45b1096ed04689d1bdc28284b8c897df96aac8"
+    },
+    "stage1_controls": {
+      "record": "reports/refined/regression/stage1_controls_20261021_155904_132095.json",
+      "record_sha256": "12d6241c657d187b822c9edb8681247ddb3c2607ae55815cf4c02e4d4265c03a"
+    },
+    "stage1_sequence": {
+      "record": "reports/refined/regression/stage1_sequence_20261021_155904_217621.json",
+      "record_sha256": "5f35d9a667457a1e3aede6c5fb1a8517e075971817282a5bdc1a32c0905b8014"
+    },
+    "stage1_age_equivalence_1": {
+      "record": "reports/refined/regression/stage1_age_equivalence_1_20261021_160117_589465.json",
+      "record_sha256": "283afb7056d2e0123b0069ecb003c487d4740ae2b25d16063760853b0aeccc83"
+    },
+    "stage1_age_equivalence_3": {
+      "record": "reports/refined/regression/stage1_age_equivalence_3_20261021_160126_629681.json",
+      "record_sha256": "d039e1ab8779b75fcc2a8d5f2d239d1f5738da930323f9168b3cf76c4da57bd6"
+    },
+    "stage1_regions": {
+      "record": "reports/refined/regression/stage1_regions_20261022_203337_661598.json",
+      "record_sha256": "9831e2db130548b0dd54b0aa272100cb81e976005da98e43327d72db8ddb807e"
+    },
+    "stage1_buzzer": {
+      "record": "reports/refined/regression/stage1_buzzer_20261022_203347_467593.json",
+      "record_sha256": "c4308b694aa7d8afce78de8689d6bee3a3939cc3b713b20b3ccb74170aa48f1e"
+    },
+    "stage1_camera_0": {
+      "record": "reports/refined/regression/stage1_camera_0_20261021_104640_282453.json",
+      "record_sha256": "b529f62038fe842e739d59d183d5ab368f5b27f2d69a3045a72000fa062f1df6"
+    },
+    "stage1_camera_1": {
+      "record": "reports/refined/regression/stage1_camera_1_20261021_104716_374333.json",
+      "record_sha256": "81594babf31ac0192fda1064b55cc64736440907626b1b4eb67fc702b9ab94ed"
+    },
+    "stage1_render_14_624": {
+      "record": "reports/refined/regression/stage1_render_14_624_20261022_203552_748947.json",
+      "record_sha256": "854014f3215a16d1d21fe43df9b84b8796448e72477e3eb667aae7f622a500f0"
+    },
+    "stage1_render_guards": {
+      "record": "reports/refined/regression/stage1_render_guards_20261022_203347_710154.json",
+      "record_sha256": "5af73dad49454550e78cd0597185aff16695c121ef3bddc1e6e76811a76e0812"
+    },
+    "stage1_overlay": {
+      "record": "reports/refined/regression/stage1_overlay_20261022_204417_030631.json",
+      "record_sha256": "8e5a875df20bfc45ac4efabb35dc86f910ecd7e23c241e2986fa7533a02af5fc"
+    },
+    "stage1_ui": {
+      "record": "reports/refined/regression/stage1_ui_20261021_104639_823201.json",
+      "record_sha256": "9b5b81fa78681580e1f80ec7c728e1ad49a599460ec5b0c0b6932f7656c65d73"
+    },
+    "stage1_region_footer": {
+      "record": "reports/refined/regression/stage1_region_footer_20261022_204033_197307.json",
+      "record_sha256": "4aa1845bbdade02d82401f2c10b07bcbe6e3b8c435c327d53cc28b17c6f0d204"
+    },
+    "stage1_english_ui": {
+      "record": "reports/refined/regression/stage1_english_ui_20261022_203555_466812.json",
+      "record_sha256": "3eaafea2cad4a63465e7a305f99a3723fb26b9fb8e426d227f4c115212817c84"
+    },
+    "stage1_english_abort": {
+      "record": "reports/refined/regression/stage1_english_abort_20261022_204151_116701.json",
+      "record_sha256": "5f2f890011aaa0e6b419d85d3ce195a9cbd7e30916a731f4109da9ee023c94e9"
+    },
+    "stage1_english_wait": {
+      "record": "reports/refined/regression/stage1_english_wait_20261022_204203_482679.json",
+      "record_sha256": "30632d4b14982b13802eb5fad744c6ec63f3ff5e6ac7dab639f516c3df859a8a"
+    },
+    "stage1_video_0_0_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_0_0_f0_n1_20261022_203555_179003.json",
+      "record_sha256": "e42deb5442125ea119efb525aa7f45571a16e048f9828ec63e754370fce69c4c"
+    },
+    "stage1_video_0_0_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_0_1_f0_n1_20261022_203555_185487.json",
+      "record_sha256": "cd82bfa4e23f6903de5b55b71dbd7ea52ba9cb3eb871b9b6d9ccd72ce75f3094"
+    },
+    "stage1_video_0_0_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_1_0_f0_n1_20261022_203555_190474.json",
+      "record_sha256": "c89446fde826c0bf00a5fb8148feb6fd9a61d878c01d6f25c5d9e6e3a078aaad"
+    },
+    "stage1_video_0_0_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_1_1_f0_n1_20261022_203555_183987.json",
+      "record_sha256": "19b0b448f61d1b8bbd2cfd8804889122551778e105084d751de3d92387186bf3"
+    },
+    "stage1_video_0_0_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_2_0_f0_n1_20261022_203555_184984.json",
+      "record_sha256": "6074490172a3cf7b39a4fc2ba530c1e1d5defbabfe4e794e844c9db0c09eb919"
+    },
+    "stage1_video_0_0_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_2_1_f0_n1_20261022_203555_190474.json",
+      "record_sha256": "82c1416d50b92c6d4a0efff0c5940388c3f5944b146f753e729ec727e7ab3686"
+    },
+    "stage1_video_0_0_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_3_0_f0_n1_20261022_203555_191471.json",
+      "record_sha256": "76f74a73f3cee8289d1769f094bf36030f7d134cc863434403bc8a62ff9b3a48"
+    },
+    "stage1_video_0_0_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_0_3_1_f0_n1_20261022_203555_191471.json",
+      "record_sha256": "e2cb411a05a25f89ddafa5911ee2f1cf624398e58570966c16c87b65fbfc7252"
+    },
+    "stage1_video_0_1_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_0_0_f0_n1_20261022_203933_498350.json",
+      "record_sha256": "934858a00f9c93cf66237138b75104f94c1a78b734213c89f55ea3b58d12c66b"
+    },
+    "stage1_video_0_1_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_0_1_f0_n1_20261022_203934_264430.json",
+      "record_sha256": "a938dc655ed9f4ab82be16e19acb1009ea59e3f868386053896c48e802a7c86f"
+    },
+    "stage1_video_0_1_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_1_0_f0_n1_20261022_203934_939352.json",
+      "record_sha256": "949c394c9bdcd2617419a45728412567578a404c73266bad92f4f15e3d0e4fad"
+    },
+    "stage1_video_0_1_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_1_1_f0_n1_20261022_203935_402990.json",
+      "record_sha256": "c5c6182e571c097d063c9151a4ae2acaf131e1a1897bdde001bd1dbb09c0be8a"
+    },
+    "stage1_video_0_1_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_2_0_f0_n1_20261022_203935_647768.json",
+      "record_sha256": "bcd5d77dd927e3bd2cf03cf9a04b7be51cb30533e5816a1ea3219ef8dfb75aaa"
+    },
+    "stage1_video_0_1_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_2_1_f0_n1_20261022_203935_660261.json",
+      "record_sha256": "248922d92f4697cf0412f1c19da9afc6560f19286439a77e6b12c9ac81b8e7a8"
+    },
+    "stage1_video_0_1_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_3_0_f0_n1_20261022_203936_210096.json",
+      "record_sha256": "2e1de50986d0f773d8a34370ef77c771da9ca4121fa8cad2fbc753b20dd48d8e"
+    },
+    "stage1_video_0_1_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_1_3_1_f0_n1_20261022_203936_701744.json",
+      "record_sha256": "5ba52f47b73bc0b47eb2ef7c85bf5b4c133fc764c2c20886d0a720a3cdfce9ad"
+    },
+    "stage1_video_0_2_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_0_0_f0_n1_20261022_204257_444352.json",
+      "record_sha256": "466d6b48c00d4a2660855a895db938b9c00d052a41d12764f2a53b35e97bfb75"
+    },
+    "stage1_video_0_2_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_0_1_f0_n1_20261022_204257_802152.json",
+      "record_sha256": "c3aa44e8407a16077881b776df78b40b032a4c1e3a86b1a376c4a250fa221dd0"
+    },
+    "stage1_video_0_2_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_1_0_f0_n1_20261022_204300_406966.json",
+      "record_sha256": "2bc400f372154307f9366c2a71e12f82d991441b59bf74ebfbd818f9b2d19c43"
+    },
+    "stage1_video_0_2_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_1_1_f0_n1_20261022_204300_414008.json",
+      "record_sha256": "5c199eba9b5bd02fa3ff46311819dc8e4d1ae06809d6d4317631da7932c36d5e"
+    },
+    "stage1_video_0_2_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_2_0_f0_n1_20261022_204300_779471.json",
+      "record_sha256": "9ede2128ea85f7fda468ccf1ca7dbc00c15924f077780b0c79120c8052676178"
+    },
+    "stage1_video_0_2_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_2_1_f0_n1_20261022_204301_538052.json",
+      "record_sha256": "6e6757e7919633cd1173319a1ada6dee621b4a7acedfc327a9981974f49ac081"
+    },
+    "stage1_video_0_2_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_3_0_f0_n1_20261022_204301_759468.json",
+      "record_sha256": "77c5070851d24f460ae3c38349ae52a4316d513e584f93695c334d6adf8ad6b4"
+    },
+    "stage1_video_0_2_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_2_3_1_f0_n1_20261022_204301_940938.json",
+      "record_sha256": "124323712ca6ca45353227db35fcc75ecba6a460efb54d6f66b9b8eab6bcc37e"
+    },
+    "stage1_video_0_3_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_0_0_f0_n1_20261022_204608_039253.json",
+      "record_sha256": "fd0426c3cfe12919d5b7652259f048aab3370a2c45ed00815253c5b9803f37fc"
+    },
+    "stage1_video_0_3_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_0_1_f0_n1_20261022_204609_255849.json",
+      "record_sha256": "568f6ea613237a869720371f00bcd6a7d17eebb0b2f09c777a5e8fd14f6efc60"
+    },
+    "stage1_video_0_3_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_1_0_f0_n1_20261022_204610_956945.json",
+      "record_sha256": "25ea39f391618bb16f20bf87c3074193911cbddcbbb751a032da16ca82c63101"
+    },
+    "stage1_video_0_3_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_1_1_f0_n1_20261022_204611_035468.json",
+      "record_sha256": "98e73e9c18acdbc8791ca384513438eda25751a28b77597a6e0c4a3717b8140a"
+    },
+    "stage1_video_0_3_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_2_0_f0_n1_20261022_204612_035551.json",
+      "record_sha256": "ee81a95cbfa8cb35fce0483ce311982e7c37ed67df8790ec8ce2cd0c1a5bc0b0"
+    },
+    "stage1_video_0_3_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_2_1_f0_n1_20261022_204612_086233.json",
+      "record_sha256": "2a7f78e265df6997a5e633b5989289a17fe30c6f6c1022cf0d917e733fcf76bc"
+    },
+    "stage1_video_0_3_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_3_0_f0_n1_20261022_204612_488133.json",
+      "record_sha256": "90100420820c94c29d7b393ebf13415deee5376102be9ab87297cd775b07d3d6"
+    },
+    "stage1_video_0_3_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_3_3_1_f0_n1_20261022_204613_480288.json",
+      "record_sha256": "1af1fd3277b763d69ba69281a87bc20dca117f31902c8604ad995a42d315ade3"
+    },
+    "stage1_video_0_4_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_0_0_f0_n1_20261022_204904_717303.json",
+      "record_sha256": "467ce80da6a1e6e4d9f1821e90c1d9c38706dc2edf9fac0cc6fbd2f47ea5427b"
+    },
+    "stage1_video_0_4_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_0_1_f0_n1_20261022_204906_433353.json",
+      "record_sha256": "e2797a61c7c1093bc3e217c77bdc30849fe4afa6f8e90abed167b9ed6198e6eb"
+    },
+    "stage1_video_0_4_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_1_0_f0_n1_20261022_204909_511692.json",
+      "record_sha256": "8cea9ed326fb3288fafd50f5f0209252f3d560f4aa156aa1bb6a7b654a27c8e0"
+    },
+    "stage1_video_0_4_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_1_1_f0_n1_20261022_204910_340147.json",
+      "record_sha256": "fbdb997fcd8c04eccb4b05d2c5065108604230fd22f1ae1b580a4bf055a1b4a4"
+    },
+    "stage1_video_0_4_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_2_0_f0_n1_20261022_204910_751600.json",
+      "record_sha256": "aaf3c8182ff46a335b0b14e15aa97fa050c9174bbead5323afb0b2d1f81d463e"
+    },
+    "stage1_video_0_4_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_2_1_f0_n1_20261022_204911_404412.json",
+      "record_sha256": "e11f5ba06ad474803a565bd6533d88f33b0b770fe4f72773afd656733d0855eb"
+    },
+    "stage1_video_0_4_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_3_0_f0_n1_20261022_204911_437836.json",
+      "record_sha256": "5497c2b24049fb3aa69fd2929fbbac8cf8d9a8bfed36c86686693200304dc760"
+    },
+    "stage1_video_0_4_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_0_4_3_1_f0_n1_20261022_204912_463385.json",
+      "record_sha256": "a99d348e49479e79edf0df2cc5fa0e097f0d55ea99baabd7e135aab4f0d866dc"
+    },
+    "stage1_video_1_0_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_0_0_f0_n1_20261022_205154_166383.json",
+      "record_sha256": "fddb94af9b55018ddeddfd04ddb522278f77db53cce645bf553926228979b67d"
+    },
+    "stage1_video_1_0_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_0_1_f0_n1_20261022_205156_477357.json",
+      "record_sha256": "44f164917c36b9e4b65e4b5c634fe89c56d2d9f285b792f399ae633587fbeebb"
+    },
+    "stage1_video_1_0_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_1_0_f0_n1_20261022_205201_283409.json",
+      "record_sha256": "3a190d7c3df4483d15e9296d1de201c14fe43c3ccdc0f2763b62ef636351ed53"
+    },
+    "stage1_video_1_0_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_1_1_f0_n1_20261022_205202_208280.json",
+      "record_sha256": "fe753ccd5e266021dafa4434e4011bdf7b69c44e2057db7dcaac63a44f5aadbd"
+    },
+    "stage1_video_1_0_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_2_0_f0_n1_20261022_205202_249204.json",
+      "record_sha256": "84e86d3708a268bce5e6fa52bfd956de8953197a611156e9c969c66302dca21e"
+    },
+    "stage1_video_1_0_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_2_1_f0_n1_20261022_205202_605128.json",
+      "record_sha256": "bc41d97e3cd6a8c7fbe575bd23df7fb059fd03fb8dc1008d4c9407fd9e5de6f4"
+    },
+    "stage1_video_1_0_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_3_0_f0_n1_20261022_205202_869496.json",
+      "record_sha256": "8032279f22017e72d17c8e72a1ab95d451eb556e10fda0cdaca489c6907d7917"
+    },
+    "stage1_video_1_0_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_0_3_1_f0_n1_20261022_205204_295335.json",
+      "record_sha256": "505d0b9a455e09519c4f53c6beb04b4ea1a97ee437f53286aee21e6fd9a3ae61"
+    },
+    "stage1_video_1_1_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_0_0_f0_n1_20261022_205509_669206.json",
+      "record_sha256": "055699ffacf3d7af091491fcc2698207cb8d34e4fe5c3997a7a39b6e669a7b59"
+    },
+    "stage1_video_1_1_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_0_1_f0_n1_20261022_205511_093399.json",
+      "record_sha256": "6746a50e24f1a5b6c8a4c3e421e479104f1d5769c5cde18d6b732c46acd4246d"
+    },
+    "stage1_video_1_1_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_1_0_f0_n1_20261022_205517_907912.json",
+      "record_sha256": "5c17f26aa879c6ebfec290c3684a4ab74504c60fe6da2b8ffe9311deeef9c597"
+    },
+    "stage1_video_1_1_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_1_1_f0_n1_20261022_205519_149348.json",
+      "record_sha256": "efd717ac0d589acdfb2fdf02c19488396cf886b9bd739dd7e9d3113d9d085203"
+    },
+    "stage1_video_1_1_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_2_0_f0_n1_20261022_205519_345408.json",
+      "record_sha256": "803f623f4f9bcde2200dc1aaefa5f3d55fc2f782429d79168d185bb65e5a4eb0"
+    },
+    "stage1_video_1_1_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_2_1_f0_n1_20261022_205519_382175.json",
+      "record_sha256": "7802b8b582a261af488b7452b5443cc585ffd102d5c6c24e068070b0b4efec3b"
+    },
+    "stage1_video_1_1_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_3_0_f0_n1_20261022_205520_914283.json",
+      "record_sha256": "a8c4b31b4c720c107e39ceb80b7f056eac5141cb151cfbe99ae8e925200aac09"
+    },
+    "stage1_video_1_1_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_1_3_1_f0_n1_20261022_205521_070256.json",
+      "record_sha256": "442463ae30f6c1a997cb6b5b4bfda1cee8d8b972d1c4ad287c2cccc39a3ffd62"
+    },
+    "stage1_video_1_2_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_0_0_f0_n1_20261022_205803_682824.json",
+      "record_sha256": "f6e0b793e4804b7f1c39188144b3169b7a61b2c51814e3aadad1e9e327ae3f7d"
+    },
+    "stage1_video_1_2_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_0_1_f0_n1_20261022_205803_838231.json",
+      "record_sha256": "e07c67e97de6775e8737771353883ccf21ff62d9c8ab1cbd3732b843c1793ef1"
+    },
+    "stage1_video_1_2_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_1_0_f0_n1_20261022_205811_240508.json",
+      "record_sha256": "5dbc64a898dc98b83f075a315102d9b269c7ee96f57ae30d9a9984cb80c09149"
+    },
+    "stage1_video_1_2_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_1_1_f0_n1_20261022_205811_786032.json",
+      "record_sha256": "a227701fc0bc577f82963f15d91aad4816b9c2970933558f77152108bdaa86eb"
+    },
+    "stage1_video_1_2_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_2_0_f0_n1_20261022_205812_200432.json",
+      "record_sha256": "84bde91023873f3bd79260bfc5432e377619f3a7d70649f0104dacf9227f29bc"
+    },
+    "stage1_video_1_2_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_2_1_f0_n1_20261022_205812_337181.json",
+      "record_sha256": "846cd77d07a6c8b57b36ca566b5cc75d0bb172a4b47d27263b12f0b21c6ef9de"
+    },
+    "stage1_video_1_2_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_3_0_f0_n1_20261022_205813_221806.json",
+      "record_sha256": "ed4e02ee23922bf1a1fae4645d06b4bc424383c6fef3d16ea64966ec0fe5cd64"
+    },
+    "stage1_video_1_2_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_2_3_1_f0_n1_20261022_205813_296942.json",
+      "record_sha256": "7bc0f7fe0944a7c56b1e616d2fd85cf798a0b3cea4ddf573ccb76427b8b88b2e"
+    },
+    "stage1_video_1_3_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_0_0_f0_n1_20261022_210109_586162.json",
+      "record_sha256": "24f59ba0bd8a58d5c3d230e811b7eb04aa9599c4aa799e29b98e0b63f4014211"
+    },
+    "stage1_video_1_3_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_0_1_f0_n1_20261022_210112_008736.json",
+      "record_sha256": "ed672ed7e10d84071d04c5731ac38f75824b0cf3f5af2e20d822a389e154bac4"
+    },
+    "stage1_video_1_3_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_1_0_f0_n1_20261022_210121_913636.json",
+      "record_sha256": "54d8ea376dbdd04fdb8c262b953b98b08211ac19c07ac65067e7b6b4376104de"
+    },
+    "stage1_video_1_3_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_1_1_f0_n1_20261022_210122_186634.json",
+      "record_sha256": "9812376639a29049a5fbf63bcb9f78b48a136b2e2dad77bf7c3f74ce8b84524b"
+    },
+    "stage1_video_1_3_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_2_0_f0_n1_20261022_210122_199113.json",
+      "record_sha256": "377563d859e43a593db251eced7bacf53ad9be35cfb8e026449b77e786c829fd"
+    },
+    "stage1_video_1_3_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_2_1_f0_n1_20261022_210123_469064.json",
+      "record_sha256": "95e9869503f30a9b543247275fba24adac1257e9e69ef1cd7817b611e2f66c86"
+    },
+    "stage1_video_1_3_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_3_0_f0_n1_20261022_210123_665627.json",
+      "record_sha256": "04f982727ed403d59609943b7ebaa3084c5fbd421fdbb4736b723f767df88c8d"
+    },
+    "stage1_video_1_3_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_3_3_1_f0_n1_20261022_210124_103197.json",
+      "record_sha256": "bfe179bdae3fdb6b48a590b799987682169bb134f51594629c84f9a15e4b832b"
+    },
+    "stage1_video_1_4_0_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_0_0_f0_n1_20261022_210459_947442.json",
+      "record_sha256": "5010fec7d48b156a5804e7c00b84fd471b666c678bd1fbb6518f951fd92c0b1d"
+    },
+    "stage1_video_1_4_0_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_0_1_f0_n1_20261022_210502_215884.json",
+      "record_sha256": "1625dcde2c585d21629019536c6602f4af0ef0ad06304f02efc3f20a030e6f7d"
+    },
+    "stage1_video_1_4_1_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_1_0_f0_n1_20261022_210514_524987.json",
+      "record_sha256": "52a7c8876293a455aff521cd4690765a2e6e67ded76583dca9bede1514970972"
+    },
+    "stage1_video_1_4_1_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_1_1_f0_n1_20261022_210514_775109.json",
+      "record_sha256": "783e79053e2c0fd25710a5babf86a69801098c776110a379ff92f122ca497d21"
+    },
+    "stage1_video_1_4_2_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_2_0_f0_n1_20261022_210514_802151.json",
+      "record_sha256": "1b4f41a559246971e98b7acb8fbefd5f013ab3aff82bb92509e2b9e25203bb13"
+    },
+    "stage1_video_1_4_2_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_2_1_f0_n1_20261022_210515_037023.json",
+      "record_sha256": "c3203386cd1f882882a9a3d5c4e59873d379b73f2126e2e74cf5c2e0d160f4ad"
+    },
+    "stage1_video_1_4_3_0_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_3_0_f0_n1_20261022_210516_104066.json",
+      "record_sha256": "e9e0c7c1079279e6a321d42cba39d3e2f6a7d2fc0525a493daa33fe30ca17af4"
+    },
+    "stage1_video_1_4_3_1_f0_n1": {
+      "record": "reports/refined/regression/stage1_video_1_4_3_1_f0_n1_20261022_210516_913605.json",
+      "record_sha256": "e350ebc1c36184cee845f0a92cb9090288f86867eb60936926429e031774703e"
+    },
+    "stage1_video_0_0_0_0_f1_n2": {
+      "record": "reports/refined/regression/stage1_video_0_0_0_0_f1_n2_20261022_210753_224664.json",
+      "record_sha256": "aac9e213771535e362bf27cc9f5bcca08490c869b72bca71b884e8585f840a6e"
+    },
+    "stage1_video_0_0_0_1_f1_n2": {
+      "record": "reports/refined/regression/stage1_video_0_0_0_1_f1_n2_20261022_210755_067803.json",
+      "record_sha256": "8d7abdf6a775d6cf3deddb2c8a9a0f5d6dfbfb8933ed6319b6ddb49ffdc8604f"
+    },
+    "stage1_video_0_1_0_0_f0_n2": {
+      "record": "reports/refined/regression/stage1_video_0_1_0_0_f0_n2_20261022_210810_529100.json",
+      "record_sha256": "ac61db15a2604a84869231fe507872b4457696cfc9cab26cf623b2b12fea0e4b"
+    },
+    "stage1_video_0_1_0_1_f0_n2": {
+      "record": "reports/refined/regression/stage1_video_0_1_0_1_f0_n2_20261022_210810_898904.json",
+      "record_sha256": "5f9b84878576a26d6f18ddf499bd3f3e2166d399930bdf4cac3c118ebb206f14"
+    },
+    "stage1_v4_live_0_0_refined_g160": {
+      "record": "reports/refined/regression/stage1_v4_live_0_0_refined_g160_20261022_203556_691132.json",
+      "record_sha256": "d8a2f94ce64c2f3a8f6242139882566ca4d29be130d6f2063b4bbbbbab789e60"
+    },
+    "stage1_v4_live_0_1_refined_g160": {
+      "record": "reports/refined/regression/stage1_v4_live_0_1_refined_g160_20261022_203556_691132.json",
+      "record_sha256": "92464917351ad54771e6febb9ab8d9d451ec79324b1c113f1288535cd761a97c"
+    },
+    "stage1_v4_live_1_0_refined_g160": {
+      "record": "reports/refined/regression/stage1_v4_live_1_0_refined_g160_20261022_203556_692128.json",
+      "record_sha256": "dcc04ee8d3c76dff28384dc235d1a3b112f1e339cecdae1adea2e2b78ea17a4b"
+    },
+    "stage1_v4_live_1_1_refined_g160": {
+      "record": "reports/refined/regression/stage1_v4_live_1_1_refined_g160_20261022_203556_692128.json",
+      "record_sha256": "4542736a22727618d6f3f57415fc12fbed69cb381494e58490836afee938e51a"
+    },
+    "stage1_arith_12_48": {
+      "record": "reports/refined/regression/stage1_arith_12_48_20261023_195805_384310.json",
+      "record_sha256": "1fbcc63911bc5c8dcce3b704df7575c07196c0cc31fabf567c5bfe2c53ba162e"
+    },
+    "stage1_arith_21_23": {
+      "record": "reports/refined/regression/stage1_arith_21_23_20261023_195806_020575.json",
+      "record_sha256": "b5d413d4d40010c287b22b8fdf3e0d2e0e18164b2d1e898b7ae1a3d522eff4ce"
+    },
+    "stage1_arith_24_14": {
+      "record": "reports/refined/regression/stage1_arith_24_14_20261023_195806_265389.json",
+      "record_sha256": "96996ff3af39d5fab2dc7b678d677272b4296e2f22851a9e7ecaadc2fc9ff0c0"
+    },
+    "stage1_arith_14_14": {
+      "record": "reports/refined/regression/stage1_arith_14_14_20261023_195806_517929.json",
+      "record_sha256": "00a094a062e5f5b1ade816f7f769b924de48a8865b446375b9d26276ba7f8905"
+    }
+  },
+  "scope": "Conditional evidence only. Current source still 4-row MW14; no source restore, TD or VVP launched. Old8 route incomplete, no final timing credit."
+}

@@ -1,0 +1,2 @@
+STAGE1_CONTROLS_PASS preset_steps=104 short/long/chords/modes/calibration
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\stage1_controls_20261024_120901_322056\tb.sv:37: $finish called at 34460 (1s)

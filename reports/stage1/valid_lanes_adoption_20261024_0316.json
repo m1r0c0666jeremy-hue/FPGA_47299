@@ -1,0 +1,48 @@
+{
+  "status": "ADOPTED_VALID_LANES_FRESH_FORMAL_SOFTWARE_AND_PHYSICAL_PENDING",
+  "time": "2026-10-24T03:16:10.878561+08:00",
+  "previous_compiled_source": "6164d3d31a52840f1ddfe2986c5946e8636adb43",
+  "previous_software": "reports/stage1/software_current_20261024_0131.json",
+  "before": {
+    "rtl/color_regions/stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97",
+    "scripts/test_stage1_render_guards.py": "4b30e126ce118a7150e6bea85395a4a1c27620c9b16016a5e9e31d684d3bf780"
+  },
+  "after": {
+    "rtl/color_regions/stage1_render.v": "e8bf5952afe934f3f3660746742301c7b9cbd5c0c79f26d3be75908e0325d142",
+    "scripts/test_stage1_render_guards.py": "ee79dae48eaa8642a3aaaf7ddf0b86e97bb6e1069477e1652f7ffb94fa92a475"
+  },
+  "backup": "build/stage1_valid_lanes_adoption_20261024_0316/before.zip",
+  "backup_sha256": "1c170f5b6125f84366bebda13432b5985df48adb9c4e269571aa71322988d72e",
+  "private_validation": "build/stage1_snapshot_valid_lanes_20261024_0219/validation.json",
+  "private_validation_sha256": "de8891fe49777c05476fb5cf3f0ed9e1f8965e2831c0f305101c01b1af3210ae",
+  "gate_comparison": "build/stage1_snapshot_valid_lanes_20261024_0219/gate_comparison_20261024_030835.json",
+  "gate_comparison_sha256": "495c6c65cb8c0e117e98e83ff5f1a1ff9bc13b3dcd846415fd7859115ed8ddfe",
+  "local_baseline": {
+    "slice": 3796,
+    "lut6": 1767,
+    "reg": 4212,
+    "eram": 3,
+    "dsp": 0
+  },
+  "local_candidate": {
+    "slice": 3805,
+    "lut6": 1756,
+    "reg": 4191,
+    "eram": 3,
+    "dsp": 0
+  },
+  "local_delta": {
+    "slice": 9,
+    "lut6": -11,
+    "reg": -21,
+    "eram": 0,
+    "dsp": 0
+  },
+  "local_commit_fanout_before": 934,
+  "local_commit_fanout_after": 105,
+  "private_candidate_sha256": "7bd5f472cfb41a01ab04d99ffb2f15ec53acfda9ed1fb3f7e75a421e8e89b269",
+  "formal_candidate_sha256": "e8bf5952afe934f3f3660746742301c7b9cbd5c0c79f26d3be75908e0325d142",
+  "source_normalization": "Only CRLF -> original formal LF; decoded candidate text identical",
+  "scope": "Only localized valid payload enables; all controls/interfaces/cycles unchanged. Added 9 local Slice, reduced 11 LUT6 and 21 registers. No whole-device resource or congestion result yet.",
+  "guard_change": "Declare B snapshot vertex valid (counts0003->0033), retain every assertion; no expected-pixel oracle edited."
+}

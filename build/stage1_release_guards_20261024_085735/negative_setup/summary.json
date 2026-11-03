@@ -1,0 +1,1 @@
+{"stage": "full", "exit_code": 0, "inputs_unchanged": true, "resource_pass": true, "timing_pass": true, "resources": {"slice": 20000, "lut6": 19000, "reg": 24000, "eram": 98, "dsp": 40}, "slack_ns": {"SWNS": -0.001, "HWNS": 0.02}}

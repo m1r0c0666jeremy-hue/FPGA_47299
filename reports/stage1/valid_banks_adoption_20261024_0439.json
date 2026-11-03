@@ -1,0 +1,42 @@
+{
+  "status": "ADOPTED_VALID_BANKS_FRESH_FORMAL_SOFTWARE_AND_PHYSICAL_PENDING",
+  "time": "2026-10-24T04:42:21.003715+08:00",
+  "previous_compiled_source": "d61da977b7cfff8f8e09dca8fd623e1ccd5ad0fa",
+  "previous_software": "reports/stage1/software_current_20261024_0406.json",
+  "before": {
+    "rtl/color_regions/stage1_render.v": "e8bf5952afe934f3f3660746742301c7b9cbd5c0c79f26d3be75908e0325d142"
+  },
+  "after": {
+    "rtl/color_regions/stage1_render.v": "1cfb54e3c607d62c7f664be02a690b9e516d87b0d98d86817317bb365a78fbf2"
+  },
+  "backup": "build/stage1_valid_banks_adoption_20261024_0439/before.zip",
+  "backup_sha256": "c4e01fcaf9a1139bbdce3e486f32c2875ff8df77862b30167daa977ae298bc6a",
+  "private_validation": "build/stage1_snapshot_valid_banks_20261024_0356/validation.json",
+  "private_validation_sha256": "80173d52ce7c6fd902a16ca49d6ad6a5c4085a7cd5e7f39c45f23f69790c7aed",
+  "gate_comparison": "build/stage1_snapshot_valid_banks_20261024_0356/gate_comparison_20261024_043541.json",
+  "gate_comparison_sha256": "20c68901244cf13f88b74c5f51d82c67786778e6ba21545f7b35ea0dd5f8a25b",
+  "local_baseline": {
+    "slice": 3805,
+    "lut6": 1756,
+    "reg": 4191,
+    "eram": 3,
+    "dsp": 0
+  },
+  "local_candidate": {
+    "slice": 3756,
+    "lut6": 1766,
+    "reg": 4191,
+    "eram": 3,
+    "dsp": 0
+  },
+  "local_delta": {
+    "slice": -49,
+    "lut6": 10,
+    "reg": 0,
+    "eram": 0,
+    "dsp": 0
+  },
+  "source_normalization": "None; formal renderer byte-identical to private LF candidate",
+  "scope": "Five bank payload enables replace forty per-vertex enables. All controls/interfaces/cycles unchanged. Local Slice -49, LUT6 +10, registers/ERAM/DSP unchanged. No whole-device or routing credit yet.",
+  "guard_change": "None; original current guard and every pixel oracle unchanged."
+}

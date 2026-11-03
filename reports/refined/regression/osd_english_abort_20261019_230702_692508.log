@@ -1,0 +1,4 @@
+ENGLISH_UI_CASE_PASS late_abort
+ENGLISH_UI_CASE_PASS last_pixel_abort
+OSD_ENGLISH_ABORT_PASS 2 cases 245760 pixels
+D:\aaa_FPGA\transparent-ring-stability\build\sim\refined\osd_english_abort_20261019_230702_692508\tb.sv:21: $finish called at 2560200 (1s)

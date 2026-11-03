@@ -87,7 +87,7 @@ def audit(attempt=None,regression=False):
   prefixes += ['compact_footer_equivalence']
   if english:
    prefixes=[p for p in prefixes if p not in ('refined_v4_ui_pixels','footer_late_abort_after','compact_footer_equivalence')]
-   prefixes += ['osd_shared_chinese_equivalence','osd_english_ui','osd_english_abort','osd_english_overlay']
+   prefixes += ['osd_shared_chinese_equivalence','osd_english_ui','osd_english_abort','osd_english_overlay','osd_english_wait']
    from refined_english_ui import PACK_PROGRAM
    if PACK_PROGRAM:prefixes += ['osd_packed_program_equivalence']
   result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}

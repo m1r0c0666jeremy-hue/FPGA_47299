@@ -1,0 +1,24 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "rtl\\color_regions\\stage1_regions.v": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+    "rtl\\color_regions\\stage1_render.v": "bb261e888134ff18a2ef4cb35b0da1c495915aecc87901af5a72189d94d81af1",
+    "build\\stage1_valid_storage_20261024_0027\\stage1_regions_reference.v": "c65dad62fab30bc551c134eb374a78d41c8d29fdc4eb847623cc4a59e14e9173"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_regions_capacity_20261024_062428_918357",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_regions_capacity_20261024_062428_918357/tb.sv": "6db0c4201913d078e7d591cef17ab8a6a36068d60407ee42582aa7e9e7ba2cc8"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_regions_capacity.py": "e333d5c2b5b2479461badb53380e7f16853a267e5765869f9c89581af1b36933",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9",
+    "scripts/test_stage1_regions.py": "8a6eee76a38c4b3bdc717275c5a446346b91405b2df0989c295a6e6e1bc7f557"
+  }
+}

@@ -1,0 +1,3 @@
+SERIAL_OVERLAP_CASE_PASS pending_point
+FATAL: D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_serial_snapshot_overlap_20261024_073134_652642\tb.sv:67: overlap missed active row deadline
+       Time: 11603737  Scope: tb

@@ -1,0 +1,9 @@
+SERIAL_OVERLAP_CASE_PASS pending_point
+SERIAL_OVERLAP_CASE_PASS successful_validation
+SERIAL_OVERLAP_CASE_PASS failed_validation
+SERIAL_OVERLAP_CASE_PASS undo_delete
+SERIAL_OVERLAP_CASE_PASS recommit
+SERIAL_OVERLAP_CASE_PASS copy_reset_recovery
+SERIAL_OVERLAP_CASE_PASS pending_validation_reset
+SERIAL_SNAPSHOT_OVERLAP_PASS cases=7 pixels=1597440 checks=965 windows=26 max_hold=41
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_serial_snapshot_safe_overlap_20261024_075400_223189\tb.sv:147: $finish called at 24392900 (1s)

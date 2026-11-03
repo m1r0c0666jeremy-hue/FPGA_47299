@@ -1,0 +1,7 @@
+{
+  "candidate_sha256": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+  "formal_renderer_sha256": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+  "private_validation": "build/stage1_four_row_probe_20261022_2151/sealed_validation.json",
+  "local_comparison": "build/stage1_four_row_probe_20261022_2151/gate_comparison_20261022_230553.json",
+  "scope": "Only the new region renderer ring buffer; full current regression and physical build pending"
+}

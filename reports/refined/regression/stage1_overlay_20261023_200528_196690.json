@@ -1,0 +1,33 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_osd.v": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+    "rtl\\color_regions\\refined_english_font_rom.v": "136e56398348d03a3582d97d29973b9de273f446d117fd9b302543c094cf2821",
+    "rtl\\color_regions\\refined_english_text_rom.v": "f42193a5c8b9cb7f7f1be13a27afc8dd894f249e261a1ad21189aa3e49953dda",
+    "rtl\\color_regions\\refined_footer_program_rom.v": "94787d7ceb7adf1038ed4ff26c9323f5060704d2a5da81eb8649ced31db4b0f6",
+    "rtl\\color_regions\\refined_logo_rom.v": "7c3d9126fdf02da52f653760258f64db7807ab095dde93a7a4ac2a32cf7351be",
+    "rtl\\color_regions\\refined_overlay_geometry.v": "960e27925a02bf6a89b2852fbc77792f9cd4e4dbde020a890dd81e31d95857e7",
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_render.v": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c",
+    "rtl\\color_regions\\stage1_ui_formatter.v": "ba5606a60b2e57240e1aab11c5a3a9a44ad1d7e24855fb9ea82851e30565bc0b",
+    "rtl\\color_regions\\stage1_ui_text.v": "ca387078bd6e1272cec36043c0079615a351d29f51a20ceb76345806ede90ad4"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_overlay_20261023_200528_196690",
+  "fixture_inputs": {
+    "build/stage1_overlay_vectors/0.hex": "815f451f8b34993464e67436750352b28d868c10a277a6d0adaf6e53673faad2",
+    "build/stage1_overlay_vectors/1.hex": "b3caeb7653ec2e538b5abf80ff4032ebbd46596f62faa50bb3afe5f7de31eb6b",
+    "build/stage1_overlay_vectors/2.hex": "0883145267f0d8697980eec755b291ca0117f7ddf170a966d28ab71ca90e984f",
+    "build/stage1_overlay_vectors/3.hex": "d42e6eff38e5c91ada584e97ad5aad3b79be18e7c95a38812d50e7550ab24710",
+    "build/stage1_overlay_vectors/4.hex": "fab59cea164544ed0656b08fd70543b61e9f07f0328388480ea4cc2d84e962e1",
+    "build/stage1_overlay_vectors/5.hex": "2dadaff1abaca969881649a9e3821a570526fad3e04ae7cd9f2a029d5cb6c6d4",
+    "build/stage1_overlay_vectors/6.hex": "adfda4f4cb3e042962305ae110d56a8d116df87e91c87f66f16053a0bd9a3dc9",
+    "build/stage1_overlay_vectors/7.hex": "ed62f0ce486f259db8491eff4a5c9bd258fc704284bda8dbff13d13a955ff245",
+    "build/sim/refined/stage1_overlay_20261023_200528_196690/tb.sv": "7b8506e01e8beddbc2e351efa3e13679d6107c49f6dd7b5d80e100d234b67d9a"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_overlay.py": "067b5f5526d6fa2a3308e7ac70146774d47b70e5d53aa33de523983263cc6dae",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

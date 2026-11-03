@@ -1,0 +1,17 @@
+{
+  "scope": "PRIVATE ONLY; one actual editor point/105 rows plus editor/order checks, not full video integration",
+  "output": "build/sim/refined/private_split_edit_render_20261022_185912_940032",
+  "bench_sha256": "6956115dd3a5582530c80aa5ef882004a354647114b5ae15d6006bc6a729411e",
+  "producer_sha256": "62ecbb53eeb9b2e93f5ecbe6282daf7bf163f30c3446328d9609ea6199ab135c",
+  "inputs": {
+    "build/stage1_split_draft_20261022_1833/stage1_regions_shared.v": "6945a9622acb1db1beb36582329e4c7cfc586c516e869699c9a7d7ee349f4a32",
+    "build/stage1_split_draft_20261022_1833/stage1_render.v": "a790dad3842a35492237d5d5a4e73586ec4d2acb550d385c3a6b75fcae741c5f",
+    "build/stage1_shared_vertex_20261022/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "build/stage1_shared_vertex_20261022/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1"
+  },
+  "pixels": 134400,
+  "adopted": false
+}

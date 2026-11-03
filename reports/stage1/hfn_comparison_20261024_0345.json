@@ -1,0 +1,217 @@
+{
+  "scope": "Raw reported nets only; absent net does not supply an exact new fanout. Before_C includes C and D changes relative to current D; not a C-only/D-only global comparison.",
+  "reports": {
+    "before_C_223056": {
+      "path": "build/stage1_structure_inspection_20261024_0006/inspection_20261024_001007/td.log",
+      "sha256": "cbbb68a34eb401b72e8035ac81169d848abf747f466e9ddd85e08455e782a5f5",
+      "nets": [
+        {
+          "net": "u_video/I_process_rst_n",
+          "fanout": 3111,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/capture_reset[1]",
+          "fanout": 2577,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_camera/rx_data_reset/release_pipe[1]",
+          "fanout": 1124,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_scaler/data_reset/release_pipe[1]",
+          "fanout": 1038,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_osd/region_render/commit",
+          "fanout": 935,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_alc_mc_top/u_rbuf_addr_fifo/rst",
+          "fanout": 880,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/ddr_reset[1]",
+          "fanout": 827,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "cal_reset_bridge[1]",
+          "fanout": 825,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/dx_phy_rst_n",
+          "fanout": 627,
+          "driver": "PH1P_PHY_PLL_V2"
+        },
+        {
+          "net": "u_video/pixel_stream_reset/release_pipe[1]",
+          "fanout": 386,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_hdmi_tx/u_hdmi_1_4b_transmitter_core_wrapper/u_hdmi_edid_wrapper/u_iic_master_wrapper/u_iic_receiver_controller/I_rst",
+          "fanout": 381,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/area_controller/draft_count_reg[3]_syn_4",
+          "fanout": 373,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_viewport/O_bank_b_n",
+          "fanout": 352,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_snapshot_response/payload_b_n",
+          "fanout": 328,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_snapshot_response/D_data_b_n",
+          "fanout": 328,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_frame_store/I_snapshot",
+          "fanout": 328,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_scaler/pixel_reset/release_pipe[1]",
+          "fanout": 303,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_detection/mux0_syn_2",
+          "fanout": 278,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_results/payload_b_n",
+          "fanout": 277,
+          "driver": "PH1P_PHY_LSLICE"
+        }
+      ],
+      "reported_min_fanout": 277,
+      "snapshot_commit": [
+        {
+          "net": "u_video/u_osd/region_render/commit",
+          "fanout": 935,
+          "driver": "PH1P_PHY_LSLICE"
+        }
+      ]
+    },
+    "current_D_032009": {
+      "path": "build/stage1_place_review_20261024_0339/inspection_20261024_033934/td.log",
+      "sha256": "65a1d2ccd32d8aa574fe81a0adb634b791d4f4c6f12e8bff3da51b6e004100f0",
+      "nets": [
+        {
+          "net": "u_video/capture_reset[1]",
+          "fanout": 2615,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/I_process_rst_n",
+          "fanout": 2291,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_camera/rx_data_reset/release_pipe[1]",
+          "fanout": 1164,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_scaler/data_reset/release_pipe[1]",
+          "fanout": 1056,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_alc_mc_top/u_rbuf_addr_fifo/rst",
+          "fanout": 883,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "cal_reset_bridge[1]",
+          "fanout": 821,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/ddr_reset[1]",
+          "fanout": 818,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_ph1p35_324_ddr_wrapper/u_ddr2/ph1p_ddrmc_wrapper/ph1p_ddrmc_top/u_ddr_phy/u_ddrphy_top/u_ddrphy/dx_byte[1]$dx_byte_used$u_ddrphy_dx_byte_wrapper/dx_phy_rst_n",
+          "fanout": 625,
+          "driver": "PH1P_PHY_PLL_V2"
+        },
+        {
+          "net": "u_video/pixel_stream_reset/release_pipe[1]",
+          "fanout": 442,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_hdmi_tx/u_hdmi_1_4b_transmitter_core_wrapper/u_hdmi_edid_wrapper/u_iic_master_wrapper/u_iic_receiver_controller/I_rst",
+          "fanout": 366,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_viewport/O_bank_b_n",
+          "fanout": 358,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_snapshot_response/payload_b_n",
+          "fanout": 328,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_frame_store/I_snapshot",
+          "fanout": 328,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_snapshot_response/D_data_b_n",
+          "fanout": 327,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_scaler/pixel_reset/release_pipe[1]",
+          "fanout": 304,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_detection/mux0_syn_2",
+          "fanout": 279,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_results/payload_b_n",
+          "fanout": 277,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "u_video/u_results/D_data_b_n",
+          "fanout": 276,
+          "driver": "PH1P_PHY_LSLICE"
+        },
+        {
+          "net": "S_rst_n",
+          "fanout": 258,
+          "driver": "PH1P_PHY_PLL_V2"
+        }
+      ],
+      "reported_min_fanout": 258,
+      "snapshot_commit": []
+    }
+  }
+}

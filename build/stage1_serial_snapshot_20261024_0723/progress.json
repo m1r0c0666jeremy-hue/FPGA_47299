@@ -1,0 +1,25 @@
+{
+  "status": "PRIVATE_NOT_ADOPTED_NOT_FORMAL_NO_RESOURCE_CREDIT",
+  "checks": {
+    "stage1_render_guards": {
+      "record": "reports/refined/regression/private_serial_snapshot_v2_stage1_render_guards_20261024_072319_979949.json",
+      "record_sha256": "18a72ebda0609cffa00d485585b7831b7820c1a9fcc2c75dd383288f7a82ca5f",
+      "log_sha256": "0a841b6b48882273f3875f562872cecad9daf51e7f9373bf1a23ec7281af0ddb",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "build/stage1_serial_snapshot_20261024_0723/stage1_render.v": "77e811b1282f145710231a80865b257cece5b870c30306b5830db62c653ca235"
+      },
+      "bench": "build/sim/refined/private_serial_snapshot_v2_stage1_render_guards_20261024_072319_979949/tb.sv",
+      "bench_sha256": "fbcd973515987fc14bda7bb5e52f9f5e5568ee2aef8e957e13e28c40f6975d0f",
+      "fixtures": {
+        "build/sim/refined/stage1_render_guards_20261024_062428_147678/tb.sv": "01651665a7d562cd903e72b722a935b68fddd3a8fbabae645b95b1d34422a667"
+      },
+      "producers": {
+        "scripts/test_stage1_render_guards.py": "ee79dae48eaa8642a3aaaf7ddf0b86e97bb6e1069477e1652f7ffb94fa92a475",
+        "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+        "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+      },
+      "private_fixture_adjustment": "Exact same22-bit frozen B coordinate spans snapshot RAM words648/649;21-bit draft point is word672. All existing assertions, commits, resets and deadlines retained."
+    }
+  }
+}

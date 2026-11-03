@@ -1,0 +1,8 @@
+{
+  "parent": "build/stage1_place_20261024_044722",
+  "checkpoint_name": "target_color_regions_placed.db",
+  "checkpoint_sha256": "87bfd90dac7a07862313e6f9fe0ec1adda9acfca9b2c7b78442e3863142f8b76",
+  "parent_summary_sha256": "1298b5d3071e5990170b085ed4505df1f976a71369bbe6d3cce578f9ec471873",
+  "parent_context_sha256": "2ad1c021784a6cd11915061bd7379b3553ff0787b74219733ebbb49e24cb42f7",
+  "parent_inputs_sha256": "9783cd197495ab59674a355c904d8fd5e07d072ff9d81440b759e9d9be2124d6"
+}

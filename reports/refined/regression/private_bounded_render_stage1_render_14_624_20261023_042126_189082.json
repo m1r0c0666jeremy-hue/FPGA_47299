@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "build\\stage1_bounded_point_20261023_0404\\stage1_arith.v": "5634e6d4f0309439e62b290aa61740a22aecf1f8a864f2e80028a3b085c937e3",
+    "build\\stage1_bounded_point_20261023_0404\\stage1_render_mw14.v": "1929a48ff2bc4843092ed4972bb4fee26e580c0312caa64519395248850ff632"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\private_bounded_render_stage1_render_14_624_20261023_042126_189082",
+  "fixture_inputs": {},
+  "producer_inputs": {}
+}

@@ -1,0 +1,28 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261022_203511",
+  "compiled_source_commit": "84c060744931b8a63059dcccfa53d7039c356560",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20203,
+    "lut6": 20005,
+    "reg": 23676,
+    "eram": 101,
+    "dsp": 40
+  },
+  "delta_from_same_settings_old_place": {
+    "slice": -812,
+    "lut6": -707,
+    "reg": 83,
+    "eram": 3,
+    "dsp": 0
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "4f1b84fb599857c8f71a4637b3865f081ef6c5c3c3eae8b3f77bec365dad0e5b",
+    "target_color_regions_placed.db": "3773f61fc1c2346be72ae256fb654ccf6e73140bb98cc6664996f78ca0336841"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING"
+}

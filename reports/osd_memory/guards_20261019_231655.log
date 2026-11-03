@@ -1,0 +1,35 @@
+build/refined_route_20261018_233608_631875
+REFINED_PROTECTION_PASS 91 baseline files plus preserved later project save
+Traceback (most recent call last):
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 75, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 13, in main
+    obj=audit(a.attempt,True);check_osd_only(R)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 93, in audit
+    result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 15, in evidence
+    if not records:raise AssertionError('Missing current-source passing evidence: '+prefix)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Missing current-source passing evidence: refined_video_0_1_0_0_f0_n1
+
+build/refined_route_20261019_100156_645532
+REFINED_PROTECTION_PASS 91 baseline files plus preserved later project save
+Traceback (most recent call last):
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 75, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\package_osd_memory.py", line 13, in main
+    obj=audit(a.attempt,True);check_osd_only(R)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 93, in audit
+    result['regression']={prefix:evidence(prefix,required_inputs(prefix)) for prefix in prefixes}
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\aaa_FPGA\transparent-ring-stability\scripts\audit_refined.py", line 15, in evidence
+    if not records:raise AssertionError('Missing current-source passing evidence: '+prefix)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Missing current-source passing evidence: refined_video_0_1_0_0_f0_n1
+
+OSD_MEMORY_GUARDS_PASS

@@ -1,0 +1,44 @@
+{
+  "status": "ADOPTED_SHARED_REGION_RAM_FRESH_FORMAL_SOFTWARE_AND_PHYSICAL_PENDING",
+  "time": "2026-10-24T06:22:59.729510+08:00",
+  "previous_compiled_source": "69a8e6993424ea822e42b55380f9eb4ef67de7b8",
+  "previous_software": "reports/stage1/software_current_20261024_0532.json",
+  "before": {
+    "rtl/color_regions/stage1_render.v": "1cfb54e3c607d62c7f664be02a690b9e516d87b0d98d86817317bb365a78fbf2",
+    "scripts/test_stage1_render.py": "6bb099baadf192441a019415d7193ff597de802aa6a21d9a8d332dbc06f61297"
+  },
+  "after": {
+    "rtl/color_regions/stage1_render.v": "bb261e888134ff18a2ef4cb35b0da1c495915aecc87901af5a72189d94d81af1",
+    "scripts/test_stage1_render.py": "9f254aae0ee8402bd426944567159aef0f3c96724a0883878adbf207336afce1"
+  },
+  "backup": "build/stage1_shared_region_ram_adoption_20261024_0624/before.zip",
+  "backup_sha256": "6a854d2b67a3b4fc9d5f980226c6723151ca650795fc683945d9126fa0cccf8c",
+  "private_validation": "build/stage1_shared_region_ram_20261024_0517/validation.json",
+  "private_validation_sha256": "878b9240566b4079fe4d0174e8ea7c87efa39df85e0d75b0cd17c8d1ffafef0d",
+  "gate_comparison": "build/stage1_shared_region_ram_20261024_0517/gate_comparison_20261024_062006.json",
+  "gate_comparison_sha256": "3fdfa1de3c48c5a3bf1d438b3158ffa46fda6bbe78d31a680f11937f9c2d784f",
+  "local_baseline": {
+    "slice": 3756,
+    "lut6": 1766,
+    "reg": 4191,
+    "eram": 3,
+    "dsp": 0
+  },
+  "local_candidate": {
+    "slice": 3767,
+    "lut6": 1783,
+    "reg": 4191,
+    "eram": 2,
+    "dsp": 0
+  },
+  "local_delta": {
+    "slice": 11,
+    "lut6": 17,
+    "reg": 0,
+    "eram": -1,
+    "dsp": 0
+  },
+  "source_normalization": "None; formal renderer byte-identical to private LF candidate",
+  "scope": "One 1024x32 dual-port RAM replaces 256x16 edge state and 640x32 line masks; pixel read latency, control FSM, interfaces and cycles unchanged. Only new region renderer storage changed; old RGB buffers/FIFOs untouched. Local ERAM -1, Slice +11, LUT6 +17; registers/DSP unchanged. No whole-device/routing credit yet.",
+  "fixture_change": "Exactly eight failure-only EDGE diagnostic references map edge_mem[k] to state_line_mem[768+k][15:0]. No assertions, vector generation or pixel oracles changed. Original producer bytes preserved in before.zip; all fresh formal evidence must use the new producer."
+}

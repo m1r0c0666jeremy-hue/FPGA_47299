@@ -1,0 +1,22 @@
+{
+  "status": "PRIVATE_EIGHT_MID_OPERATION_RECOMMIT_CASES_PASSED_NOT_ADOPTED",
+  "record": "reports/refined/regression/private_serial_snapshot_safe_mid_launch_20261024_075400_838213.json",
+  "record_sha256": "462026da84ff66da92402cff5838d7ce764e2d44e172322ac5144a3a63d2784b",
+  "log_sha256": "566c965838005369cfff1162811554f535d6b979df0bf9037b63790ef583b31d",
+  "inputs": {
+    "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "build/stage1_serial_snapshot_20261024_0752/stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a",
+    "build/stage1_serial_snapshot_20261024_0752/stage1_render_clean_reference.v": "e37729deb0372fa59644ae20f011f336f45d14bdffe251dd430fde7d8f6d52c8"
+  },
+  "bench": "build/sim/refined/private_serial_snapshot_safe_mid_launch_20261024_075400_838213/tb.sv",
+  "bench_sha256": "73be44029520eb5d810a0db60bafc197521d9dbadd617c714d6c2720560d1e0a",
+  "fixtures": {
+    "build/stage1_serial_snapshot_20261024_0723/abort_probe.py": "2f95ec3029dcf556578b0929d45ca7769607c12f51c3a20015c292585034faad"
+  },
+  "producers": {
+    "build/stage1_serial_snapshot_20261024_0752/abort_probe.py": "05f4dbdfbd417feb43e80ac0316677b503284370312baffe0240ab3398d9a058",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2"
+  },
+  "producer_sha256": "05f4dbdfbd417feb43e80ac0316677b503284370312baffe0240ab3398d9a058",
+  "scope": "Latest snapshot matches fresh clean instance across8 divider/multiplier launch/mid/end offsets and7168 cache/edge words. Copy is unchanged; mapping waits for old arithmetic idle with bounded drain. No formal/resource/physical credit."
+}

@@ -1,0 +1,18 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_regions.v": "4657c8d15f6aa186b986daef646da8717c33f4a2a56a2c24a93cbededf1a4156",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "rtl\\color_regions\\stage1_render.v": "d183035a784ac09343106521b96c5b58a7e0eac224e33c522ee86033b0565947"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_rect_geometry_20261024_120725_170458",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_rect_geometry_20261024_120725_170458/tb.sv": "82f42c2abab6bc24b49b25028f7a5d0ced0d8daa9013c36e0efe3fe41198d070"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_rect.py": "7a037978f6d702db34c8a73d601e706d417a3485948dc97935e1e9926c0fd6df",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "fc877037b424613e73e0c0190adfc95b376852a01ad13ecaf3cca6afde8b0d0b"
+  }
+}

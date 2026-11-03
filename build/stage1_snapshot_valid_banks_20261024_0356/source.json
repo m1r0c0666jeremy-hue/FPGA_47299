@@ -1,0 +1,7 @@
+{
+  "status": "PRIVATE_NOT_ADOPTED_NO_CAD",
+  "baseline_source": "rtl/color_regions/stage1_render.v",
+  "baseline_sha256": "e8bf5952afe934f3f3660746742301c7b9cbd5c0c79f26d3be75908e0325d142",
+  "candidate_sha256": "1cfb54e3c607d62c7f664be02a690b9e516d87b0d98d86817317bb365a78fbf2",
+  "intent": "Reduce 40 valid-lane payload enable processes to five valid-bank groups after D whole placement increased 155 Slice; no control/interface/cycle change. Fanout/area are unmeasured."
+}

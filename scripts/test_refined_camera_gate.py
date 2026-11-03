@@ -3,7 +3,8 @@
 ISP/MIPI IP are omitted; their stream boundaries are driven explicitly. Their
 numerical datapaths and vendor FIFO are checked by separate regression fixtures.
 """
-from refined_testlib import R,run
+from refined_testlib import R
+from sc500_test_evidence import run
 src=r'''`timescale 1ns/1ps
 module tb;
 reg clk=0;always #5 clk=~clk;reg rst=0,ready=0,sof=0,v=0;

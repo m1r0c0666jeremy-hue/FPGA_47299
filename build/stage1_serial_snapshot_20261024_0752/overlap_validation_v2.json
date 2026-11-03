@@ -1,0 +1,25 @@
+{
+  "status": "PRIVATE_OVERLAP_PROTOCOL_PASSED_NOT_ADOPTED",
+  "record": "reports/refined/regression/private_serial_snapshot_safe_overlap_20261024_075400_223189.json",
+  "record_sha256": "4edfe841bca0343abfb01567002e636789686ef64b0b0391308bad2f4c2d5cdd",
+  "log_sha256": "b0ca5c0d9decd6aebadfb90586ddf0fa951e3a0c34ac3f76932dcea4e6bb3d1c",
+  "producer_sha256": "de6b6c0a124a2ebbb1806ba88bf395d5f8ff04a5f2bd3db82f0f70fa994e9623",
+  "fixture": "build/sim/refined/private_serial_snapshot_v2_stage1_regions_20261024_072320_249298/tb.sv",
+  "fixture_sha256": "24496069528a893abc5725161d1be3a1d03d1cad33f975768ce99d08ff53695c",
+  "frame_coordinate_source": "rtl/color_regions/stage1_osd.v:261",
+  "frame_coordinate_source_sha256": "b02b3802a85641497c2e1adad7cc4c870009b8ba31ef6be05542e6544d8cba1d",
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+    "rtl\\color_regions\\stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+    "rtl\\color_regions\\stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+    "rtl\\color_regions\\stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+    "build\\stage1_serial_snapshot_20261024_0752\\stage1_regions.v": "bc0a58c4c3c8cd0dcc22933a41b7d4fef071a8a66b18b6b6eacc910e36858fd6",
+    "build\\stage1_serial_snapshot_20261024_0752\\stage1_render.v": "39013f67f78b5e6047da0797e68a555dfcd350f87a790d2c777698bca7f98e5a",
+    "build\\stage1_serial_snapshot_20261024_0752\\stage1_regions_frozen.v": "1bebfdb0de4e72976a0ce1f30676c4f2a473cfcb5d694252404691f959c74c43",
+    "build\\stage1_serial_snapshot_20261024_0752\\stage1_render_reference.v": "9e1d5b20c8bc982d013448f10bed0e40f43024d3813531fc345faee9dbf63491"
+  },
+  "bench": "build/sim/refined/private_serial_snapshot_safe_overlap_20261024_075400_223189/tb.sv",
+  "bench_sha256": "253f0c5acb430163602aaaebad62cd774f99ad088615034b5aa2d608e161e5dd",
+  "scope": "Real key/editor and genuine validator completion; at most41 blocked edges including commit,40 subsequent copy clocks. Queued point/undo/delete and success/failure validation converge to frozen F. Snapshot bytes match frozen F renderer over1597440 active pixels. Recommit and mid-copy/pending reset recover. Preparation timing differs; no formal/resource/physical credit."
+}

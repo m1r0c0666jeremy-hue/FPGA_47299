@@ -1,0 +1,52 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261023_223056",
+  "compiled_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20252,
+    "lut6": 19950,
+    "reg": 23706,
+    "eram": 99,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "11439557571c8707f5505d86135e3171922f2bb1c4f5890b95b77a83a20a6a06",
+    "target_color_regions_placed.db": "fd50dc3db518825f97cbbec38c7929d1c0bcbbfd3a9b177e9df98adf25cc7a27"
+  },
+  "reused_gate": {
+    "parent": "build/stage1_place_20261023_200045",
+    "checkpoint_sha256": "302f6674e12b591019c0cc8b87c6c2e2cb98df4249a7bbf64e39e8634f5d4e4b",
+    "compiled_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+    "placement_created_commit": "773866d1ba4eb2229494c9a6cc9604a33e540ed6",
+    "inputs_verified": 308
+  },
+  "actual_parameters": {
+    "effective_place.txt": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "999999",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "effective_route.txt": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "parameter_reports": {
+    "effective_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "effective_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING"
+}

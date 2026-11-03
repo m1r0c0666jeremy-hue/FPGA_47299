@@ -1,0 +1,32 @@
+{
+  "status": "READ_ONLY_VENDOR_OPTION_REVIEW_NO_RUNTIME_CHANGE",
+  "time": "2026-10-23T21:57:18.482946+08:00",
+  "sources": {
+    "D:/26_software/TangDynasty/doc/TD_User_Guide_V6.2.pdf": "5bd0028e33def85bf7cd5019b3987e05ea4deeda1874e92e9e209c316479f087",
+    "D:/26_software/TangDynasty/doc/SWUG/SWUG105_TCL_Command_User_Guide.pdf": "c6d97356cb930eab5b5613e4e9cf670a9a0cfec11dc04b678367f0e7d2431380"
+  },
+  "user_guide_pdf_pages": [
+    281,
+    282,
+    283,
+    284
+  ],
+  "tcl_guide_pdf_pages": [
+    24,
+    25,
+    29,
+    34,
+    35
+  ],
+  "findings": {
+    "pr_strategy": "Guide labels 2-4 for congestion, 5-9 timing, and10-17 stronger generic optimization. Both relevant families accept2.",
+    "max_fanout": "Guide says ALL families, default999999; forced split may increase resources and generally need not be set. Current placement explicitly used128. A future default-value comparison is justified, benefit not established.",
+    "macro_performance": "Guide supports macro_congestion for all families; targets DSP/RAM congestion.",
+    "pack_mode": "Table lists PH2 applicability. Independent PH1P support/effect not established here; do not rely on undocumented applicability to explain gains.",
+    "route_effort": "routability tries more congestion-avoidance algorithms and may take longer.",
+    "route_timing": "off is described as prioritizing connectivity over timing during routing; not enabled here and final nonnegative setup/hold remain mandatory.",
+    "parameter_persistence": "report_param is described as reporting database parameters. This does not independently prove which properties this imported checkpoint carries; do not assert a missing-setting bug without actual report."
+  },
+  "formal_source_unchanged": true,
+  "runtime_parameters_unchanged": true
+}

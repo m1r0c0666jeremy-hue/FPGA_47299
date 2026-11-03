@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "non_osd_inputs_preserved": 292,
+  "compiler_dependency_rejections": 2,
+  "package_rejections": 2,
+  "no_output_directory_created": true,
+  "protected": {
+    "build/target_color_regions_refined_20261019_100417/target_color_regions.bit": "fe6029bb4fd343df1e7757418c1b2540e2c9884d93f27206a9464509bc3586fe",
+    "build/target_color_regions_refined_20261019_100417/color_video_refined_source.zip": "84711c7f21cb0f5d025d3842c9cb52cc62028695356b4442e9f5b5981ec5502e",
+    "td_project/target_color_regions.al": "4467601011e2e6df3603c786579b175bcc71a537469bfc75c6b533ffee05de64",
+    "reports/refined/delivery_20261019_100417.json": "4ecdb0e1797aa965a230ed35f809d04372aa9c1b6a826530873344d7dc66e21d",
+    "reports/refined/\u6700\u7ec8\u9a8c\u8bc1\u62a5\u544a.md": "4bff711d6b4f44cba543bf5d30a4681ac5d2b60635d4629ef090211b400c99a5",
+    "docs/\u989c\u8272\u89c6\u9891\u663e\u793a\u6539\u8fdb_\u4e0a\u677f\u4e00\u9875.md": "e379744ebd12415b6f62792df597df36c39d963415512ce38736ba29d802999c"
+  },
+  "inputs": {
+    "scripts/test_osd_memory_guards.py": "8ae62b429c9b160d7f11bd1d4df402482116e1cb57fd132fae5ef419cc832209",
+    "scripts/package_osd_memory.py": "0f8853a3b2b3ccb211910902ebc12e6d0a7308c4d348fc60975345637fed1f23",
+    "scripts/audit_refined.py": "5d39e06c766ec3e89795f4b8f351abc8a429f9c1ceb713cf51e539929b0b1fc0",
+    "scripts/osd_memory_branch.py": "3e64f5097476cb328fd4f40237cce3f7d9ca7e011ea80697b413bf267f8ce414"
+  }
+}

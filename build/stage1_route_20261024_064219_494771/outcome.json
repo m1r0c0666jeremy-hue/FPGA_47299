@@ -1,0 +1,170 @@
+{
+  "status": "CANCELLED_BY_AGENT_NOT_DELIVERABLE",
+  "time": "2026-10-24T08:51:05.852724+08:00",
+  "reason": "F routability about128 minutes. First20percent recovery reached iteration14 minimum13337, then15/16/17 rose15257/16400/18293. Announced30-minute stopping rule was extended exactly one round for the second20percent recovery; iteration18 still19680 and1393.51seconds. About one hour without a new low. Preserve all results and quantify fully software-proven six-check G3 serial-snapshot structure. Incomplete agent cancellation is not a final native failure or pass.",
+  "attempt": "build/stage1_route_20261024_064219_494771",
+  "process_id": 42440,
+  "process_started": "2026-10-24T06:42:21.5596828+08:00",
+  "session_exit_code": 1,
+  "route_result": "CANCELLED_INCOMPLETE_NO_FINAL_ROUTING_OR_TIMING_RESULT",
+  "iterations": [
+    {
+      "iteration": 1,
+      "over_count": 33363,
+      "over": 33951,
+      "worst": 4,
+      "seconds": 110.4
+    },
+    {
+      "iteration": 2,
+      "over_count": 29120,
+      "over": 29471,
+      "worst": 3,
+      "seconds": 69.98
+    },
+    {
+      "iteration": 3,
+      "over_count": 27476,
+      "over": 27847,
+      "worst": 3,
+      "seconds": 82.67
+    },
+    {
+      "iteration": 4,
+      "over_count": 22603,
+      "over": 22807,
+      "worst": 2,
+      "seconds": 176.92
+    },
+    {
+      "iteration": 5,
+      "over_count": 21309,
+      "over": 21463,
+      "worst": 3,
+      "seconds": 159.21
+    },
+    {
+      "iteration": 6,
+      "over_count": 20451,
+      "over": 20600,
+      "worst": 3,
+      "seconds": 137.92
+    },
+    {
+      "iteration": 7,
+      "over_count": 20099,
+      "over": 20208,
+      "worst": 2,
+      "seconds": 199.89
+    },
+    {
+      "iteration": 8,
+      "over_count": 19150,
+      "over": 19253,
+      "worst": 2,
+      "seconds": 293.12
+    },
+    {
+      "iteration": 9,
+      "over_count": 19046,
+      "over": 19157,
+      "worst": 2,
+      "seconds": 364.36
+    },
+    {
+      "iteration": 10,
+      "over_count": 19061,
+      "over": 19153,
+      "worst": 3,
+      "seconds": 324.86
+    },
+    {
+      "iteration": 11,
+      "over_count": 19487,
+      "over": 19580,
+      "worst": 2,
+      "seconds": 372.18
+    },
+    {
+      "iteration": 12,
+      "over_count": 20060,
+      "over": 20152,
+      "worst": 3,
+      "seconds": 806.4
+    },
+    {
+      "iteration": 13,
+      "over_count": 15850,
+      "over": 15878,
+      "worst": 2,
+      "seconds": 342.65
+    },
+    {
+      "iteration": 14,
+      "over_count": 13327,
+      "over": 13337,
+      "worst": 2,
+      "seconds": 313.02
+    },
+    {
+      "iteration": 15,
+      "over_count": 15217,
+      "over": 15257,
+      "worst": 2,
+      "seconds": 386.63
+    },
+    {
+      "iteration": 16,
+      "over_count": 16347,
+      "over": 16400,
+      "worst": 2,
+      "seconds": 848.64
+    },
+    {
+      "iteration": 17,
+      "over_count": 18206,
+      "over": 18293,
+      "worst": 2,
+      "seconds": 1005.77
+    },
+    {
+      "iteration": 18,
+      "over_count": 19573,
+      "over": 19680,
+      "worst": 2,
+      "seconds": 1393.51
+    }
+  ],
+  "td_log_sha256": "856662657f840b8e85bf05d4f2558c7ff9b1792a4ea6cd9488b5d0bf682e28de",
+  "source_context": {
+    "compiled_source_commit": "124c37e21be6584e5e7445e8fc006aa13db58295",
+    "creation_time": "20261024_064219_494771",
+    "input_count": 308,
+    "inputs_sha256": "507e09d91aac1b39bf20f48a86b4ab6bed16f926301fed639c3da7aa0c93ae44",
+    "reused_gate": null,
+    "placed_checkpoint": {
+      "parent": "build/stage1_place_20261024_062426",
+      "checkpoint_name": "target_color_regions_placed.db",
+      "checkpoint_sha256": "dd9c12eaeb159c410989f5541db22d6fc2346a5ead8e6a53549f2ef318089087",
+      "parent_summary_sha256": "0facaa8b4f4bc47e5ec4b949e1cddeecd82572dc9b6504f7b160acee98d324b5",
+      "parent_context_sha256": "bba9e0dbc37bb1301fa8301a98ff51fb828cbf961c96376ee972a2afb637349e",
+      "parent_inputs_sha256": "507e09d91aac1b39bf20f48a86b4ab6bed16f926301fed639c3da7aa0c93ae44"
+    },
+    "replaced_strategy": null,
+    "retry_routability": false,
+    "flow_threads": 16
+  },
+  "input_count": 308,
+  "inputs_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "placed_checkpoint_unchanged": true,
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "final_timing_available": false,
+  "deliverable": false,
+  "software_report": "reports/stage1/software_current_20261024_0708.json",
+  "software_checks": 110,
+  "continuing_authorized_task": true,
+  "new_timer_created": false,
+  "producer_sha256": "97233f9c70428b3716b8d74f8bdf781927a55b343c89274d7e10952945741f98"
+}

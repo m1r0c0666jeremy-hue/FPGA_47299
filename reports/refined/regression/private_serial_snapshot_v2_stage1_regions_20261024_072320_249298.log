@@ -1,0 +1,2 @@
+FATAL: D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_serial_snapshot_v2_stage1_regions_20261024_072320_249298\tb.sv:48: coupled displayed outputs differ sample 56232
+       Time: 562352  Scope: tb

@@ -1,0 +1,17 @@
+{
+  "compiled_source_commit": "09cccd89e34f2508aeae342a4b1e6819a920d889",
+  "creation_time": "20261019_232845_179508",
+  "input_count": 297,
+  "inputs_sha256": "970d0781b9c66096ac5a2aba9fd3206a82d29649a49c4075dc7185154084a265",
+  "placed_checkpoint": {
+    "parent": "build/refined_place_20261019_231537",
+    "checkpoint_name": "target_color_regions_placed.db",
+    "checkpoint_sha256": "0e1511810a773ccc611dab69ed410c85daa6bd7d296f8f230b9e758e07bbf8ff",
+    "parent_summary_sha256": "4aea1c2942f3e6a40759f98e8c184e1a792a57168ab46736565db70cd688f80e",
+    "parent_context_sha256": "4ca4fb6c459b277e650ec1fb58da3100d43b4dbefc0b7ca3f0d7fa3f708e0531",
+    "parent_inputs_sha256": "970d0781b9c66096ac5a2aba9fd3206a82d29649a49c4075dc7185154084a265"
+  },
+  "replaced_strategy": null,
+  "retry_routability": false,
+  "flow_threads": null
+}

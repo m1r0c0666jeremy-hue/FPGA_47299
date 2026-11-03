@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "rtl\\color_regions\\stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+    "rtl\\color_regions\\stage1_render.v": "3fdb3bf26950eeceb428c538587117d27696b50fab2ca4556052da99d7c5077c"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_render_guards_20261023_195806_782491",
+  "fixture_inputs": {
+    "build/sim/refined/stage1_render_guards_20261023_195806_782491/tb.sv": "6bba57f37bc8a60cb2a91b6369bdc84a0f22d97eea052b99a9dd6c22232f0477"
+  },
+  "producer_inputs": {
+    "scripts/test_stage1_render_guards.py": "4b30e126ce118a7150e6bea85395a4a1c27620c9b16016a5e9e31d684d3bf780",
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

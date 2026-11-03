@@ -1,0 +1,39 @@
+{
+  "status": "GATE_REUSE_GUARDS_PASS",
+  "checks": {
+    "corrupt_gate_copy": "REJECTED",
+    "stale_origin_context": "REJECTED",
+    "false_compiler_identity": "REJECTED",
+    "dishonest_unchanged_flag": "REJECTED"
+  },
+  "accepted": {
+    "parent": "build/stage1_place_20261023_012438",
+    "checkpoint_sha256": "1887f5ebda42fbb72737352f2247ff58d07f2656401cc691e33a5d108a331da3",
+    "compiled_source_commit": "707b11717da48923815aa6e865ccdac80c1cd1ba",
+    "placement_created_commit": "c88b99a678a96b24ec90e29ecba960250f8aa2e7",
+    "inputs_verified": 308
+  },
+  "actual_parent": "build/stage1_place_20261023_032446",
+  "actual_parent_summary_sha256": "c70543c4c78b3a5ce3612692ac4cf37b3207e860b7a4c4462ec6416343d8f957",
+  "auditor_sha256": "5b016b00600bca41d01fe66b4186ff577aeb5e1933a892740a83f9cc5379c548",
+  "producer_sha256": "421a9e328e3116fbee56513569cc49e8c9fa58b3bbd1738520dc90753db01ee2",
+  "fixtures": {
+    "build/stage1_gate_reuse_guards_20261024_123950/corrupt_gate_copy/inputs.json": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f",
+    "build/stage1_gate_reuse_guards_20261024_123950/corrupt_gate_copy/input_gate.db": "15ecb282d78f3e6a6ce34496dde70286b433de3160a80f0644b686626338b4ff",
+    "build/stage1_gate_reuse_guards_20261024_123950/corrupt_gate_copy/source_context.json": "0a933c098fe05c2c9268eb85b45bd9ce04bdf47a5da53edab61f97e0fdf90fa9",
+    "build/stage1_gate_reuse_guards_20261024_123950/corrupt_gate_copy/summary.json": "e9727ed4038f0e7b995f1f004e0e6969debc87c3fe7764cacd0619c643fef695",
+    "build/stage1_gate_reuse_guards_20261024_123950/stale_origin_context/inputs.json": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f",
+    "build/stage1_gate_reuse_guards_20261024_123950/stale_origin_context/input_gate.db": "15ecb282d78f3e6a6ce34496dde70286b433de3160a80f0644b686626338b4ff",
+    "build/stage1_gate_reuse_guards_20261024_123950/stale_origin_context/source_context.json": "63d6c3d1949ccdf6efa2c78e178aa60e28e09c87c21603934604de0099b4510d",
+    "build/stage1_gate_reuse_guards_20261024_123950/stale_origin_context/summary.json": "d910f27be161658e8c292423ffe56fb7dcc272ff4e6dd5e9b2628b98e439bd5b",
+    "build/stage1_gate_reuse_guards_20261024_123950/false_compiler_identity/inputs.json": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f",
+    "build/stage1_gate_reuse_guards_20261024_123950/false_compiler_identity/input_gate.db": "15ecb282d78f3e6a6ce34496dde70286b433de3160a80f0644b686626338b4ff",
+    "build/stage1_gate_reuse_guards_20261024_123950/false_compiler_identity/source_context.json": "0a933c098fe05c2c9268eb85b45bd9ce04bdf47a5da53edab61f97e0fdf90fa9",
+    "build/stage1_gate_reuse_guards_20261024_123950/false_compiler_identity/summary.json": "e9727ed4038f0e7b995f1f004e0e6969debc87c3fe7764cacd0619c643fef695",
+    "build/stage1_gate_reuse_guards_20261024_123950/dishonest_unchanged_flag/inputs.json": "86f59847e3eb3b900ceb96b8a2b8a049a687324073f6b00161b34e72dead108f",
+    "build/stage1_gate_reuse_guards_20261024_123950/dishonest_unchanged_flag/input_gate.db": "15ecb282d78f3e6a6ce34496dde70286b433de3160a80f0644b686626338b4ff",
+    "build/stage1_gate_reuse_guards_20261024_123950/dishonest_unchanged_flag/source_context.json": "0a933c098fe05c2c9268eb85b45bd9ce04bdf47a5da53edab61f97e0fdf90fa9",
+    "build/stage1_gate_reuse_guards_20261024_123950/dishonest_unchanged_flag/summary.json": "c63f2ea038d203a323b0629a1a20aa5bcc2a6d1cb3d2b40b8123b02ed5266170"
+  },
+  "scope": "Artificial forged copies only; not functional or board evidence"
+}

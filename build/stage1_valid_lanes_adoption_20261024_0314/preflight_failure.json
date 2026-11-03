@@ -1,0 +1,9 @@
+{
+  "status": "NO_FORMAL_WRITES_BEFORE_PREFLIGHT_STOP",
+  "reason": "Compared raw reference bytes without accounting for CRLF normalization",
+  "original_files": {
+    "rtl/color_regions/stage1_render.v": "790fb77ba6fdf157dbf8b1fb068aa5ec96359f5cde66de6fa89ed51516168d97",
+    "scripts/test_stage1_render_guards.py": "4b30e126ce118a7150e6bea85395a4a1c27620c9b16016a5e9e31d684d3bf780"
+  },
+  "correct_adoption": "reports/stage1/valid_lanes_adoption_20261024_0316.json"
+}

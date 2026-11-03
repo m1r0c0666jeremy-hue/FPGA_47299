@@ -1,0 +1,2 @@
+STAGE1_VALIDATE_PASS cases=220 max_cycles=56768
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\private_bounded_point_stage1_validate_20261023_040252_232089\tb.sv:16: $finish called at 22535190 (1s)

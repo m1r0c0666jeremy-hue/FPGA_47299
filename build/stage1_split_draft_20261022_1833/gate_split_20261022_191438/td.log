@@ -1,0 +1,393 @@
+============================================================
+   Tang Dynasty, V6.2.168116
+   Copyright (c) 2012-2025 Anlogic Inc.
+   Executable = D:/26_software/TangDynasty/bin/td_commands_prompt.exe
+   Built at =   16:32:07 Jun 12 2025
+   Run by =     CodexSandboxOffline
+   Run Date =   Thu Oct 22 19:15:43 2026
+
+   Run on =     LAPTOP-G7KSL6F6
+============================================================
+RUN-1002 : start command "import_device ph1_35p.db -package PH1P35MDG324 -speed 3"
+ARC-1001 : Device Initialization.
+ARC-1001 : ----------------------------------------------------------------
+ARC-1001 :           OPTION          |          IO           |   SETTING   
+ARC-1001 : ----------------------------------------------------------------
+ARC-1001 :   non_jtag_persist(none)  |        35 IOs         |    gpio    
+ARC-1001 :            jtag           |  P13/P15/L14/R13/T13  |  dedicate  
+ARC-1001 : ----------------------------------------------------------------
+RUN-1003 : finish command "import_device ph1_35p.db -package PH1P35MDG324 -speed 3" in  1.350970s wall, 0.312500s user + 0.015625s system = 0.328125s CPU (24.3%)
+
+RUN-1004 : used memory is 322 MB, reserved memory is 320 MB, peak memory is 322 MB
+RUN-1002 : start command "open_project D:/aaa_FPGA/region-sequence-stage1/build/stage1_split_draft_20261022_1833/gate_split_20261022_191438/target_color_regions_stage1.al -single_run"
+RUN-1002 : start command "commit_param -step design"
+RUN-1001 : Print Global Property
+RUN-1001 : -------------------------------------------------------------
+RUN-1001 :     Parameters    |   Settings   |  Default Values  |  Note  
+RUN-1001 : -------------------------------------------------------------
+RUN-1001 :    enable_seed    |     off      |       off        |        
+RUN-1001 :    hfn_to_clock   |  1000000000  |    1000000000    |        
+RUN-1001 :      message      |   standard   |     standard     |        
+RUN-1001 :    qor_monitor    |      on      |        on        |        
+RUN-1001 :   speedup_effort  |      0       |        0         |        
+RUN-1001 :    syn_ip_flow    |     off      |       off        |        
+RUN-1001 :       thread      |     auto     |       auto       |        
+RUN-1001 : -------------------------------------------------------------
+RUN-1001 : Print Design Property
+RUN-1001 : ----------------------------------------------------------------
+RUN-1001 :       Parameters       |  Settings  |  Default Values  |  Note  
+RUN-1001 : ----------------------------------------------------------------
+RUN-1001 :   default_reg_initial  |    auto    |       auto       |        
+RUN-1001 :    hdl_warning_level   |   normal   |      normal      |        
+RUN-1001 : ----------------------------------------------------------------
+HDL-1007 : analyze verilog file serial_wrapper.v
+HDL-1007 : analyze verilog file ../../../rtl/color_regions/stage1_arith.v
+HDL-1007 : analyze verilog file ../../../rtl/color_regions/stage1_sequence.v
+HDL-1007 : analyze verilog file ../../../rtl/color_regions/stage1_point.v
+HDL-1007 : analyze verilog file ../../../rtl/color_regions/stage1_segment.v
+HDL-1007 : analyze verilog file ../../../rtl/color_regions/stage1_validate.v
+HDL-1007 : analyze verilog file ../stage1_regions.v
+HDL-1007 : analyze verilog file ../stage1_render.v
+PRJ-1401 : Successfully analyzed 8 source files.
+RUN-1002 : start command "elaborate -top serial_wrapper"
+HDL-1007 : elaborate module serial_wrapper in serial_wrapper.v(1)
+HDL-1007 : elaborate module stage1_regions in ../stage1_regions.v(3)
+HDL-1007 : elaborate module stage1_validate(SHARED=1) in ../../../rtl/color_regions/stage1_validate.v(3)
+HDL-1007 : elaborate module stage1_segment(SHARED=1) in ../../../rtl/color_regions/stage1_segment.v(3)
+HDL-1007 : elaborate module stage1_point in ../../../rtl/color_regions/stage1_point.v(4)
+HDL-1007 : elaborate module stage1_arith(MW=21,DW=23) in ../../../rtl/color_regions/stage1_arith.v(3)
+HDL-1007 : elaborate module stage1_sequence in ../../../rtl/color_regions/stage1_sequence.v(3)
+HDL-1007 : elaborate module stage1_render(SPLIT_DRAFT=1) in ../stage1_render.v(4)
+HDL-1007 : extracting RAM for identifier 'edge_mem' in ../stage1_render.v(24)
+HDL-1007 : extracting RAM for identifier 'line_mem' in ../stage1_render.v(25)
+HDL-1007 : extracting RAM for identifier 'span_lo' in ../stage1_render.v(29)
+HDL-1007 : extracting RAM for identifier 'span_hi' in ../stage1_render.v(29)
+HDL-1007 : elaborate module stage1_arith(DW=14) in ../../../rtl/color_regions/stage1_arith.v(3)
+HDL-5001 WARNING: Contains anonymous inst(s) and/or net(s) that have not been renamed
+HDL-5001 WARNING: Contains anonymous inst(s) and/or net(s) that have not been renamed
+HDL-1200 : Current top model is serial_wrapper
+HDL-1100 : Inferred 4 RAMs.
+RUN-1002 : start command "set_param rtl min_ripple_len 64"
+RUN-1002 : start command "set_param rtl infer_fsm sequential"
+RUN-1002 : start command "optimize_rtl"
+RUN-1001 : Open license file D:/26_software/TangDynasty/license/Anlogic.lic
+SYN-1001 : Stage 1 | Optimize RTL
+SYN-1001 : Stage 1.1 | Check Design Sanity
+SYN-1001 : End Stage 1.1 | Check Design Sanity; Time: 0.004565s wall, 0.000000s user + 0.000000s system = 0.000000s CPU (n/a%); Memory(MB): used = 428, reserved = 419, peak = 428;
+
+SYN-1079 : finish stage Check Design Sanity. Total instances: 18692, Total nets: 56660.
+
+SYN-1001 : Stage 1.2 | Initialize Design
+SYN-1001 : End Stage 1.2 | Initialize Design; Time: 0.705048s wall, 0.312500s user + 0.000000s system = 0.312500s CPU (44.3%); Memory(MB): used = 428, reserved = 419, peak = 428;
+
+SYN-1079 : finish stage Initialize Design. Total instances: 3133, Total nets: 35095.
+
+SYN-1001 : Stage 1.3 | Flatten Module
+SYN-1011 : Flatten model serial_wrapper
+SYN-1001 : End Stage 1.3 | Flatten Module; Time: 0.079570s wall, 0.046875s user + 0.000000s system = 0.046875s CPU (58.9%); Memory(MB): used = 428, reserved = 419, peak = 428;
+
+SYN-1079 : finish stage Flatten Module. Total instances: 3125, Total nets: 30566.
+
+SYN-1001 : Stage 1.4 | Uniform Instance
+SYN-5025 WARNING: Using 0 for all undriven pins and nets
+SYN-1001 : End Stage 1.4 | Uniform Instance; Time: 0.010887s wall, 0.000000s user + 0.000000s system = 0.000000s CPU (n/a%); Memory(MB): used = 427, reserved = 428, peak = 429;
+
+SYN-1079 : finish stage Uniform Instance. Total instances: 3106, Total nets: 30544.
+
+SYN-1001 : Stage 1.5 | Optimize Design
+SYN-1066 : Inferred FSM for state register 'editor/geometry/state_reg' in module 'serial_wrapper'
+--------------------------------------------
+     Previous Encoding     New Encoding
+--------------------------------------------
+                  0000             0000
+                  0010             0001
+                  0011             0010
+                  0100             0011
+                  0101             0100
+                  0110             0101
+                  0001             0110
+                  1000             0111
+                  0111             1000
+--------------------------------------------
+SYN-1067 : encoded FSM with state register 'editor/geometry/state_reg' using encoding 'sequential' in model 'serial_wrapper'
+SYN-1066 : Inferred FSM for state register 'editor/validator/state_reg' in module 'serial_wrapper'
+--------------------------------------------
+     Previous Encoding     New Encoding
+--------------------------------------------
+                  0000              000
+                  0001              001
+                  0101              010
+                  0010              011
+                  0011              100
+                  0110              101
+                  0100              110
+--------------------------------------------
+SYN-1067 : encoded FSM with state register 'editor/validator/state_reg' using encoding 'sequential' in model 'serial_wrapper'
+SYN-1066 : Inferred FSM for state register 'editor/validator/segments/state_reg' in module 'serial_wrapper'
+--------------------------------------------
+     Previous Encoding     New Encoding
+--------------------------------------------
+                   000               00
+                   001               01
+                   101               10
+                   100               11
+--------------------------------------------
+SYN-1067 : encoded FSM with state register 'editor/validator/segments/state_reg' using encoding 'sequential' in model 'serial_wrapper'
+SYN-1057 : Inferred 3 FSM(s)
+SYN-1001 : Optimize 7 less-than instances
+SYN-1001 : Optimize 1 decoder instances
+SYN-1032 : 29293/56 useful/useless nets, 3048/9 useful/useless insts
+SYN-1001 : Bypass 1 mux instances
+SYN-1021 : Optimized 36 onehot mux instances.
+SYN-1068 : Optimized 45 binary mux instances.
+SYN-1019 : Optimized 10 mux instances.
+SYN-1021 : Optimized 6 onehot mux instances.
+SYN-1016 : Merged 987 instances.
+SYN-1016 : Merged 496 instances.
+SYN-1001 : End Stage 1.5 | Optimize Design; Time: 1.298958s wall, 0.828125s user + 0.000000s system = 0.828125s CPU (63.8%); Memory(MB): used = 442, reserved = 442, peak = 442;
+
+SYN-1079 : finish stage Optimize Design. Total instances: 15183, Total nets: 16901.
+
+SYN-1001 : Stage 1.6 | Optimize Iteratively
+SYN-1021 : Optimized 12 onehot mux instances.
+SYN-1014 : Optimize round 1
+SYN-1044 : Optimized 63 inv instances.
+SYN-1017 : Remove 8 const input seq instances
+SYN-1019 : Optimized 3 mux instances.
+SYN-1020 : Optimized 2430 distributor mux.
+SYN-1001 : Optimize 10 less-than instances
+SYN-1019 : Optimized 22 mux instances.
+SYN-1016 : Merged 3457 instances.
+SYN-1015 : Optimize round 1, 11065 better
+SYN-1014 : Optimize round 2
+SYN-1044 : Optimized 44 inv instances.
+SYN-1019 : Optimized 12 mux instances.
+SYN-1020 : Optimized 91 distributor mux.
+SYN-1019 : Optimized 24 mux instances.
+SYN-1016 : Merged 227 instances.
+SYN-1015 : Optimize round 2, 434 better
+SYN-3010 : Optimized 59 DFF(s)
+SYN-1014 : Optimize round 1
+SYN-1020 : Optimized 6 distributor mux.
+SYN-1016 : Merged 10 instances.
+SYN-1015 : Optimize round 1, 31 better
+SYN-1014 : Optimize round 2
+SYN-1015 : Optimize round 2, 0 better
+SYN-1001 : End Stage 1.6 | Optimize Iteratively; Time: 3.962750s wall, 2.281250s user + 0.031250s system = 2.312500s CPU (58.4%); Memory(MB): used = 508, reserved = 506, peak = 519;
+
+SYN-1079 : finish stage Optimize Iteratively. Total instances: 12303, Total nets: 13758.
+
+SYN-1001 : Stage 1.7 | Check Design
+SYN-1001 : End Stage 1.7 | Check Design; Time: 0.001314s wall, 0.000000s user + 0.000000s system = 0.000000s CPU (n/a%); Memory(MB): used = 508, reserved = 506, peak = 519;
+
+SYN-1079 : finish stage Check Design. Total instances: 12303, Total nets: 13758.
+
+SYN-1001 : End Stage 1 | Optimize RTL; Time: 6.064001s wall, 3.468750s user + 0.031250s system = 3.500000s CPU (57.7%); Memory(MB): used = 508, reserved = 506, peak = 519;
+
+SYN-1079 : finish stage Optimize RTL. Total instances: 12303, Total nets: 13758.
+
+RUN-1003 : finish command "optimize_rtl" in  6.071152s wall, 3.484375s user + 0.031250s system = 3.515625s CPU (57.9%)
+
+RUN-1004 : used memory is 508 MB, reserved memory is 506 MB, peak memory is 519 MB
+RUN-1002 : start command "set_param gate map_mode area_prior"
+RUN-1002 : start command "set_param gate opt_area high"
+RUN-1002 : start command "set_param gate pack_effort high"
+RUN-1002 : start command "optimize_gate -packarea isolated.area"
+RUN-1001 : Open license file D:/26_software/TangDynasty/license/Anlogic.lic
+SYN-1001 : Stage 2 | Optimize Gate
+SYN-1001 : Stage 2.1 | Map Reg
+SYN-1001 : End Stage 2.1 | Map Reg; Time: 0.208885s wall, 0.109375s user + 0.000000s system = 0.109375s CPU (52.4%); Memory(MB): used = 508, reserved = 506, peak = 519;
+
+SYN-1079 : finish stage Map Reg. Total instances: 12303, Total nets: 13758.
+
+SYN-1001 : Stage 2.2 | Map IO
+SYN-2001 : Map 11 IOs to PADs of model 'serial_wrapper'
+SYN-6021 CRITICAL-WARNING: 11 out of 11 logical ports has no user assigned specific location constraint.
+                           This may affect performance or in some cases cause damage to the device!
+                           Bitgen will abort. If insist on bitgen with risk, please 'set_param bitgen unconstr_io on' to avoid bitgen error.
+                           No ADC ports: clk, data[7:0], observe, rst.
+                           No ADC ports will be assigned to random location as below:
+                           clk:K5, data[7]:A7, data[6]:R12, data[5]:M2, data[4]:B9, data[3]:P10, data[2]:L4, data[1]:B5, data[0]:K16, observe:D18, 
+                           rst:D14.
+SYN-1001 : End Stage 2.2 | Map IO; Time: 0.155751s wall, 0.015625s user + 0.000000s system = 0.015625s CPU (10.0%); Memory(MB): used = 509, reserved = 506, peak = 519;
+
+SYN-1001 : Stage 2.3 | Map Macro
+RUN-1002 : start command "update_pll_param -module serial_wrapper"
+SYN-2501 : Processed 0 LOGIC_BUF instances.
+SYN-2571 : Optimize after map_dsp, round 1
+SYN-1016 : Merged 5 instances.
+SYN-2571 : Optimize after map_dsp, round 1, 5 better
+SYN-2571 : Optimize after map_dsp, round 2
+SYN-2571 : Optimize after map_dsp, round 2, 0 better
+SYN-1001 : Throwback 182 control mux instances
+SYN-1001 : clone 3 adder instances
+SYN-1001 : Generate 3 bigger adders
+SYN-1001 : Convert 5 adder
+SYN-1001 : Optimize 35 adders
+SYN-1001 : Convert 1 adder
+SYN-2501 : Optimize round 1
+SYN-1016 : Merged 197 instances.
+SYN-2501 : Optimize round 1, 758 better
+SYN-2501 : Optimize round 2
+SYN-2501 : Optimize round 2, 0 better
+SYN-2501 : Optimize round 1
+SYN-2501 : Optimize round 1, 2 better
+SYN-2501 : Optimize round 2
+SYN-2501 : Optimize round 2, 0 better
+SYN-2501 : Map 258 macro adder(s)
+SYN-3009 : Map 415 FxMUX in MapMacro
+SYN-1019 : Optimized 205 mux instances.
+SYN-1016 : Merged 1691 instances.
+SYN-1001 : End Stage 2.3 | Map Macro; Time: 3.019744s wall, 1.343750s user + 0.015625s system = 1.359375s CPU (45.0%); Memory(MB): used = 526, reserved = 522, peak = 526;
+
+SYN-1079 : finish stage Map Macro. Total instances: 19091, Total nets: 20531.
+
+SYN-1001 : Stage 2.4 | Map Gate
+SYN-2581 : Mapping with K=6, #lut = 5828 (4.34), #lev = 20 (5.45), #crit_level = 0
+SYN-2551 : Post LUT mapping optimization.
+SYN-2581 : Mapping with K=6, #lut = 5459 (4.32), #lev = 17 (5.47), #crit_level = 0
+SYN-3001 : Logic optimization opt = 1.32 sec, map = 0.96 sec, post map opt = 39.86 sec.
+SYN-1001 : End Stage 2.4 | Map Gate; Time: 46.356141s wall, 21.125000s user + 0.093750s system = 21.218750s CPU (45.8%); Memory(MB): used = 567, reserved = 553, peak = 568;
+
+SYN-1001 : Packing model "serial_wrapper" ...
+SYN-1001 : Stage 2.5 | Pack Gate
+SYN-4010 : Pack lib has 43 rtl pack models with 26 top pack blocks
+SYN-1014 : Optimize round 1
+SYN-1015 : Optimize round 1, 0 better
+SYN-4002 : Packing 4275 DFF/LATCH to SEQ ...
+SYN-1001 : Remove 1 carry adders
+RUN-1002 : start command "start_timer"
+RUN-1002 : start command "end_timer"
+SYN-4009 : Pack 1 carry chain into lslice
+SYN-1001 : End Stage 2.5 | Pack Gate; Time: 1.486481s wall, 0.421875s user + 0.000000s system = 0.421875s CPU (28.4%); Memory(MB): used = 568, reserved = 564, peak = 568;
+
+RUN-1002 : start command "report_qor -step gate -file gate.qor"
+RUN-1002 : start command "start_timer"
+-----------------------------------------------------------
+| QoR metrics               |         value               |
+-----------------------------------------------------------
+| Timing                    |                             |
+|     Setup WNS             |         2712                |
+|     Setup TNS             |            0                |
+|     Num of violated S-EP  |            0                |
+|     Hold WNS              |          220                |
+|     Hold TNS              |            0                |
+|     Num of violated H-EP  |            0                |
+-----------------------------------------------------------
+| Utilization               |                             |
+|     #registers            |         4275                |
+|     #luts                 |         5459                |
+|     #lut1                 |            2                |
+|     #lut1(~A)             |            2                |
+|     #slices               |          778                |
+|     slices percentage     |        3.67%                |
+|     #RAMs                 |            2                |
+|     #DSPs                 |            0                |
+|     #f7mux                |        2.72%                |
+|     #MACROs               |          183                |
+|     #insts in MACRO       |          960                |
+-----------------------------------------------------------
+| kept_net                  |                             |
+|     #syn_keep             |            0                |
+|     #keep_hier            |            0                |
+|     #dont_touch           |            0                |
+|     #mark_debug           |            0                |
+|     #max_fanout_keep      |            0                |
+|     #async_reg            |            0                |
+-----------------------------------------------------------
+| Top 10% datanet fanout#   |        64.46                |
+| dff(single fanout)->dff   |          130                |
+| dff(single fanout)->dram  |            0                |
+-----------------------------------------------------------
+| Over-quota path num*      |                             |
+|     Total                 |            0                |
+-----------------------------------------------------------
+| Rent**                    |                             |
+-----------------------------------------------------------
+Note*: Over-quota path shows the over-path-level-threshold path number of each clock.
+       The clock will not be shown if no path is with path level over the threshold.
+       The threshold is defined as worst path_margin / 800ps.
+Note**: Rent shows the rent exponent value of the modules whose rent value exceeds the threshold.
+        Only modules under top are reported, and the threshold is defined as 0.7.
+
+Logic Level Distribution
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Clock        |  Period            |  0     |  1    |  2     |  3     |  4    |  5    |  6    |  7    |  8    |  9    |  10   |  11   |  12   |  13  |  14  |  15  |  16  |  17   |  18   |  19
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  DeriveClock  |  20.000ns (50MHz)  |  2509  |  896  |  1141  |  1021  |  932  |  237  |  166  |  105  |  273  |  280  |  154  |  164  |  100  |  57  |  30  |  29  |  22  |  146  |  176  |  12
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Note: The table count the worst 100000 paths, each endpoint count only one time.(8450 paths analyzed)
+
+Hierarchical Rent Exponent Report
++-------------------------------------------------------------------+
+|Inst      |Model            |Rent     |Cell     |Pin     |Term     |
++-------------------------------------------------------------------+
+|top       |serial_wrapper   |-0.03    |10707    |54274   |4        |
+|  editor  |stage1_regions_1 |0.64     |5667     |27676   |1281     |
+|  picture |stage1_render_2  |0.63     |4455     |23596   |1077     |
++-------------------------------------------------------------------+
+Note: Cell represents total number of cells inside module; Pin represents total number of pins
+      which have net connection inside module; Term represents total number of PIs and POs of module.
+      Rent represents the relationship between number of terms and number of cells in module.
+      A module with higher rent corresponds to highly connected logic and strong connectivity with others.
+Report gate stage QoR done.
+
+RUN-1003 : finish command "report_qor -step gate -file gate.qor" in  1.836917s wall, 0.984375s user + 0.000000s system = 0.984375s CPU (53.6%)
+
+RUN-1004 : used memory is 568 MB, reserved memory is 562 MB, peak memory is 570 MB
+RUN-1002 : start command "report_area -file isolated.area"
+SYN-4034 : The count of slices with lut is 578.
+SYN-4035 : The count of slices with lut+ripple is 48.
+RUN-1001 : standard
+***Report Model: serial_wrapper Device: PH1P35MDG324***
+
+Design Statistics
+#IO                        11   out of    160    6.88%
+  #input                   10
+  #output                   1
+  #inout                    0
+#lut                     6237
+  #lut1                     2
+  #lut2                   575
+  #lut3                  1343
+  #lut4                   771
+  #lut5                  1309
+  #lut6                  2237
+#reg                     4275
+  #slice reg             4275   out of  42432   10.07%
+  #pad reg                  0
+
+Utilization Statistics
+#slice*                  4556   out of  21216   21.47%
+  #used ram               152
+    #dram lut             128
+    #shifter lut           24
+  #used logic            4404
+    #with luts*          4202
+    #with adder            48
+    #reg only*            154
+#f7mux                    289   out of  10608    2.72%
+#f8mux                    126   out of   5304    2.38%
+#eram                       2   out of    108    1.85%
+  #eram20k                  2
+  #fifo20k                  0
+#dsp                        0   out of     40    0.00%
+#ddr_byte                   0   out of     12    0.00%
+#mipi_tx                    0   out of      2    0.00%
+#mipi_rx                    0   out of      2    0.00%
+#pad                       11   out of    160    6.88%
+#pll                        0   out of      6    0.00%
+#gclk                       0   out of     32    0.00%
+#lclk                       0   out of     12    0.00%
+#sclk                       0   out of     48    0.00%
+#mlclk                      0   out of      6    0.00%
+#ioclk                      0   out of     18    0.00%
+
+* Note! The LUT and Slice count after Optimize-Gate is not the final value, Run Optimize-place for a more realistic count.
+
+SYN-1001 : End Stage 2 | Optimize Gate; Time: 53.281524s wall, 24.156250s user + 0.109375s system = 24.265625s CPU (45.5%); Memory(MB): used = 569, reserved = 562, peak = 570;
+
+RUN-1003 : finish command "optimize_gate -packarea isolated.area" in  53.289166s wall, 24.171875s user + 0.109375s system = 24.281250s CPU (45.6%)
+
+RUN-1004 : used memory is 569 MB, reserved memory is 562 MB, peak memory is 570 MB
+PRIVATE_SPLIT_GATE_PASS

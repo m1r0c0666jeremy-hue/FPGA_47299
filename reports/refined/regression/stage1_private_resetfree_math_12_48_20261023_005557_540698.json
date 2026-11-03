@@ -1,0 +1,16 @@
+{
+  "inputs": {
+    "build\\stage1_resetfree_arith_20261023_0054\\stage1_arith.v": "f414517882634795492f198c5084faad2ff3a4cb7768d9ef6c7f9c6b017411aa"
+  },
+  "exit_code": 0,
+  "expected_failure": false,
+  "output": "D:\\aaa_FPGA\\region-sequence-stage1\\build\\sim\\refined\\stage1_private_resetfree_math_12_48_20261023_005557_540698",
+  "fixture_inputs": {
+    "build/stage1_arith_vectors/math_12_48.hex": "29c6f5150af49d91c61ba92b9ff629b6cab7786931f253e235d923f7f481cf7c",
+    "build/sim/refined/stage1_private_resetfree_math_12_48_20261023_005557_540698/tb.sv": "95eafdc32c900520ceb04a6f223d8e85d3a6b626279c7781b323e9430e229e9f"
+  },
+  "producer_inputs": {
+    "scripts/refined_testlib.py": "03967082352ce6c4f29d97bfa041582669fdf7a728853adf42d1b3e8fcae92e2",
+    "scripts/stage1_test_sources.py": "ebe05faba7c856483eb32e0ac1f66165e357c15a651d4d531143b603057ea2a9"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261023_032446",
+  "compiled_source_commit": "707b11717da48923815aa6e865ccdac80c1cd1ba",
+  "functional_source_commit": "9d520214fcb11c61df24be98fb6e4ab740a93ac6",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20211,
+    "lut6": 19960,
+    "reg": 23832,
+    "eram": 99,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "3987deb84607833761a875caf64b755efe7ccfc5aa0cce3999a327f0909ef094",
+    "target_color_regions_placed.db": "35a837aadcb8b160c4c517bd578de4fc7c59b43e4e8abc0f61db31ed7cafccf1"
+  },
+  "reused_gate": {
+    "parent": "build/stage1_place_20261023_012438",
+    "checkpoint_sha256": "1887f5ebda42fbb72737352f2247ff58d07f2656401cc691e33a5d108a331da3",
+    "compiled_source_commit": "707b11717da48923815aa6e865ccdac80c1cd1ba",
+    "placement_created_commit": "c88b99a678a96b24ec90e29ecba960250f8aa2e7",
+    "inputs_verified": 308
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "placement_estimates": {
+    "wire_length": 3449206,
+    "overloaded_tiles": 13,
+    "top_one_percent_average_utilization": 96.66
+  },
+  "hardware_status": "PENDING"
+}

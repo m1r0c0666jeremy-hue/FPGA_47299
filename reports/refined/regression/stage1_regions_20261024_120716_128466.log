@@ -1,0 +1,3 @@
+STAGE1_EDIT_RENDER_PASS point_pixels=134400
+STAGE1_REGIONS_PASS press-position/rectangles/overlap-reject/undo/modes/actual-geometry/order/stale/reset
+D:\aaa_FPGA\region-sequence-stage1\build\sim\refined\stage1_regions_20261024_120716_128466\tb.sv:65: $finish called at 8833700 (1s)

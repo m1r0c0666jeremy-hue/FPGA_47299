@@ -1,0 +1,104 @@
+{
+  "scope": "CONNECTED LOCAL ESTIMATES ONLY; NOT ADOPTED OR A WHOLE-DEVICE RESULT",
+  "outputs": {
+    "baseline": {
+      "directory": "build/stage1_snapshot_valid_lanes_20261024_0219/gate_valid_lanes_20261024_030835",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_regions.v": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+        "build/stage1_snapshot_valid_lanes_20261024_0219/stage1_render.v": "7bd5f472cfb41a01ab04d99ffb2f15ec53acfda9ed1fb3f7e75a421e8e89b269"
+      },
+      "resources": {
+        "slice": 3805,
+        "lut6": 1756,
+        "reg": 4191,
+        "eram": 3,
+        "dsp": 0
+      },
+      "netlist_sha256": "1a66b6770051f59f3276332ebe847adafbf9445d19e5a2a79433b2dd873c280c",
+      "checkpoint_sha256": "ff2a8acc7e6f5b7559955a483f321d02723739e7fcb0207743c315e16575a45f",
+      "log_sha256": "93abea8add48ae998950e1ca90162970b81fc43015c10052e8a1418d70aa77a9"
+    },
+    "valid_banks": {
+      "directory": "build/stage1_snapshot_valid_banks_20261024_0356/gate_valid_banks_20261024_043541",
+      "inputs": {
+        "rtl/color_regions/stage1_arith.v": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+        "rtl/color_regions/stage1_sequence.v": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+        "rtl/color_regions/stage1_point.v": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+        "rtl/color_regions/stage1_segment.v": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+        "rtl/color_regions/stage1_validate.v": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+        "rtl/color_regions/stage1_regions.v": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+        "build/stage1_snapshot_valid_banks_20261024_0356/stage1_render.v": "1cfb54e3c607d62c7f664be02a690b9e516d87b0d98d86817317bb365a78fbf2"
+      },
+      "resources": {
+        "slice": 3756,
+        "lut6": 1766,
+        "reg": 4191,
+        "eram": 3,
+        "dsp": 0
+      },
+      "netlist_sha256": "dfda8991f91b4be2d41f11d0b487297bbb8a74c8c987ec12fad4cb37e8288ddc",
+      "checkpoint_sha256": "7fbbe808774ad2642d7485f4440f0f4faf2a7d51c16b6a848a4175935e65b6e2",
+      "log_sha256": "944cec637c28ae5b222891018b1e456f5a60a7427b1a0900ab3fc708f390af4a"
+    }
+  },
+  "baseline_comparison": "build/stage1_snapshot_valid_lanes_20261024_0219/gate_comparison_20261024_030835.json",
+  "baseline_comparison_sha256": "495c6c65cb8c0e117e98e83ff5f1a1ff9bc13b3dcd846415fd7859115ed8ddfe",
+  "producer_sha256": "bf5161dc40b86b9462cb7e4e81afe1a86d46864f12aa906dd28277c879743122",
+  "wrapper_sha256": "604def53b2d9c23070b2d820bea3fef9061a8b33a782103b61ddf55dd620b670",
+  "validation_sha256": "80173d52ce7c6fd902a16ca49d6ad6a5c4085a7cd5e7f39c45f23f69790c7aed",
+  "baseline_sources_text_verified": [
+    {
+      "name": "stage1_arith",
+      "old_sha256": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+      "current_sha256": "f7901b43a54a4fc314e7e0ec3d3a5998f58b065055182fae1bfdfd08b03df043",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_sequence",
+      "old_sha256": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+      "current_sha256": "2776a397d0c6534c27f1389b2793744aea6e437601f80c2967bd89d6fca831a1",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_point",
+      "old_sha256": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+      "current_sha256": "0071fa4b0fd300a0c4e8fd1a9585f0bf37d88a17d3147c5f9a2ef1bbd79f7a94",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_segment",
+      "old_sha256": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+      "current_sha256": "711f0d8992e08379898e3a8a446ae3c41c331744ee5ff67b69d9a90a848456d1",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_validate",
+      "old_sha256": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+      "current_sha256": "8a8324dd95f31fbbb2324243ef7683fa50ff0ba683eaedfbb34955314b85a7c7",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_regions",
+      "old_sha256": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+      "current_sha256": "c678cf6081fdcfc3d35949f40a6e0650907b73afe6492aec05c0d49cfc82be92",
+      "text_identical": true
+    },
+    {
+      "name": "stage1_render",
+      "old_sha256": "7bd5f472cfb41a01ab04d99ffb2f15ec53acfda9ed1fb3f7e75a421e8e89b269",
+      "current_sha256": "e8bf5952afe934f3f3660746742301c7b9cbd5c0c79f26d3be75908e0325d142",
+      "text_identical": true
+    }
+  ],
+  "baseline_eol_normalization": "universal-newlines only; D renderer gate-source CRLF restored to formal LF during adoption0316",
+  "baseline_refresh_sha256": "6368fba1de5abd0dca67d0c8237f97bf6ab5e786bc211854f0df72d216e899a2",
+  "baseline_full_software": "reports/stage1/software_current_20261024_0406.json",
+  "baseline_full_software_sha256": "e16a1361f32d6e664489131842a90f3c4fbe2fc141e0237b8c7c5c61efd91a69",
+  "reference": "reports/stage1/software_valid_lanes_progress_20261024_0345.json",
+  "reference_sha256": "24a34a8fa12d925664f0a7ed8c007f01f245be8a85658ea360eb65bcdd66ac52"
+}

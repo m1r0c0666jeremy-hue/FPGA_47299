@@ -1,0 +1,25 @@
+{
+  "status": "READ_ONLY_FALLBACK_REVIEW_NOT_ADOPTED",
+  "time": "2026-10-23T04:18:37.222962+08:00",
+  "reference": "reports/stage1/software_current_20261022_2123.json",
+  "reference_sha256": "01f419b19ced4a04262c8cc95fce8769adf0d99aa32ba5983889df658274b430",
+  "old_checks_with_intact_records_and_logs": 109,
+  "changed_paths": {
+    "rtl/color_regions/stage1_render.v": {
+      "expected_eight_row_sha256": "ae2d68ced066bacb04503ba0e97ce4d77f57cf6ce26950ec3a90fb0a42667464",
+      "current_four_row_sha256": "33bef4025af9d4410361ffb08ee7ebb4088707cdc6fd43c3c6537a12a4058ee6",
+      "affected_check_count": 96
+    },
+    "scripts/test_stage1_render.py": {
+      "expected_eight_row_sha256": "7ac07351103f173213ac458ad9ae924a0b9bcaec073f50ee2072fc7e92abdedf",
+      "current_four_row_sha256": "6bb099baadf192441a019415d7193ff597de802aa6a21d9a8d332dbc06f61297",
+      "affected_check_count": 1
+    }
+  },
+  "old_eight_row_commit": "84c0607",
+  "compiler_input_count": 308,
+  "changed_compiler_inputs": [
+    "rtl/color_regions/stage1_render.v"
+  ],
+  "note": "Eight-row renderer used 101 ERAM and was previously software-validated. Only these two exact files differ from its 109 software proofs. No files restored and no new route/TD started. Current four-row source remains formal. Old route cancelled by user pause, never a final pass."
+}

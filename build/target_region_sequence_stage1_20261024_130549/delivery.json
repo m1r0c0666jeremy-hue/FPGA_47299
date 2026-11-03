@@ -1,0 +1,28 @@
+{
+  "status": "CANDIDATE_SOFTWARE_AND_FINAL_PHYSICAL_PASSED_HARDWARE_PENDING",
+  "archive_name": "矩形区域顺序报警第一阶段候选",
+  "branch": "feature/region-sequence-stage1",
+  "head": "a05f8ac2599a242c934c20f1ae50d6fd436b9555",
+  "compiled_source_commit": "78858ad46d9bc020574478c3401fc39a09ceb6e1",
+  "attempt": "build/stage1_route_20261024_125519_122210",
+  "directory": "build/target_region_sequence_stage1_20261024_130549",
+  "bit_sha256": "57cea17e19e4a34969e2c1c2d4e0f0f43fc6f3d7ff9d01e0e2569ec826911b17",
+  "source_zip_sha256": "34f2551bda8300d3b5ecb376d1b2a63a0727608fdd6da3a29e363d205fab2de1",
+  "source_file_count": 1733,
+  "audit": "reports/stage1/final_audit_20261024_130549.json",
+  "audit_sha256": "890b764eb41994778ad013cb414949cc467799efa9707735c0c07e6d5ae3a709",
+  "resources": {
+    "slice": 18089,
+    "lut6": 17909,
+    "reg": 20868,
+    "eram": 96,
+    "dsp": 40
+  },
+  "slack_ns": {
+    "SWNS": 0.005,
+    "HWNS": 0.02
+  },
+  "baseline_module_checks": 160,
+  "stage1_checks": 107,
+  "hardware_status": "PENDING; no board download or Flash write"
+}

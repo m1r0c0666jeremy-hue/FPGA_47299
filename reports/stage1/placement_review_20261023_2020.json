@@ -1,0 +1,21 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261023_200045",
+  "compiled_source_commit": "60bc63ccf060b493f3b0d3fdd1df53e880521e51",
+  "input_count": 308,
+  "git_blob_inputs_verified": 308,
+  "resources": {
+    "slice": 20205,
+    "lut6": 19965,
+    "reg": 23758,
+    "eram": 99,
+    "dsp": 40
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "302f6674e12b591019c0cc8b87c6c2e2cb98df4249a7bbf64e39e8634f5d4e4b",
+    "target_color_regions_placed.db": "7e087b33564ec15c247a2da96dec8d73adf9a7ced386f3940c29462abfc4c895"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING"
+}

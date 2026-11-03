@@ -1,0 +1,61 @@
+{
+  "status": "ROUTING_GUARDS_PASS",
+  "archive": "build/target_color_regions_osd_memory_20261019_234705/osd_memory_same_source.zip",
+  "archive_member": "build/refined_route_20261019_232845_179508/td.log",
+  "auditor_sha256": "dfaae848662055da70adf031fa38699b5401a389863b58cff3ce6f987487eac9",
+  "producer_sha256": "2e291e5ef823c0f80d33b8348caf6cd1016da8e6fdd5187daabd9ec4368a2578",
+  "known_completed_log": "build/stage1_routing_guards_20261026_214655/known_completed.log",
+  "known_completed_log_sha256": "a9e8ce5710e00d2d344c49854f0ff53a9ce8a004bc8230e5a12fcfcff9c1e22a",
+  "accepted": {
+    "final_over_count": 0,
+    "final_over": 0,
+    "final_worst": 0,
+    "routing_drc_pass": true,
+    "log_sha256": "a9e8ce5710e00d2d344c49854f0ff53a9ce8a004bc8230e5a12fcfcff9c1e22a"
+  },
+  "checks": {
+    "late_conflict": "REJECTED",
+    "missing_drc": "REJECTED",
+    "multi_drive": "REJECTED",
+    "abnormal_path": "REJECTED",
+    "bound_failed": "REJECTED",
+    "incomplete_build": "REJECTED"
+  },
+  "fixtures": {
+    "build/stage1_routing_guards_20261026_214655/known_completed.log": "a9e8ce5710e00d2d344c49854f0ff53a9ce8a004bc8230e5a12fcfcff9c1e22a",
+    "build/stage1_routing_guards_20261026_214655/late_conflict.log": "914b55b3eacc37c6678ef6f6b182bef316212e62d5fc43a0a5c23bf09763b9dd",
+    "build/stage1_routing_guards_20261026_214655/missing_drc.log": "317a54eba33d90648d5d18ffe25be4ffb935f68a86ae0c09c073e0b9d183bb3a",
+    "build/stage1_routing_guards_20261026_214655/multi_drive.log": "53f4d55cb3f7d68673dd51e01dfd595797b0889070dd5a56a26a593989a44d0b",
+    "build/stage1_routing_guards_20261026_214655/abnormal_path.log": "06f21aea2123d611847feb6fdb4f3fcb9b1fe332fc90cdaf1c92c6f1a8effc4e",
+    "build/stage1_routing_guards_20261026_214655/bound_failed.log": "ce7b0436f6a3613b9a6cc988db109b109084e56151e31ec1c18a8a651bd406e7",
+    "build/stage1_routing_guards_20261026_214655/incomplete_build.log": "fd06228c6e09198d9cb11f0a93ebd9547ae2f2ec5fa0ea647c14970b70df3f51",
+    "build/stage1_routing_guards_20261026_214655/current_late_conflict.log": "46cc79f5a3442cc37d96fd28adfcc63d5614f05375c17a7c8426e336e33de60f",
+    "build/stage1_routing_guards_20261026_214655/current_missing_drc.log": "02672a3392887788c1ada0acbf2162847371bd70587e44c9a3498f1dee0ef1c2",
+    "build/stage1_routing_guards_20261026_214655/current_multi_drive.log": "a859c9b7373f190b6660e4be0a93b61556020cd53fbd470f16e419a31b1a0898",
+    "build/stage1_routing_guards_20261026_214655/current_abnormal_path.log": "fae3f37638c40d74ab19f758bb52e4b0126c2bf7d24f8585cc6f2f0b324ea467",
+    "build/stage1_routing_guards_20261026_214655/current_bound_failed.log": "2d08279b7523ab3f100b16fd52c2a632868ffbfe5c078ece4a199e421736c02f",
+    "build/stage1_routing_guards_20261026_214655/current_incomplete_build.log": "3a0a5e9834fb0c59c12d6985db6731087cfec67462f496c215c623d625d7346f",
+    "build/stage1_routing_guards_20261026_214655/current_wrong_drc_end.log": "99e83f78766586853ce9c8b5e0b84d9dfea7c6c5fd5d11d31829e90243ab3fa6",
+    "build/stage1_routing_guards_20261026_214655/current_wrong_bound_stage.log": "3b25f3b61dd09b72ad2a1965e47a5eef526043394a90a6f332e2a82a00781d85",
+    "build/stage1_route_20261024_125519_122210/td.log": "499b74984a01a6a5d1a908ef7930d889adbcdc99e4da2056db2917163981eb3b"
+  },
+  "current_candidate": "build/stage1_route_20261024_125519_122210/td.log",
+  "current_accepted": {
+    "final_over_count": 0,
+    "final_over": 0,
+    "final_worst": 0,
+    "routing_drc_pass": true,
+    "log_sha256": "499b74984a01a6a5d1a908ef7930d889adbcdc99e4da2056db2917163981eb3b"
+  },
+  "current_checks": {
+    "late_conflict": "REJECTED",
+    "missing_drc": "REJECTED",
+    "multi_drive": "REJECTED",
+    "abnormal_path": "REJECTED",
+    "bound_failed": "REJECTED",
+    "incomplete_build": "REJECTED",
+    "wrong_drc_end": "REJECTED",
+    "wrong_bound_stage": "REJECTED"
+  },
+  "scope": "Artificial damaged log copies only; not current candidate or functional evidence"
+}

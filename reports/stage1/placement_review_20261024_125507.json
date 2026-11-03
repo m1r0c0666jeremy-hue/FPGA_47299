@@ -1,0 +1,145 @@
+{
+  "status": "PLACEMENT_PASSED_FINAL_ROUTE_PENDING",
+  "attempt": "build/stage1_place_20261024_124631",
+  "compiled_source_commit": "78858ad46d9bc020574478c3401fc39a09ceb6e1",
+  "input_count": 304,
+  "git_blob_inputs_verified": 304,
+  "resources": {
+    "slice": 18089,
+    "lut6": 17909,
+    "reg": 20868,
+    "eram": 96,
+    "dsp": 40
+  },
+  "previous_C_004652": {
+    "slice": 19819,
+    "lut6": 19633,
+    "reg": 23765,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta": {
+    "slice": -1730,
+    "lut6": -1724,
+    "reg": -2897,
+    "eram": -3,
+    "dsp": 0
+  },
+  "checkpoints": {
+    "target_color_regions_gate.db": "79a8c1d82307278fa59c826e54bb48ef077cb4eb214379c9d0dfee9e872b6331",
+    "target_color_regions_placed.db": "08ece936ad7482d492ca0c5e66d4cd487a1e34dce2d674a54a4ca8fbe9a233e2"
+  },
+  "reused_gate": null,
+  "actual_parameters": {
+    "effective_place.txt": {
+      "effort": "medium",
+      "hfn_opt_effort": "medium",
+      "logic_level_opt": "off",
+      "macro_performance": "macro_congestion",
+      "max_fanout": "999999",
+      "opt_timing": "high",
+      "post_place_opt": "high",
+      "pr_strategy": "2",
+      "preplace_floorplan": "off"
+    },
+    "effective_route.txt": {
+      "effort": "normal",
+      "fix_hold": "on",
+      "hold_fix_iteration": "5",
+      "post_route_opt": "high",
+      "timing": "on"
+    }
+  },
+  "parameter_reports": {
+    "effective_place.txt": "fc740717c0893a1a0ef714cc41fdd9cdb1e2f26f4d7358b8c94100fe5a5e5c41",
+    "effective_route.txt": "33700cbd0bc5b7243ec966d8b8ec09e8cd55742df631c0b2af0c5f20c2fce45e"
+  },
+  "original_baseline_count": 297,
+  "protected_files": 5,
+  "hardware_status": "PENDING",
+  "previous_pre_C_223056": {
+    "slice": 20252,
+    "lut6": 19950,
+    "reg": 23706,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_pre_C_223056": {
+    "slice": -2163,
+    "lut6": -2041,
+    "reg": -2838,
+    "eram": -3,
+    "dsp": 0
+  },
+  "previous_D_032009": {
+    "slice": 19974,
+    "lut6": 19729,
+    "reg": 23711,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_D_032009": {
+    "slice": -1885,
+    "lut6": -1820,
+    "reg": -2843,
+    "eram": -3,
+    "dsp": 0
+  },
+  "previous_E_044722": {
+    "slice": 19848,
+    "lut6": 19690,
+    "reg": 23730,
+    "eram": 99,
+    "dsp": 40
+  },
+  "delta_vs_E_044722": {
+    "slice": -1759,
+    "lut6": -1781,
+    "reg": -2862,
+    "eram": -3,
+    "dsp": 0
+  },
+  "previous_F_062426": {
+    "slice": 19899,
+    "lut6": 19650,
+    "reg": 23722,
+    "eram": 98,
+    "dsp": 40
+  },
+  "delta_vs_F_062426": {
+    "slice": -1810,
+    "lut6": -1741,
+    "reg": -2854,
+    "eram": -2,
+    "dsp": 0
+  },
+  "previous_G3_090145": {
+    "slice": 19906,
+    "lut6": 19667,
+    "reg": 22907,
+    "eram": 98,
+    "dsp": 40
+  },
+  "delta_vs_G3_090145": {
+    "slice": -1817,
+    "lut6": -1758,
+    "reg": -2039,
+    "eram": -2,
+    "dsp": 0
+  },
+  "previous_rect_121048": {
+    "slice": 18066,
+    "lut6": 17782,
+    "reg": 20833,
+    "eram": 96,
+    "dsp": 40
+  },
+  "delta_vs_rect_121048": {
+    "slice": 23,
+    "lut6": 127,
+    "reg": 35,
+    "eram": 0,
+    "dsp": 0
+  },
+  "scope": "USER_APPROVED_RECTANGLE_SIMPLIFICATION; arbitrary polygons, precise distance and approach/away deferred; original image/detection functions retained"
+}
