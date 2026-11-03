@@ -1,76 +1,48 @@
-# ScalingTest：手动缩放与中文 OSD
+# 手动选点放大与中文 OSD
 
-更新：2026-10-05。当前开发分支 **ScalingTest**，从重新获取远端后确认一致的 `main / origin/main`（`e671630`）创建。新增 1／2／4 倍选点放大、黄色黑边准心、按键复用和底部 96 行中文信息栏；摄像头采集和原有四模式算法沿用已验收主干。**本分支已于 2026-10-05 完成首次上板验收**（第 0~5 步通过、第 6 步按决定跳过），逐项见 [验证报告](reports/ScalingTest验证报告.md)；旧 bit 的结论仍不适用于本 bit。
+在摄像头画面上移动十字准心，按选点进行 1、2、4 倍放大。底部 OSD 信息栏显示坐标、倍率和操作状态。
 
-- 当前工程：[scaling_test.al](td_project/scaling_test.al)，使用 [独立构建脚本](scripts/build_scaling_test.tcl)。不要用旧 `criticalwork.al` 编译此分支修改后的顶层。
-- 当前 bit：[scaling_test.bit](build/scaling_test/scaling_test.bit)，校验值见 [构建清单](reports/scaling_build_manifest.json)。旧 bit 均保留。
-- [操作、接口与实物检查](docs/ScalingTest使用与实现.md)、[验证报告](reports/ScalingTest验证报告.md)、[来源说明](vendor_reference/lab3_osd/README.md)。
-- 仿真入口：`scripts/test_scaling.py`、`scripts/test_scaling_osd.py`、原四模式回归 `scripts/test_imagepreprocess_10_3.py`；本分支审计入口 `scripts/audit_scaling.py`。
+当前分支：`ScalingTest`。这是独立功能或历史实验分支。完整的区域与路线操作见 [main](https://github.com/m1r0c0666jeremy-hue/FPGA_47299/tree/main)。
 
-SW1/2 仍选择原图、边缘、灰度、二值化。KEY1 复位；KEY2 按 SW3 电平调增益；KEY3 按 SW3/SW4 的 00/01/10/11 下/右/左/上移动；KEY4 按 SW4 的 1/0 放大/缩小。SW3/SW4 上下极性已实物核实（上0下1）。所有操作细节见使用说明。
+## 快速开始
 
-新增参与综合的目录为 `05_roi_processing`、`09_osd_ui`，现共六个功能目录。相机/DDR → 区域读出与整数缩放 → 四模式处理 → 准心/OSD → HDMI。输出仍为 1280×720、总节拍 1650×750、75 MHz；底栏覆盖画面，原图底部可通过平移访问。没有新增自动跟踪、颜色环识别或全帧片上缓存。
+1. 准备 HX1P35A 开发板、SC500CS 摄像头、HDMI 显示器和下载器。
+2. 在 TD 6.2.168116 中打开 [td_project/scaling_test.al](td_project/scaling_test.al)，或直接下载下表的 bit。
+3. 先通过 BitWriter 下载到 SRAM，复位后确认原图，再按使用手册校准和操作。
 
-以下保留 main 四模式阶段说明，仅对应当时的代码和旧 bit；其中旧按键用途、未实现缩放/OSD等描述不适用于 ScalingTest。
-
----
-
-# main 四模式阶段归档（2026-10-04）
-
-更新：2026-10-04；当前主干 **main**，已同步队友四模式实物验收版本v1.2；功能最初在ImagePreprocess分支开发。平台 HX1P35A / PH1P35MDG324 −3，TD 6.2.168116。
-
-新增拨动开关选择与图像处理，顶层已整合并重新综合、布局布线、生成bit。Jeremy于2026-10-04补充截图确认队友提亮后版本已成功摄像头采集并显示，正常观察未发现补黑；**本轮新增四模式已于 2026-10-04 完成实物验收**（`00/01/10/11` 逐项通过，见[第二轮](reports/图像处理验证_10_3.md)与第三轮记录）；仅 SRAM 在线下载，未烧写 Flash；30 分钟连续运行按 Jeremy 决定跳过、记为未执行。
-
-## 操作与入口
-
-两位顺序是 **SW1、SW2**；SW1=A4，SW2=B4。**实物实测极性为上=0、下=1**（与手册 p21 描述相反，见[图像处理与拨动开关](docs/图像处理与拨动开关_10_3.md) 的"实物更正"节）。
-
-| SW1 SW2 位置 | 模式 | 屏幕效果 |
-|---|---|---|
-| 上 上 | 00 | 原图，不处理（彩色） |
-| 上 下 | 01 | Sobel边缘检测（黑底亮轮廓） |
-| 下 上 | 10 | 灰度变换 |
-| 下 下 | 11 | 二值化，灰度≥128为白 |
-
-开关稳定约20ms后，在下一帧边界切换（2026-10-04 实物验证）。KEY1复位、KEY2/3曝光调节保持原用途。边缘模式的前两行、前两列为黑色，窗口中心与输出坐标相差1像素，详见[算法与接口说明](docs/图像处理与拨动开关_10_3.md)。
-
-- [TD工程](td_project/criticalwork.al)：顶层 `criticalwork_top`，使用项目相对路径。
-- [新增图像处理bit](build/imagepreprocess_10_3/imagepreprocess_10_3.bit)及[使用说明](build/imagepreprocess_10_3/使用说明_10_3.md)。
-- [本轮验证报告](reports/图像处理验证_10_3.md)、[当前待解决问题](docs/问题清单_10_3.md)。
-- [编译说明](docs/编译说明.md)、[架构](docs/架构与接口.md)、[接线与验收](docs/接线与验收.md)、[Git存档](docs/Git存档说明.md)。
-
-三组针对性仿真通过，其中完整720p测试核对3,688,960个有效像素及同步信号。布线后SWNS +1.177ns、HWNS +0.020ns、STA覆盖96.00%；LUT6 10,850、寄存器13,794、slice 13,390（63.11%）。这些是软件验证，不能代替实物验收。
-
-## 目录与范围
-
-| 目录 | 用途 |
+| 文件 | 路径 |
 |---|---|
-| rtl/00_top_control | 板级顶层、PLL/复位连接、开关同步消抖、状态同步 |
-| rtl/01_camera | 配置、MIPI/RAW10、厂家彩色转换与128位打包封装 |
-| rtl/02_image_preprocess | 显示侧RGB888原图/边缘/灰度/二值化 |
-| rtl/10_memory_video_out | DDR缓存、调度、显示时序、处理模块连接、HDMI |
-| rtl其余9个目录 | 职责说明，未实现、未接入综合 |
-| user_source | 厂家源码/IP原结构；保留队友已登记7项修改，本轮未改 |
-| vendor_reference/lab1 | 独立原始基线，193个文件哈希不变 |
-| scripts、sim | 编译、审计、仿真脚本；仿真模型不加入硬件工程 |
-| build/imagepreprocess_10_3、reports | 本轮bit与软件验证证据 |
+| TD 工程 | [td_project/scaling_test.al](td_project/scaling_test.al) |
+| 下载文件 | [build/scaling_test/scaling_test.bit](build/scaling_test/scaling_test.bit) |
+| 操作手册 | [连接、校准、开关与按键](docs/USER_GUIDE.md) |
+| 编译与校验 | [工程入口、下载步骤与 SHA256](docs/BUILD.md) |
+| 版本选择 | [分支说明](docs/BRANCHES.md) |
 
-原队友bit仍在 `build/criticalwork/criticalwork.bit`，不包含新增处理模块。历史报告按其对应提交理解，不作为新bit的验证结论。
+## 操作速查
 
-输出维持1280×720、总周期1650×750、75MHz像素时钟，理论约60.606Hz。不是分辨率放大，也不是已实测的标准60Hz。跟踪、局部放大、对准和“安路”Logo叠加尚未实现。
+| 输入 | 功能 |
+|---|---|
+| SW1 SW2 = 00 / 01 / 10 / 11 | 原图 / Sobel 边缘 / 灰度 / 二值化 |
+| KEY1 | 复位，恢复 1 倍与默认选点 |
+| KEY2，SW3 = 1 / 0 | 增大 / 减小相机增益 |
+| KEY3，SW3 SW4 = 00 / 01 / 10 / 11 | 向下 / 向右 / 向左 / 向上移动选点 |
+| KEY4，SW4 = 1 / 0 | 放大 / 缩小，档位为 1、2、4 倍 |
 
-按Jeremy要求，本轮暂不修改打包复位、缓存尾字、完整帧恢复等旧问题。已解决的基础引脚对照与基本出图不再列入当前待办；未解决项集中见问题清单。迁移工程应携带整个文件夹，不能只复制 `.al`。
+KEY3 按住可连续移动，超过 1 秒后加速。操作开始时锁定开关方向，松开后重按才采用新的方向。多个功能键同时按下时暂停调节。
 
-## ImproveFourfoldScale 上板验收结论（2026-10-06）
+## 目录
 
-分支 ScalingTest 之上还完成了 **ImproveFourfoldScale** 版本（4 倍的「原图/灰度」改为双线性插值，
-1/2 倍与边缘/二值化保持最近邻）。该版本已于 2026-10-06 完成**首次上板 A/B 验收并通过**：
+| 目录 | 内容 |
+|---|---|
+| `td_project/` | TD 工程、引脚和时序约束 |
+| `rtl/` | 顶层控制、检测、跟踪、图像处理与显示逻辑 |
+| `user_source/`、`ip/` | 相机、DDR、显示等厂家源码与 IP |
+| `docs/` | 使用方法和版本说明 |
+| `scripts/`、`sim/` | 生成、构建、审计与仿真代码，部分脚本依赖原开发环境 |
+| `build/`、`reports/` | 已归档产物与验证证据，文件按对应版本使用 |
 
-- 结论与量化数据：[docs/ImproveFourfoldScale上板验收结论.md](docs/ImproveFourfoldScale上板验收结论.md)
-- 测试流程与判据：[docs/上板测试流程_ImproveFourfoldScale.md](docs/上板测试流程_ImproveFourfoldScale.md)
-- 设计与软件验证：[docs/ImproveFourfoldScale使用与实现.md](docs/ImproveFourfoldScale使用与实现.md)、[reports/ImproveFourfoldScale验证报告.md](reports/ImproveFourfoldScale验证报告.md)
-- 证据与靶标：[细缝可辨性对比](reports/improve_fourfold_ab/细缝可辨性对比_旧bit_vs_新bit.png)、[四倍缩放 AB 对照卡](docs/四倍缩放AB对照卡_1920x1080.png)
+## 使用边界
 
-关键数据：4× 原图/灰度边缘过渡宽度 17 → 25 像素（平滑生效），窄缝平均深度 0.71 → 0.71（可辨性未下降）；
-1×/2× 与 4× 边缘/二值化与旧 bit 无可辨差异。
-**说明**：该版本的 RTL 与 bit 已归档在 `ImproveFourfoldScale` 分支（`86ef777`）；本分支归档说明文档与验收结论，未合并 main。
+已有首次上板记录，准心、缩放、增益和 OSD 功能通过；连续运行观察未执行。数字放大不增加原始采集细节。
+
+来源见 [源码与素材说明](docs/来源与修改记录.md)。厂家 IP、字体和参考工程保留原有声明。本仓库暂未添加统一开源许可证。
